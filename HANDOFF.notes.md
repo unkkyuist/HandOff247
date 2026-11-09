@@ -8,11 +8,11 @@ Never paste passwords or tokens here — say where they are kept instead.
 
 ## Project
 HandOff247 reads a project folder and writes a handoff pack for the next person: diagrams, structure, extracted comments and a map of how the tools connect. It is static analysis only (it never imports or runs the target's code) and it is standard-library Python, so `python -m handoff247` works on any machine with Python 3.10+.
-Status: v0.1.0. The first real target was PlayBookOS (see examples/playbookos). C#, Python, JavaScript/TypeScript, PowerShell, shell and batch have analyzers; other languages are inventoried but not parsed.
+Status: v0.2.0. The first real target was PlayBookOS (see examples/playbookos). C#, Python, JavaScript/TypeScript, PowerShell, shell and batch have analyzers; other languages are inventoried but not parsed. Output is English; a project's own comments and headings in another language get English versions from the notes file's `## Translations` table.
 
 ## Topic: Successor checklist
 1. Run the tests: `python -m unittest discover -s tests`.
-2. Regenerate the examples after any analyzer change: `python -m handoff247 build <PlayBookOS checkout> --name PlayBookOS -o examples/playbookos --notes examples/playbookos.notes.md --date <date>` (and the `-ko` one with `--lang ko`). Read the diff of the generated pages: a change there is a change in what successors will be told.
+2. Regenerate the examples after any analyzer change: `python -m handoff247 build <PlayBookOS checkout> --name PlayBookOS -o examples/playbookos --notes examples/playbookos.notes.md --date <date>`. If an analyzer change surfaces new Korean comments or headings, `check --notes examples/playbookos.notes.md` reports them; add their rows to the Translations table there. Read the diff of the generated pages: a change there is a change in what successors will be told.
 3. Regenerate this pack: `python -m handoff247 build . -o docs/handoff --date <date>`.
 4. Open `index.html` of a pack in a browser and check that every diagram renders (Mermaid errors show as red text in the page).
 
@@ -67,8 +67,8 @@ Three commands: `build`, `notes`, `check`. `check --min N` exits 1 when fewer th
 ## File: handoff247/connect.py
 Turns per-file facts into edges and connection maps. The key idea: string keys of a dispatch table (`"list"`, `"ontology.search"`) are followed to every caller (`api('list')`, `cli('list')`, `Call("list")`, `cli list` in docs), and each caller's wrapper function is inspected to tell HTTP, CLI process or in-process apart. A caller group only counts when it uses two or more keys or a dotted key, so ordinary strings like "git" are not mistaken for operations.
 
-## File: handoff247/i18n.py
-All generated labels in English and Korean. Extracted comments and notes are never translated.
+## File: handoff247/labels.py
+Every generated heading and label, in one table, so pages and diagrams use the same words. Extracted comments and notes never pass through it.
 
 ## File: handoff247/inventory.py
 Lists files with `git ls-files` (so .gitignore applies), falls back to a directory walk, applies `.handoffignore` and skips folders that contain an earlier pack.
@@ -83,7 +83,7 @@ Builds the five diagrams. `system` collapses launch scripts into one node when t
 Dataclasses: FileInfo, Symbol, Fact, Edge, Project. A Fact is one observation with a file and line; everything in the pack traces back to one.
 
 ## File: handoff247/notes.py
-Parses and extends the notes file. `update` only appends missing headings; it never rewrites existing text. Stale headings (for deleted files) are reported, not removed.
+Parses and extends the notes file. `update` only appends missing headings and missing Translations rows; it never rewrites existing text. Stale headings (for deleted files) are reported, not removed.
 
 ## File: handoff247/pipeline.py
 analyze_project(): inventory, per-file analysis, linking.
@@ -93,6 +93,9 @@ The single-file viewer. It embeds the Markdown pages and loads marked, DOMPurify
 
 ## File: handoff247/render_md.py
 The five Markdown pages. `Linker` decides how file:line references are linked: relative when the pack is inside the project, GitHub blob URLs at the exact commit when it is outside, plain text otherwise.
+
+## File: handoff247/translate.py
+Finds extracted prose with letters outside the Latin script (summaries, doc comments, Markdown headings, MCP tool descriptions, sub-command help, commit subjects) and swaps in the English from the notes' Translations table. Matching is exact apart from spacing, so a comment that changed later shows its original again instead of a stale translation. Identifiers such as file names are never touched.
 
 ## File: tests/test_handoff.py
 Runs the full pipeline on a copy of the fixture outside Git, so both file-listing paths are covered.

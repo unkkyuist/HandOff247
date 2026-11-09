@@ -5,7 +5,7 @@ import argparse
 import sys
 from pathlib import Path
 
-from . import __version__
+from . import __version__, translate
 from .build import write_pack
 from .notes import DEFAULT_NAME, load, skeleton, update
 from .pipeline import analyze_project
@@ -15,7 +15,6 @@ def _common(p: argparse.ArgumentParser) -> None:
     p.add_argument("project", nargs="?", default=".", help="project folder to analyze (default: current folder)")
     p.add_argument("--name", help="project name shown in the pack (default: folder name)")
     p.add_argument("--notes", help=f"notes file (default: <project>/{DEFAULT_NAME})")
-    p.add_argument("--lang", choices=["en", "ko"], default="en", help="language of generated headings and labels")
     p.add_argument("--exclude", action="append", default=[], metavar="GLOB",
                    help="skip matching paths (repeatable; also read from <project>/.handoffignore)")
 
@@ -59,17 +58,22 @@ def main(argv: list[str] | None = None) -> int:
         out = Path(args.out) if args.out else Path.cwd() / "handoff" / project.name
         notes = load(notes_path)
         label = notes_path.name if notes_path.parent.resolve() == root.resolve() else notes_path.as_posix()
-        info = write_pack(project, out, notes, args.lang, args.links, args.link_base, args.date, label)
+        info = write_pack(project, out, notes, args.links, args.link_base, args.date, label)
         L = project.links
         print(f"HandOff247 {__version__}: {info['files']} files, {info['edges']} links, "
               f"{len({m['name'] for m in L['modes']})} modes, {sum(len(t['ops']) for t in L['tables'])} operations, "
               f"{len(L['routes'])} routes, {len(L['mcp_tools'])} MCP tools")
         print(f"diagrams: {', '.join(info['diagrams']) or 'none'} · source links: {info['links']}")
+        if info["applied"] or info["untranslated"] or info["unused"]:
+            print(f"translations: {info['applied']} used, {info['untranslated']} text(s) still in another language"
+                  + (f", {info['unused']} row(s) no longer match the code" if info["unused"] else ""))
         print(f"wrote {out}{'' if notes_path.exists() else f'  (no notes file yet: run handoff247 notes {args.project})'}")
         return 0
     if args.cmd == "notes":
-        added, existing = update(notes_path, project, args.lang)
+        added, rows, existing = update(notes_path, project)
         print(f"{notes_path}: {added} heading(s) added, {existing} already there. Existing text was not changed.")
+        if rows:
+            print(f"{rows} comment(s) or heading(s) in another language listed under ## Translations; fill the English column.")
         stale = load(notes_path).stale(project)
         if stale:
             print("headings for items that no longer exist (kept, review by hand):")
@@ -78,7 +82,7 @@ def main(argv: list[str] | None = None) -> int:
         return 0
     # check
     notes = load(notes_path)
-    items = skeleton(project, args.lang)
+    items = skeleton(project)
     file_items = [k for k, _ in items if k.startswith("File: ")]
     filled = [k for k in file_items if notes.get(k)]
     share = 100.0 * len(filled) / len(file_items) if file_items else 100.0
@@ -89,8 +93,12 @@ def main(argv: list[str] | None = None) -> int:
     topics = [k for k, _ in items if k.startswith("Topic: ")]
     for k in topics:
         print(f"{k}: {'ok' if notes.get(k) else 'TODO'}")
+    foreign = translate.texts(project)
+    if foreign:
+        have = {translate.norm(o) for o in notes.translations()}
+        print(f"translations: {sum(x in have for x in foreign)}/{len(foreign)} texts in another language have an English version")
     from .render_md import Pages, Linker
-    pages = Pages(project, {}, notes, args.lang, Linker("plain"), notes_path.name, "")
+    pages = Pages(project, {}, notes, Linker("plain"), notes_path.name, "")
     gaps = pages.undocumented()
     if gaps:
         print("most important undocumented files:")

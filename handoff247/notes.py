@@ -1,8 +1,9 @@
 """The human half of a handoff: a Markdown notes file with one heading per item.
 
 Headings are matched by name: ``## Project``, ``## Topic: …``, ``## Mode: serve``,
-``## Area: scripts``, ``## File: path/to/file.cs``, ``## Op: list``. Updating the skeleton
-only appends missing headings; existing text is never rewritten or removed.
+``## Area: scripts``, ``## File: path/to/file.cs``, ``## Op: list``, plus ``## Translations``
+(a two-column table, original → English). Updating the skeleton only appends missing
+headings and missing table rows; existing text is never rewritten or removed.
 """
 from __future__ import annotations
 
@@ -10,15 +11,19 @@ import re
 from dataclasses import dataclass, field
 from pathlib import Path
 
+from . import translate
 from .connect import area_of
-from .i18n import STRINGS, T
+from .labels import t
 from .model import Project
 
 DEFAULT_NAME = "HANDOFF.notes.md"
+TRANSLATIONS = "Translations"
 HEADING = re.compile(r"^##\s+(.+?)\s*$")
-CHECKLIST_NAMES = set(STRINGS["topic_checklist"])
-RISK_NAMES = set(STRINGS["topic_risks"])
-SECRET_NAMES = set(STRINGS["topic_secrets"])
+CELL_SPLIT = re.compile(r"(?<!\\)\|")
+SEPARATOR = re.compile(r":?-{2,}:?")
+CHECKLIST_NAMES = {t("topic_checklist")}
+RISK_NAMES = {t("topic_risks")}
+SECRET_NAMES = {t("topic_secrets")}
 
 
 @dataclass
@@ -40,11 +45,28 @@ class Notes:
                 return v
         return ""
 
+    def translation_rows(self) -> list[tuple[str, str]]:
+        """Every (original, english) row of the Translations table, TODO rows included."""
+        rows = []
+        for line in self.body.get(TRANSLATIONS, "").split("\n"):
+            s = line.strip()
+            if not s.startswith("|"):
+                continue
+            cells = [c.strip().replace("\\|", "|") for c in CELL_SPLIT.split(s[1:-1] if s.endswith("|") else s[1:])]
+            if len(cells) != 2 or SEPARATOR.fullmatch(cells[0]) or (cells[0], cells[1]) == ("Original", "English"):
+                continue
+            rows.append((cells[0], cells[1]))
+        return rows
+
+    def translations(self) -> dict[str, str]:
+        """Original → English for the rows that have been filled in."""
+        return {o: e for o, e in self.translation_rows() if o and e and not e.upper().startswith("TODO")}
+
     def stale(self, project: Project) -> list[str]:
         paths = {f.path for f in project.files}
         areas = {area_of(f.path) for f in project.files}
         modes = {m["name"] for m in project.links.get("modes", [])}
-        ops = {o["key"] for t in project.links.get("tables", []) for o in t["ops"]}
+        ops = {o["key"] for tb in project.links.get("tables", []) for o in tb["ops"]}
         out = []
         for k in self.order:
             kind, _, name = k.partition(": ")
@@ -94,8 +116,18 @@ def load(path: Path | None) -> Notes:
     return Notes(path=path)
 
 
-def skeleton(project: Project, lang: str, max_files: int = 400) -> list[tuple[str, str]]:
-    t = T(lang)
+def _row(original: str) -> str:
+    return "| " + original.replace("|", "\\|") + " | TODO |"
+
+
+def translation_skeleton(project: Project) -> str:
+    rows = [_row(x) for x in translate.texts(project)]
+    if not rows:
+        return ""
+    return "\n".join([f"<!-- {t('translations_hint')} -->", "| Original | English |", "|---|---|", *rows])
+
+
+def skeleton(project: Project, max_files: int = 400) -> list[tuple[str, str]]:
     items = [("Project", t("todo_project")),
              (f"Topic: {t('topic_checklist')}", t("todo_checklist")),
              (f"Topic: {t('topic_risks')}", t("todo_risks")),
@@ -114,29 +146,55 @@ def skeleton(project: Project, lang: str, max_files: int = 400) -> list[tuple[st
             n += 1
             if n >= max_files:
                 break
+    tr = translation_skeleton(project)
+    if tr:
+        items.append((TRANSLATIONS, tr))
     return items
 
 
-def render_new(project: Project, lang: str) -> str:
-    t = T(lang)
+def render_new(project: Project) -> str:
     lines = [f"# HandOff247 notes · {project.name}", "", "<!--", t("notes_preamble"), "-->", ""]
-    for key, body in skeleton(project, lang):
+    for key, body in skeleton(project):
         lines += [f"## {key}", body, ""]
     return "\n".join(lines)
 
 
-def update(path: Path, project: Project, lang: str) -> tuple[int, int]:
-    """Create the notes file or append headings that are missing. Returns (added, existing)."""
+def _add_translation_rows(text: str, notes: Notes, project: Project) -> tuple[str, int]:
+    """Insert rows for new foreign text after the last row of an existing Translations table."""
+    have = {translate.norm(o) for o, _ in notes.translation_rows()}
+    new = [x for x in translate.texts(project) if x not in have]
+    if not new:
+        return text, 0
+    lines = text.split("\n")
+    start = next(i for i, l in enumerate(lines) if (m := HEADING.match(l)) and m.group(1).strip() == TRANSLATIONS)
+    end = next((i for i in range(start + 1, len(lines)) if HEADING.match(lines[i])), len(lines))
+    rows = [i for i in range(start + 1, end) if lines[i].strip().startswith("|")]
+    if rows:
+        at, insert = rows[-1] + 1, [_row(x) for x in new]
+    else:
+        at = start + 1
+        insert = ["| Original | English |", "|---|---|", *[_row(x) for x in new]]
+    return "\n".join(lines[:at] + insert + lines[at:]), len(new)
+
+
+def update(path: Path, project: Project) -> tuple[int, int, int]:
+    """Create the notes file or append headings (and translation rows) that are missing.
+    Returns (headings added, translation rows added, headings already there)."""
     if not path.exists():
-        path.write_text(render_new(project, lang), encoding="utf-8")
-        return len(skeleton(project, lang)), 0
+        path.write_text(render_new(project), encoding="utf-8")
+        return len(skeleton(project)), len(translate.texts(project)), 0
     text = path.read_text(encoding="utf-8-sig")
     notes = parse(text, path)
-    missing = [(k, b) for k, b in skeleton(project, lang) if k not in notes.body]
+    added = 0
+    if TRANSLATIONS in notes.body:
+        text, added = _add_translation_rows(text, notes, project)
+    missing = [(k, b) for k, b in skeleton(project) if k not in notes.body]
     if missing:
-        add = ["", f"<!-- added by HandOff247 for new items -->"]
+        add = ["", "<!-- added by HandOff247 for new items -->"]
         for key, body in missing:
             add += [f"## {key}", body, ""]
         sep = "" if text.endswith("\n") else "\n"
-        path.write_text(text + sep + "\n".join(add), encoding="utf-8")
-    return len(missing), len(notes.order)
+        text = text + sep + "\n".join(add)
+    if added or missing:
+        path.write_text(text, encoding="utf-8")
+    return len(missing), added, len(notes.order)

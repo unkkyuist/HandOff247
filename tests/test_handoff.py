@@ -148,20 +148,21 @@ class PackTests(unittest.TestCase):
 
     def test_build_notes_check_cycle(self):
         out = self.root / "docs" / "handoff"
-        self.assertEqual(main(["notes", str(self.root), "--lang", "ko"]), 0)
+        self.assertEqual(main(["notes", str(self.root)]), 0)
         notes_file = self.root / "HANDOFF.notes.md"
         text = notes_file.read_text(encoding="utf-8")
         self.assertIn("## File: Program.cs", text)
         self.assertIn("## Mode: cli", text)
+        self.assertNotIn("## Translations", text)                  # the fixture is all English
         # a person fills two items
-        text = text.replace("## Project\nTODO: 이 프로젝트가 하는 일, 쓰는 사람, 지금 상태를 적어 주세요.",
+        text = text.replace("## Project\nTODO: What does this project do, who uses it, and what state is it in right now?",
                             "## Project\nRecords for the front desk. Owner: ops team.")
-        text = text.replace("## File: Program.cs\nTODO: 이 파일의 역할, 알아둘 점.",
+        text = text.replace("## File: Program.cs\nTODO: Role of this file; anything surprising about it.",
                             "## File: Program.cs\nPick the mode here; serve is what people use.")
         notes_file.write_text(text, encoding="utf-8")
         # re-running notes keeps the person's text
         (self.root / "Extra.cs").write_text("namespace Mini; public class Extra {}", encoding="utf-8")
-        self.assertEqual(main(["notes", str(self.root), "--lang", "ko"]), 0)
+        self.assertEqual(main(["notes", str(self.root)]), 0)
         text2 = notes_file.read_text(encoding="utf-8")
         self.assertIn("Records for the front desk. Owner: ops team.", text2)
         self.assertIn("## File: Extra.cs", text2)
@@ -214,6 +215,56 @@ class PackTests(unittest.TestCase):
         n = notes_mod.parse("# t\n\n## Project\nline 1\n\nline 2\n## File: a.py\nTODO: x\n")
         self.assertEqual(n.get("Project"), "line 1\n\nline 2")
         self.assertEqual(n.get("File: a.py"), "")
+
+    def test_translations_cycle(self):
+        # source text written in Korean: a leading comment, a doc comment and a Markdown heading
+        (self.root / "Ledger.cs").write_text(
+            "// 기록을 저장하는 원장.\nnamespace Mini;\n/// <summary>모든 변경을 검증한다.</summary>\n"
+            "public class Ledger {}\n", encoding="utf-8")
+        (self.root / "GUIDE.md").write_text("# 사용 안내\n\nHow to use it.\n\n## 설치 | 설정\n", encoding="utf-8")
+        self.assertEqual(main(["notes", str(self.root)]), 0)
+        notes_file = self.root / "HANDOFF.notes.md"
+        text = notes_file.read_text(encoding="utf-8")
+        self.assertIn("## Translations", text)
+        self.assertIn("| 기록을 저장하는 원장. | TODO |", text)
+        self.assertIn("| 설치 \\| 설정 | TODO |", text)              # a pipe in the original is escaped
+        self.assertNotIn("| Records", text)                         # English text is never listed
+        text = (text.replace("| 기록을 저장하는 원장. | TODO |", "| 기록을 저장하는 원장. | The ledger that stores records. |")
+                    .replace("| 사용 안내 | TODO |", "| 사용 안내 | User guide |")
+                    .replace("| 설치 \\| 설정 | TODO |", "| 설치 \\| 설정 | Install \\| configure |"))
+        notes_file.write_text(text, encoding="utf-8")
+        # a new Korean comment appears: only its row is added, filled rows stay as written
+        (self.root / "Audit.cs").write_text("// 감사 기록.\nnamespace Mini; public class Audit {}\n", encoding="utf-8")
+        self.assertEqual(main(["notes", str(self.root)]), 0)
+        text2 = notes_file.read_text(encoding="utf-8")
+        self.assertIn("| 감사 기록. | TODO |", text2)
+        self.assertIn("| 기록을 저장하는 원장. | The ledger that stores records. |", text2)
+        self.assertEqual(text2.count("## Translations"), 1)
+
+        out = self.tmp / "pack"
+        self.assertEqual(main(["build", str(self.root), "-o", str(out), "--date", "2026-01-01"]), 0)
+        files_md = (out / "FILES.md").read_text(encoding="utf-8")
+        self.assertIn("> The ledger that stores records.", files_md)
+        self.assertIn("translated", files_md)
+        self.assertIn("User guide", files_md)
+        self.assertIn("Install \\| configure", files_md)             # escaped inside the link label
+        self.assertNotIn("기록을 저장하는 원장", files_md)
+        self.assertIn("모든 변경을 검증한다", files_md)               # not translated yet, so shown as written
+        readme = (out / "README.md").read_text(encoding="utf-8")
+        self.assertIn("## Still in another language", readme)
+        data = json.loads((out / "handoff.json").read_text(encoding="utf-8"))
+        ledger = next(f for f in data["files"] if f["path"] == "Ledger.cs")
+        self.assertEqual(ledger["translated"], [{"where": "summary", "original": "기록을 저장하는 원장."}])
+        self.assertEqual(set(data["links"]["untranslated"]), {"모든 변경을 검증한다.", "감사 기록."})
+        self.assertNotIn("Translations", data["notes"])
+
+    def test_foreign_detection(self):
+        from handoff247.translate import foreign
+        self.assertTrue(foreign("기록을 저장한다"))
+        self.assertTrue(foreign("ログを書く"))
+        self.assertTrue(foreign("Журнал"))
+        self.assertFalse(foreign("Café façade, Straße — naïve"))
+        self.assertFalse(foreign("PlayBook.dll cli list"))
 
 
 if __name__ == "__main__":

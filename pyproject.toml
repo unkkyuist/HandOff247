@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "handoff247"
-version = "0.1.0"
+version = "0.2.0"
 description = "Turn a project folder into a handoff pack: diagrams, structure, comments and how the tools connect."
 readme = "README.md"
 requires-python = ">=3.10"

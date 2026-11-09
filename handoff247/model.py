@@ -48,6 +48,7 @@ class FileInfo:
     strings: list[tuple[str, int]] = field(default_factory=list)   # string literals (value, line)
     tags: list[str] = field(default_factory=list)
     skipped: str = ""             # reason the file was not parsed
+    translated: list[dict[str, str]] = field(default_factory=list)   # {where, original} replaced by an English version
     # private analyzer state (not serialised)
     text: str = field(default="", repr=False)
     code: str = field(default="", repr=False)        # comments and string contents blanked

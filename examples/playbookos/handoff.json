@@ -1,8 +1,7 @@
 {
  "generator": "HandOff247",
- "version": "0.1.0",
+ "version": "0.2.0",
  "generated": "2026-11-09",
- "lang": "en",
  "project": {
   "name": "PlayBookOS",
   "git": {
@@ -64,7 +63,8 @@
    "symbols": [],
    "imports": [],
    "tags": [],
-   "skipped": ""
+   "skipped": "",
+   "translated": []
   },
   {
    "path": ".gitignore",
@@ -77,7 +77,8 @@
    "symbols": [],
    "imports": [],
    "tags": [],
-   "skipped": ""
+   "skipped": "",
+   "translated": []
   },
   {
    "path": "AGENTS.md",
@@ -109,7 +110,8 @@
    ],
    "imports": [],
    "tags": [],
-   "skipped": ""
+   "skipped": "",
+   "translated": []
   },
   {
    "path": "Access.cs",
@@ -233,7 +235,8 @@
    "tags": [
     "ns:PlayBook"
    ],
-   "skipped": ""
+   "skipped": "",
+   "translated": []
   },
   {
    "path": "AgentWorker.cs",
@@ -330,7 +333,8 @@
    "tags": [
     "ns:PlayBook"
    ],
-   "skipped": ""
+   "skipped": "",
+   "translated": []
   },
   {
    "path": "Connection.cs",
@@ -436,7 +440,8 @@
    "tags": [
     "ns:PlayBook"
    ],
-   "skipped": ""
+   "skipped": "",
+   "translated": []
   },
   {
    "path": "Desktop.cs",
@@ -470,7 +475,8 @@
    "tags": [
     "ns:PlayBook"
    ],
-   "skipped": ""
+   "skipped": "",
+   "translated": []
   },
   {
    "path": "Domain.cs",
@@ -558,7 +564,8 @@
    "tags": [
     "ns:PlayBook"
    ],
-   "skipped": ""
+   "skipped": "",
+   "translated": []
   },
   {
    "path": "Folders.cs",
@@ -799,7 +806,8 @@
    "tags": [
     "ns:PlayBook"
    ],
-   "skipped": ""
+   "skipped": "",
+   "translated": []
   },
   {
    "path": "Harnesses.cs",
@@ -1004,7 +1012,8 @@
    "tags": [
     "ns:PlayBook"
    ],
-   "skipped": ""
+   "skipped": "",
+   "translated": []
   },
   {
    "path": "Library.cs",
@@ -1119,7 +1128,8 @@
    "tags": [
     "ns:PlayBook"
    ],
-   "skipped": ""
+   "skipped": "",
+   "translated": []
   },
   {
    "path": "McpTools.cs",
@@ -1568,7 +1578,8 @@
     "mcp-tool-type",
     "ns:PlayBook"
    ],
-   "skipped": ""
+   "skipped": "",
+   "translated": []
   },
   {
    "path": "Ontology.cs",
@@ -1998,7 +2009,8 @@
    "tags": [
     "ns:PlayBook"
    ],
-   "skipped": ""
+   "skipped": "",
+   "translated": []
   },
   {
    "path": "Operations.cs",
@@ -2068,7 +2080,8 @@
    "tags": [
     "ns:PlayBook"
    ],
-   "skipped": ""
+   "skipped": "",
+   "translated": []
   },
   {
    "path": "Orchestration.cs",
@@ -2219,7 +2232,8 @@
    "tags": [
     "ns:PlayBook"
    ],
-   "skipped": ""
+   "skipped": "",
+   "translated": []
   },
   {
    "path": "PlayBook.csproj",
@@ -2232,7 +2246,8 @@
    "symbols": [],
    "imports": [],
    "tags": [],
-   "skipped": ""
+   "skipped": "",
+   "translated": []
   },
   {
    "path": "Program.cs",
@@ -2247,7 +2262,8 @@
    "tags": [
     "entry"
    ],
-   "skipped": ""
+   "skipped": "",
+   "translated": []
   },
   {
    "path": "ProjectScanner.cs",
@@ -2326,7 +2342,8 @@
    "tags": [
     "ns:PlayBook"
    ],
-   "skipped": ""
+   "skipped": "",
+   "translated": []
   },
   {
    "path": "Properties/launchSettings.json",
@@ -2339,7 +2356,8 @@
    "symbols": [],
    "imports": [],
    "tags": [],
-   "skipped": ""
+   "skipped": "",
+   "translated": []
   },
   {
    "path": "Providers.cs",
@@ -2472,7 +2490,8 @@
    "tags": [
     "ns:PlayBook"
    ],
-   "skipped": ""
+   "skipped": "",
+   "translated": []
   },
   {
    "path": "README.en.md",
@@ -2543,7 +2562,8 @@
     ]
    ],
    "tags": [],
-   "skipped": ""
+   "skipped": "",
+   "translated": []
   },
   {
    "path": "README.md",
@@ -2551,8 +2571,8 @@
    "category": "docs",
    "lines": 184,
    "size": 12618,
-   "summary": "프로젝트와 AI 작업을 관리하는 공통 원장.",
-   "summary_source": "first paragraph",
+   "summary": "A shared ledger for managing projects and AI work.",
+   "summary_source": "first paragraph, translated",
    "symbols": [
     {
      "name": "PlayBook OS",
@@ -2564,7 +2584,7 @@
      "end_line": 0
     },
     {
-     "name": "시작",
+     "name": "Getting started",
      "kind": "h2",
      "line": 8,
      "doc": "",
@@ -2573,7 +2593,7 @@
      "end_line": 0
     },
     {
-     "name": "사용 순서",
+     "name": "Usage steps",
      "kind": "h2",
      "line": 40,
      "doc": "",
@@ -2582,7 +2602,7 @@
      "end_line": 0
     },
     {
-     "name": "Headless 예시",
+     "name": "Headless examples",
      "kind": "h2",
      "line": 59,
      "doc": "",
@@ -2591,7 +2611,7 @@
      "end_line": 0
     },
     {
-     "name": "MCP 연결",
+     "name": "MCP connection",
      "kind": "h2",
      "line": 76,
      "doc": "",
@@ -2600,7 +2620,7 @@
      "end_line": 0
     },
     {
-     "name": "도구/서버",
+     "name": "Tools / servers",
      "kind": "h2",
      "line": 108,
      "doc": "",
@@ -2609,7 +2629,7 @@
      "end_line": 0
     },
     {
-     "name": "데이터와 이식",
+     "name": "Data and portability",
      "kind": "h2",
      "line": 130,
      "doc": "",
@@ -2618,7 +2638,7 @@
      "end_line": 0
     },
     {
-     "name": "현재 구현 범위",
+     "name": "What is implemented now",
      "kind": "h2",
      "line": 143,
      "doc": "",
@@ -2627,7 +2647,7 @@
      "end_line": 0
     },
     {
-     "name": "개발 온톨로지",
+     "name": "Development ontology",
      "kind": "h2",
      "line": 158,
      "doc": "",
@@ -2636,7 +2656,7 @@
      "end_line": 0
     },
     {
-     "name": "검증/설계",
+     "name": "Verification / design",
      "kind": "h2",
      "line": 170,
      "doc": "",
@@ -2692,7 +2712,49 @@
     ]
    ],
    "tags": [],
-   "skipped": ""
+   "skipped": "",
+   "translated": [
+    {
+     "where": "summary",
+     "original": "프로젝트와 AI 작업을 관리하는 공통 원장."
+    },
+    {
+     "where": "heading L8",
+     "original": "시작"
+    },
+    {
+     "where": "heading L40",
+     "original": "사용 순서"
+    },
+    {
+     "where": "heading L59",
+     "original": "Headless 예시"
+    },
+    {
+     "where": "heading L76",
+     "original": "MCP 연결"
+    },
+    {
+     "where": "heading L108",
+     "original": "도구/서버"
+    },
+    {
+     "where": "heading L130",
+     "original": "데이터와 이식"
+    },
+    {
+     "where": "heading L143",
+     "original": "현재 구현 범위"
+    },
+    {
+     "where": "heading L158",
+     "original": "개발 온톨로지"
+    },
+    {
+     "where": "heading L170",
+     "original": "검증/설계"
+    }
+   ]
   },
   {
    "path": "START_GRAPHIFY.cmd",
@@ -2705,7 +2767,8 @@
    "symbols": [],
    "imports": [],
    "tags": [],
-   "skipped": ""
+   "skipped": "",
+   "translated": []
   },
   {
    "path": "START_PLAYBOOK.cmd",
@@ -2718,7 +2781,8 @@
    "symbols": [],
    "imports": [],
    "tags": [],
-   "skipped": ""
+   "skipped": "",
+   "translated": []
   },
   {
    "path": "Start-PlayBook-Desktop.ps1",
@@ -2726,12 +2790,18 @@
    "category": "script",
    "lines": 34,
    "size": 2428,
-   "summary": "바탕화면 바로가기용: 서버가 꺼져 있으면 켜고, 화면을 엽니다.",
-   "summary_source": "file comment",
+   "summary": "For the desktop shortcut: starts the server if it is not running, then opens the UI.",
+   "summary_source": "file comment, translated",
    "symbols": [],
    "imports": [],
    "tags": [],
-   "skipped": ""
+   "skipped": "",
+   "translated": [
+    {
+     "where": "summary",
+     "original": "바탕화면 바로가기용: 서버가 꺼져 있으면 켜고, 화면을 엽니다."
+    }
+   ]
   },
   {
    "path": "Store.cs",
@@ -2864,7 +2934,8 @@
    "tags": [
     "ns:PlayBook"
    ],
-   "skipped": ""
+   "skipped": "",
+   "translated": []
   },
   {
    "path": "ToolRunner.cs",
@@ -3024,7 +3095,8 @@
    "tags": [
     "ns:PlayBook"
    ],
-   "skipped": ""
+   "skipped": "",
+   "translated": []
   },
   {
    "path": "Workspace.cs",
@@ -3184,7 +3256,8 @@
    "tags": [
     "ns:PlayBook"
    ],
-   "skipped": ""
+   "skipped": "",
+   "translated": []
   },
   {
    "path": "appsettings.Development.json",
@@ -3197,7 +3270,8 @@
    "symbols": [],
    "imports": [],
    "tags": [],
-   "skipped": ""
+   "skipped": "",
+   "translated": []
   },
   {
    "path": "appsettings.json",
@@ -3210,7 +3284,8 @@
    "symbols": [],
    "imports": [],
    "tags": [],
-   "skipped": ""
+   "skipped": "",
+   "translated": []
   },
   {
    "path": "docs/API.md",
@@ -3218,11 +3293,11 @@
    "category": "docs",
    "lines": 153,
    "size": 11299,
-   "summary": "모든 진입점이 Operations.Execute(operation, arguments)를 공유한다.",
-   "summary_source": "first paragraph",
+   "summary": "Every entry point shares Operations.Execute(operation, arguments).",
+   "summary_source": "first paragraph, translated",
    "symbols": [
     {
-     "name": "PlayBook API / 데이터 계약",
+     "name": "PlayBook API / data contract",
      "kind": "h1",
      "line": 1,
      "doc": "",
@@ -3249,7 +3324,7 @@
      "end_line": 0
     },
     {
-     "name": "오류",
+     "name": "Errors",
      "kind": "h2",
      "line": 145,
      "doc": "",
@@ -3258,7 +3333,7 @@
      "end_line": 0
     },
     {
-     "name": "작업 지침 개선 API",
+     "name": "Work-instruction improvement API",
      "kind": "h2",
      "line": 149,
      "doc": "",
@@ -3282,7 +3357,25 @@
     ]
    ],
    "tags": [],
-   "skipped": ""
+   "skipped": "",
+   "translated": [
+    {
+     "where": "summary",
+     "original": "모든 진입점이 Operations.Execute(operation, arguments)를 공유한다."
+    },
+    {
+     "where": "heading L1",
+     "original": "PlayBook API / 데이터 계약"
+    },
+    {
+     "where": "heading L145",
+     "original": "오류"
+    },
+    {
+     "where": "heading L149",
+     "original": "작업 지침 개선 API"
+    }
+   ]
   },
   {
    "path": "docs/CENTRAL-SERVER-PLAN.md",
@@ -3290,11 +3383,11 @@
    "category": "docs",
    "lines": 195,
    "size": 18013,
-   "summary": "PlayBook 서버가 프로젝트 지침, 목적, 파일 목록, 작업과 검증 기록의 공통 원장을 관리하고, 로그인한 각 컴퓨터의 클라이언트가 로컬 AI와 도구를 실행한다.",
-   "summary_source": "first paragraph",
+   "summary": "The PlayBook server keeps the shared ledger of project instructions, goals, file lists, tasks and verification records; a client on each signed-in computer runs the local AI and tools.",
+   "summary_source": "first paragraph, translated",
    "symbols": [
     {
-     "name": "PlayBook 중앙 서버와 기기 간 AI 오케스트레이션 설계안",
+     "name": "Design: PlayBook central server and AI orchestration across devices",
      "kind": "h1",
      "line": 1,
      "doc": "",
@@ -3303,7 +3396,7 @@
      "end_line": 0
     },
     {
-     "name": "사용 흐름",
+     "name": "Usage flow",
      "kind": "h2",
      "line": 12,
      "doc": "",
@@ -3312,7 +3405,7 @@
      "end_line": 0
     },
     {
-     "name": "현재 구현과 확장 지점",
+     "name": "Current implementation and extension points",
      "kind": "h2",
      "line": 34,
      "doc": "",
@@ -3321,7 +3414,7 @@
      "end_line": 0
     },
     {
-     "name": "서버와 클라이언트의 책임",
+     "name": "Responsibilities of server and client",
      "kind": "h2",
      "line": 53,
      "doc": "",
@@ -3330,7 +3423,7 @@
      "end_line": 0
     },
     {
-     "name": "로그인과 실시간 공유",
+     "name": "Sign-in and live sharing",
      "kind": "h2",
      "line": 73,
      "doc": "",
@@ -3339,7 +3432,7 @@
      "end_line": 0
     },
     {
-     "name": "파일 목록과 기기별 작업 폴더",
+     "name": "File lists and per-device work folders",
      "kind": "h2",
      "line": 90,
      "doc": "",
@@ -3348,7 +3441,7 @@
      "end_line": 0
     },
     {
-     "name": "AI 하네스와 지침 반영",
+     "name": "AI harness and applying instructions",
      "kind": "h2",
      "line": 108,
      "doc": "",
@@ -3357,7 +3450,7 @@
      "end_line": 0
     },
     {
-     "name": "다른 기기의 여러 AI 작업 조정",
+     "name": "Coordinating several AI tasks on other devices",
      "kind": "h2",
      "line": 130,
      "doc": "",
@@ -3366,7 +3459,7 @@
      "end_line": 0
     },
     {
-     "name": "구현 순서와 확인할 결과",
+     "name": "Implementation order and results to check",
      "kind": "h2",
      "line": 171,
      "doc": "",
@@ -3375,7 +3468,7 @@
      "end_line": 0
     },
     {
-     "name": "이번 설계의 확인 범위",
+     "name": "What this design has been checked against",
      "kind": "h2",
      "line": 190,
      "doc": "",
@@ -3395,7 +3488,53 @@
     ]
    ],
    "tags": [],
-   "skipped": ""
+   "skipped": "",
+   "translated": [
+    {
+     "where": "summary",
+     "original": "PlayBook 서버가 프로젝트 지침, 목적, 파일 목록, 작업과 검증 기록의 공통 원장을 관리하고, 로그인한 각 컴퓨터의 클라이언트가 로컬 AI와 도구를 실행한다."
+    },
+    {
+     "where": "heading L1",
+     "original": "PlayBook 중앙 서버와 기기 간 AI 오케스트레이션 설계안"
+    },
+    {
+     "where": "heading L12",
+     "original": "사용 흐름"
+    },
+    {
+     "where": "heading L34",
+     "original": "현재 구현과 확장 지점"
+    },
+    {
+     "where": "heading L53",
+     "original": "서버와 클라이언트의 책임"
+    },
+    {
+     "where": "heading L73",
+     "original": "로그인과 실시간 공유"
+    },
+    {
+     "where": "heading L90",
+     "original": "파일 목록과 기기별 작업 폴더"
+    },
+    {
+     "where": "heading L108",
+     "original": "AI 하네스와 지침 반영"
+    },
+    {
+     "where": "heading L130",
+     "original": "다른 기기의 여러 AI 작업 조정"
+    },
+    {
+     "where": "heading L171",
+     "original": "구현 순서와 확인할 결과"
+    },
+    {
+     "where": "heading L190",
+     "original": "이번 설계의 확인 범위"
+    }
+   ]
   },
   {
    "path": "docs/CLAUDE-AND-FOLDERS.md",
@@ -3403,11 +3542,11 @@
    "category": "docs",
    "lines": 61,
    "size": 4212,
-   "summary": "DevWork 전체에서 같은 PlayBook을 사용하려면 사용자 범위 MCP에 등록한다:",
-   "summary_source": "first paragraph",
+   "summary": "To use the same PlayBook across all of DevWork, register it as a user-scope MCP server:",
+   "summary_source": "first paragraph, translated",
    "symbols": [
     {
-     "name": "Claude 연결과 폴더 관리",
+     "name": "Connecting Claude and managing folders",
      "kind": "h1",
      "line": 1,
      "doc": "",
@@ -3434,7 +3573,7 @@
      "end_line": 0
     },
     {
-     "name": "프로젝트 내부 폴더 정리",
+     "name": "Organizing folders inside a project",
      "kind": "h2",
      "line": 28,
      "doc": "",
@@ -3450,7 +3589,21 @@
     ]
    ],
    "tags": [],
-   "skipped": ""
+   "skipped": "",
+   "translated": [
+    {
+     "where": "summary",
+     "original": "DevWork 전체에서 같은 PlayBook을 사용하려면 사용자 범위 MCP에 등록한다:"
+    },
+    {
+     "where": "heading L1",
+     "original": "Claude 연결과 폴더 관리"
+    },
+    {
+     "where": "heading L28",
+     "original": "프로젝트 내부 폴더 정리"
+    }
+   ]
   },
   {
    "path": "docs/GRAPHIFY-OZ-MAC.md",
@@ -3458,11 +3611,11 @@
    "category": "docs",
    "lines": 86,
    "size": 6181,
-   "summary": "오즈는 Mac의 Claude Code 앱을 사용한다는 사용자 정정을 반영했습니다.",
-   "summary_source": "first paragraph",
+   "summary": "Updated after the user's correction that Oz uses the Claude Code app on a Mac.",
+   "summary_source": "first paragraph, translated",
    "symbols": [
     {
-     "name": "오즈용 Mac 배포본",
+     "name": "Mac distribution for Oz",
      "kind": "h1",
      "line": 1,
      "doc": "",
@@ -3471,7 +3624,7 @@
      "end_line": 0
     },
     {
-     "name": "전달 파일",
+     "name": "Files to hand over",
      "kind": "h2",
      "line": 8,
      "doc": "",
@@ -3480,7 +3633,7 @@
      "end_line": 0
     },
     {
-     "name": "설치와 구성",
+     "name": "Installation and setup",
      "kind": "h2",
      "line": 20,
      "doc": "",
@@ -3489,7 +3642,7 @@
      "end_line": 0
     },
     {
-     "name": "Claude가 사용하는 도구",
+     "name": "Tools Claude uses",
      "kind": "h2",
      "line": 35,
      "doc": "",
@@ -3498,7 +3651,7 @@
      "end_line": 0
     },
     {
-     "name": "빌드와 검증",
+     "name": "Build and verification",
      "kind": "h2",
      "line": 57,
      "doc": "",
@@ -3514,7 +3667,33 @@
     ]
    ],
    "tags": [],
-   "skipped": ""
+   "skipped": "",
+   "translated": [
+    {
+     "where": "summary",
+     "original": "오즈는 Mac의 Claude Code 앱을 사용한다는 사용자 정정을 반영했습니다."
+    },
+    {
+     "where": "heading L1",
+     "original": "오즈용 Mac 배포본"
+    },
+    {
+     "where": "heading L8",
+     "original": "전달 파일"
+    },
+    {
+     "where": "heading L20",
+     "original": "설치와 구성"
+    },
+    {
+     "where": "heading L35",
+     "original": "Claude가 사용하는 도구"
+    },
+    {
+     "where": "heading L57",
+     "original": "빌드와 검증"
+    }
+   ]
   },
   {
    "path": "docs/GRAPHIFY.md",
@@ -3522,11 +3701,11 @@
    "category": "docs",
    "lines": 131,
    "size": 8152,
-   "summary": "공식 Graphify를 로컬 코드 분석 도구로 연결했습니다.",
-   "summary_source": "first paragraph",
+   "summary": "Connected the official Graphify as a local code-analysis tool.",
+   "summary_source": "first paragraph, translated",
    "symbols": [
     {
-     "name": "Graphify와 PlayBook 함께 사용하기",
+     "name": "Using Graphify together with PlayBook",
      "kind": "h1",
      "line": 1,
      "doc": "",
@@ -3535,7 +3714,7 @@
      "end_line": 0
     },
     {
-     "name": "화면 사용",
+     "name": "Using the UI",
      "kind": "h2",
      "line": 6,
      "doc": "",
@@ -3562,7 +3741,7 @@
      "end_line": 0
     },
     {
-     "name": "연결 범위와 출처",
+     "name": "Scope of the connection and sources",
      "kind": "h2",
      "line": 66,
      "doc": "",
@@ -3571,7 +3750,7 @@
      "end_line": 0
     },
     {
-     "name": "설치 위치와 현재 실행본",
+     "name": "Install location and the build currently running",
      "kind": "h2",
      "line": 85,
      "doc": "",
@@ -3580,7 +3759,7 @@
      "end_line": 0
     },
     {
-     "name": "검증",
+     "name": "Verification",
      "kind": "h2",
      "line": 121,
      "doc": "",
@@ -3591,7 +3770,33 @@
    ],
    "imports": [],
    "tags": [],
-   "skipped": ""
+   "skipped": "",
+   "translated": [
+    {
+     "where": "summary",
+     "original": "공식 Graphify를 로컬 코드 분석 도구로 연결했습니다."
+    },
+    {
+     "where": "heading L1",
+     "original": "Graphify와 PlayBook 함께 사용하기"
+    },
+    {
+     "where": "heading L6",
+     "original": "화면 사용"
+    },
+    {
+     "where": "heading L66",
+     "original": "연결 범위와 출처"
+    },
+    {
+     "where": "heading L85",
+     "original": "설치 위치와 현재 실행본"
+    },
+    {
+     "where": "heading L121",
+     "original": "검증"
+    }
+   ]
   },
   {
    "path": "docs/HARNESS.md",
@@ -3599,11 +3804,11 @@
    "category": "docs",
    "lines": 101,
    "size": 6842,
-   "summary": "Harness²의 제안 → 시험 → 비교·조합 → 검토 후 채택 → 교훈 재사용 절차 중 현재 PlayBook에 맞는 부분을 .NET 엔진에 구현했다.",
-   "summary_source": "first paragraph",
+   "summary": "Implemented in the .NET engine the parts of Harness²'s propose → trial → compare and combine → adopt after review → reuse lessons procedure that fit PlayBook today.",
+   "summary_source": "first paragraph, translated",
    "symbols": [
     {
-     "name": "작업 지침 개선",
+     "name": "Improving work instructions",
      "kind": "h1",
      "line": 1,
      "doc": "",
@@ -3612,7 +3817,7 @@
      "end_line": 0
     },
     {
-     "name": "화면에서 사용",
+     "name": "Using it from the UI",
      "kind": "h2",
      "line": 8,
      "doc": "",
@@ -3621,7 +3826,7 @@
      "end_line": 0
     },
     {
-     "name": "실행 경계",
+     "name": "Execution boundaries",
      "kind": "h2",
      "line": 21,
      "doc": "",
@@ -3630,7 +3835,7 @@
      "end_line": 0
     },
     {
-     "name": "공통 API",
+     "name": "Shared API",
      "kind": "h2",
      "line": 32,
      "doc": "",
@@ -3639,7 +3844,7 @@
      "end_line": 0
     },
     {
-     "name": "원장과 검증",
+     "name": "Ledger and verification",
      "kind": "h2",
      "line": 63,
      "doc": "",
@@ -3650,7 +3855,33 @@
    ],
    "imports": [],
    "tags": [],
-   "skipped": ""
+   "skipped": "",
+   "translated": [
+    {
+     "where": "summary",
+     "original": "Harness²의 제안 → 시험 → 비교·조합 → 검토 후 채택 → 교훈 재사용 절차 중 현재 PlayBook에 맞는 부분을 .NET 엔진에 구현했다."
+    },
+    {
+     "where": "heading L1",
+     "original": "작업 지침 개선"
+    },
+    {
+     "where": "heading L8",
+     "original": "화면에서 사용"
+    },
+    {
+     "where": "heading L21",
+     "original": "실행 경계"
+    },
+    {
+     "where": "heading L32",
+     "original": "공통 API"
+    },
+    {
+     "where": "heading L63",
+     "original": "원장과 검증"
+    }
+   ]
   },
   {
    "path": "docs/ONTOLOGY.md",
@@ -3658,11 +3889,11 @@
    "category": "docs",
    "lines": 210,
    "size": 13404,
-   "summary": "PlayBook에 기록된 대화, 연구 결과와 개발 상태를 출처가 있는 개발 지식으로 모으고 검색·참조합니다.",
-   "summary_source": "first paragraph",
+   "summary": "Gathers the conversations, research results and development status recorded in PlayBook into sourced development knowledge that can be searched and referenced.",
+   "summary_source": "first paragraph, translated",
    "symbols": [
     {
-     "name": "개발 온톨로지",
+     "name": "Development ontology",
      "kind": "h1",
      "line": 1,
      "doc": "",
@@ -3671,7 +3902,7 @@
      "end_line": 0
     },
     {
-     "name": "자동 갱신이 일어나는 범위",
+     "name": "Scope of automatic updates",
      "kind": "h2",
      "line": 7,
      "doc": "",
@@ -3680,7 +3911,7 @@
      "end_line": 0
     },
     {
-     "name": "동작과 인터페이스",
+     "name": "Behavior and interfaces",
      "kind": "h2",
      "line": 38,
      "doc": "",
@@ -3689,7 +3920,7 @@
      "end_line": 0
     },
     {
-     "name": "대화·연구 수집",
+     "name": "Collecting conversations and research",
      "kind": "h2",
      "line": 58,
      "doc": "",
@@ -3698,7 +3929,7 @@
      "end_line": 0
     },
     {
-     "name": "검색·참조·사용 이력",
+     "name": "Search, references and usage history",
      "kind": "h2",
      "line": 111,
      "doc": "",
@@ -3707,7 +3938,7 @@
      "end_line": 0
     },
     {
-     "name": "외부 온톨로지 연결",
+     "name": "Connecting external ontologies",
      "kind": "h2",
      "line": 147,
      "doc": "",
@@ -3716,7 +3947,7 @@
      "end_line": 0
     },
     {
-     "name": "검증",
+     "name": "Verification",
      "kind": "h2",
      "line": 198,
      "doc": "",
@@ -3736,7 +3967,41 @@
     ]
    ],
    "tags": [],
-   "skipped": ""
+   "skipped": "",
+   "translated": [
+    {
+     "where": "summary",
+     "original": "PlayBook에 기록된 대화, 연구 결과와 개발 상태를 출처가 있는 개발 지식으로 모으고 검색·참조합니다."
+    },
+    {
+     "where": "heading L1",
+     "original": "개발 온톨로지"
+    },
+    {
+     "where": "heading L7",
+     "original": "자동 갱신이 일어나는 범위"
+    },
+    {
+     "where": "heading L38",
+     "original": "동작과 인터페이스"
+    },
+    {
+     "where": "heading L58",
+     "original": "대화·연구 수집"
+    },
+    {
+     "where": "heading L111",
+     "original": "검색·참조·사용 이력"
+    },
+    {
+     "where": "heading L147",
+     "original": "외부 온톨로지 연결"
+    },
+    {
+     "where": "heading L198",
+     "original": "검증"
+    }
+   ]
   },
   {
    "path": "docs/OZ-LOGGING.md",
@@ -3744,11 +4009,11 @@
    "category": "docs",
    "lines": 44,
    "size": 3590,
-   "summary": "0.1.1은 Claude Code가 oz-playbook, oz-graphify 두 stdio 연결을 사용하도록 설치합니다.",
-   "summary_source": "first paragraph",
+   "summary": "Version 0.1.1 sets Claude Code up to use two stdio connections, oz-playbook and oz-graphify.",
+   "summary_source": "first paragraph, translated",
    "symbols": [
     {
-     "name": "오즈의 AI 대화 중심 운영과 로그",
+     "name": "Oz's conversation-first AI operation and logs",
      "kind": "h1",
      "line": 1,
      "doc": "",
@@ -3757,7 +4022,7 @@
      "end_line": 0
     },
     {
-     "name": "자동 기록",
+     "name": "Automatic logging",
      "kind": "h2",
      "line": 7,
      "doc": "",
@@ -3766,7 +4031,7 @@
      "end_line": 0
     },
     {
-     "name": "오즈와 담당자의 사용법",
+     "name": "How Oz and the person in charge use it",
      "kind": "h2",
      "line": 21,
      "doc": "",
@@ -3775,7 +4040,7 @@
      "end_line": 0
     },
     {
-     "name": "기존 설치와 검증",
+     "name": "Existing installs and verification",
      "kind": "h2",
      "line": 35,
      "doc": "",
@@ -3786,7 +4051,29 @@
    ],
    "imports": [],
    "tags": [],
-   "skipped": ""
+   "skipped": "",
+   "translated": [
+    {
+     "where": "summary",
+     "original": "0.1.1은 Claude Code가 oz-playbook, oz-graphify 두 stdio 연결을 사용하도록 설치합니다."
+    },
+    {
+     "where": "heading L1",
+     "original": "오즈의 AI 대화 중심 운영과 로그"
+    },
+    {
+     "where": "heading L7",
+     "original": "자동 기록"
+    },
+    {
+     "where": "heading L21",
+     "original": "오즈와 담당자의 사용법"
+    },
+    {
+     "where": "heading L35",
+     "original": "기존 설치와 검증"
+    }
+   ]
   },
   {
    "path": "docs/PLAN.md",
@@ -3794,11 +4081,11 @@
    "category": "docs",
    "lines": 59,
    "size": 5143,
-   "summary": "DevWork의 프로젝트 기획, 실행, 변경, 검증, 인수인계를 한 원장에서 관리한다.",
-   "summary_source": "first paragraph",
+   "summary": "Manages DevWork's project planning, execution, changes, verification and handoff in one ledger.",
+   "summary_source": "first paragraph, translated",
    "symbols": [
     {
-     "name": "Project PlayBook — 설계와 구현 계획",
+     "name": "Project PlayBook — design and implementation plan",
      "kind": "h1",
      "line": 1,
      "doc": "",
@@ -3807,7 +4094,7 @@
      "end_line": 0
     },
     {
-     "name": "목적",
+     "name": "Purpose",
      "kind": "h2",
      "line": 3,
      "doc": "",
@@ -3816,7 +4103,7 @@
      "end_line": 0
     },
     {
-     "name": "구현 단위와 검증",
+     "name": "Implementation units and verification",
      "kind": "h2",
      "line": 8,
      "doc": "",
@@ -3825,7 +4112,7 @@
      "end_line": 0
     },
     {
-     "name": "데이터 모델",
+     "name": "Data model",
      "kind": "h2",
      "line": 15,
      "doc": "",
@@ -3834,7 +4121,7 @@
      "end_line": 0
     },
     {
-     "name": "경계",
+     "name": "Boundaries",
      "kind": "h2",
      "line": 25,
      "doc": "",
@@ -3843,7 +4130,7 @@
      "end_line": 0
     },
     {
-     "name": "후속 확장",
+     "name": "Later extensions",
      "kind": "h2",
      "line": 35,
      "doc": "",
@@ -3852,7 +4139,7 @@
      "end_line": 0
     },
     {
-     "name": "개발 온톨로지 확장 (2026-10-07)",
+     "name": "Development ontology extension (2026-10-07)",
      "kind": "h2",
      "line": 45,
      "doc": "",
@@ -3861,7 +4148,7 @@
      "end_line": 0
     },
     {
-     "name": "작업 지침 개선 (2026-10-18)",
+     "name": "Improving work instructions (2026-10-18)",
      "kind": "h2",
      "line": 54,
      "doc": "",
@@ -3889,7 +4176,45 @@
     ]
    ],
    "tags": [],
-   "skipped": ""
+   "skipped": "",
+   "translated": [
+    {
+     "where": "summary",
+     "original": "DevWork의 프로젝트 기획, 실행, 변경, 검증, 인수인계를 한 원장에서 관리한다."
+    },
+    {
+     "where": "heading L1",
+     "original": "Project PlayBook — 설계와 구현 계획"
+    },
+    {
+     "where": "heading L3",
+     "original": "목적"
+    },
+    {
+     "where": "heading L8",
+     "original": "구현 단위와 검증"
+    },
+    {
+     "where": "heading L15",
+     "original": "데이터 모델"
+    },
+    {
+     "where": "heading L25",
+     "original": "경계"
+    },
+    {
+     "where": "heading L35",
+     "original": "후속 확장"
+    },
+    {
+     "where": "heading L45",
+     "original": "개발 온톨로지 확장 (2026-10-07)"
+    },
+    {
+     "where": "heading L54",
+     "original": "작업 지침 개선 (2026-10-18)"
+    }
+   ]
   },
   {
    "path": "docs/PORTABLE-AND-AGENTS.md",
@@ -3966,7 +4291,8 @@
     ]
    ],
    "tags": [],
-   "skipped": ""
+   "skipped": "",
+   "translated": []
   },
   {
    "path": "docs/RELEASE-0.2.0.md",
@@ -4012,7 +4338,8 @@
     ]
    ],
    "tags": [],
-   "skipped": ""
+   "skipped": "",
+   "translated": []
   },
   {
    "path": "examples/codex-mcp.toml",
@@ -4025,7 +4352,8 @@
    "symbols": [],
    "imports": [],
    "tags": [],
-   "skipped": ""
+   "skipped": "",
+   "translated": []
   },
   {
    "path": "examples/mcp.json",
@@ -4038,7 +4366,8 @@
    "symbols": [],
    "imports": [],
    "tags": [],
-   "skipped": ""
+   "skipped": "",
+   "translated": []
   },
   {
    "path": "examples/ontology-feed.json",
@@ -4051,7 +4380,8 @@
    "symbols": [],
    "imports": [],
    "tags": [],
-   "skipped": ""
+   "skipped": "",
+   "translated": []
   },
   {
    "path": "examples/ontology-research.json",
@@ -4064,7 +4394,8 @@
    "symbols": [],
    "imports": [],
    "tags": [],
-   "skipped": ""
+   "skipped": "",
+   "translated": []
   },
   {
    "path": "graphify.ps1",
@@ -4077,7 +4408,8 @@
    "symbols": [],
    "imports": [],
    "tags": [],
-   "skipped": ""
+   "skipped": "",
+   "translated": []
   },
   {
    "path": "packages.lock.json",
@@ -4090,7 +4422,8 @@
    "symbols": [],
    "imports": [],
    "tags": [],
-   "skipped": ""
+   "skipped": "",
+   "translated": []
   },
   {
    "path": "playbook-harness.ps1",
@@ -4103,7 +4436,8 @@
    "symbols": [],
    "imports": [],
    "tags": [],
-   "skipped": ""
+   "skipped": "",
+   "translated": []
   },
   {
    "path": "playbook.ps1",
@@ -4116,7 +4450,8 @@
    "symbols": [],
    "imports": [],
    "tags": [],
-   "skipped": ""
+   "skipped": "",
+   "translated": []
   },
   {
    "path": "playbook.sh",
@@ -4129,7 +4464,8 @@
    "symbols": [],
    "imports": [],
    "tags": [],
-   "skipped": ""
+   "skipped": "",
+   "translated": []
   },
   {
    "path": "portable/INSTALL_PLAYBOOK.cmd",
@@ -4142,7 +4478,8 @@
    "symbols": [],
    "imports": [],
    "tags": [],
-   "skipped": ""
+   "skipped": "",
+   "translated": []
   },
   {
    "path": "portable/Install-PlayBook.ps1",
@@ -4155,7 +4492,8 @@
    "symbols": [],
    "imports": [],
    "tags": [],
-   "skipped": ""
+   "skipped": "",
+   "translated": []
   },
   {
    "path": "portable/START_PLAYBOOK.cmd",
@@ -4168,7 +4506,8 @@
    "symbols": [],
    "imports": [],
    "tags": [],
-   "skipped": ""
+   "skipped": "",
+   "translated": []
   },
   {
    "path": "portable/STOP_PLAYBOOK.cmd",
@@ -4181,7 +4520,8 @@
    "symbols": [],
    "imports": [],
    "tags": [],
-   "skipped": ""
+   "skipped": "",
+   "translated": []
   },
   {
    "path": "portable/Start-PlayBook.ps1",
@@ -4194,7 +4534,8 @@
    "symbols": [],
    "imports": [],
    "tags": [],
-   "skipped": ""
+   "skipped": "",
+   "translated": []
   },
   {
    "path": "portable/Stop-PlayBook.ps1",
@@ -4207,7 +4548,8 @@
    "symbols": [],
    "imports": [],
    "tags": [],
-   "skipped": ""
+   "skipped": "",
+   "translated": []
   },
   {
    "path": "portable/oz/00_먼저읽기.txt",
@@ -4215,12 +4557,18 @@
    "category": "docs",
    "lines": 89,
    "size": 6088,
-   "summary": "오즈용 PlayBook + Graphify — Mac / Claude Code 앱",
-   "summary_source": "first line",
+   "summary": "PlayBook + Graphify for Oz — Mac / Claude Code app",
+   "summary_source": "first line, translated",
    "symbols": [],
    "imports": [],
    "tags": [],
-   "skipped": ""
+   "skipped": "",
+   "translated": [
+    {
+     "where": "summary",
+     "original": "오즈용 PlayBook + Graphify — Mac / Claude Code 앱"
+    }
+   ]
   },
   {
    "path": "portable/oz/install.py",
@@ -4473,7 +4821,8 @@
    "tags": [
     "entry"
    ],
-   "skipped": ""
+   "skipped": "",
+   "translated": []
   },
   {
    "path": "portable/oz/oz_graphify_mcp.py",
@@ -4609,7 +4958,8 @@
    "tags": [
     "entry"
    ],
-   "skipped": ""
+   "skipped": "",
+   "translated": []
   },
   {
    "path": "portable/oz/oz_mcp_proxy.py",
@@ -4675,7 +5025,8 @@
    "tags": [
     "entry"
    ],
-   "skipped": ""
+   "skipped": "",
+   "translated": []
   },
   {
    "path": "portable/oz/oz_support.py",
@@ -4823,7 +5174,8 @@
     ]
    ],
    "tags": [],
-   "skipped": ""
+   "skipped": "",
+   "translated": []
   },
   {
    "path": "portable/oz/templates/봇_정리양식.md",
@@ -4831,11 +5183,11 @@
    "category": "docs",
    "lines": 20,
    "size": 1138,
-   "summary": "비밀번호·토큰·인증 코드는 이 문서에 적지 않습니다.",
-   "summary_source": "first paragraph",
+   "summary": "Passwords, tokens and verification codes are never written in this document.",
+   "summary_source": "first paragraph, translated",
    "symbols": [
     {
-     "name": "{{BOT_NAME}} 봇",
+     "name": "{{BOT_NAME}} bot",
      "kind": "h1",
      "line": 1,
      "doc": "",
@@ -4846,7 +5198,17 @@
    ],
    "imports": [],
    "tags": [],
-   "skipped": ""
+   "skipped": "",
+   "translated": [
+    {
+     "where": "summary",
+     "original": "비밀번호·토큰·인증 코드는 이 문서에 적지 않습니다."
+    },
+    {
+     "where": "heading L1",
+     "original": "{{BOT_NAME}} 봇"
+    }
+   ]
   },
   {
    "path": "portable/oz/templates/사람과_봇_업무흐름.md",
@@ -4854,8 +5216,8 @@
    "category": "docs",
    "lines": 18,
    "size": 1078,
-   "summary": "시작 조건: {{TRIGGER}} 끝났다는 기준: {{COMPLETIONCRITERIA}} 전체 담당자: {{WORKFLOWOWNER}}",
-   "summary_source": "first paragraph",
+   "summary": "Start condition: {{TRIGGER}} Done when: {{COMPLETIONCRITERIA}} Owner of the whole flow: {{WORKFLOWOWNER}}",
+   "summary_source": "first paragraph, translated",
    "symbols": [
     {
      "name": "{{WORKFLOW_NAME}}",
@@ -4869,7 +5231,13 @@
    ],
    "imports": [],
    "tags": [],
-   "skipped": ""
+   "skipped": "",
+   "translated": [
+    {
+     "where": "summary",
+     "original": "시작 조건: {{TRIGGER}} 끝났다는 기준: {{COMPLETIONCRITERIA}} 전체 담당자: {{WORKFLOWOWNER}}"
+    }
+   ]
   },
   {
    "path": "portable/oz/오즈에게_전달.txt",
@@ -4877,12 +5245,18 @@
    "category": "docs",
    "lines": 25,
    "size": 1706,
-   "summary": "오즈야, 맥에서 쓰는 PlayBook + Graphify 설치본이야.",
-   "summary_source": "first line",
+   "summary": "Oz, this is the PlayBook + Graphify install for your Mac.",
+   "summary_source": "first line, translated",
    "symbols": [],
    "imports": [],
    "tags": [],
-   "skipped": ""
+   "skipped": "",
+   "translated": [
+    {
+     "where": "summary",
+     "original": "오즈야, 맥에서 쓰는 PlayBook + Graphify 설치본이야."
+    }
+   ]
   },
   {
    "path": "portable/oz/클로드에_처음_붙여넣기.txt",
@@ -4890,12 +5264,18 @@
    "category": "docs",
    "lines": 17,
    "size": 2674,
-   "summary": "나는 오즈고 컴퓨터 설명을 어렵게 하면 잘 모른다.",
-   "summary_source": "first line",
+   "summary": "I'm Oz; I don't follow computer explanations when they get complicated.",
+   "summary_source": "first line, translated",
    "symbols": [],
    "imports": [],
    "tags": [],
-   "skipped": ""
+   "skipped": "",
+   "translated": [
+    {
+     "where": "summary",
+     "original": "나는 오즈고 컴퓨터 설명을 어렵게 하면 잘 모른다."
+    }
+   ]
   },
   {
    "path": "scripts/central-smoke.py",
@@ -5002,7 +5382,8 @@
     ]
    ],
    "tags": [],
-   "skipped": ""
+   "skipped": "",
+   "translated": []
   },
   {
    "path": "scripts/check-package.py",
@@ -5067,7 +5448,8 @@
     ]
    ],
    "tags": [],
-   "skipped": ""
+   "skipped": "",
+   "translated": []
   },
   {
    "path": "scripts/fixtures/harness-provider.py",
@@ -5093,7 +5475,8 @@
     ]
    ],
    "tags": [],
-   "skipped": ""
+   "skipped": "",
+   "translated": []
   },
   {
    "path": "scripts/fixtures/provider.py",
@@ -5123,7 +5506,8 @@
     ]
    ],
    "tags": [],
-   "skipped": ""
+   "skipped": "",
+   "translated": []
   },
   {
    "path": "scripts/folders-smoke.py",
@@ -5167,7 +5551,8 @@
     ]
    ],
    "tags": [],
-   "skipped": ""
+   "skipped": "",
+   "translated": []
   },
   {
    "path": "scripts/graphify-playbook.py",
@@ -5408,7 +5793,8 @@
    "tags": [
     "entry"
    ],
-   "skipped": ""
+   "skipped": "",
+   "translated": []
   },
   {
    "path": "scripts/graphify-smoke.py",
@@ -5523,7 +5909,8 @@
     ]
    ],
    "tags": [],
-   "skipped": ""
+   "skipped": "",
+   "translated": []
   },
   {
    "path": "scripts/graphify/index.html",
@@ -5573,7 +5960,8 @@
    ],
    "imports": [],
    "tags": [],
-   "skipped": ""
+   "skipped": "",
+   "translated": []
   },
   {
    "path": "scripts/harness-smoke.py",
@@ -5653,7 +6041,8 @@
     ]
    ],
    "tags": [],
-   "skipped": ""
+   "skipped": "",
+   "translated": []
   },
   {
    "path": "scripts/ontology-smoke.py",
@@ -5768,7 +6157,8 @@
     ]
    ],
    "tags": [],
-   "skipped": ""
+   "skipped": "",
+   "translated": []
   },
   {
    "path": "scripts/oz-logging-smoke.py",
@@ -5845,7 +6235,8 @@
     ]
    ],
    "tags": [],
-   "skipped": ""
+   "skipped": "",
+   "translated": []
   },
   {
    "path": "scripts/oz-package-smoke.py",
@@ -5956,7 +6347,8 @@
     ]
    ],
    "tags": [],
-   "skipped": ""
+   "skipped": "",
+   "translated": []
   },
   {
    "path": "scripts/package-oz-mac.py",
@@ -6061,7 +6453,8 @@
    "tags": [
     "entry"
    ],
-   "skipped": ""
+   "skipped": "",
+   "translated": []
   },
   {
    "path": "scripts/package.py",
@@ -6099,7 +6492,8 @@
     ]
    ],
    "tags": [],
-   "skipped": ""
+   "skipped": "",
+   "translated": []
   },
   {
    "path": "scripts/prepare-public-source.py",
@@ -6129,7 +6523,8 @@
     ]
    ],
    "tags": [],
-   "skipped": ""
+   "skipped": "",
+   "translated": []
   },
   {
    "path": "scripts/real-provider-smoke.py",
@@ -6198,7 +6593,8 @@
     ]
    ],
    "tags": [],
-   "skipped": ""
+   "skipped": "",
+   "translated": []
   },
   {
    "path": "scripts/smoke.py",
@@ -6291,7 +6687,8 @@
     ]
    ],
    "tags": [],
-   "skipped": ""
+   "skipped": "",
+   "translated": []
   },
   {
    "path": "wwwroot/app.js",
@@ -6553,7 +6950,8 @@
     ]
    ],
    "tags": [],
-   "skipped": ""
+   "skipped": "",
+   "translated": []
   },
   {
    "path": "wwwroot/assets.js",
@@ -6670,7 +7068,8 @@
     ]
    ],
    "tags": [],
-   "skipped": ""
+   "skipped": "",
+   "translated": []
   },
   {
    "path": "wwwroot/context-menu.js",
@@ -6707,7 +7106,8 @@
     ]
    ],
    "tags": [],
-   "skipped": ""
+   "skipped": "",
+   "translated": []
   },
   {
    "path": "wwwroot/flowchart.js",
@@ -6753,7 +7153,8 @@
     ]
    ],
    "tags": [],
-   "skipped": ""
+   "skipped": "",
+   "translated": []
   },
   {
    "path": "wwwroot/folders.js",
@@ -6789,7 +7190,8 @@
     ]
    ],
    "tags": [],
-   "skipped": ""
+   "skipped": "",
+   "translated": []
   },
   {
    "path": "wwwroot/harness.js",
@@ -6844,7 +7246,8 @@
     ]
    ],
    "tags": [],
-   "skipped": ""
+   "skipped": "",
+   "translated": []
   },
   {
    "path": "wwwroot/i18n.js",
@@ -6912,7 +7315,8 @@
    ],
    "imports": [],
    "tags": [],
-   "skipped": ""
+   "skipped": "",
+   "translated": []
   },
   {
    "path": "wwwroot/index.html",
@@ -6934,7 +7338,8 @@
     ]
    ],
    "tags": [],
-   "skipped": ""
+   "skipped": "",
+   "translated": []
   },
   {
    "path": "wwwroot/inventory.js",
@@ -6980,7 +7385,8 @@
     ]
    ],
    "tags": [],
-   "skipped": ""
+   "skipped": "",
+   "translated": []
   },
   {
    "path": "wwwroot/media.js",
@@ -7080,7 +7486,8 @@
     ]
    ],
    "tags": [],
-   "skipped": ""
+   "skipped": "",
+   "translated": []
   },
   {
    "path": "wwwroot/ontology.js",
@@ -7198,7 +7605,8 @@
     ]
    ],
    "tags": [],
-   "skipped": ""
+   "skipped": "",
+   "translated": []
   },
   {
    "path": "wwwroot/style.css",
@@ -7211,7 +7619,8 @@
    "symbols": [],
    "imports": [],
    "tags": [],
-   "skipped": ""
+   "skipped": "",
+   "translated": []
   },
   {
    "path": "wwwroot/vendor/mermaid/README.md",
@@ -7236,7 +7645,8 @@
    "tags": [
     "vendored"
    ],
-   "skipped": ""
+   "skipped": "",
+   "translated": []
   },
   {
    "path": "wwwroot/vendor/mermaid/mermaid.min.js",
@@ -7251,7 +7661,8 @@
    "tags": [
     "vendored"
    ],
-   "skipped": "minified"
+   "skipped": "minified",
+   "translated": []
   },
   {
    "path": "wwwroot/workspace-ui.js",
@@ -7355,7 +7766,8 @@
     ]
    ],
    "tags": [],
-   "skipped": ""
+   "skipped": "",
+   "translated": []
   }
  ],
  "edges": [
@@ -16753,6 +17165,374 @@
    "portable/START_PLAYBOOK.cmd": 2,
    "portable/Install-PlayBook.ps1": 1,
    "portable/Start-PlayBook.ps1": 1
-  }
+  },
+  "translations": [
+   {
+    "original": "프로젝트와 AI 작업을 관리하는 공통 원장.",
+    "english": "A shared ledger for managing projects and AI work.",
+    "uses": 1
+   },
+   {
+    "original": "시작",
+    "english": "Getting started",
+    "uses": 1
+   },
+   {
+    "original": "사용 순서",
+    "english": "Usage steps",
+    "uses": 1
+   },
+   {
+    "original": "Headless 예시",
+    "english": "Headless examples",
+    "uses": 1
+   },
+   {
+    "original": "MCP 연결",
+    "english": "MCP connection",
+    "uses": 1
+   },
+   {
+    "original": "도구/서버",
+    "english": "Tools / servers",
+    "uses": 1
+   },
+   {
+    "original": "데이터와 이식",
+    "english": "Data and portability",
+    "uses": 1
+   },
+   {
+    "original": "현재 구현 범위",
+    "english": "What is implemented now",
+    "uses": 1
+   },
+   {
+    "original": "개발 온톨로지",
+    "english": "Development ontology",
+    "uses": 2
+   },
+   {
+    "original": "검증/설계",
+    "english": "Verification / design",
+    "uses": 1
+   },
+   {
+    "original": "바탕화면 바로가기용: 서버가 꺼져 있으면 켜고, 화면을 엽니다.",
+    "english": "For the desktop shortcut: starts the server if it is not running, then opens the UI.",
+    "uses": 1
+   },
+   {
+    "original": "모든 진입점이 Operations.Execute(operation, arguments)를 공유한다.",
+    "english": "Every entry point shares Operations.Execute(operation, arguments).",
+    "uses": 1
+   },
+   {
+    "original": "PlayBook API / 데이터 계약",
+    "english": "PlayBook API / data contract",
+    "uses": 1
+   },
+   {
+    "original": "오류",
+    "english": "Errors",
+    "uses": 1
+   },
+   {
+    "original": "작업 지침 개선 API",
+    "english": "Work-instruction improvement API",
+    "uses": 1
+   },
+   {
+    "original": "PlayBook 서버가 프로젝트 지침, 목적, 파일 목록, 작업과 검증 기록의 공통 원장을 관리하고, 로그인한 각 컴퓨터의 클라이언트가 로컬 AI와 도구를 실행한다.",
+    "english": "The PlayBook server keeps the shared ledger of project instructions, goals, file lists, tasks and verification records; a client on each signed-in computer runs the local AI and tools.",
+    "uses": 1
+   },
+   {
+    "original": "PlayBook 중앙 서버와 기기 간 AI 오케스트레이션 설계안",
+    "english": "Design: PlayBook central server and AI orchestration across devices",
+    "uses": 1
+   },
+   {
+    "original": "사용 흐름",
+    "english": "Usage flow",
+    "uses": 1
+   },
+   {
+    "original": "현재 구현과 확장 지점",
+    "english": "Current implementation and extension points",
+    "uses": 1
+   },
+   {
+    "original": "서버와 클라이언트의 책임",
+    "english": "Responsibilities of server and client",
+    "uses": 1
+   },
+   {
+    "original": "로그인과 실시간 공유",
+    "english": "Sign-in and live sharing",
+    "uses": 1
+   },
+   {
+    "original": "파일 목록과 기기별 작업 폴더",
+    "english": "File lists and per-device work folders",
+    "uses": 1
+   },
+   {
+    "original": "AI 하네스와 지침 반영",
+    "english": "AI harness and applying instructions",
+    "uses": 1
+   },
+   {
+    "original": "다른 기기의 여러 AI 작업 조정",
+    "english": "Coordinating several AI tasks on other devices",
+    "uses": 1
+   },
+   {
+    "original": "구현 순서와 확인할 결과",
+    "english": "Implementation order and results to check",
+    "uses": 1
+   },
+   {
+    "original": "이번 설계의 확인 범위",
+    "english": "What this design has been checked against",
+    "uses": 1
+   },
+   {
+    "original": "DevWork 전체에서 같은 PlayBook을 사용하려면 사용자 범위 MCP에 등록한다:",
+    "english": "To use the same PlayBook across all of DevWork, register it as a user-scope MCP server:",
+    "uses": 1
+   },
+   {
+    "original": "Claude 연결과 폴더 관리",
+    "english": "Connecting Claude and managing folders",
+    "uses": 1
+   },
+   {
+    "original": "프로젝트 내부 폴더 정리",
+    "english": "Organizing folders inside a project",
+    "uses": 1
+   },
+   {
+    "original": "오즈는 Mac의 Claude Code 앱을 사용한다는 사용자 정정을 반영했습니다.",
+    "english": "Updated after the user's correction that Oz uses the Claude Code app on a Mac.",
+    "uses": 1
+   },
+   {
+    "original": "오즈용 Mac 배포본",
+    "english": "Mac distribution for Oz",
+    "uses": 1
+   },
+   {
+    "original": "전달 파일",
+    "english": "Files to hand over",
+    "uses": 1
+   },
+   {
+    "original": "설치와 구성",
+    "english": "Installation and setup",
+    "uses": 1
+   },
+   {
+    "original": "Claude가 사용하는 도구",
+    "english": "Tools Claude uses",
+    "uses": 1
+   },
+   {
+    "original": "빌드와 검증",
+    "english": "Build and verification",
+    "uses": 1
+   },
+   {
+    "original": "공식 Graphify를 로컬 코드 분석 도구로 연결했습니다.",
+    "english": "Connected the official Graphify as a local code-analysis tool.",
+    "uses": 1
+   },
+   {
+    "original": "Graphify와 PlayBook 함께 사용하기",
+    "english": "Using Graphify together with PlayBook",
+    "uses": 1
+   },
+   {
+    "original": "화면 사용",
+    "english": "Using the UI",
+    "uses": 1
+   },
+   {
+    "original": "연결 범위와 출처",
+    "english": "Scope of the connection and sources",
+    "uses": 1
+   },
+   {
+    "original": "설치 위치와 현재 실행본",
+    "english": "Install location and the build currently running",
+    "uses": 1
+   },
+   {
+    "original": "검증",
+    "english": "Verification",
+    "uses": 2
+   },
+   {
+    "original": "Harness²의 제안 → 시험 → 비교·조합 → 검토 후 채택 → 교훈 재사용 절차 중 현재 PlayBook에 맞는 부분을 .NET 엔진에 구현했다.",
+    "english": "Implemented in the .NET engine the parts of Harness²'s propose → trial → compare and combine → adopt after review → reuse lessons procedure that fit PlayBook today.",
+    "uses": 1
+   },
+   {
+    "original": "작업 지침 개선",
+    "english": "Improving work instructions",
+    "uses": 1
+   },
+   {
+    "original": "화면에서 사용",
+    "english": "Using it from the UI",
+    "uses": 1
+   },
+   {
+    "original": "실행 경계",
+    "english": "Execution boundaries",
+    "uses": 1
+   },
+   {
+    "original": "공통 API",
+    "english": "Shared API",
+    "uses": 1
+   },
+   {
+    "original": "원장과 검증",
+    "english": "Ledger and verification",
+    "uses": 1
+   },
+   {
+    "original": "PlayBook에 기록된 대화, 연구 결과와 개발 상태를 출처가 있는 개발 지식으로 모으고 검색·참조합니다.",
+    "english": "Gathers the conversations, research results and development status recorded in PlayBook into sourced development knowledge that can be searched and referenced.",
+    "uses": 1
+   },
+   {
+    "original": "자동 갱신이 일어나는 범위",
+    "english": "Scope of automatic updates",
+    "uses": 1
+   },
+   {
+    "original": "동작과 인터페이스",
+    "english": "Behavior and interfaces",
+    "uses": 1
+   },
+   {
+    "original": "대화·연구 수집",
+    "english": "Collecting conversations and research",
+    "uses": 1
+   },
+   {
+    "original": "검색·참조·사용 이력",
+    "english": "Search, references and usage history",
+    "uses": 1
+   },
+   {
+    "original": "외부 온톨로지 연결",
+    "english": "Connecting external ontologies",
+    "uses": 1
+   },
+   {
+    "original": "0.1.1은 Claude Code가 oz-playbook, oz-graphify 두 stdio 연결을 사용하도록 설치합니다.",
+    "english": "Version 0.1.1 sets Claude Code up to use two stdio connections, oz-playbook and oz-graphify.",
+    "uses": 1
+   },
+   {
+    "original": "오즈의 AI 대화 중심 운영과 로그",
+    "english": "Oz's conversation-first AI operation and logs",
+    "uses": 1
+   },
+   {
+    "original": "자동 기록",
+    "english": "Automatic logging",
+    "uses": 1
+   },
+   {
+    "original": "오즈와 담당자의 사용법",
+    "english": "How Oz and the person in charge use it",
+    "uses": 1
+   },
+   {
+    "original": "기존 설치와 검증",
+    "english": "Existing installs and verification",
+    "uses": 1
+   },
+   {
+    "original": "DevWork의 프로젝트 기획, 실행, 변경, 검증, 인수인계를 한 원장에서 관리한다.",
+    "english": "Manages DevWork's project planning, execution, changes, verification and handoff in one ledger.",
+    "uses": 1
+   },
+   {
+    "original": "Project PlayBook — 설계와 구현 계획",
+    "english": "Project PlayBook — design and implementation plan",
+    "uses": 1
+   },
+   {
+    "original": "목적",
+    "english": "Purpose",
+    "uses": 1
+   },
+   {
+    "original": "구현 단위와 검증",
+    "english": "Implementation units and verification",
+    "uses": 1
+   },
+   {
+    "original": "데이터 모델",
+    "english": "Data model",
+    "uses": 1
+   },
+   {
+    "original": "경계",
+    "english": "Boundaries",
+    "uses": 1
+   },
+   {
+    "original": "후속 확장",
+    "english": "Later extensions",
+    "uses": 1
+   },
+   {
+    "original": "개발 온톨로지 확장 (2026-10-07)",
+    "english": "Development ontology extension (2026-10-07)",
+    "uses": 1
+   },
+   {
+    "original": "작업 지침 개선 (2026-10-18)",
+    "english": "Improving work instructions (2026-10-18)",
+    "uses": 1
+   },
+   {
+    "original": "오즈용 PlayBook + Graphify — Mac / Claude Code 앱",
+    "english": "PlayBook + Graphify for Oz — Mac / Claude Code app",
+    "uses": 1
+   },
+   {
+    "original": "비밀번호·토큰·인증 코드는 이 문서에 적지 않습니다.",
+    "english": "Passwords, tokens and verification codes are never written in this document.",
+    "uses": 1
+   },
+   {
+    "original": "{{BOT_NAME}} 봇",
+    "english": "{{BOT_NAME}} bot",
+    "uses": 1
+   },
+   {
+    "original": "시작 조건: {{TRIGGER}} 끝났다는 기준: {{COMPLETIONCRITERIA}} 전체 담당자: {{WORKFLOWOWNER}}",
+    "english": "Start condition: {{TRIGGER}} Done when: {{COMPLETIONCRITERIA}} Owner of the whole flow: {{WORKFLOWOWNER}}",
+    "uses": 1
+   },
+   {
+    "original": "오즈야, 맥에서 쓰는 PlayBook + Graphify 설치본이야.",
+    "english": "Oz, this is the PlayBook + Graphify install for your Mac.",
+    "uses": 1
+   },
+   {
+    "original": "나는 오즈고 컴퓨터 설명을 어렵게 하면 잘 모른다.",
+    "english": "I'm Oz; I don't follow computer explanations when they get complicated.",
+    "uses": 1
+   }
+  ],
+  "untranslated": []
  }
 }

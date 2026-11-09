@@ -6,7 +6,7 @@ from collections import Counter, defaultdict
 
 from . import __version__
 from .connect import area_of
-from .i18n import T
+from .labels import t as label
 from .mermaid import Flow, short
 from .model import Project
 from .notes import CHECKLIST_NAMES, RISK_NAMES, SECRET_NAMES, Notes
@@ -65,10 +65,10 @@ def more(items: list[str], limit: int, t) -> str:
 
 
 class Pages:
-    def __init__(self, project: Project, diagrams: dict[str, Flow], notes: Notes, lang: str, link: Linker,
+    def __init__(self, project: Project, diagrams: dict[str, Flow], notes: Notes, link: Linker,
                  notes_label: str, date: str):
-        self.p, self.d, self.n, self.lang, self.link = project, diagrams, notes, lang, link
-        self.t = T(lang)
+        self.p, self.d, self.n, self.link = project, diagrams, notes, link
+        self.t = label
         self.notes_label = notes_label
         self.date = date
         self.files = {f.path: f for f in project.files}
@@ -106,24 +106,21 @@ class Pages:
             if p and p in self.files and p not in seen:
                 seen.add(p)
                 out.append((p, why))
-        ko = self.lang == "ko"
         for f in self.p.files:
             if f.path.lower() in ("readme.md", "readme.en.md", "readme.txt", "readme"):
-                add(f.path, "what the project says about itself" if not ko else "프로젝트 소개 문서")
+                add(f.path, "what the project says about itself")
                 break
         for m in L["modes"]:
-            add(m["file"], "entry point; picks the run mode" if self.lang != "ko" else "진입점, 실행 모드를 고름")
+            add(m["file"], "entry point; picks the run mode")
         for e in L["entries"]:
             if e["file"].endswith(".cs"):
-                add(e["file"], "entry point" if self.lang != "ko" else "진입점")
+                add(e["file"], "entry point")
         for tb in L["tables"]:
-            add(tb["file"], (f"dispatch table: {len(tb['ops'])} operations" if self.lang != "ko"
-                             else f"분기표: operation {len(tb['ops'])}개"))
+            add(tb["file"], f"dispatch table: {len(tb['ops'])} operations")
         for p in list(L.get("launchers", {}))[:2]:
-            add(p, "how people start it" if not ko else "사람이 실행하는 스크립트")
+            add(p, "how people start it")
         for h in L["hubs"]:
-            add(h["file"], (f"shared foundation used by {h['used_by']} files" if self.lang != "ko"
-                            else f"{h['used_by']}개 파일이 쓰는 공통 기반"))
+            add(h["file"], f"shared foundation used by {h['used_by']} files")
         handlers = Counter()
         for tb in L["tables"]:
             for op in tb["ops"]:
@@ -131,15 +128,15 @@ class Pages:
                     handlers[op["handler_file"]] += 1
         tools = sorted({x["file"] for x in L["mcp_tools"]})
         for p in tools:
-            add(p, "MCP tool definitions" if self.lang != "ko" else "MCP 도구 정의")
+            add(p, "MCP tool definitions")
         for p, n in handlers.most_common(5):
-            add(p, f"handles {n} operations" if self.lang != "ko" else f"operation {n}개 처리")
+            add(p, f"handles {n} operations")
         for e in self.p.edges:
             if e.kind == "runs" and self.files.get(e.src) and self.files[e.src].category == "script":
-                add(e.src, "launch script" if self.lang != "ko" else "실행 스크립트")
+                add(e.src, "launch script")
         for f in self.p.files:
-            if f.path.lower() in ("agents.md", "claude.md", "contributing.md", "readme.en.md", "readme.ko.md"):
-                add(f.path, "project document" if self.lang != "ko" else "프로젝트 문서")
+            if f.path.lower() in ("agents.md", "claude.md", "contributing.md", "readme.en.md"):
+                add(f.path, "project document")
         return out
 
     def undocumented(self) -> list[str]:
@@ -157,6 +154,9 @@ class Pages:
         t, L, p = self.t, self.p.links, self.p
         s = [self.header("title_readme", name=p.name)]
         s.append(f"> {t('legend', notes=f'`{self.notes_label}`')}\n")
+        translated = sum(r["uses"] for r in L.get("translations", []))
+        if translated:
+            s.append(f"> {t('legend_translated', n=translated, notes=f'`{self.notes_label}`')}\n")
         # at a glance
         code_files = [f for f in p.files if f.category != "asset"]
         metrics = [(t("metric_files"), len(p.files)), (t("metric_lines"), f"{sum(f.lines for f in p.files):,}"),
@@ -221,6 +221,9 @@ class Pages:
             if len(gaps) > 20:
                 s.append(f"- {t('more', n=len(gaps) - 20)}")
             s.append("")
+        left = L.get("untranslated", [])
+        if left:
+            s.append(f"## {t('untranslated')}\n\n{t('untranslated_hint', n=len(left), notes=f'`{self.notes_label}`')}\n")
         g = p.git
         if g.get("commits"):
             s.append(f"## {t('recent_commits')}\n")
@@ -247,7 +250,7 @@ class Pages:
                 for m in modes:
                     exposes = list(m["transports"])
                     if m["routes"]:
-                        exposes.append(f'{len(m["routes"])} HTTP routes' if self.lang != "ko" else f'HTTP 라우트 {len(m["routes"])}개')
+                        exposes.append(t("n_routes", n=len(m["routes"])))
                     exposes += [f"→ {x}" for x in m["tables"]]
                     note = self.n.get(f"Mode: {m['name']}")
                     rows.append([f"`{m['name']}`" + (f" ({t('default')})" if m["default"] else ""),
@@ -442,6 +445,8 @@ class Pages:
                     s.append(note_block(note, t))
                 if f.summary:
                     s.append(f"> {f.summary}  \n> <sub>{t('comment_from', src=f.summary_source)}</sub>\n")
+                if f.translated:
+                    s.append(f"<sub>{t('card_translated', n=len(f.translated), notes=f'`{self.notes_label}`')}</sub>\n")
                 syms = [x for x in f.symbols if x.public and x.kind not in ("h3",)]
                 if syms:
                     s.append(f"**{t('symbols')}**\n")

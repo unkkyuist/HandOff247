@@ -5,8 +5,6 @@ Point it at a project folder and it writes a *handoff pack*: diagrams, the struc
 exist in the code, and how each tool in the project is connected to the others.
 Your successor opens one page and sees how the program starts, which modes it has, who calls what, and where to begin reading.
 
-[한국어 안내 →](README.ko.md)
-
 - **No guessing.** Every statement in the pack comes from a file and links to the exact line. When a link is
   only an inference, it is labelled and drawn as a dashed arrow. When something is ambiguous, it is left out.
 - **Nothing runs.** HandOff247 reads files; it never imports, builds or executes the project.
@@ -14,13 +12,14 @@ Your successor opens one page and sees how the program starts, which modes it ha
 - **People add what code can't say.** A plain Markdown notes file holds the explanations: what the project is for,
   the first things a successor must do, known risks, and where credentials are kept (location only). Notes are merged into
   every page and survive regeneration.
+- **English output, whatever language the code is commented in.** Comments and headings written in another language
+  get an English version from a table in the notes file; the pack marks them as translated and keeps the originals.
 
 ## See it
 
 | Example | What it is |
 |---|---|
-| [examples/playbookos](examples/playbookos/README.md) | Pack for [PlayBookOS](https://github.com/unkkyuist/PlayBookOS) (C# + JS + Python + PowerShell), English |
-| [examples/playbookos-ko](examples/playbookos-ko/README.md) | The same pack in Korean |
+| [examples/playbookos](examples/playbookos/README.md) | Pack for [PlayBookOS](https://github.com/unkkyuist/PlayBookOS) (C# + JS + Python + PowerShell, commented in Korean) |
 | [docs/handoff](docs/handoff/README.md) | HandOff247 documenting itself |
 
 GitHub renders the diagrams inline. For the interactive version, download a pack folder and open `index.html`
@@ -36,6 +35,8 @@ For PlayBookOS, it found the following without being told anything about the pro
   as a parameter, marked *inferred*), 7 Python scripts through `dotnet PlayBook.dll cli <op>`, and the MCP tools in-process
 - the launch chain `START_PLAYBOOK.cmd → playbook.ps1 (serve) → PlayBook.csproj`, the MCP client configs that start `mcp` mode,
   the env vars (`PLAYBOOK_HOME`, `PLAYBOOK_PORT`, …) with who reads and who sets them, ports, and the SQLite file `playbook.db`
+- 73 distinct Korean comments and document headings (75 places), listed for translation by `handoff247 notes`; their
+  English versions are in [examples/playbookos.notes.md](examples/playbookos.notes.md)
 
 ## Quick start
 
@@ -67,7 +68,7 @@ flowchart LR
   A["project folder"] --> B["inventory<br/>git ls-files, .handoffignore"]
   B --> C["analyzers<br/>C#, Python, JS/TS, PowerShell, sh, cmd, Markdown, configs"]
   C --> D["connect<br/>edges, modes, dispatch tables, callers, launch chain, env, ports"]
-  N["HANDOFF.notes.md<br/>(written by people)"] --> E
+  N["HANDOFF.notes.md<br/>(written by people: notes, translations)"] --> E
   D --> E["render<br/>Markdown, Mermaid, JSON, HTML"]
   E --> F["handoff pack"]
 ```
@@ -112,6 +113,28 @@ Write under any heading. Lines that still start with `TODO` count as undocumente
 Running `notes` again only **adds** headings for new files, modes and folders; it never changes existing text,
 and it lists headings whose file no longer exists so you can tidy them by hand.
 
+## Projects commented in another language
+
+The pack's own headings and labels are English. A project's comments, docstrings and document headings are quoted as
+written, so when they are in Korean, Japanese, Chinese, Russian and so on, `handoff247 notes` adds a table for them:
+
+```markdown
+## Translations
+| Original | English |
+|---|---|
+| 프로젝트와 AI 작업을 관리하는 공통 원장. | A shared ledger for managing projects and AI work. |
+| 설치와 구성 | TODO |
+```
+
+Fill the English column (by hand or with an assistant). On the next `build`, every page and the viewer show the
+English, the comment is marked *translated*, and `handoff.json` keeps the original next to it.
+
+- Only text in a non-Latin script is listed. Accented Latin text (French, German, Spanish, …) is left as written.
+- An original must match the current text exactly (spacing aside). When a comment changes, the pack shows the new
+  original instead of an outdated translation, and `notes` adds a row for it.
+- File names and code identifiers are never translated; a successor has to type them exactly.
+- `check` reports how many texts still have no English version, and the pack's README lists the count.
+
 ## Keep it current (the 24/7 part)
 
 Use the repository as a GitHub Action to rebuild the pack on every push:
@@ -145,9 +168,9 @@ The action stamps the pack with the last commit date, so an unchanged project pr
 ## Command reference
 
 ```text
-handoff247 build  [PROJECT] [-o OUT] [--lang en|ko] [--notes FILE] [--name NAME]
+handoff247 build  [PROJECT] [-o OUT] [--notes FILE] [--name NAME]
                   [--links auto|relative|url|plain] [--link-base URL] [--date YYYY-MM-DD] [--exclude GLOB]
-handoff247 notes  [PROJECT] [--lang en|ko] [--notes FILE]
+handoff247 notes  [PROJECT] [--notes FILE]
 handoff247 check  [PROJECT] [--notes FILE] [--min PERCENT]
 ```
 

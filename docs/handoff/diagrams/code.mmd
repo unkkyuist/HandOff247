@@ -11,18 +11,19 @@ flowchart LR
     n10["build.py"]:::file
     n11["cli.py"]:::file
     n12["connect.py"]:::file
-    n13["i18n.py"]:::file
-    n14["inventory.py"]:::file
+    n13["inventory.py"]:::file
+    n14["labels.py"]:::file
     n15["lexer.py"]:::file
     n16["mermaid.py"]:::file
-    n17["model.py<br/>(used by 13 files)"]:::hub
+    n17["model.py<br/>(used by 14 files)"]:::hub
     n18["notes.py"]:::file
     n19["pipeline.py"]:::file
     n20["render#95;html.py"]:::file
     n21["render#95;md.py"]:::file
+    n22["translate.py"]:::file
   end
-  subgraph g22["tests"]
-    n23["test#95;handoff.py"]:::entry
+  subgraph g23["tests"]
+    n24["test#95;handoff.py"]:::entry
   end
   n3 --> n11
   n4 --> n5
@@ -40,30 +41,35 @@ flowchart LR
   n10 --> n18
   n10 --> n20
   n10 --> n21
+  n10 --> n22
   n11 --> n2
   n11 --> n10
   n11 --> n18
   n11 --> n19
   n11 --> n21
+  n11 --> n22
   n16 --> n12
-  n16 --> n13
+  n16 --> n14
+  n18 --> n2
   n18 --> n12
-  n18 --> n13
+  n18 --> n14
+  n18 --> n22
   n19 --> n2
   n19 --> n4
   n19 --> n12
-  n19 --> n14
+  n19 --> n13
   n20 --> n2
   n21 --> n2
   n21 --> n12
-  n21 --> n13
+  n21 --> n14
   n21 --> n16
   n21 --> n18
-  n23 --> n2
-  n23 --> n10
-  n23 --> n11
-  n23 --> n15
-  n23 --> n19
+  n24 --> n2
+  n24 --> n10
+  n24 --> n11
+  n24 --> n15
+  n24 --> n19
+  n24 --> n22
   classDef entry fill:#fde68a,stroke:#b45309,color:#1f2937
   classDef launcher fill:#e0e7ff,stroke:#4338ca,color:#1f2937
   classDef mode fill:#dcfce7,stroke:#15803d,color:#1f2937

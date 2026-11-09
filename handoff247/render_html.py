@@ -13,7 +13,7 @@ PURIFY = "https://cdn.jsdelivr.net/npm/dompurify@3.1.6/dist/purify.min.js"
 MERMAID = "https://cdn.jsdelivr.net/npm/mermaid@11.4.1/dist/mermaid.min.js"
 
 TEMPLATE = r"""<!doctype html>
-<html lang="__LANG__">
+<html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -80,10 +80,8 @@ article th{background:var(--chip);font-weight:600}
 <script src="__MERMAID__"></script>
 <script>
 const DATA = JSON.parse(document.getElementById('data').textContent);
-const ko = DATA.lang === 'ko';
-const TABS = [['README.md', ko ? '개요' : 'Overview'], ['RUNNING.md', ko ? '실행' : 'Running'],
-  ['CONNECTIONS.md', ko ? '연결' : 'Connections'], ['CODEMAP.md', ko ? '코드 지도' : 'Code map'],
-  ['FILES.md', ko ? '파일' : 'Files'], ['@search', ko ? '찾기' : 'Search']];
+const TABS = [['README.md', 'Overview'], ['RUNNING.md', 'Running'], ['CONNECTIONS.md', 'Connections'],
+  ['CODEMAP.md', 'Code map'], ['FILES.md', 'Files'], ['@search', 'Search']];
 const filesByPath = Object.fromEntries(DATA.files.map(f => [f.path, f]));
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 let current = 'README.md', mermaidSeq = 0;
@@ -112,7 +110,7 @@ async function show(id, anchor) {
   try { history.replaceState(null, '', '#' + id); } catch (e) {}
 }
 function wireLinks(root) {
-  root.querySelectorAll('h2,h3').forEach(h => { if (!h.id) h.id = h.textContent.trim().toLowerCase().replace(/[^\w가-힣]+/g, '-'); });
+  root.querySelectorAll('h2,h3').forEach(h => { if (!h.id) h.id = h.textContent.trim().toLowerCase().replace(/[^\p{L}\p{N}_]+/gu, '-'); });
   root.querySelectorAll('a[href]').forEach(a => {
     const href = a.getAttribute('href');
     if (DATA.pages[href]) { a.onclick = e => { e.preventDefault(); show(href); }; return; }
@@ -144,7 +142,7 @@ async function drawDiagrams(root) {
       zoom = Math.min(1, (box.clientWidth - 26) / (svg.getBoundingClientRect().width / zoom)); canvas.style.zoom = zoom; };
     mk('−', () => { zoom = Math.max(.2, zoom - .15); canvas.style.zoom = zoom; });
     mk('+', () => { zoom = Math.min(3, zoom + .15); canvas.style.zoom = zoom; });
-    mk(ko ? '맞춤' : 'Fit', fit);
+    mk('Fit', fit);
     mk('1:1', () => { zoom = 1; canvas.style.zoom = 1; });
     box.append(tools, canvas);
     code.parentElement.replaceWith(box);
@@ -166,14 +164,14 @@ function link(path, line, label) {
 }
 function openCard(path, line) {
   const f = filesByPath[path]; if (!f) return;
-  const L = s => ko ? s[1] : s[0];
   let h = `<h2>${esc(f.path)}${line ? ' <span class="muted">:' + line + '</span>' : ''}</h2>`;
-  h += `<div><span class="chip">${esc(f.lang)}</span><span class="chip">${f.lines} ${L(['lines','줄'])}</span><span class="chip">${esc(f.category)}</span>${f.tags.filter(t => !t.startsWith('ns:')).map(t => `<span class="chip">${esc(t)}</span>`).join('')}</div>`;
-  if (f.source_url) h += `<p><a href="${esc(f.source_url)}${line ? '#L' + line : ''}" target="_blank" rel="noopener">${L(['Open source ↗','원본 열기 ↗'])}</a></p>`;
-  if (f.note) h += `<h3>${L(['Notes','노트'])}</h3><div class="note">${esc(f.note)}</div>`;
-  if (f.summary) h += `<h3>${L(['Comment','주석'])}</h3><p>${esc(f.summary)} <span class="muted">(${esc(f.summary_source)})</span></p>`;
-  if (f.symbols.length) h += `<h3>${L(['Symbols','심볼'])}</h3><ul class="list">` + f.symbols.slice(0, 60).map(s => `<li><code>${esc((s.parent && s.kind === 'method' ? s.parent + '.' : '') + s.name)}</code> <span class="muted">${esc(s.kind)} · L${s.line}</span>${s.doc ? '<br>' + esc(s.doc) : ''}</li>`).join('') + '</ul>';
-  for (const [title, list, arrow] of [[L(['Links out','나가는 연결']), f.out, '→'], [L(['Links in','들어오는 연결']), f.in, '←']]) {
+  h += `<div><span class="chip">${esc(f.lang)}</span><span class="chip">${f.lines} lines</span><span class="chip">${esc(f.category)}</span>${f.tags.filter(t => !t.startsWith('ns:')).map(t => `<span class="chip">${esc(t)}</span>`).join('')}</div>`;
+  if (f.source_url) h += `<p><a href="${esc(f.source_url)}${line ? '#L' + line : ''}" target="_blank" rel="noopener">Open source ↗</a></p>`;
+  if (f.note) h += `<h3>Notes</h3><div class="note">${esc(f.note)}</div>`;
+  if (f.summary) h += `<h3>Comment</h3><p>${esc(f.summary)} <span class="muted">(${esc(f.summary_source)})</span></p>`;
+  if (f.translated) h += `<p class="muted">${f.translated} heading(s) or comment(s) here are English versions from the notes file; the originals are in handoff.json.</p>`;
+  if (f.symbols.length) h += `<h3>Symbols</h3><ul class="list">` + f.symbols.slice(0, 60).map(s => `<li><code>${esc((s.parent && s.kind === 'method' ? s.parent + '.' : '') + s.name)}</code> <span class="muted">${esc(s.kind)} · L${s.line}</span>${s.doc ? '<br>' + esc(s.doc) : ''}</li>`).join('') + '</ul>';
+  for (const [title, list, arrow] of [['Links out', f.out, '→'], ['Links in', f.in, '←']]) {
     if (!list.length) continue;
     h += `<h3>${title}</h3><ul class="list">` + list.map(e => `<li><span class="chip">${esc(e.kind)}</span>${arrow} ${link(e.other, 0, e.other)}${e.label ? ' <span class="muted">' + esc(e.label) + '</span>' : ''}</li>`).join('') + '</ul>';
   }
@@ -191,7 +189,7 @@ function searchPage(q) {
     const hay = (f.path + ' ' + f.summary + ' ' + f.note + ' ' + f.symbols.map(s => s.name + ' ' + s.doc).join(' ')).toLowerCase();
     return words.every(w => hay.includes(w));
   });
-  page.innerHTML = `<h1>${ko ? '찾기' : 'Search'}</h1><p class="muted">${hits.length} / ${DATA.files.length}</p>` +
+  page.innerHTML = `<h1>Search</h1><p class="muted">${hits.length} / ${DATA.files.length}</p>` +
     hits.slice(0, 300).map(f => `<div class="filehit" data-path="${esc(f.path)}"><strong>${esc(f.path)}</strong> <span class="chip">${esc(f.lang)}</span><br><span class="muted">${esc(f.note || f.summary || '')}</span></div>`).join('');
   page.querySelectorAll('.filehit').forEach(el => el.onclick = () => openCard(el.dataset.path));
 }
@@ -204,7 +202,7 @@ show(DATA.pages[start] ? start : 'README.md');
 """
 
 
-def render(project, pages: dict[str, str], diagrams: dict, notes, lang: str, date: str, linker) -> str:
+def render(project, pages: dict[str, str], diagrams: dict, notes, date: str, linker) -> str:
     out_edges, in_edges = {}, {}
     for e in project.edges:
         out_edges.setdefault(e.src, []).append({"kind": e.kind, "other": e.dst, "label": e.label})
@@ -220,20 +218,19 @@ def render(project, pages: dict[str, str], diagrams: dict, notes, lang: str, dat
             src_url = linker.rel_prefix + f.path.replace(" ", "%20")
         files.append({"path": f.path, "lang": f.lang, "category": f.category, "lines": f.lines, "tags": f.tags,
                       "summary": f.summary, "summary_source": f.summary_source, "note": notes.get(f"File: {f.path}"),
-                      "source_url": src_url,
+                      "source_url": src_url, "translated": len(f.translated),
                       "symbols": [{"name": s.name, "kind": s.kind, "line": s.line, "doc": s.doc, "parent": s.parent}
                                   for s in f.symbols if s.public][:120],
                       "out": out_edges.get(f.path, [])[:80], "in": in_edges.get(f.path, [])[:80]})
-    data = {"lang": lang, "pages": pages, "files": files,
+    data = {"pages": pages, "files": files,
             "diagrams": {k: {"source": v.render(), "files": v.files} for k, v in diagrams.items()},
             "linkBase": linker.base if linker.mode == "url" else "",
             "relPrefix": linker.rel_prefix if linker.mode == "relative" else ""}
     payload = json.dumps(data, ensure_ascii=False).replace("</", "<\\/")
-    title = f"Handoff · {project.name}" if lang != "ko" else f"인수인계 · {project.name}"
+    title = f"Handoff · {project.name}"
     page = (TEMPLATE.replace("__TITLE__", html.escape(title))
-            .replace("__LANG__", "ko" if lang == "ko" else "en")
             .replace("__VERSION__", __version__)
             .replace("__DATE__", date)
-            .replace("__SEARCH__", "파일·심볼 찾기" if lang == "ko" else "Find a file or symbol")
+            .replace("__SEARCH__", "Find a file or symbol")
             .replace("__MARKED__", MARKED).replace("__PURIFY__", PURIFY).replace("__MERMAID__", MERMAID))
     return page.replace("__DATA__", payload, 1)   # last, so project text can never hit a placeholder

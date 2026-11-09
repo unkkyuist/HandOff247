@@ -8,7 +8,7 @@ from collections import Counter, defaultdict
 from contextlib import contextmanager
 
 from .connect import area_of
-from .i18n import T
+from .labels import t
 from .model import Project
 
 CLASSDEFS = [
@@ -93,7 +93,7 @@ def holes(text: str) -> str:
     return re.sub(r"\{[^{}]*\}", "*", text)
 
 
-def _label_ops(keys: list[str], lang: str, limit: int = 4) -> str:
+def _label_ops(keys: list[str], limit: int = 4) -> str:
     keys = sorted(set(keys))
     if len(keys) <= limit:
         return ", ".join(keys)
@@ -120,10 +120,9 @@ def _apps(project: Project) -> list[dict]:
     return apps
 
 
-def system_map(project: Project, lang: str) -> Flow | None:
+def system_map(project: Project) -> Flow | None:
     """Launchers → program → modes → interfaces → dispatch table, with the clients that call in."""
     L = project.links
-    t = T(lang)
     apps = _apps(project)
     if not apps and not L["tables"] and not L["routes"]:
         return None
@@ -266,7 +265,7 @@ def system_map(project: Project, lang: str) -> Flow | None:
                 if op["handler_file"] and op["handler_file"] != tb["file"]:
                     per[op["handler_file"]].append(op["key"])
             for p, keys in per.items():
-                fl.edge(table_ids[tb["id"]], fl.ids[p], _label_ops(keys, lang, 3))
+                fl.edge(table_ids[tb["id"]], fl.ids[p], _label_ops(keys, 3))
     # data stores
     for rp in L["runtime_paths"]:
         for part in rp["parts"]:
@@ -283,9 +282,8 @@ def system_map(project: Project, lang: str) -> Flow | None:
     return fl
 
 
-def startup(project: Project, lang: str) -> Flow | None:
+def startup(project: Project) -> Flow | None:
     """Every observed 'X starts Y' link: launch scripts, build outputs, MCP client configs, CI."""
-    t = T(lang)
     runs = [e for e in project.edges if e.kind == "runs"]
     L = project.links
     files = {f.path: f for f in project.files}
@@ -334,12 +332,11 @@ def startup(project: Project, lang: str) -> Flow | None:
     return fl
 
 
-def operations(project: Project, lang: str) -> Flow | None:
+def operations(project: Project) -> Flow | None:
     """Per dispatch table: who calls which group of operations, and which component handles them."""
     L = project.links
     if not L["tables"]:
         return None
-    t = T(lang)
     fl = Flow("LR")
     files = {f.path: f for f in project.files}
     for tb in L["tables"]:
@@ -363,7 +360,7 @@ def operations(project: Project, lang: str) -> Flow | None:
             src = fl.ids["mcp" if p == "@mcp" else p]
             c = consumer_info.get(p, {})
             ch = c.get("route") or (f'{c.get("mode")}' if c.get("channel") == "process" and c.get("mode") else c.get("channel", ""))
-            label = _label_ops(list(keys), lang, 2) + (f" · {ch}" if ch else "")
+            label = _label_ops(list(keys), 2) + (f" · {ch}" if ch else "")
             fl.edge(src, tid, label, "-.->" if c.get("inferred") else "-->")
         per = defaultdict(list)
         for op in tb["ops"]:
@@ -379,14 +376,13 @@ def operations(project: Project, lang: str) -> Flow | None:
                     fl.node("type:" + key, key, "rect", "ext")
         for key, keys in per.items():
             dst = fl.ids["inline" + tb["id"]] if key == "inline" else fl.ids.get(key) or fl.ids.get("type:" + key)
-            fl.edge(tid, dst, _label_ops(keys, lang, 3))
+            fl.edge(tid, dst, _label_ops(keys, 3))
     return fl
 
 
-def code_map(project: Project, lang: str, max_area_nodes: int = 25) -> Flow | None:
+def code_map(project: Project, max_area_nodes: int = 25) -> Flow | None:
     """File-level dependency map grouped by folder. Shared foundations (hubs) are drawn once
     without their incoming edges so the rest stays readable."""
-    t = T(lang)
     kinds = {"injects": 3, "extends": 3, "imports": 2, "uses": 1, "loads": 2}
     edges = [e for e in project.edges if e.kind in kinds]
     if not edges:
@@ -446,9 +442,8 @@ def code_map(project: Project, lang: str, max_area_nodes: int = 25) -> Flow | No
     return fl
 
 
-def areas_map(project: Project, lang: str) -> Flow:
+def areas_map(project: Project) -> Flow:
     """Folder-level overview with file counts and aggregated links between folders."""
-    t = T(lang)
     fl = Flow("LR")
     counts = defaultdict(Counter)
     for f in project.files:
@@ -471,11 +466,11 @@ def areas_map(project: Project, lang: str) -> Flow:
     return fl
 
 
-def all_diagrams(project: Project, lang: str) -> dict[str, Flow]:
+def all_diagrams(project: Project) -> dict[str, Flow]:
     out = {}
     for name, fn in (("system", system_map), ("startup", startup), ("operations", operations),
                      ("code", code_map), ("areas", areas_map)):
-        fl = fn(project, lang)
+        fl = fn(project)
         if fl is not None and len(fl.lines) > 1:
             out[name] = fl
     return out
