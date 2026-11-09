@@ -5,18 +5,23 @@
  "project": {
   "name": "HandOff247",
   "git": {
-   "head": "d9b811a",
-   "head_full": "d9b811a35ae65bb5c580f2c5da243c491bbaf648",
+   "head": "fd03fe1",
+   "head_full": "fd03fe126b74c219472f674b26cfce228dd12b44",
    "branch": "main",
    "remote": "https://github.com/unkkyuist/HandOff247.git",
    "commits": [
+    {
+     "sha": "fd03fe1",
+     "date": "2026-11-09",
+     "subject": "English-only output, plus English versions for non-English source text"
+    },
     {
      "sha": "d9b811a",
      "date": "2026-11-09",
      "subject": "HandOff247 v0.1.0: handoff pack generator"
     }
    ],
-   "uncommitted": 38,
+   "uncommitted": 0,
    "subdir": ""
   }
  },
@@ -384,7 +389,7 @@
    "lang": "markdown",
    "category": "docs",
    "lines": 199,
-   "size": 11143,
+   "size": 11164,
    "summary": "Hand Off 24-7 is a good-bye project for passing your existing projects to the next person.",
    "summary_source": "first paragraph",
    "symbols": [
