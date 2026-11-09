@@ -1,0 +1,26 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "handoff247"
+version = "0.1.0"
+description = "Turn a project folder into a handoff pack: diagrams, structure, comments and how the tools connect."
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = []
+keywords = ["handoff", "documentation", "architecture", "diagram", "mermaid", "onboarding"]
+classifiers = [
+  "Programming Language :: Python :: 3",
+  "Topic :: Software Development :: Documentation",
+  "Environment :: Console",
+]
+
+[project.urls]
+Repository = "https://github.com/unkkyuist/HandOff247"
+
+[project.scripts]
+handoff247 = "handoff247.cli:main"
+
+[tool.setuptools]
+packages = ["handoff247", "handoff247.analyzers"]

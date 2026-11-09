@@ -1,0 +1,118 @@
+flowchart LR
+  subgraph g1["(root) · csharp"]
+    n2["Access.cs<br/>ServerIdentity"]:::file
+    n3["AgentWorker.cs"]:::file
+    n4["Connection.cs<br/>ClientSettings"]:::file
+    n5["Desktop.cs"]:::file
+    n6["Domain.cs<br/>Entry<br/>(used by 17 files)"]:::hub
+    n7["Folders.cs<br/>FolderPlan"]:::file
+    n8["Harnesses.cs"]:::file
+    n9["Library.cs"]:::file
+    n10["McpTools.cs"]:::file
+    n11["Ontology.cs"]:::file
+    n12["Operations.cs"]:::file
+    n13["Orchestration.cs"]:::file
+    n14["Program.cs"]:::entry
+    n15["ProjectScanner.cs<br/>ProjectCandidate"]:::file
+    n16["Providers.cs<br/>ProviderCommand"]:::file
+    n17["Store.cs<br/>(used by 12 files)"]:::hub
+    n18["ToolRunner.cs<br/>ToolDefinition"]:::file
+    n19["Workspace.cs"]:::file
+  end
+  subgraph g20["portable"]
+    n21["install.py"]:::entry
+    n22["oz#95;graphify#95;mcp.py"]:::entry
+    n23["oz#95;mcp#95;proxy.py"]:::entry
+    n24["oz#95;support.py"]:::file
+  end
+  subgraph g25["scripts"]
+    n26["graphify-playbook.py"]:::entry
+    n27["package-oz-mac.py"]:::entry
+  end
+  subgraph g28["wwwroot"]
+    n29["app.js"]:::file
+    n30["assets.js"]:::file
+    n31["context-menu.js"]:::file
+    n32["flowchart.js"]:::file
+    n33["folders.js"]:::file
+    n34["harness.js"]:::file
+    n35["i18n.js<br/>(used by 10 files)"]:::hub
+    n36["index.html"]:::file
+    n37["inventory.js"]:::file
+    n38["media.js"]:::file
+    n39["ontology.js"]:::file
+    n40["style.css"]:::file
+    n41["workspace-ui.js"]:::file
+  end
+  n3 ==> n4
+  n3 ==> n12
+  n3 ==> n16
+  n3 ==> n19
+  n7 ==> n18
+  n7 ==> n19
+  n8 ==> n19
+  n9 ==> n4
+  n9 ==> n19
+  n10 ==> n12
+  n12 ==> n2
+  n12 ==> n4
+  n12 ==> n16
+  n12 ==> n18
+  n12 ==> n19
+  n13 ==> n19
+  n15 ==> n4
+  n15 ==> n19
+  n22 --> n24
+  n23 --> n24
+  n29 --> n30
+  n29 --> n31
+  n29 --> n32
+  n29 --> n33
+  n29 --> n34
+  n29 --> n37
+  n29 --> n38
+  n29 --> n39
+  n29 --> n41
+  n30 --> n31
+  n30 --> n38
+  n33 --> n31
+  n33 --> n38
+  n36 -.-> n29
+  n36 -.-> n40
+  n41 --> n38
+  n3 --> n15
+  n3 --> n18
+  n8 --> n13
+  n12 --> n3
+  n12 --> n5
+  n12 --> n7
+  n12 --> n8
+  n12 --> n9
+  n12 --> n11
+  n12 --> n13
+  n12 --> n15
+  n13 --> n8
+  n13 --> n11
+  n14 --> n2
+  n14 --> n3
+  n14 --> n4
+  n14 --> n9
+  n14 --> n10
+  n14 --> n12
+  n14 --> n16
+  n14 --> n18
+  n14 --> n19
+  n17 --> n4
+  n17 --> n8
+  n17 --> n11
+  n19 --> n11
+  classDef entry fill:#fde68a,stroke:#b45309,color:#1f2937
+  classDef launcher fill:#e0e7ff,stroke:#4338ca,color:#1f2937
+  classDef mode fill:#dcfce7,stroke:#15803d,color:#1f2937
+  classDef iface fill:#cffafe,stroke:#0e7490,color:#1f2937
+  classDef table fill:#fce7f3,stroke:#be185d,color:#1f2937
+  classDef hub fill:#f3f4f6,stroke:#6b7280,color:#1f2937,stroke-dasharray:4 3
+  classDef data fill:#fef3c7,stroke:#92400e,color:#1f2937
+  classDef ext fill:#ffffff,stroke:#9ca3af,color:#374151,stroke-dasharray:2 2
+  classDef test fill:#ede9fe,stroke:#6d28d9,color:#1f2937
+  classDef file fill:#ffffff,stroke:#64748b,color:#1f2937

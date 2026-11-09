@@ -1,0 +1,92 @@
+flowchart LR
+  n1{{"Operations.Execute<br/>Operations.cs:33"}}:::table
+  subgraph g2["호출하는 쪽"]
+    n3[["MCP 도구 46개"]]:::iface
+    n4["McpTools.cs"]:::file
+    n5["wwwroot/workspace-ui.js"]:::file
+    n6["scripts/ontology-smoke.py"]:::test
+    n7["scripts/harness-smoke.py"]:::test
+    n8["wwwroot/app.js"]:::file
+    n9["scripts/smoke.py"]:::test
+    n10["scripts/folders-smoke.py"]:::test
+    n11["scripts/graphify-playbook.py"]:::file
+    n12["wwwroot/ontology.js"]:::file
+    n13["portable/oz/install.py"]:::file
+    n14["wwwroot/harness.js"]:::file
+    n15["AgentWorker.cs"]:::file
+    n16["scripts/check-package.py"]:::file
+    n17["portable/oz/oz#95;graphify#95;mcp.py"]:::file
+    n18["scripts/real-provider-smoke.py"]:::test
+    n19["wwwroot/folders.js"]:::file
+    n20["scripts/oz-package-smoke.py"]:::test
+    n21["Library.cs"]:::file
+    n22["scripts/graphify-smoke.py"]:::test
+    n23["portable/Install-PlayBook.ps1"]:::file
+    n24["wwwroot/assets.js"]:::file
+    n25["wwwroot/media.js"]:::file
+  end
+  n4 -->|"ontology.#42;, harness.#42;, folder.#42; … (46) · in-process"| n1
+  n13 -->|"tool.#42;, connection.#42;, info … (7)"| n1
+  n17 -->|"tool.#42;, list, save (4)"| n1
+  n10 -->|"folder.#42;, events, get … (9) · cli"| n1
+  n11 -->|"ontology.#42;, tool.#42;, context … (8) · cli"| n1
+  n7 -->|"harness.#42;, run.#42;, agent.#42; … (17) · cli"| n1
+  n6 -->|"ontology.#42;, run.#42;, agent.#42; … (18) · cli"| n1
+  n8 -->|"tool.#42;, asset.#42;, backup … (17)"| n1
+  n3 -->|"ontology.#42;, harness.#42;, folder.#42; … (46)"| n1
+  n16 -->|"connection.#42;, get, info … (5) · cli"| n1
+  n20 -->|"tool.#42;, get (3)"| n1
+  n9 -->|"tool.#42;, asset.#42;, backup … (12) · cli"| n1
+  n5 -.->|"connection.#42;, library.#42;, provider.#42; … (20) · POST /api/{operation}"| n1
+  n22 -->|"ontology.search, save"| n1
+  n18 -->|"library.#42;, provider.#42;, run.#42; … (4) · cli"| n1
+  n14 -.->|"harness.#42; (6) · POST /api/{operation}"| n1
+  n12 -.->|"ontology.#42; (8) · POST /api/{operation}"| n1
+  n23 -->|"connection.configure"| n1
+  n15 -->|"run.#42;, agent.#42;, library.#42; (5) · in-process"| n1
+  n21 -->|"library.download, library.put"| n1
+  n24 -.->|"asset.files · POST /api/{operation}"| n1
+  n25 -.->|"asset.readText · POST /api/{operation}"| n1
+  n19 -.->|"folder.#42; (4) · POST /api/{operation}"| n1
+  subgraph g26["처리하는 쪽"]
+    n27["Access.cs"]:::file
+    n28["Connection.cs"]:::file
+    n29["Desktop.cs"]:::file
+    n30["Folders.cs"]:::file
+    n31["Harnesses.cs"]:::file
+    n32["OSVersion"]:::ext
+    n33["Ontology.cs"]:::file
+    n34["Operations.cs"]:::file
+    n35["Orchestration.cs"]:::file
+    n36["ProjectScanner.cs"]:::file
+    n37["Providers.cs"]:::file
+    n38["Store.cs"]:::file
+    n39["ToolRunner.cs"]:::file
+    n40["Workspace.cs"]:::file
+  end
+  n1 -->|"backup, canon.#42;, events … (6)"| n38
+  n1 -->|"harness.#42; (6)"| n31
+  n1 -->|"ontology.#42; (8)"| n33
+  n1 -->|"asset.#42;, context, discover … (7)"| n40
+  n1 -->|"scan, scan.import"| n36
+  n1 -->|"connection.connect, connection.disconnect, connection.status"| n28
+  n1 -->|"connection.configure"| n34
+  n1 -->|"server.setup"| n27
+  n1 -->|"provider.login, provider.mcp, provider.status"| n37
+  n1 -->|"worker.configure, worker.status"| n15
+  n1 -->|"run.#42;, agent.#42;, orchestration.#42; (7)"| n35
+  n1 -->|"library.#42; (6)"| n21
+  n1 -->|"desktop.pickFolder"| n29
+  n1 -->|"folder.#42;, asset.#42; (6)"| n30
+  n1 -->|"tool.#42;, tools (5)"| n39
+  n1 -->|"info"| n32
+  classDef entry fill:#fde68a,stroke:#b45309,color:#1f2937
+  classDef launcher fill:#e0e7ff,stroke:#4338ca,color:#1f2937
+  classDef mode fill:#dcfce7,stroke:#15803d,color:#1f2937
+  classDef iface fill:#cffafe,stroke:#0e7490,color:#1f2937
+  classDef table fill:#fce7f3,stroke:#be185d,color:#1f2937
+  classDef hub fill:#f3f4f6,stroke:#6b7280,color:#1f2937,stroke-dasharray:4 3
+  classDef data fill:#fef3c7,stroke:#92400e,color:#1f2937
+  classDef ext fill:#ffffff,stroke:#9ca3af,color:#374151,stroke-dasharray:2 2
+  classDef test fill:#ede9fe,stroke:#6d28d9,color:#1f2937
+  classDef file fill:#ffffff,stroke:#64748b,color:#1f2937

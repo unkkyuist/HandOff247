@@ -1,0 +1,9 @@
+{
+  "mcpServers": {
+    "mini": {
+      "command": "dotnet",
+      "args": ["C:/apps/Mini/bin/Release/net8.0/Mini.dll", "mcp"],
+      "env": {"APP_HOME": "C:/apps/Mini/data"}
+    }
+  }
+}

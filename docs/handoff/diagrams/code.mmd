@@ -1,0 +1,76 @@
+flowchart LR
+  subgraph g1["handoff247"]
+    n2["#95;#95;init#95;#95;.py"]:::file
+    n3["#95;#95;main#95;#95;.py"]:::file
+    n4["#95;#95;init#95;#95;.py"]:::file
+    n5["csharp.py"]:::file
+    n6["docs.py"]:::file
+    n7["python.py"]:::file
+    n8["shell.py"]:::file
+    n9["web.py"]:::file
+    n10["build.py"]:::file
+    n11["cli.py"]:::file
+    n12["connect.py"]:::file
+    n13["i18n.py"]:::file
+    n14["inventory.py"]:::file
+    n15["lexer.py"]:::file
+    n16["mermaid.py"]:::file
+    n17["model.py<br/>(used by 13 files)"]:::hub
+    n18["notes.py"]:::file
+    n19["pipeline.py"]:::file
+    n20["render#95;html.py"]:::file
+    n21["render#95;md.py"]:::file
+  end
+  subgraph g22["tests"]
+    n23["test#95;handoff.py"]:::entry
+  end
+  n3 --> n11
+  n4 --> n5
+  n4 --> n6
+  n4 --> n7
+  n4 --> n8
+  n4 --> n9
+  n5 --> n15
+  n6 --> n15
+  n7 --> n15
+  n8 --> n15
+  n9 --> n15
+  n10 --> n2
+  n10 --> n16
+  n10 --> n18
+  n10 --> n20
+  n10 --> n21
+  n11 --> n2
+  n11 --> n10
+  n11 --> n18
+  n11 --> n19
+  n11 --> n21
+  n16 --> n12
+  n16 --> n13
+  n18 --> n12
+  n18 --> n13
+  n19 --> n2
+  n19 --> n4
+  n19 --> n12
+  n19 --> n14
+  n20 --> n2
+  n21 --> n2
+  n21 --> n12
+  n21 --> n13
+  n21 --> n16
+  n21 --> n18
+  n23 --> n2
+  n23 --> n10
+  n23 --> n11
+  n23 --> n15
+  n23 --> n19
+  classDef entry fill:#fde68a,stroke:#b45309,color:#1f2937
+  classDef launcher fill:#e0e7ff,stroke:#4338ca,color:#1f2937
+  classDef mode fill:#dcfce7,stroke:#15803d,color:#1f2937
+  classDef iface fill:#cffafe,stroke:#0e7490,color:#1f2937
+  classDef table fill:#fce7f3,stroke:#be185d,color:#1f2937
+  classDef hub fill:#f3f4f6,stroke:#6b7280,color:#1f2937,stroke-dasharray:4 3
+  classDef data fill:#fef3c7,stroke:#92400e,color:#1f2937
+  classDef ext fill:#ffffff,stroke:#9ca3af,color:#374151,stroke-dasharray:2 2
+  classDef test fill:#ede9fe,stroke:#6d28d9,color:#1f2937
+  classDef file fill:#ffffff,stroke:#64748b,color:#1f2937

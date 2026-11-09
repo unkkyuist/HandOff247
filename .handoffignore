@@ -1,0 +1,5 @@
+# Paths HandOff247 skips when it documents itself (same syntax works in any project).
+# Test fixtures imitate another app's wiring and would show up as fake modes and routes.
+tests/fixtures/
+# Generated example packs and their demo notes.
+examples/

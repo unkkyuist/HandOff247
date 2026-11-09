@@ -1,0 +1,17 @@
+flowchart LR
+  n1["(root) · 7<br/>config 3, docs 3, other 1"]:::file
+  n2[".github · 1<br/>config 1"]:::file
+  n3["handoff247 · 20<br/>code 20"]:::file
+  n4["tests · 1<br/>test 1"]:::file
+  n2 -->|"runs 1"| n1
+  n4 -->|"imports 5"| n3
+  classDef entry fill:#fde68a,stroke:#b45309,color:#1f2937
+  classDef launcher fill:#e0e7ff,stroke:#4338ca,color:#1f2937
+  classDef mode fill:#dcfce7,stroke:#15803d,color:#1f2937
+  classDef iface fill:#cffafe,stroke:#0e7490,color:#1f2937
+  classDef table fill:#fce7f3,stroke:#be185d,color:#1f2937
+  classDef hub fill:#f3f4f6,stroke:#6b7280,color:#1f2937,stroke-dasharray:4 3
+  classDef data fill:#fef3c7,stroke:#92400e,color:#1f2937
+  classDef ext fill:#ffffff,stroke:#9ca3af,color:#374151,stroke-dasharray:2 2
+  classDef test fill:#ede9fe,stroke:#6d28d9,color:#1f2937
+  classDef file fill:#ffffff,stroke:#64748b,color:#1f2937

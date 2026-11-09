@@ -1,0 +1,44 @@
+name: HandOff247
+description: Generate a handoff pack (diagrams, structure, comments, tool connections) for a repository.
+branding:
+  icon: share-2
+  color: blue
+inputs:
+  path:
+    description: Project folder to analyze.
+    default: "."
+  output:
+    description: Folder to write the pack to.
+    default: docs/handoff
+  lang:
+    description: Language of generated headings and labels (en or ko).
+    default: en
+  notes:
+    description: Notes file (default <path>/HANDOFF.notes.md).
+    default: ""
+  min-notes:
+    description: Fail when fewer than this percentage of files have notes (0 disables).
+    default: "0"
+runs:
+  using: composite
+  steps:
+    - uses: actions/setup-python@v5
+      with:
+        python-version: "3.12"
+    - name: Build handoff pack
+      shell: bash
+      env:
+        PYTHONPATH: ${{ github.action_path }}
+        H247_PATH: ${{ inputs.path }}
+        H247_OUT: ${{ inputs.output }}
+        H247_LANG: ${{ inputs.lang }}
+        H247_NOTES: ${{ inputs.notes }}
+        H247_MIN: ${{ inputs.min-notes }}
+      run: |
+        set -euo pipefail
+        notes=()
+        if [ -n "$H247_NOTES" ]; then notes=(--notes "$H247_NOTES"); fi
+        # commit date keeps the pack byte-identical when nothing changed
+        date="$(git -C "$H247_PATH" log -1 --format=%cs 2>/dev/null || date +%F)"
+        python -m handoff247 build "$H247_PATH" -o "$H247_OUT" --lang "$H247_LANG" --date "$date" "${notes[@]}"
+        python -m handoff247 check "$H247_PATH" --lang "$H247_LANG" --min "$H247_MIN" "${notes[@]}"
