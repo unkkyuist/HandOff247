@@ -13,7 +13,7 @@ from .notes import TRANSLATIONS, Notes
 from .render_html import render as render_html
 from .render_md import Pages, make_linker
 
-PAGE_FILES = ("README.md", "RUNNING.md", "CONNECTIONS.md", "CODEMAP.md", "FILES.md")
+PAGE_FILES = ("README.md", "HANDOVER.md", "RUNNING.md", "CONNECTIONS.md", "CODEMAP.md", "FILES.md")
 
 
 def to_json(project: Project, notes: Notes, date: str) -> dict:
@@ -40,8 +40,9 @@ def write_pack(project: Project, out_dir: Path, notes: Notes, links: str = "auto
     diagrams = all_diagrams(project)
     linker = make_linker(links, project, out_dir, link_base)
     pages = Pages(project, diagrams, notes, linker, notes_label, date)
-    content = {"README.md": pages.readme(), "RUNNING.md": pages.running(), "CONNECTIONS.md": pages.connections(),
-               "CODEMAP.md": pages.codemap(), "FILES.md": pages.file_cards()}
+    project.links["readiness"] = pages.ready()
+    content = {"README.md": pages.readme(), "HANDOVER.md": pages.handover(), "RUNNING.md": pages.running(),
+               "CONNECTIONS.md": pages.connections(), "CODEMAP.md": pages.codemap(), "FILES.md": pages.file_cards()}
     for name, text in content.items():
         (out_dir / name).write_text(text, encoding="utf-8", newline="\n")
     ddir = out_dir / "diagrams"
@@ -56,4 +57,5 @@ def write_pack(project: Project, out_dir: Path, notes: Notes, links: str = "auto
     (out_dir / "index.html").write_text(render_html(project, content, diagrams, notes, date, linker),
                                         encoding="utf-8", newline="\n")
     return {"out": str(out_dir), "pages": list(content), "diagrams": list(diagrams), "files": len(project.files),
-            "edges": len(project.edges), "links": linker.mode, **tr}
+            "edges": len(project.edges), "links": linker.mode, "readiness": project.links["readiness"],
+            "gaps": pages.undocumented(), **tr}

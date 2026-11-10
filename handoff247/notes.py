@@ -24,6 +24,10 @@ SEPARATOR = re.compile(r":?-{2,}:?")
 CHECKLIST_NAMES = {t("topic_checklist")}
 RISK_NAMES = {t("topic_risks")}
 SECRET_NAMES = {t("topic_secrets")}
+# (label key, TODO prompt key): the questions only the person leaving can answer
+TOPICS = [("topic_checklist", "todo_checklist"), ("topic_risks", "todo_risks"), ("topic_secrets", "todo_secrets"),
+          ("topic_open", "todo_open"), ("topic_deploy", "todo_deploy"), ("topic_routine", "todo_routine"),
+          ("topic_data", "todo_data"), ("topic_people", "todo_people")]
 
 
 @dataclass
@@ -128,10 +132,7 @@ def translation_skeleton(project: Project) -> str:
 
 
 def skeleton(project: Project, max_files: int = 400) -> list[tuple[str, str]]:
-    items = [("Project", t("todo_project")),
-             (f"Topic: {t('topic_checklist')}", t("todo_checklist")),
-             (f"Topic: {t('topic_risks')}", t("todo_risks")),
-             (f"Topic: {t('topic_secrets')}", t("todo_secrets"))]
+    items = [("Project", t("todo_project"))] + [(f"Topic: {t(k)}", t(todo)) for k, todo in TOPICS]
     seen = set()
     for m in project.links.get("modes", []):
         if m["name"] not in seen:

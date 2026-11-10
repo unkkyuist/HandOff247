@@ -24,6 +24,23 @@ It is a trusted-owner workspace service: there are no per-user roles or tenant i
 ## Topic: Credentials and accounts
 The HTTP/MCP key lives in `PLAYBOOK_HOME/api-key` (created on first `serve`). Never commit `data/`, tool credentials, logs or API keys (AGENTS.md).
 
+<!-- The next five questions can only be answered by the person leaving, so the demo leaves them open:
+     the pack shows them as "to do" on its Handover page. -->
+## Topic: Open work and next steps
+TODO: What is half done, what was promised to someone, and what you would do next.
+
+## Topic: Deploy and release
+TODO: How a change reaches users: where it runs, who can deploy, the exact steps, how to roll back.
+
+## Topic: Routine operations
+TODO: What has to be done by hand and how often (daily, monthly, renewals), what to watch, what to do when it breaks.
+
+## Topic: Data and backups
+TODO: Where the data lives, what is backed up and how to restore it, what cannot be recreated.
+
+## Topic: People and contacts
+TODO: Who uses it, who to ask about what, vendors and other teams (names and how to reach them).
+
 ## Mode: serve
 What people normally run: web UI, `/api/{operation}`, HTTP MCP at `/mcp`, and the local AI worker.
 

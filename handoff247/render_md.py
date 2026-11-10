@@ -4,12 +4,12 @@ from __future__ import annotations
 import posixpath
 from collections import Counter, defaultdict
 
-from . import __version__
+from . import __version__, leaving
 from .connect import area_of
 from .labels import t as label
 from .mermaid import Flow, short
 from .model import Project
-from .notes import CHECKLIST_NAMES, RISK_NAMES, SECRET_NAMES, Notes
+from .notes import CHECKLIST_NAMES, RISK_NAMES, SECRET_NAMES, TOPICS, Notes
 
 LANG_NAMES = {"csharp": "C#", "python": "Python", "javascript": "JavaScript", "typescript": "TypeScript",
               "powershell": "PowerShell", "shell": "Shell", "batch": "Batch", "markdown": "Markdown",
@@ -157,6 +157,8 @@ class Pages:
         translated = sum(r["uses"] for r in L.get("translations", []))
         if translated:
             s.append(f"> {t('legend_translated', n=translated, notes=f'`{self.notes_label}`')}\n")
+        ok, total = leaving.score(self.ready())
+        s.append(f"> {t('handover_status', ok=ok, total=total)}\n")
         # at a glance
         code_files = [f for f in p.files if f.category != "asset"]
         metrics = [(t("metric_files"), len(p.files)), (t("metric_lines"), f"{sum(f.lines for f in p.files):,}"),
@@ -192,6 +194,7 @@ class Pages:
         elif "areas" in self.d:
             s.append(f"\n## {t('areas_map')}\n\n" + mermaid_block(self.d["areas"], "areas", t))
         s.append(f"\n## {t('pages')}\n")
+        s.append(f"- [HANDOVER.md](HANDOVER.md) — {t('page_handover')}")
         s.append(f"- [RUNNING.md](RUNNING.md) — {t('page_running')}")
         s.append(f"- [CONNECTIONS.md](CONNECTIONS.md) — {t('page_connections')}")
         s.append(f"- [CODEMAP.md](CODEMAP.md) — {t('page_codemap')}")
@@ -232,6 +235,146 @@ class Pages:
             if g.get("uncommitted"):
                 s.append(f"\n{t('uncommitted', n=g['uncommitted'])}")
             s.append("")
+        return "\n".join(s) + "\n"
+
+    # ------------------------------------------------------------ HANDOVER
+    def ready(self) -> list[dict]:
+        if not hasattr(self, "_ready"):
+            self._ready = leaving.readiness(self.p, self.n, [self.t(k) for k, _ in TOPICS], self.undocumented())
+        return self._ready
+
+    def where(self, hits: list[dict], limit: int = 3) -> str:
+        return more([self.L(h["file"], h["line"]) for h in hits], limit, self.t)
+
+    def topic(self, key: str, todo: str) -> str:
+        v = self.n.get(f"Topic: {self.t(key)}")
+        return note_block(v, self.t) if v else f"*{self.t(todo)}*\n"
+
+    def handover(self) -> str:
+        t, lv = self.t, self.p.links["leaving"]
+        g = lv["git"]
+        s = [self.header("title_handover")]
+        s.append(f"> {t('handover_hint', notes=f'`{self.notes_label}`')}\n")
+        rows = self.ready()
+        ok, total = leaving.score(rows)
+        s.append(f"## {t('ready')}\n\n{t('ready_hint', ok=ok, total=total)}\n")
+        s.append(table(["", t("check"), t("detail")],
+                       [[t("state_" + r["state"]), r["label"], r["detail"]] for r in rows]))
+        # unfinished work
+        s.append(f"\n## {t('unfinished')}\n")
+        s.append(self.topic("topic_open", "todo_open"))
+        s.append(f"### {t('git_state')}\n")
+        if not g["repo"]:
+            s.append(t("git_none") + "\n")
+        else:
+            bits = [t("git_branch", branch=g["branch"] or "?")]
+            if g.get("commits") and g.get("first_commit"):
+                bits.append(t("git_history", n=g["commits"], first=g["first_commit"], last=g["last_commit"]))
+            elif g.get("last_commit"):
+                bits.append(f"{t('last_commit').lower()} {g['last_commit']}")
+            s.append("- " + " · ".join(bits))
+            if g["shallow"]:
+                s.append(f"- {t('git_shallow')}")
+            if g["subdir"]:
+                s.append(f"- {t('git_subdir', dir=g['subdir'])}")
+            s.append("- " + (t("git_remotes", names=", ".join(f"`{r}`" for r in g["remotes"])) if g["remotes"] else t("git_no_remote")))
+            if g["uncommitted"]:
+                s.append("- " + t("uncommitted", n=g["uncommitted"]) + " " + more(
+                    [f"`{x['state']}` {self.L(x['path']) if x['path'] in self.files else '`' + x['path'] + '`'}"
+                     for x in g["uncommitted_files"]], 15, t)
+                    + (f" {t('more', n=g['uncommitted'] - len(g['uncommitted_files']))}" if g["uncommitted"] > len(g["uncommitted_files"]) else ""))
+            else:
+                s.append(f"- {t('git_clean')}")
+            if g["remotes"]:
+                if g["unpushed"]:
+                    s.append(f"- **{t('git_unpushed')}:** " + ", ".join(f"`{u['branch']}` ({u['commits']})" for u in g["unpushed"]))
+                else:
+                    s.append(f"- {t('git_all_pushed')}")
+            if g["stashes"]:
+                s.append(f"- {t('git_stashes', n=g['stashes'])}")
+            s.append("")
+        if lv["todos"]:
+            s.append(f"### {t('todo_comments')} ({len(lv['todos'])})\n")
+            s.append(table([t("where"), t("tag"), t("text")],
+                           [[self.L(x["file"], x["line"]), x["tag"], x["text"]] for x in lv["todos"][:60]]))
+            if len(lv["todos"]) > 60:
+                s.append(t("more", n=len(lv["todos"]) - 60) + "\n")
+        # only on this computer
+        s.append(f"\n## {t('only_here')}\n\n{t('only_here_hint')}\n")
+        s.append(f"### {t('ignored_files')}\n")
+        lo = lv["local_only"]
+        if lo is None:
+            s.append(t("ignored_unknown") + "\n")
+        elif not lo:
+            s.append(t("ignored_none") + "\n")
+        else:
+            s.append(t("ignored_hint") + "\n")
+            order = {"settings or secrets": 0, "data": 1, "file": 2, "folder": 3}
+            shown = sorted(lo, key=lambda x: (order[x["kind"]], x["path"].lower()))
+            s.append(table([t("path"), t("kind")], [[f"`{x['path']}`", x["kind"]] for x in shown[:50]]))
+            if len(shown) > 50:
+                s.append(t("more", n=len(shown) - 50) + "\n")
+        if lv["machine_paths"]:
+            s.append(f"### {t('machine_paths')} ({len(lv['machine_paths'])})\n\n{t('machine_paths_hint')}\n")
+            s.append(table([t("path"), t("where"), ""],
+                           [[f"`{x['path']}`", self.where(x["where"]), f"**{t('personal')}**" if x["user"] else ""]
+                            for x in lv["machine_paths"][:50]]))
+            if len(lv["machine_paths"]) > 50:
+                s.append(t("more", n=len(lv["machine_paths"]) - 50) + "\n")
+        # accounts
+        s.append(f"\n## {t('accounts')}\n")
+        s.append(self.topic("topic_secrets", "todo_secrets"))
+        if lv["secret_env"]:
+            env = self.p.links["env"]
+            s.append(f"### {t('secret_env')}\n\n{t('secret_env_hint')}\n")
+            for name in lv["secret_env"]:
+                s.append(f"- `{name}` — " + (self.where(env[name]["reads"]) or self.where(env[name]["writes"])))
+            s.append("")
+        if lv["secrets"]:
+            s.append(f"### {t('secret_hits')} ({len(lv['secrets'])})\n\n{t('secret_hits_hint')}\n")
+            s.append(table([t("where"), t("kind")], [[self.L(x["file"], x["line"]), x["kind"]] for x in lv["secrets"][:40]]))
+        if lv["hosts"]:
+            s.append(f"### {t('hosts')} ({len(lv['hosts'])})\n\n{t('hosts_hint')}\n")
+            s.append(table([t("host"), t("in_code"), t("in_docs")],
+                           [[f"`{x['host']}`", self.where(x["code"]), self.where(x["docs"])] for x in lv["hosts"][:50]]))
+            if len(lv["hosts"]) > 50:
+                s.append(t("more", n=len(lv["hosts"]) - 50) + "\n")
+        # install
+        if lv["prerequisites"] or lv["commands"]:
+            s.append(f"\n## {t('install')}\n")
+            if lv["prerequisites"]:
+                s.append(f"### {t('tool_versions')}\n")
+                s.append(table([t("tool"), t("version"), t("declared_in")],
+                               [[x["tool"], f"`{x['version']}`", self.L(x["file"], x["line"])] for x in lv["prerequisites"]]))
+            if lv["commands"]:
+                s.append(f"### {t('commands_used')}\n")
+                s.append(table([t("command"), t("where"), t("count")],
+                               [[f"`{x['command']}`", self.where(x["where"]), x["count"]] for x in lv["commands"]]))
+        # deploy, routine
+        s.append(f"\n## {t('topic_deploy')}\n")
+        s.append(self.topic("topic_deploy", "todo_deploy"))
+        if lv["has"]["ci"]:
+            s.append(f"**{t('ci_files')}:** " + ", ".join(self.L(x) for x in lv["has"]["ci"]) + "\n")
+        s.append(f"\n## {t('topic_routine')}\n")
+        s.append(self.topic("topic_routine", "todo_routine"))
+        if lv["schedules"]:
+            s.append(f"### {t('schedules')}\n")
+            s.append(table([t("where"), t("what")], [[self.L(x["file"], x["line"]), f"`{x['what']}`"] for x in lv["schedules"][:30]]))
+        # data
+        s.append(f"\n## {t('topic_data')}\n")
+        s.append(self.topic("topic_data", "todo_data"))
+        data = [x for x in (lo or []) if x["kind"] == "data"]
+        if data:
+            s.append(f"**{t('data_local')}:** " + more([f"`{x['path']}`" for x in data], 12, t) + "\n")
+        if self.p.links["runtime_paths"]:
+            s.append(t("data_paths") + "\n")
+        # people
+        s.append(f"\n## {t('topic_people')}\n")
+        s.append(self.topic("topic_people", "todo_people"))
+        if g.get("authors"):
+            s.append(f"### {t('authors')}\n\n{t('authors_hint')}\n")
+            s.append(table([t("author"), t("commits"), t("first_commit"), t("last_commit")],
+                           [[a["name"], a["commits"], a["first"], a["last"]] for a in g["authors"]]))
         return "\n".join(s) + "\n"
 
     # ------------------------------------------------------------ RUNNING
@@ -475,6 +618,7 @@ class Pages:
 
 
 def make_linker(mode: str, project: Project, out_dir, link_base: str) -> Linker:
+    import os
     from pathlib import Path
     if mode == "plain":
         return Linker("plain")
@@ -482,6 +626,14 @@ def make_linker(mode: str, project: Project, out_dir, link_base: str) -> Linker:
         return Linker("url", link_base)
     root = Path(project.root).resolve()
     out = Path(out_dir).resolve()
+    if mode == "local":
+        # pack next to the project (a workspace): a GitHub link when there is one, else a path between the two folders
+        g = project.git
+        if not (g.get("remote", "").startswith("https://github.com/") and g.get("head")):
+            try:
+                return Linker("relative", rel_prefix=Path(os.path.relpath(root, out)).as_posix() + "/")
+            except ValueError:                      # different drives
+                return Linker("plain")
     try:
         rel = out.relative_to(root)
         prefix = "/".join([".."] * len(rel.parts)) + "/"

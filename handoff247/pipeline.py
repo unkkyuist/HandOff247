@@ -3,7 +3,7 @@ from __future__ import annotations
 
 from pathlib import Path
 
-from . import analyzers
+from . import analyzers, leaving
 from .connect import link
 from .inventory import list_files, load
 from .model import Project
@@ -17,4 +17,5 @@ def analyze_project(root: Path, name: str | None = None, excludes: list[str] | N
     for f in files:
         analyzers.analyze(f, project.facts)
     link(project)
+    leaving.collect(project)
     return project

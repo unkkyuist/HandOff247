@@ -1,7 +1,7 @@
 {
  "generator": "HandOff247",
- "version": "0.2.0",
- "generated": "2026-11-09",
+ "version": "0.3.0",
+ "generated": "2026-11-10",
  "project": {
   "name": "PlayBookOS",
   "git": {
@@ -44,7 +44,7 @@
   "Project": "PlayBook OS is a shared ledger for projects, references and AI work. The web UI, the JSON CLI and MCP (stdio and HTTP) all go through the same operations and the same SQLite records (README.en.md).\nIt is a trusted-owner workspace service: there are no per-user roles or tenant isolation (README.en.md, \"Verification and scope\").",
   "Topic: Successor checklist": "1. Install the .NET 10 SDK, run `dotnet build -c Release`, then `dotnet bin/Release/net10.0/PlayBook.dll serve` and open http://127.0.0.1:7331.\n2. Point every client (GUI, CLI, MCP) at the same `PLAYBOOK_HOME`, or they will each see a different database.\n3. After any business-logic change run `python scripts/smoke.py` (plus folders/ontology/central smokes before a release).\n4. Track work for this project in PlayBook itself under project ID `playbook` (AGENTS.md).",
   "Topic: Known issues and risks": "- Every write must send `expectedRevision`; on conflict reread and merge instead of retrying blindly (README.en.md).\n- macOS runtime is unverified; cross-publishing does not count as evidence (AGENTS.md).\n- Real Claude model execution was not verified in v0.2.0; see docs/RELEASE-0.2.0.md.",
-  "Topic: Credentials and accounts": "The HTTP/MCP key lives in `PLAYBOOK_HOME/api-key` (created on first `serve`). Never commit `data/`, tool credentials, logs or API keys (AGENTS.md).",
+  "Topic: Credentials and accounts": "The HTTP/MCP key lives in `PLAYBOOK_HOME/api-key` (created on first `serve`). Never commit `data/`, tool credentials, logs or API keys (AGENTS.md).\n\n<!-- The next five questions can only be answered by the person leaving, so the demo leaves them open:\n     the pack shows them as \"to do\" on its Handover page. -->",
   "Mode: serve": "What people normally run: web UI, `/api/{operation}`, HTTP MCP at `/mcp`, and the local AI worker.",
   "Mode: server": "Central multi-PC server. Needs its own `PLAYBOOK_HOME` and an account created with `cli server.setup` first.",
   "Mode: cli": "One operation per process: `PlayBook.dll cli <operation> <json | @file | ->`. Errors go to stderr as JSON with exit code 1.",
@@ -17166,6 +17166,398 @@
    "portable/Install-PlayBook.ps1": 1,
    "portable/Start-PlayBook.ps1": 1
   },
+  "leaving": {
+   "machine_paths": [
+    {
+     "path": "C:/DevWork/PlayBook/data",
+     "user": false,
+     "where": [
+      {
+       "file": "README.md",
+       "line": 86
+      },
+      {
+       "file": "docs/CLAUDE-AND-FOLDERS.md",
+       "line": 8
+      },
+      {
+       "file": "docs/GRAPHIFY.md",
+       "line": 60
+      }
+     ],
+     "count": 5,
+     "in_code": true
+    },
+    {
+     "path": "C:/DevWork/PlayBook/bin/Release/net10.0/PlayBook.dll",
+     "user": false,
+     "where": [
+      {
+       "file": "README.md",
+       "line": 85
+      },
+      {
+       "file": "docs/CLAUDE-AND-FOLDERS.md",
+       "line": 8
+      },
+      {
+       "file": "examples/codex-mcp.toml",
+       "line": 4
+      }
+     ],
+     "count": 4,
+     "in_code": true
+    },
+    {
+     "path": "C:\\DevWork\\PlayBook",
+     "user": false,
+     "where": [
+      {
+       "file": "README.md",
+       "line": 18
+      },
+      {
+       "file": "docs/GRAPHIFY.md",
+       "line": 22
+      }
+     ],
+     "count": 2,
+     "in_code": false
+    },
+    {
+     "path": "C:\\DevWork\\vendor\\graphify",
+     "user": false,
+     "where": [
+      {
+       "file": "docs/GRAPHIFY.md",
+       "line": 87
+      }
+     ],
+     "count": 2,
+     "in_code": false
+    },
+    {
+     "path": "C:\\DevWork\\vendor\\graphify\\.venv\\Scripts\\python.exe",
+     "user": false,
+     "where": [
+      {
+       "file": "docs/GRAPHIFY.md",
+       "line": 114
+      }
+     ],
+     "count": 2,
+     "in_code": false
+    },
+    {
+     "path": "C:/DevWork/PlayBook/scripts/graphify-playbook.py",
+     "user": false,
+     "where": [
+      {
+       "file": "docs/GRAPHIFY.md",
+       "line": 59
+      }
+     ],
+     "count": 1,
+     "in_code": false
+    },
+    {
+     "path": "C:/DevWork/vendor/graphify/.venv/Scripts/python.exe",
+     "user": false,
+     "where": [
+      {
+       "file": "docs/GRAPHIFY.md",
+       "line": 58
+      }
+     ],
+     "count": 1,
+     "in_code": false
+    },
+    {
+     "path": "C:\\DevWork\\Example",
+     "user": false,
+     "where": [
+      {
+       "file": "docs/CENTRAL-SERVER-PLAN.md",
+       "line": 93
+      }
+     ],
+     "count": 1,
+     "in_code": false
+    },
+    {
+     "path": "C:\\DevWork\\PlayBook\\artifacts\\graphify-runtime\\PlayBook.dll",
+     "user": false,
+     "where": [
+      {
+       "file": "docs/GRAPHIFY.md",
+       "line": 124
+      }
+     ],
+     "count": 1,
+     "in_code": false
+    },
+    {
+     "path": "C:\\DevWork\\PlayBook\\data",
+     "user": false,
+     "where": [
+      {
+       "file": "docs/GRAPHIFY.md",
+       "line": 106
+      }
+     ],
+     "count": 1,
+     "in_code": false
+    },
+    {
+     "path": "C:\\DevWork\\vendor\\graphify\\.venv",
+     "user": false,
+     "where": [
+      {
+       "file": "docs/GRAPHIFY.md",
+       "line": 113
+      }
+     ],
+     "count": 1,
+     "in_code": false
+    },
+    {
+     "path": "C:\\PlayBookServer\\data",
+     "user": false,
+     "where": [
+      {
+       "file": "docs/PORTABLE-AND-AGENTS.md",
+       "line": 38
+      }
+     ],
+     "count": 1,
+     "in_code": false
+    }
+   ],
+   "hosts": [
+    {
+     "host": "github.com",
+     "code": [
+      {
+       "file": "scripts/graphify/index.html",
+       "line": 19
+      },
+      {
+       "file": "scripts/package-oz-mac.py",
+       "line": 115
+      }
+     ],
+     "docs": [
+      {
+       "file": "README.en.md",
+       "line": 7
+      },
+      {
+       "file": "README.md",
+       "line": 10
+      },
+      {
+       "file": "docs/GRAPHIFY-OZ-MAC.md",
+       "line": 86
+      }
+     ],
+     "count": 15
+    },
+    {
+     "host": "code.claude.com",
+     "code": [
+      {
+       "file": "wwwroot/workspace-ui.js",
+       "line": 93
+      }
+     ],
+     "docs": [
+      {
+       "file": "docs/CLAUDE-AND-FOLDERS.md",
+       "line": 25
+      },
+      {
+       "file": "docs/GRAPHIFY-OZ-MAC.md",
+       "line": 83
+      },
+      {
+       "file": "portable/oz/00_먼저읽기.txt",
+       "line": 87
+      }
+     ],
+     "count": 6
+    },
+    {
+     "host": "json.schemastore.org",
+     "code": [
+      {
+       "file": "Properties/launchSettings.json",
+       "line": 2
+      }
+     ],
+     "docs": [],
+     "count": 1
+    },
+    {
+     "host": "learn.chatgpt.com",
+     "code": [
+      {
+       "file": "wwwroot/workspace-ui.js",
+       "line": 93
+      }
+     ],
+     "docs": [],
+     "count": 1
+    },
+    {
+     "host": "unpkg.com",
+     "code": [
+      {
+       "file": "scripts/graphify-playbook.py",
+       "line": 203
+      }
+     ],
+     "docs": [],
+     "count": 1
+    },
+    {
+     "host": "learn.microsoft.com",
+     "code": [],
+     "docs": [
+      {
+       "file": "README.md",
+       "line": 134
+      },
+      {
+       "file": "docs/CENTRAL-SERVER-PLAN.md",
+       "line": 80
+      },
+      {
+       "file": "docs/GRAPHIFY-OZ-MAC.md",
+       "line": 85
+      }
+     ],
+     "count": 4
+    },
+    {
+     "host": "modelcontextprotocol.io",
+     "code": [],
+     "docs": [
+      {
+       "file": "docs/CENTRAL-SERVER-PLAN.md",
+       "line": 81
+      },
+      {
+       "file": "docs/CLAUDE-AND-FOLDERS.md",
+       "line": 26
+      }
+     ],
+     "count": 2
+    },
+    {
+     "host": "www.sqlite.org",
+     "code": [],
+     "docs": [
+      {
+       "file": "docs/CENTRAL-SERVER-PLAN.md",
+       "line": 70
+      }
+     ],
+     "count": 1
+    }
+   ],
+   "todos": [],
+   "secrets": [],
+   "schedules": [],
+   "git": {
+    "repo": true,
+    "branch": "main",
+    "subdir": "",
+    "has_commits": true,
+    "remotes": [
+     "origin"
+    ],
+    "uncommitted": 0,
+    "uncommitted_files": [],
+    "unpushed": [],
+    "stashes": 0,
+    "shallow": false,
+    "authors": [
+     {
+      "name": "R B",
+      "commits": 5,
+      "last": "2026-11-07",
+      "first": "2026-10-07"
+     }
+    ],
+    "commits": 5,
+    "first_commit": "2026-10-07",
+    "last_commit": "2026-11-07"
+   },
+   "local_only": [],
+   "prerequisites": [
+    {
+     "tool": ".NET",
+     "version": "net10.0",
+     "file": "PlayBook.csproj",
+     "line": 0
+    }
+   ],
+   "commands": [
+    {
+     "command": "dotnet",
+     "where": [
+      {
+       "file": "playbook-harness.ps1",
+       "line": 12
+      },
+      {
+       "file": "playbook.ps1",
+       "line": 10
+      },
+      {
+       "file": "scripts/central-smoke.py",
+       "line": 30
+      }
+     ],
+     "count": 17
+    },
+    {
+     "command": "powershell",
+     "where": [
+      {
+       "file": "Desktop.cs",
+       "line": 13
+      },
+      {
+       "file": "Providers.cs",
+       "line": 80
+      },
+      {
+       "file": "START_GRAPHIFY.cmd",
+       "line": 3
+      }
+     ],
+     "count": 8
+    },
+    {
+     "command": "python",
+     "where": [
+      {
+       "file": "graphify.ps1",
+       "line": 5
+      }
+     ],
+     "count": 1
+    }
+   ],
+   "secret_env": [],
+   "has": {
+    "readme": "README.md",
+    "license": "",
+    "tests": 9,
+    "ci": []
+   }
+  },
   "translations": [
    {
     "original": "프로젝트와 AI 작업을 관리하는 공통 원장.",
@@ -17533,6 +17925,92 @@
     "uses": 1
    }
   ],
-  "untranslated": []
+  "untranslated": [],
+  "readiness": [
+   {
+    "key": "readme",
+    "label": "The project has a README",
+    "state": "ok",
+    "detail": "README.md"
+   },
+   {
+    "key": "start",
+    "label": "How to start it can be found in the files",
+    "state": "ok",
+    "detail": "launch scripts, an entry point or run modes were found"
+   },
+   {
+    "key": "tests",
+    "label": "There are tests",
+    "state": "ok",
+    "detail": "9 test file(s)"
+   },
+   {
+    "key": "license",
+    "label": "A license file says who may use the code",
+    "state": "todo",
+    "detail": "no LICENSE file"
+   },
+   {
+    "key": "git",
+    "label": "The folder is in Git with a remote",
+    "state": "ok",
+    "detail": "origin"
+   },
+   {
+    "key": "committed",
+    "label": "Everything is committed",
+    "state": "ok",
+    "detail": "clean work tree"
+   },
+   {
+    "key": "pushed",
+    "label": "Everything is pushed",
+    "state": "ok",
+    "detail": "every local commit is on a remote"
+   },
+   {
+    "key": "local",
+    "label": "Nothing the program needs exists only on this computer",
+    "state": "ok",
+    "detail": "no ignored settings or data files"
+   },
+   {
+    "key": "paths",
+    "label": "No personal folder paths are written into code",
+    "state": "ok",
+    "detail": "none found"
+   },
+   {
+    "key": "secrets",
+    "label": "No secret-looking values are stored in files",
+    "state": "ok",
+    "detail": "no key or token patterns matched"
+   },
+   {
+    "key": "project",
+    "label": "The notes say what the project is",
+    "state": "ok",
+    "detail": ""
+   },
+   {
+    "key": "topics",
+    "label": "The handover questions are answered",
+    "state": "todo",
+    "detail": "3/8 answered: missing Open work and next steps, Deploy and release, Routine operations, Data and backups, People and contacts"
+   },
+   {
+    "key": "files",
+    "label": "The most important files have notes",
+    "state": "todo",
+    "detail": "20 without notes"
+   },
+   {
+    "key": "english",
+    "label": "Comments in another language have English versions",
+    "state": "ok",
+    "detail": "all translated"
+   }
+  ]
  }
 }

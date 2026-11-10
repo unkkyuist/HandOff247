@@ -20,6 +20,8 @@ jobs:
       - run: python -m unittest discover -s tests -v
       - name: Document HandOff247 itself
         run: python -m handoff247 build . -o handoff/self --date 2026-01-01
+      - name: One-step run on a folder of projects
+        run: python -m handoff247 tests/fixtures --workspace -o handoff/all --date 2026-01-01
   action:
     runs-on: ubuntu-latest
     steps:

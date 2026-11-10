@@ -258,6 +258,126 @@ class PackTests(unittest.TestCase):
         self.assertEqual(set(data["links"]["untranslated"]), {"모든 변경을 검증한다.", "감사 기록."})
         self.assertNotIn("Translations", data["notes"])
 
+    # ---------------------------------------------------------------- handover findings
+    def _leaver_script(self):
+        self.personal = "C:" + "\\Users\\alice\\exports"           # split so this test file holds no such path itself
+        (self.root / "sync.ps1").write_text(
+            "# Copy the export to the share.\n"
+            "# TODO: stop hard-coding the share name\n"
+            f'$target = "{self.personal}"\n'
+            "Invoke-WebRequest https://api.partner-billing.com/v2/upload -Headers @{ a = $env:BILLING_API_TOKEN }\n"
+            f'$k = "{"AKIA" + "ABCDEFGHIJKLMNOP"}"\n'
+            '$fixture = "sk-TEST_ONLY_PRIVATE_PROMPT_7fa299fd"\n', encoding="utf-8")
+        (self.root / "pyproject.toml").write_text('[project]\nname = "mini"\nrequires-python = ">=3.11"\n', encoding="utf-8")
+
+    def test_handover_findings(self):
+        self._leaver_script()
+        lv = analyze_project(self.root).links["leaving"]
+        self.assertIn({"file": "sync.ps1", "line": 2, "tag": "TODO", "text": "stop hard-coding the share name"}, lv["todos"])
+        personal = [x for x in lv["machine_paths"] if x["user"]]
+        self.assertEqual([x["path"] for x in personal], [self.personal])
+        self.assertIn("api.partner-billing.com", [h["host"] for h in lv["hosts"] if h["code"]])
+        self.assertEqual([(s["file"], s["line"], s["kind"]) for s in lv["secrets"]], [("sync.ps1", 5, "AWS access key id")])
+        self.assertIn("BILLING_API_TOKEN", lv["secret_env"])
+        self.assertIn(("Python", ">=3.11"), [(x["tool"], x["version"]) for x in lv["prerequisites"]])
+        self.assertEqual(lv["git"], {"repo": False})
+        self.assertIsNone(lv["local_only"])
+        self.assertEqual(lv["has"]["readme"], "README.md")
+
+    def _git(self, cwd, *args):
+        import subprocess
+        subprocess.run(["git", "-C", str(cwd), "-c", "user.name=T", "-c", "user.email=t@example.com",
+                        "-c", "commit.gpgsign=false", *args], check=True, capture_output=True)
+
+    @unittest.skipUnless(shutil.which("git"), "git is not installed")
+    def test_git_state_and_files_only_on_this_computer(self):
+        (self.root / ".gitignore").write_text(".env\n*.db\nbin/\n", encoding="utf-8")
+        self._git(self.root, "init", "-q")
+        self._git(self.root, "add", "-A")
+        self._git(self.root, "commit", "-q", "-m", "first")
+        (self.root / ".env").write_text("X=1\n", encoding="utf-8")
+        (self.root / "records.db").write_text("x", encoding="utf-8")
+        (self.root / "bin").mkdir()
+        (self.root / "bin" / "Mini.dll").write_text("x", encoding="utf-8")
+        (self.root / "new.py").write_text("print(1)\n", encoding="utf-8")
+        p = analyze_project(self.root)
+        lv = p.links["leaving"]
+        g = lv["git"]
+        self.assertTrue(g["repo"])
+        self.assertEqual((g["remotes"], g["uncommitted"], g["unpushed"], g["commits"]), ([], 1, [], 1))
+        self.assertEqual(g["authors"][0]["name"], "T")
+        self.assertEqual(lv["local_only"], [{"path": ".env", "kind": "settings or secrets"},
+                                            {"path": "records.db", "kind": "data"}])      # bin/ is build output
+        self.assertNotIn(".env", {f.path for f in p.files})
+        out = self.tmp / "pack"
+        self.assertEqual(main(["build", str(self.root), "-o", str(out), "--date", "2026-01-01"]), 0)
+        page = (out / "HANDOVER.md").read_text(encoding="utf-8")
+        self.assertIn("**No remote is configured.**", page)
+        self.assertIn("| `.env` | settings or secrets |", page)
+        self.assertNotIn("X=1", page)
+        rows = {r["key"]: r["state"] for r in json.loads((out / "handoff.json").read_text(encoding="utf-8"))["links"]["readiness"]}
+        self.assertEqual((rows["git"], rows["committed"], rows["local"], rows["readme"]), ("todo", "todo", "todo", "ok"))
+        self.assertNotIn("pushed", rows)                             # no remote, so there is nothing to compare with
+
+    def test_go_one_project(self):
+        self._leaver_script()
+        self.assertEqual(main([str(self.root), "--date", "2026-01-01"]), 0)       # no command = go
+        out = self.root / "docs" / "handoff"
+        for name in ("README.md", "HANDOVER.md", "index.html", "handoff.json", "diagrams/system.mmd"):
+            self.assertTrue((out / name).is_file(), name)
+        notes_text = (self.root / "HANDOFF.notes.md").read_text(encoding="utf-8")
+        self.assertIn("## Topic: Open work and next steps", notes_text)
+        self.assertIn("## Topic: People and contacts", notes_text)
+        page = (out / "HANDOVER.md").read_text(encoding="utf-8")
+        self.assertIn("## Ready to hand over?", page)
+        self.assertIn(f"`{self.personal}`", page)
+        self.assertIn("**personal**", page)
+        self.assertNotIn("AKIA", page)                               # location and kind only, never the value
+        self.assertIn("Handover status:", (out / "README.md").read_text(encoding="utf-8"))
+        self.assertIn("'HANDOVER.md', 'Handover'", (out / "index.html").read_text(encoding="utf-8"))
+        # answering a question moves the count
+        before = notes_mod.load(self.root / "HANDOFF.notes.md")
+        self.assertEqual(before.get("Topic: People and contacts"), "")
+        (self.root / "HANDOFF.notes.md").write_text(notes_text.replace(
+            "## Topic: People and contacts\nTODO", "## Topic: People and contacts\nFront desk lead owns it.\nTODO"), encoding="utf-8")
+        self.assertEqual(main(["go", str(self.root), "--date", "2026-01-01"]), 0)
+        self.assertIn("Front desk lead owns it.", (out / "HANDOVER.md").read_text(encoding="utf-8"))
+        self.assertIn("1/8 answered", (out / "HANDOVER.md").read_text(encoding="utf-8"))
+
+    def test_go_folder_of_projects(self):
+        ws = self.tmp / "ws"
+        (ws / "Tools").mkdir(parents=True)
+        (ws / "Pictures").mkdir()
+        (ws / "Pictures" / "a.txt").write_text("x", encoding="utf-8")
+        shutil.move(str(self.root), str(ws / "Mini"))
+        (ws / "Tools" / "requirements.txt").write_text("requests\n", encoding="utf-8")
+        (ws / "Tools" / "export.ps1").write_text("# Export through Mini.\n& ..\\Mini\\run.ps1 cli list\n", encoding="utf-8")
+        self.assertEqual(main([str(ws), "--date", "2026-01-01"]), 0)
+        out = ws / "handoff"
+        for name in ("README.md", "index.html", "workspace.json", "workspace.mmd", "Mini/HANDOVER.md", "Tools/index.html",
+                     "notes/Mini.notes.md", "notes/Tools.notes.md"):
+            self.assertTrue((out / name).is_file(), name)
+        self.assertFalse((ws / "Mini" / "HANDOFF.notes.md").exists())            # projects are left untouched
+        data = json.loads((out / "workspace.json").read_text(encoding="utf-8"))
+        by_name = {p["name"]: p for p in data["projects"]}
+        self.assertEqual(set(by_name), {"Mini", "Tools"})
+        self.assertEqual(data["unrecognised"], ["Pictures"])
+        self.assertEqual([(r["to"], r["where"]) for r in by_name["Tools"]["refs"]],
+                         [("Mini", [{"file": "export.ps1", "line": 2}])])
+        self.assertEqual(by_name["Mini"]["refs"], [])
+        index = (out / "README.md").read_text(encoding="utf-8")
+        self.assertIn("**[Mini](Mini/HANDOVER.md)** is not in Git", index)
+        self.assertIn("| Tools | Mini | 1 |", index)
+        self.assertIn("](../../Mini/Program.cs", (out / "Mini" / "README.md").read_text(encoding="utf-8"))
+        # a second run reads the notes it created and does not analyze its own output
+        notes_file = out / "notes" / "Tools.notes.md"
+        notes_file.write_text(notes_file.read_text(encoding="utf-8").replace(
+            "## Project\nTODO", "## Project\nExports for the finance team.\nTODO"), encoding="utf-8")
+        self.assertEqual(main([str(ws), "--date", "2026-01-01"]), 0)
+        data = json.loads((out / "workspace.json").read_text(encoding="utf-8"))
+        self.assertEqual({p["name"]: p["description"] for p in data["projects"]}["Tools"], "Exports for the finance team.")
+        self.assertEqual(len(data["projects"]), 2)
+
     def test_foreign_detection(self):
         from handoff247.translate import foreign
         self.assertTrue(foreign("기록을 저장한다"))

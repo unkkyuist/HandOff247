@@ -80,7 +80,7 @@ article th{background:var(--chip);font-weight:600}
 <script src="__MERMAID__"></script>
 <script>
 const DATA = JSON.parse(document.getElementById('data').textContent);
-const TABS = [['README.md', 'Overview'], ['RUNNING.md', 'Running'], ['CONNECTIONS.md', 'Connections'],
+const TABS = [['README.md', 'Overview'], ['HANDOVER.md', 'Handover'], ['RUNNING.md', 'Running'], ['CONNECTIONS.md', 'Connections'],
   ['CODEMAP.md', 'Code map'], ['FILES.md', 'Files'], ['@search', 'Search']];
 const filesByPath = Object.fromEntries(DATA.files.map(f => [f.path, f]));
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
