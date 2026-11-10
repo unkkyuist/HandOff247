@@ -199,7 +199,10 @@ class Pages:
         s.append(f"- [CONNECTIONS.md](CONNECTIONS.md) — {t('page_connections')}")
         s.append(f"- [CODEMAP.md](CODEMAP.md) — {t('page_codemap')}")
         s.append(f"- [FILES.md](FILES.md) — {t('page_files')}")
-        s.append(f"- [index.html](index.html) — {t('page_viewer')}\n")
+        s.append(f"- [index.html](index.html) — {t('page_viewer')}")
+        s.append(f"- [wiki/index.md](wiki/index.md) — {t('page_wiki')}")
+        s.append(f"- [llms.txt](llms.txt) — {t('page_llms')}")
+        s.append(f"- [ontology.json](ontology.json) — {t('page_ontology')}\n")
         # reading order
         order = self.importance()
         if order:

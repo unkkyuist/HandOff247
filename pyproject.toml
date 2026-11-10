@@ -4,12 +4,13 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "handoff247"
-version = "0.3.0"
-description = "Turn a project folder into a handoff pack: diagrams, structure, comments and how the tools connect."
+version = "0.4.0"
+description = "Turn a project folder into a handoff pack: diagrams, structure, comments, how the tools connect, an ontology graph and a wiki for AI assistants."
 readme = "README.md"
+license = { text = "MIT" }
 requires-python = ">=3.10"
 dependencies = []
-keywords = ["handoff", "documentation", "architecture", "diagram", "mermaid", "onboarding"]
+keywords = ["handoff", "documentation", "architecture", "diagram", "mermaid", "onboarding", "ontology", "knowledge-graph", "llms-txt", "wiki"]
 classifiers = [
   "Programming Language :: Python :: 3",
   "Topic :: Software Development :: Documentation",

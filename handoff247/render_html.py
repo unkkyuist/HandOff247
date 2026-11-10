@@ -63,6 +63,20 @@ article th{background:var(--chip);font-weight:600}
 .filehit{display:block;padding:8px 10px;border:1px solid var(--line);border-radius:8px;margin:6px 0;cursor:pointer;background:var(--panel)}
 .filehit:hover{border-color:var(--accent)}
 .note{border-left:3px solid #d97706;background:rgba(217,119,6,.08);padding:.4em .9em;border-radius:0 8px 8px 0;white-space:pre-wrap}
+:root{--g1:#2a78d6;--g2:#eb6834;--g3:#1baf7a;--g4:#eda100;--g5:#e87ba4;--g6:#008300;--g7:#6250d6;--g8:#e34948;--edge:#b9bec8}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--g1:#3987e5;--g2:#d95926;--g3:#199e70;--g4:#c98500;--g5:#d55181;--g6:#008300;--g7:#9085e9;--g8:#e66767;--edge:#4a5261}}
+:root[data-theme="dark"]{--g1:#3987e5;--g2:#d95926;--g3:#199e70;--g4:#c98500;--g5:#d55181;--g6:#008300;--g7:#9085e9;--g8:#e66767;--edge:#4a5261}
+.gbar{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin:10px 0 8px}
+.gbar button,.legend button,#card button.act{border:1px solid var(--line);background:var(--panel);color:var(--ink);border-radius:8px;padding:4px 10px;font:inherit;font-size:13px;cursor:pointer}
+.gbar label{font-size:13px;color:var(--muted);display:flex;gap:5px;align-items:center}
+.legend{display:flex;gap:6px;flex-wrap:wrap;margin:0 0 10px}
+.legend button{display:inline-flex;gap:6px;align-items:center;padding:3px 9px;font-size:12.5px}
+.legend button[aria-pressed="false"]{opacity:.45;text-decoration:line-through}
+.legend svg{flex:none}
+.gwrap{position:relative;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:var(--panel)}
+#gcanvas{display:block;width:100%;height:min(72vh,760px);min-height:420px;touch-action:none;cursor:grab}
+#gtip{position:absolute;pointer-events:none;max-width:320px;background:var(--panel);color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:6px 10px;font-size:12.5px;line-height:1.45;box-shadow:var(--shadow);display:none;overflow-wrap:anywhere}
+#card button.act{margin:0 6px 6px 0}
 @media (max-width:640px){article{padding:4px 14px 18px}header{gap:8px}nav{margin-left:0}input[type=search]{min-width:0;width:100%}}
 </style>
 </head>
@@ -81,7 +95,7 @@ article th{background:var(--chip);font-weight:600}
 <script>
 const DATA = JSON.parse(document.getElementById('data').textContent);
 const TABS = [['README.md', 'Overview'], ['HANDOVER.md', 'Handover'], ['RUNNING.md', 'Running'], ['CONNECTIONS.md', 'Connections'],
-  ['CODEMAP.md', 'Code map'], ['FILES.md', 'Files'], ['@search', 'Search']];
+  ['CODEMAP.md', 'Code map'], ['FILES.md', 'Files'], ['@graph', 'Graph'], ['wiki/index.md', 'Wiki'], ['@search', 'Search']];
 const filesByPath = Object.fromEntries(DATA.files.map(f => [f.path, f]));
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 let current = 'README.md', mermaidSeq = 0;
@@ -91,8 +105,20 @@ function tabs() {
   const nav = document.getElementById('tabs'); nav.innerHTML = '';
   for (const [id, label] of TABS) {
     const b = document.createElement('button'); b.type = 'button'; b.textContent = label; b.setAttribute('role', 'tab');
-    b.setAttribute('aria-selected', id === current); b.onclick = () => show(id); nav.append(b);
+    b.setAttribute('aria-selected', id === current || (id === 'wiki/index.md' && current.startsWith('wiki/')));
+    b.onclick = () => show(id); nav.append(b);
   }
+}
+// a link written inside wiki/…/page.md is relative to that page; the viewer sits at the pack root
+function resolveHref(href) {
+  if (/^[a-z][a-z0-9+.-]*:|^#|^\//i.test(href) || current.startsWith('@') || !current.includes('/')) return href;
+  const [path, frag] = href.split('#');
+  const parts = current.split('/').slice(0, -1);
+  for (const seg of path.split('/')) {
+    if (seg === '..') { if (parts.length && parts[parts.length - 1] !== '..') parts.pop(); else parts.push('..'); }
+    else if (seg && seg !== '.') parts.push(seg);
+  }
+  return parts.join('/') + (path.endsWith('/') ? '/' : '') + (frag ? '#' + frag : '');
 }
 function md(text) {
   if (!window.marked) return '<pre>' + esc(text) + '</pre>';
@@ -103,7 +129,8 @@ async function show(id, anchor) {
   current = id; tabs();
   const page = document.getElementById('page');
   if (id === '@search') { searchPage(document.getElementById('q').value); return; }
-  page.innerHTML = md(DATA.pages[id] || '');
+  if (id === '@graph') { graphPage(); return; }
+  page.innerHTML = md((DATA.pages[id] || '').replace(/^---\n[\s\S]*?\n---\n/, ''));
   wireLinks(page);
   await drawDiagrams(page);
   if (anchor) document.getElementById(anchor)?.scrollIntoView(); else window.scrollTo(0, 0);
@@ -112,9 +139,12 @@ async function show(id, anchor) {
 function wireLinks(root) {
   root.querySelectorAll('h2,h3').forEach(h => { if (!h.id) h.id = h.textContent.trim().toLowerCase().replace(/[^\p{L}\p{N}_]+/gu, '-'); });
   root.querySelectorAll('a[href]').forEach(a => {
-    const href = a.getAttribute('href');
-    if (DATA.pages[href]) { a.onclick = e => { e.preventDefault(); show(href); }; return; }
-    if (href.startsWith('#')) return;
+    const raw = a.getAttribute('href');
+    if (raw.startsWith('#')) return;
+    const href = resolveHref(raw);
+    if (href !== raw) a.setAttribute('href', href);
+    const target = href.split('#')[0];
+    if (DATA.pages[target]) { a.onclick = e => { e.preventDefault(); show(target); }; return; }
     const path = toProjectPath(href);
     if (path && filesByPath[path]) {
       a.onclick = e => { if (e.ctrlKey || e.metaKey) return; e.preventDefault(); openCard(path, lineOf(href)); };
@@ -167,6 +197,7 @@ function openCard(path, line) {
   let h = `<h2>${esc(f.path)}${line ? ' <span class="muted">:' + line + '</span>' : ''}</h2>`;
   h += `<div><span class="chip">${esc(f.lang)}</span><span class="chip">${f.lines} lines</span><span class="chip">${esc(f.category)}</span>${f.tags.filter(t => !t.startsWith('ns:')).map(t => `<span class="chip">${esc(t)}</span>`).join('')}</div>`;
   if (f.source_url) h += `<p><a href="${esc(f.source_url)}${line ? '#L' + line : ''}" target="_blank" rel="noopener">Open source ↗</a></p>`;
+  if (G.byId['file:' + f.path]) h += `<p><button class="act" type="button" data-rel="1">Relations and wiki page</button></p>`;
   if (f.note) h += `<h3>Notes</h3><div class="note">${esc(f.note)}</div>`;
   if (f.summary) h += `<h3>Comment</h3><p>${esc(f.summary)} <span class="muted">(${esc(f.summary_source)})</span></p>`;
   if (f.translated) h += `<p class="muted">${f.translated} heading(s) or comment(s) here are English versions from the notes file; the originals are in handoff.json.</p>`;
@@ -177,10 +208,265 @@ function openCard(path, line) {
   }
   const card = document.getElementById('card'); card.innerHTML = h;
   card.querySelectorAll('a[data-path]').forEach(a => a.onclick = e => { e.preventDefault(); openCard(a.dataset.path, +a.dataset.line); });
+  card.querySelector('[data-rel]')?.addEventListener('click', () => openEntity('file:' + f.path));
   const d = document.getElementById('drawer'); d.classList.add('open'); d.setAttribute('aria-hidden', 'false'); d.scrollTop = 0;
 }
 function closeDrawer() { const d = document.getElementById('drawer'); d.classList.remove('open'); d.setAttribute('aria-hidden', 'true'); }
 document.addEventListener('keydown', e => { if (e.key === 'Escape') closeDrawer(); });
+
+// ---------------------------------------------------------------- ontology: entity cards and the graph
+const ONT = DATA.ontology || {classes: [], relations: [], entities: [], triples: []};
+const CLS = Object.fromEntries(ONT.classes.map(c => [c.id, c]));
+const REL = Object.fromEntries(ONT.relations.map(r => [r.id, r]));
+const GROUPS = ['file', 'structure', 'type', 'run', 'operation', 'interface', 'config', 'outside'];   // colour slot 1..8, fixed
+const G = {nodes: [], links: [], vis: [], vlinks: [], byId: {}, hidden: new Set(), sel: null, hover: null, drag: null, match: null,
+  k: 1, tx: 0, ty: 0, alpha: 0, auto: true, labels: true, dirty: false, raf: 0, started: false, col: {}};
+(function () {
+  for (const e of ONT.entities) { const n = {e, c: CLS[e.type], deg: 0, out: [], in: [], x: 0, y: 0, vx: 0, vy: 0}; G.nodes.push(n); G.byId[e.id] = n; }
+  for (const r of ONT.triples) {
+    const s = G.byId[r.s], o = G.byId[r.o]; if (!s || !o) continue;
+    const l = {s, o, r}; s.deg++; o.deg++; s.out.push(l); o.in.push(l); G.links.push(l);
+  }
+  let seed = 7; const rnd = () => (seed = seed * 16807 % 2147483647) / 2147483647;   // fixed seed: the same picture every time
+  for (const n of G.nodes) {
+    const a = GROUPS.indexOf(n.c.group) / GROUPS.length * 6.2832 + rnd() * .8, d = 60 + rnd() * 320;
+    n.x = Math.cos(a) * d; n.y = Math.sin(a) * d;
+    n.r = n.e.type === 'Project' ? 13 : Math.min(12, 3.5 + Math.sqrt(n.deg) * 1.2);
+  }
+  if (G.nodes.length > 1200) for (const id of ['Type', 'Package', 'EnvVar', 'Port', 'Host', 'Command']) G.hidden.add(id);
+})();
+const entLabel = e => { const s = e.type === 'File' ? e.name.split('/').pop() : e.name; return s.length > 34 ? s.slice(0, 33) + '…' : s; };
+function entLink(id) {
+  const n = G.byId[id];
+  return n ? `<a href="#" data-ent="${esc(id)}">${esc(n.e.name)}</a> <span class="muted">${esc(n.c.label)}</span>` : esc(id);
+}
+function openEntity(id) {
+  const n = G.byId[id]; if (!n) return; const e = n.e;
+  let h = `<h2>${esc(e.name)}</h2><div><span class="chip">${esc(n.c.label)}</span><span class="chip">${n.deg} relation(s)</span></div>`;
+  if (e.summary) h += `<p>${esc(e.summary)}</p>`;
+  h += '<p>';
+  if (e.page && DATA.pages[e.page]) h += `<button class="act" type="button" data-page="1">Wiki page</button>`;
+  if (e.type === 'File' && filesByPath[e.name]) h += `<button class="act" type="button" data-file="1">File card</button>`;
+  if (current !== '@graph') h += `<button class="act" type="button" data-show="1">Show in graph</button>`;
+  h += '</p>';
+  for (const [list, end, word, arrow] of [[n.out, 'o', 'label', '→'], [n.in, 's', 'inverse', '←']]) {
+    const by = {}; for (const l of list) (by[l.r.p] ||= []).push(l);
+    for (const p of Object.keys(by)) {
+      h += `<h3>${esc(REL[p] ? REL[p][word] : p)} ${arrow}</h3><ul class="list">` + by[p].slice(0, 80).map(l =>
+        `<li>${entLink(l[end].e.id)}${l.r.label ? ' <span class="muted">(' + esc(l.r.label) + ')</span>' : ''}` +
+        `${l.r.file ? ' <span class="muted">· ' + esc(l.r.file) + (l.r.line ? ':' + l.r.line : '') + '</span>' : ''}` +
+        `${l.r.inferred ? ' <span class="chip" title="' + esc(l.r.inferred) + '">inferred</span>' : ''}</li>`).join('') +
+        (by[p].length > 80 ? `<li class="muted">… ${by[p].length - 80} more</li>` : '') + '</ul>';
+    }
+  }
+  const card = document.getElementById('card'); card.innerHTML = h;
+  card.querySelectorAll('a[data-ent]').forEach(a => a.onclick = ev => { ev.preventDefault(); focusEntity(a.dataset.ent); });
+  card.querySelector('[data-page]')?.addEventListener('click', () => { closeDrawer(); show(e.page); });
+  card.querySelector('[data-file]')?.addEventListener('click', () => openCard(e.name));
+  card.querySelector('[data-show]')?.addEventListener('click', async () => { await show('@graph'); focusEntity(id); });
+  const d = document.getElementById('drawer'); d.classList.add('open'); d.setAttribute('aria-hidden', 'false'); d.scrollTop = 0;
+}
+function focusEntity(id) {
+  const n = G.byId[id]; if (!n) return;
+  if (current === '@graph') {
+    if (G.hidden.has(n.e.type)) { G.hidden.delete(n.e.type); glegend(); gvisible(); }
+    // the card opens over the right side, so the mark is centred in what stays visible
+    G.sel = n; G.auto = false; G.tx = -n.x * G.k - (window.innerWidth > 1100 ? 220 : 0); G.ty = -n.y * G.k; G.dirty = true;
+  }
+  openEntity(id);
+}
+function gcolors() {
+  const css = getComputedStyle(document.documentElement), v = k => css.getPropertyValue(k).trim();
+  G.col = {ink: v('--ink'), muted: v('--muted'), panel: v('--panel'), edge: v('--edge'), accent: v('--accent'), g: GROUPS.map((_, i) => v('--g' + (i + 1)))};
+}
+function gvisible() {
+  G.vis = G.nodes.filter(n => !G.hidden.has(n.e.type));
+  G.vlinks = G.links.filter(l => !G.hidden.has(l.s.e.type) && !G.hidden.has(l.o.e.type));
+  G.top = new Set([...G.vis].sort((a, b) => b.deg - a.deg).slice(0, 28));   // always named, however far zoomed out
+  G.alpha = Math.max(G.alpha, .5); G.dirty = true; gcount();
+}
+function gcount() {
+  const c = document.getElementById('gcount'); if (!c) return;
+  c.textContent = `${G.vis.length} of ${G.nodes.length} things, ${G.vlinks.length} relations` + (G.match ? ` · ${G.match.size} match` : '');
+}
+function shapePath(ctx, shape, x, y, r) {
+  ctx.beginPath();
+  if (shape === 'square') ctx.rect(x - r * .86, y - r * .86, r * 1.72, r * 1.72);
+  else if (shape === 'diamond') { ctx.moveTo(x, y - r * 1.2); ctx.lineTo(x + r * 1.2, y); ctx.lineTo(x, y + r * 1.2); ctx.lineTo(x - r * 1.2, y); ctx.closePath(); }
+  else if (shape === 'triangle') { ctx.moveTo(x, y - r * 1.25); ctx.lineTo(x + r * 1.15, y + r * .85); ctx.lineTo(x - r * 1.15, y + r * .85); ctx.closePath(); }
+  else ctx.arc(x, y, r, 0, 6.2832);
+}
+function swatch(c) {
+  const s = {square: '<rect x="2" y="2" width="10" height="10"/>', diamond: '<path d="M7 .5 13.5 7 7 13.5 .5 7z"/>',
+    triangle: '<path d="M7 1 13.5 12.5H.5z"/>'}[c.shape] || '<circle cx="7" cy="7" r="5.5"/>';
+  return `<svg width="14" height="14" viewBox="0 0 14 14" style="fill:var(--g${GROUPS.indexOf(c.group) + 1})" aria-hidden="true">${s}</svg>`;
+}
+function glegend() {
+  const box = document.getElementById('glegend'); if (!box) return; box.innerHTML = '';
+  for (const c of ONT.classes) {
+    const n = G.nodes.filter(x => x.e.type === c.id).length; if (!n) continue;
+    const b = document.createElement('button'); b.type = 'button'; b.title = c.description; b.setAttribute('aria-pressed', !G.hidden.has(c.id));
+    b.innerHTML = swatch(c) + esc(c.plural) + ' <span class="muted">' + n + '</span>';
+    b.onclick = () => { if (G.hidden.has(c.id)) G.hidden.delete(c.id); else G.hidden.add(c.id); glegend(); gvisible(); };
+    box.append(b);
+  }
+}
+function graphPage() {
+  const page = document.getElementById('page');
+  page.innerHTML = `<h1>Graph</h1>
+<p class="muted">Every mark is something the analysis found; every line is a relation that has a file and line behind it (dashed: inferred). Colour is the kind of thing and the shape tells kinds of one colour apart. Click a mark for its relations, drag to move, scroll to zoom. The same content as text is on the Wiki tab, as data in <a href="ontology.json" target="_blank" rel="noopener">ontology.json</a>.</p>
+<div class="gbar"><input id="gq" type="search" placeholder="Find in the graph" aria-label="Find in the graph"><button id="gfit" type="button">Fit</button><label><input id="glab" type="checkbox"${G.labels ? ' checked' : ''}> Names</label><span id="gcount" class="muted"></span></div>
+<div class="legend" id="glegend"></div>
+<div class="gwrap"><canvas id="gcanvas" role="img" aria-label="Graph of the project ontology"></canvas><div id="gtip"></div></div>`;
+  G.cv = document.getElementById('gcanvas'); G.ctx = G.cv.getContext('2d'); G.match = null; G.hover = null;
+  gcolors(); glegend(); gvisible(); gwire();
+  if (!G.started) { G.started = true; G.alpha = 1; }
+  G.dirty = true; if (!G.raf) G.raf = requestAnimationFrame(gloop);
+  window.scrollTo(0, 0);
+  try { history.replaceState(null, '', '#@graph'); } catch (e) {}
+}
+function gloop() {
+  if (current !== '@graph' || !document.body.contains(G.cv)) { G.raf = 0; return; }
+  if (G.alpha > .02) { gtick(); if (G.vis.length < 700) gtick(); if (G.auto) gfit(); G.dirty = true; }
+  if (G.dirty) { G.dirty = false; gdraw(); }
+  G.raf = requestAnimationFrame(gloop);
+}
+function gtick() {
+  const ns = G.vis, a = G.alpha;
+  for (let i = 0; i < ns.length; i++) {
+    const p = ns[i];
+    for (let j = i + 1; j < ns.length; j++) {
+      const q = ns[j]; let dx = q.x - p.x, dy = q.y - p.y, d2 = dx * dx + dy * dy;
+      if (d2 > 160000) continue;
+      if (d2 < 1) { dx = (i % 7) - 3.5; dy = (j % 5) - 2.5; d2 = dx * dx + dy * dy; }
+      const f = 150 * a / d2; dx *= f; dy *= f; p.vx -= dx; p.vy -= dy; q.vx += dx; q.vy += dy;
+    }
+  }
+  for (const l of G.vlinks) {
+    const dx = l.o.x - l.s.x, dy = l.o.y - l.s.y, d = Math.sqrt(dx * dx + dy * dy) || 1;
+    const f = (d - (26 + l.s.r + l.o.r)) / d * .22 * a / Math.sqrt(Math.min(l.s.deg, l.o.deg));
+    l.s.vx += dx * f; l.s.vy += dy * f; l.o.vx -= dx * f; l.o.vy -= dy * f;
+  }
+  for (const n of ns) {
+    if (n === G.drag) { n.vx = n.vy = 0; continue; }
+    n.vx = Math.max(-40, Math.min(40, (n.vx - n.x * .035 * a) * .82)); n.vy = Math.max(-40, Math.min(40, (n.vy - n.y * .035 * a) * .82));
+    n.x += n.vx; n.y += n.vy;
+  }
+  G.alpha *= .99;
+}
+function gfit() {
+  const ns = G.vis; if (!ns.length || !G.cv) return;
+  let x0 = 1e9, y0 = 1e9, x1 = -1e9, y1 = -1e9;
+  for (const n of ns) { x0 = Math.min(x0, n.x); x1 = Math.max(x1, n.x); y0 = Math.min(y0, n.y); y1 = Math.max(y1, n.y); }
+  const k = Math.min(2, (G.cv.clientWidth - 80) / Math.max(1, x1 - x0), (G.cv.clientHeight - 60) / Math.max(1, y1 - y0));
+  G.k = Math.max(.05, k); G.tx = -(x0 + x1) / 2 * G.k; G.ty = -(y0 + y1) / 2 * G.k; G.dirty = true;
+}
+function gdraw() {
+  const cv = G.cv, ctx = G.ctx, w = cv.clientWidth, h = cv.clientHeight, dpr = window.devicePixelRatio || 1, C = G.col, k = G.k;
+  if (cv.width !== Math.round(w * dpr) || cv.height !== Math.round(h * dpr)) { cv.width = Math.round(w * dpr); cv.height = Math.round(h * dpr); }
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0); ctx.clearRect(0, 0, w, h);
+  ctx.translate(w / 2 + G.tx, h / 2 + G.ty); ctx.scale(k, k);
+  const focus = G.hover || G.sel, near = new Set();
+  if (focus) { near.add(focus); for (const l of focus.out) near.add(l.o); for (const l of focus.in) near.add(l.s); }
+  const dim = n => (focus && !near.has(n)) || (G.match && !G.match.has(n) && !near.has(n));
+  for (const dashed of [false, true]) {
+    ctx.beginPath();
+    for (const l of G.vlinks) {
+      if (!!l.r.inferred !== dashed || (focus && (l.s === focus || l.o === focus))) continue;
+      ctx.moveTo(l.s.x, l.s.y); ctx.lineTo(l.o.x, l.o.y);
+    }
+    ctx.setLineDash(dashed ? [4 / k, 3 / k] : []); ctx.strokeStyle = C.edge; ctx.globalAlpha = focus || G.match ? .2 : .65; ctx.lineWidth = 1 / k; ctx.stroke();
+  }
+  ctx.globalAlpha = 1;
+  const hot = focus ? G.vlinks.filter(l => l.s === focus || l.o === focus) : [];
+  for (const l of hot) {
+    const dx = l.o.x - l.s.x, dy = l.o.y - l.s.y, d = Math.sqrt(dx * dx + dy * dy) || 1, ux = dx / d, uy = dy / d;
+    const ex = l.o.x - ux * (l.o.r + 2 / k), ey = l.o.y - uy * (l.o.r + 2 / k), a = 7 / k;
+    ctx.setLineDash(l.r.inferred ? [4 / k, 3 / k] : []); ctx.strokeStyle = C.accent; ctx.lineWidth = 1.6 / k;
+    ctx.beginPath(); ctx.moveTo(l.s.x, l.s.y); ctx.lineTo(ex, ey); ctx.stroke();
+    ctx.setLineDash([]); ctx.fillStyle = C.accent; ctx.beginPath(); ctx.moveTo(ex, ey);
+    ctx.lineTo(ex - ux * a - uy * a * .45, ey - uy * a + ux * a * .45); ctx.lineTo(ex - ux * a + uy * a * .45, ey - uy * a - ux * a * .45); ctx.closePath(); ctx.fill();
+  }
+  ctx.setLineDash([]);
+  for (const n of G.vis) {
+    ctx.globalAlpha = dim(n) ? .16 : 1;
+    shapePath(ctx, n.c.shape, n.x, n.y, n.r); ctx.fillStyle = C.g[GROUPS.indexOf(n.c.group)]; ctx.fill();
+    ctx.lineWidth = 1.5 / k; ctx.strokeStyle = C.panel; ctx.stroke();
+    if (n === G.sel) { shapePath(ctx, n.c.shape, n.x, n.y, n.r + 3 / k); ctx.lineWidth = 2 / k; ctx.strokeStyle = C.ink; ctx.stroke(); }
+  }
+  ctx.globalAlpha = 1;
+  // names and relation words are drawn in screen pixels, most connected first, skipping any that would overlap
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  const sx = n => w / 2 + G.tx + n.x * k, sy = n => h / 2 + G.ty + n.y * k, placed = [];
+  const put = (text, x, y, color, font, centered) => {
+    ctx.font = font; const tw = ctx.measureText(text).width, bx = centered ? x - tw / 2 : x, box = [bx - 2, y - 11, bx + tw + 2, y + 4];
+    if (box[2] < 0 || box[0] > w || box[3] < 0 || box[1] > h) return;
+    for (const p of placed) if (box[0] < p[2] && box[2] > p[0] && box[1] < p[3] && box[3] > p[1]) return;
+    placed.push(box); ctx.lineWidth = 3; ctx.strokeStyle = C.panel; ctx.lineJoin = 'round'; ctx.strokeText(text, bx, y); ctx.fillStyle = color; ctx.fillText(text, bx, y);
+  };
+  const named = G.vis.filter(n => !dim(n) && (near.has(n) || (G.labels && ((G.match && G.match.size <= 60) || n.r * k >= 7.5 || G.top.has(n)))));
+  named.sort((a, b) => (b === focus) - (a === focus) || near.has(b) - near.has(a) || b.deg - a.deg);
+  for (const n of named.slice(0, 260)) put(entLabel(n.e), sx(n) + n.r * k + 4, sy(n) + 4, C.ink, (n === focus ? '600 ' : '') + '12px system-ui,sans-serif', false);
+  if (hot.length <= 16) for (const l of hot) put(REL[l.r.p] ? REL[l.r.p].label : l.r.p, (sx(l.s) + sx(l.o)) / 2, (sy(l.s) + sy(l.o)) / 2 + 4, C.muted, '11px system-ui,sans-serif', true);
+}
+function gwire() {
+  const cv = G.cv, tip = document.getElementById('gtip');
+  const world = ev => { const r = cv.getBoundingClientRect(); return [(ev.clientX - r.left - r.width / 2 - G.tx) / G.k, (ev.clientY - r.top - r.height / 2 - G.ty) / G.k]; };
+  const hit = ev => {
+    const [x, y] = world(ev); let best = null, bd = 1e9;
+    for (const n of G.vis) { const d = Math.hypot(n.x - x, n.y - y) - n.r; if (d < 6 / G.k && d < bd) { bd = d; best = n; } }
+    return best;
+  };
+  let down = null;
+  cv.onpointerdown = ev => {
+    try { cv.setPointerCapture(ev.pointerId); } catch (e) {}
+    const n = hit(ev); down = {n, x: ev.clientX, y: ev.clientY, lx: ev.clientX, ly: ev.clientY, moved: false};
+    cv.style.cursor = 'grabbing'; tip.style.display = 'none';
+  };
+  cv.onpointermove = ev => {
+    if (down) {
+      if (Math.abs(ev.clientX - down.x) + Math.abs(ev.clientY - down.y) > 3) down.moved = true;
+      if (!down.moved) return;
+      G.auto = false;
+      if (down.n) { G.drag = down.n; [down.n.x, down.n.y] = world(ev); G.alpha = Math.max(G.alpha, .25); }
+      else { G.tx += ev.clientX - down.lx; G.ty += ev.clientY - down.ly; }
+      down.lx = ev.clientX; down.ly = ev.clientY; G.dirty = true; return;
+    }
+    const n = hit(ev); if (n !== G.hover) { G.hover = n; G.dirty = true; }
+    cv.style.cursor = n ? 'pointer' : 'grab';
+    if (!n) { tip.style.display = 'none'; return; }
+    tip.innerHTML = `<strong>${esc(n.e.name)}</strong><br><span class="muted">${esc(n.c.label)} · ${n.deg} relation(s)</span>${n.e.summary ? '<br>' + esc(n.e.summary) : ''}`;
+    tip.style.display = 'block';
+    const r = cv.getBoundingClientRect(), x = ev.clientX - r.left, y = ev.clientY - r.top;
+    tip.style.left = Math.max(0, Math.min(x + 14, r.width - tip.offsetWidth - 6)) + 'px';
+    tip.style.top = (y + 18 + tip.offsetHeight > r.height ? Math.max(0, y - tip.offsetHeight - 10) : y + 18) + 'px';
+  };
+  cv.onpointerup = () => {
+    const d = down; down = null; G.drag = null; cv.style.cursor = 'grab';
+    if (!d || d.moved) return;
+    if (d.n) { G.sel = d.n; openEntity(d.n.e.id); } else { G.sel = null; closeDrawer(); }
+    G.dirty = true;
+  };
+  cv.onpointercancel = () => { down = null; G.drag = null; };
+  cv.onpointerleave = () => { if (G.hover) { G.hover = null; G.dirty = true; } tip.style.display = 'none'; };
+  cv.addEventListener('wheel', ev => {
+    ev.preventDefault();
+    const r = cv.getBoundingClientRect(), px = ev.clientX - r.left - r.width / 2, py = ev.clientY - r.top - r.height / 2;
+    const k = Math.min(6, Math.max(.05, G.k * Math.exp(-ev.deltaY * .0015)));
+    G.tx = px - (px - G.tx) / G.k * k; G.ty = py - (py - G.ty) / G.k * k; G.k = k; G.auto = false; G.dirty = true;
+  }, {passive: false});
+  document.getElementById('gfit').onclick = () => { G.auto = G.alpha > .02; gfit(); };
+  document.getElementById('glab').onchange = ev => { G.labels = ev.target.checked; G.dirty = true; };
+  const q = document.getElementById('gq');
+  q.oninput = () => {
+    const words = q.value.toLowerCase().split(/\s+/).filter(Boolean);
+    G.match = words.length ? new Set(G.vis.filter(n => { const hay = (n.e.name + ' ' + n.c.label + ' ' + (n.e.summary || '')).toLowerCase(); return words.every(x => hay.includes(x)); })) : null;
+    G.dirty = true; gcount();
+  };
+  q.onkeydown = ev => { if (ev.key === 'Enter' && G.match && G.match.size) focusEntity([...G.match].sort((a, b) => b.deg - a.deg)[0].e.id); };
+}
+window.addEventListener('resize', () => { G.dirty = true; });
+if (window.matchMedia) matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => { gcolors(); G.dirty = true; });
 function searchPage(q) {
   current = '@search'; tabs();
   const page = document.getElementById('page');
@@ -195,14 +481,14 @@ function searchPage(q) {
 }
 document.getElementById('q').addEventListener('input', e => searchPage(e.target.value));
 const start = decodeURIComponent(location.hash.slice(1));
-show(DATA.pages[start] ? start : 'README.md');
+show(DATA.pages[start] || start === '@graph' ? start : 'README.md');
 </script>
 </body>
 </html>
 """
 
 
-def render(project, pages: dict[str, str], diagrams: dict, notes, date: str, linker) -> str:
+def render(project, pages: dict[str, str], diagrams: dict, notes, date: str, linker, onto: dict | None = None) -> str:
     out_edges, in_edges = {}, {}
     for e in project.edges:
         out_edges.setdefault(e.src, []).append({"kind": e.kind, "other": e.dst, "label": e.label})
@@ -226,6 +512,11 @@ def render(project, pages: dict[str, str], diagrams: dict, notes, date: str, lin
             "diagrams": {k: {"source": v.render(), "files": v.files} for k, v in diagrams.items()},
             "linkBase": linker.base if linker.mode == "url" else "",
             "relPrefix": linker.rel_prefix if linker.mode == "relative" else ""}
+    if onto:
+        keep = ("id", "type", "name", "summary", "page")
+        data["ontology"] = {"classes": onto["schema"]["classes"], "relations": onto["schema"]["relations"],
+                            "entities": [{k: e[k] for k in keep if k in e} for e in onto["entities"]],
+                            "triples": onto["relations"]}
     payload = json.dumps(data, ensure_ascii=False).replace("</", "<\\/")
     title = f"Handoff · {project.name}"
     page = (TEMPLATE.replace("__TITLE__", html.escape(title))

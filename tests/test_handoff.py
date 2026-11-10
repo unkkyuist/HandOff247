@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import json
+import re
 import shutil
 import sys
 import tempfile
@@ -343,6 +344,61 @@ class PackTests(unittest.TestCase):
         self.assertEqual(main(["go", str(self.root), "--date", "2026-01-01"]), 0)
         self.assertIn("Front desk lead owns it.", (out / "HANDOVER.md").read_text(encoding="utf-8"))
         self.assertIn("1/8 answered", (out / "HANDOVER.md").read_text(encoding="utf-8"))
+
+    def test_ontology_graph_and_wiki(self):
+        self._leaver_script()
+        self.assertEqual(main([str(self.root), "--date", "2026-01-01"]), 0)
+        out = self.root / "docs" / "handoff"
+        onto = json.loads((out / "ontology.json").read_text(encoding="utf-8"))
+        ents = {e["id"]: e for e in onto["entities"]}
+        rels = {(r["s"], r["p"], r["o"]): r for r in onto["relations"]}
+        self.assertEqual(ents["op:list"]["type"], "Operation")
+        self.assertIn(("op:list", "handledBy", "file:Store.cs"), rels)
+        self.assertIn(("table:Operations.Execute", "hasOperation", "op:notes.add"), rels)
+        self.assertTrue(any(p == "calls" and o == "op:list" for _, p, o in rels))
+        self.assertTrue(any(p == "invokes" and ents[s]["type"] == "McpTool" for s, p, _ in rels))
+        self.assertIn(("mode:cli", "serves", "table:Operations.Execute"), rels)
+        self.assertEqual(ents["env:BILLING_API_TOKEN"]["type"], "EnvVar")
+        self.assertIn("host:api.partner-billing.com", ents)
+        classes = {c["id"] for c in onto["schema"]["classes"]}
+        known = {r["id"] for r in onto["schema"]["relations"]}
+        for (s, p, o), r in rels.items():                            # nothing dangling, everything observed somewhere
+            self.assertIn(s, ents)
+            self.assertIn(o, ents)
+            self.assertIn(p, known)
+            if p not in ("contains", "authored"):
+                self.assertTrue(r.get("file"), (s, p, o))
+        link = re.compile(r"\]\(([^)\s]+)\)")
+        for e in ents.values():
+            self.assertIn(e["type"], classes)
+            self.assertTrue((out / e["page"]).is_file(), e["id"])
+        pages = list((out / "wiki").rglob("*.md"))
+        self.assertGreater(len(pages), 20)
+        for page in pages + [out / "llms.txt"]:                      # every link of the wiki leads somewhere
+            for href in link.findall(page.read_text(encoding="utf-8")):
+                if href.startswith(("http:", "https:", "#")):
+                    continue
+                target = (page.parent / href.split("#")[0].replace("%20", " ")).resolve()
+                self.assertTrue(target.exists(), f"{page.name}: {href}")
+        full = (out / "llms-full.txt").read_text(encoding="utf-8")
+        self.assertIn("<!-- page: wiki/files/Store.cs.md -->", full)
+        self.assertNotIn("AKIA", full)
+        self.assertNotIn("AKIA", (out / "ontology.json").read_text(encoding="utf-8"))
+        viewer = (out / "index.html").read_text(encoding="utf-8")
+        self.assertIn("'@graph'", viewer)
+        self.assertIn('"wiki/index.md"', viewer)
+        # a note written by a person reaches the wiki; stale generated pages go, hand-made pages stay
+        notes_file = self.root / "HANDOFF.notes.md"
+        notes_file.write_text(notes_file.read_text(encoding="utf-8").replace(
+            "## File: Store.cs\nTODO", "## File: Store.cs\nKeeps every record in memory; nothing is saved."), encoding="utf-8")
+        stale = out / "wiki" / "files" / "Gone.cs.md"
+        stale.write_text("---\ngenerator: HandOff247\n---\n\n# `Gone.cs`\n", encoding="utf-8")
+        mine = out / "wiki" / "my-own-page.md"
+        mine.write_text("# Written by hand\n", encoding="utf-8")
+        self.assertEqual(main([str(self.root), "--date", "2026-01-01"]), 0)
+        self.assertIn("Keeps every record in memory", (out / "wiki" / "files" / "Store.cs.md").read_text(encoding="utf-8"))
+        self.assertFalse(stale.exists())
+        self.assertTrue(mine.exists())
 
     def test_go_folder_of_projects(self):
         ws = self.tmp / "ws"

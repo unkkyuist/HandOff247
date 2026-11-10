@@ -8,7 +8,7 @@ Never paste passwords or tokens here — say where they are kept instead.
 
 ## Project
 HandOff247 reads a project folder and writes a handoff pack for the next person: diagrams, structure, extracted comments and a map of how the tools connect. It is static analysis only (it never imports or runs the target's code) and it is standard-library Python, so `python -m handoff247` works on any machine with Python 3.10+.
-Status: v0.3.0. `python -m handoff247 <folder>` does everything in one step (notes file, pack, handover checklist), and a folder that holds several projects gets one pack per project plus an index. The first real target was PlayBookOS (see examples/playbookos). C#, Python, JavaScript/TypeScript, PowerShell, shell and batch have analyzers; other languages are inventoried but not parsed. Output is English; a project's own comments and headings in another language get English versions from the notes file's `## Translations` table.
+Status: v0.4.0. `python -m handoff247 <folder>` does everything in one step (notes file, pack, handover checklist), and a folder that holds several projects gets one pack per project plus an index. Since v0.4.0 every pack also holds the ontology (`ontology.json`), a graph of it in the viewer, and a wiki for AI assistants (`wiki/`, `llms.txt`). The first real target was PlayBookOS (see examples/playbookos). C#, Python, JavaScript/TypeScript, PowerShell, shell and batch have analyzers; other languages are inventoried but not parsed. Output is English; a project's own comments and headings in another language get English versions from the notes file's `## Translations` table.
 
 ## Topic: Successor checklist
 1. Run the tests: `python -m unittest discover -s tests`.
@@ -26,7 +26,8 @@ Status: v0.3.0. `python -m handoff247 <folder>` does everything in one step (not
 None. The tool needs no keys. The GitHub Action only uses the workflow's own checkout.
 
 ## Topic: Open work and next steps
-- The repository has no LICENSE file yet; the owner has not chosen one.
+- A folder of projects has a graph and a wiki per project but no single graph across projects; `workspace.py` only writes an `llms.txt` that links them.
+- The wiki is generated without a language model. If prose written by a model is wanted, the place for it is the notes file (see `wiki/AGENTS.md` in any pack), not the generator.
 - Go, Rust, Java and other languages are only inventoried. An analyzer for one of them is the natural next piece: copy the shape of `analyzers/python.py` and add an assertion per fact to the tests.
 - The workspace index has no example in `examples/`; it is covered by `test_go_folder_of_projects` only.
 
@@ -76,7 +77,13 @@ PowerShell, POSIX shell and batch: leading comment / .SYNOPSIS as summary, `$env
 JavaScript/TypeScript (imports, exported functions with spans, `fetch` calls, Express routes, MCP registrations, `case` tables), HTML (`<script src>`, `<link>`, inline scripts) and CSS imports.
 
 ## File: handoff247/build.py
-Writes the pack: six Markdown pages, `diagrams/*.mmd`, `handoff.json` (its first key `"generator": "HandOff247"` is how later runs recognise and skip an old pack) and `index.html`.
+Writes the pack: six Markdown pages, `diagrams/*.mmd`, `handoff.json` (its first key `"generator": "HandOff247"` is how later runs recognise and skip an old pack), `ontology.json`, the wiki and `index.html`. `write_wiki` deletes wiki pages of an earlier run that no longer exist, but only files that start with the generator mark, so a page someone added by hand stays.
+
+## File: handoff247/ontology.py
+Turns `project.links` and `project.edges` into typed entities and relations. It detects nothing itself; add a new kind of fact in an analyzer or in `connect.py` first, then map it here. `CLASSES` and `RELATIONS` are the schema: a class has a colour group and a shape (the graph has eight colours, so classes share one and differ by shape), a relation has a label for each direction. `_Builder.rel` drops a relation whose ends are not both entities, which is why assets and system environment variables never appear.
+
+## File: handoff247/wiki.py
+Writes the ontology as Markdown pages plus `llms.txt` and `llms-full.txt`. `assign_pages` decides which page describes an entity (own page for files, areas, modes, operations and MCP tools; a list page for the small classes; a type lives on its file's page). File names are slugs with `/` as `__`; Windows reserved names get a `_` prefix. The pages are regenerated on every run, so durable knowledge belongs in the notes file; `agents()` is the page that tells an assistant so.
 
 ## File: handoff247/cli.py
 Four commands: `go`, `build`, `notes`, `check`. A first argument that is not a command is taken as a folder for `go`. `go` decides between one project and a folder of projects (`workspace.is_workspace`), then does notes + build + report. `check --min N` exits 1 when fewer than N% of files have notes, which is how CI can enforce documentation.
@@ -112,7 +119,7 @@ Parses and extends the notes file. `update` only appends missing headings and mi
 analyze_project(): inventory, per-file analysis, linking.
 
 ## File: handoff247/render_html.py
-The single-file viewer. It embeds the Markdown pages and loads marked, DOMPurify and Mermaid from jsDelivr at pinned versions. Diagram nodes are matched back to files through the `flowchart-nN-` element ids, so clicking a node opens that file's card.
+The single-file viewer. It embeds the Markdown pages and loads marked, DOMPurify and Mermaid from jsDelivr at pinned versions. Diagram nodes are matched back to files through the `flowchart-nN-` element ids, so clicking a node opens that file's card. The Graph tab is hand-written canvas code with no library: a force layout with a fixed seed (the same picture every run), hit testing, and names drawn most-connected first without overlap. The eight colours are the `--g1`…`--g8` variables; do not add a ninth, give a new class a shape inside an existing group. Wiki pages are embedded too, and `resolveHref` turns their page-relative links into pack-relative ones.
 
 ## File: handoff247/render_md.py
 The six Markdown pages; `handover()` puts each of the leaver's answers next to what `leaving.py` found. `Linker` decides how file:line references are linked: relative when the pack is inside the project, GitHub blob URLs at the exact commit when it is outside, plain text otherwise.

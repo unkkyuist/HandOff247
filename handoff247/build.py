@@ -6,7 +6,7 @@ import json
 from dataclasses import asdict
 from pathlib import Path
 
-from . import __version__, translate
+from . import __version__, ontology, translate, wiki
 from .mermaid import all_diagrams
 from .model import Project
 from .notes import TRANSLATIONS, Notes
@@ -54,8 +54,38 @@ def write_pack(project: Project, out_dir: Path, notes: Notes, links: str = "auto
         (ddir / f"{name}.mmd").write_text(fl.render(), encoding="utf-8", newline="\n")
     data = to_json(project, notes, date)
     (out_dir / "handoff.json").write_text(json.dumps(data, ensure_ascii=False, indent=1), encoding="utf-8", newline="\n")
-    (out_dir / "index.html").write_text(render_html(project, content, diagrams, notes, date, linker),
+    onto = ontology.build(project, notes)
+    wiki.assign_pages(onto)
+    (out_dir / "ontology.json").write_text(json.dumps({**onto, "generated": date}, ensure_ascii=False, indent=1),
+                                           encoding="utf-8", newline="\n")
+    wiki_pages = wiki.Wiki(project, onto, notes, linker, notes_label, date).render()
+    write_wiki(out_dir, wiki_pages)
+    embedded = {**content, **{k: v for k, v in wiki_pages.items() if k.startswith("wiki/")}}
+    (out_dir / "index.html").write_text(render_html(project, embedded, diagrams, notes, date, linker, onto),
                                         encoding="utf-8", newline="\n")
     return {"out": str(out_dir), "pages": list(content), "diagrams": list(diagrams), "files": len(project.files),
             "edges": len(project.edges), "links": linker.mode, "readiness": project.links["readiness"],
-            "gaps": pages.undocumented(), **tr}
+            "gaps": pages.undocumented(), "entities": len(onto["entities"]), "relations": len(onto["relations"]),
+            "wiki_pages": sum(1 for k in wiki_pages if k.startswith("wiki/")), **tr}
+
+
+def write_wiki(out_dir: Path, pages: dict[str, str]) -> None:
+    """Write the wiki and remove pages of an earlier run that no longer exist. Only files that
+    carry the generator mark are removed, so a page a person added by hand stays."""
+    wanted = set()
+    for rel, text in pages.items():
+        path = out_dir / rel
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text(text, encoding="utf-8", newline="\n")
+        wanted.add(path.resolve())
+    root = out_dir / "wiki"
+    for old in root.rglob("*.md"):
+        if old.resolve() in wanted:
+            continue
+        try:
+            with old.open(encoding="utf-8", errors="replace") as fh:
+                head = fh.read(200)
+        except OSError:
+            continue
+        if head.startswith("---\n" + wiki.MARK):
+            old.unlink()

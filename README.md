@@ -24,6 +24,9 @@ your computer goes away.
 - **It looks at what a clone will not carry.** Uncommitted and unpushed work, files Git ignores that exist only on
   your computer, personal folder paths written into code, the external hosts and secret-named variables a successor
   needs accounts for, TODO comments, and the tools to install.
+- **An ontology, a graph and a wiki for AI assistants.** Everything found is also written as typed entities and
+  relations (`ontology.json`), drawn as an interactive graph in the viewer, and laid out as a wiki of small interlinked
+  pages with an `llms.txt` entry point, so the next person's assistant can answer questions about the project.
 - **English output, whatever language the code is commented in.** Comments and headings written in another language
   get an English version from a table in the notes file; the pack marks them as translated and keeps the originals.
 
@@ -116,7 +119,10 @@ A folder is treated as a set of projects when it has no manifest of its own or h
 | `FILES.md` | One card per file: extracted comment, notes, public symbols with their doc comments, links in and out |
 | `diagrams/*.mmd` | Mermaid sources of every diagram (paste into anything that renders Mermaid) |
 | `handoff.json` | Everything above as data, for scripts and AI agents |
-| `index.html` | Single-file viewer with tabs, search and clickable diagrams |
+| `ontology.json` | The **ontology**: every entity (file, type, run mode, operation, route, MCP tool, environment variable, package, host, …) and every relation between them, each with the file and line it was observed at |
+| `wiki/` | The **LLM wiki**: one small Markdown page per file, area, run mode, operation and MCP tool, list pages for the rest, an `index.md` catalog and `AGENTS.md` with the reading rules |
+| `llms.txt`, `llms-full.txt` | Entry point for AI assistants in the [llms.txt](https://llmstxt.org) convention, and the whole wiki in one file |
+| `index.html` | Single-file viewer with tabs, search, clickable diagrams, the **Graph** tab and the wiki |
 
 ```mermaid
 flowchart LR
@@ -127,6 +133,37 @@ flowchart LR
   D --> E["render<br/>Markdown, Mermaid, JSON, HTML"]
   E --> F["handoff pack"]
 ```
+
+## Ontology, graph and wiki
+
+The same facts are available in three more shapes, all written by the one command. None of them adds a guess: they
+are views of what the analysis observed.
+
+**Ontology** — [`ontology.json`](examples/playbookos/ontology.json). 16 classes (Project, Area, File, Type, Run mode,
+Sub-command, Dispatch table, Operation, HTTP route, MCP tool, Environment variable, Port, Package, External host,
+Command-line tool, Person) and 24 relations (`contains`, `defines`, `imports`, `uses`, `runs`, `hasOperation`,
+`handledBy`, `calls`, `invokes`, `forwardsTo`, `reads`, `sets`, `dependsOn`, …). A relation looks like this:
+
+```json
+{"s": "file:wwwroot/app.js", "p": "calls", "o": "op:asset.verify",
+ "file": "wwwroot/app.js", "line": 77, "label": "api(), over HTTP"}
+```
+
+A relation that rests on an inference carries `"inferred"` with the reason. For PlayBookOS: 289 entities, 985 relations.
+
+**Graph** — the *Graph* tab of `index.html`. Every entity is a mark and every relation a line. Colour is the kind of
+thing, shape tells kinds of one colour apart, dashed lines are inferences. Click a mark to see its relations with
+their file and line, type to find something, switch classes on and off in the legend, and jump from any mark to its
+wiki page or file card. It needs no extra library.
+
+**LLM wiki** — [`wiki/`](examples/playbookos/wiki/index.md), [`llms.txt`](examples/playbookos/llms.txt). Small pages
+an assistant can read one at a time: each page is one thing, with what it points to and what points to it, and the
+source line next to every statement. `wiki/AGENTS.md` tells the assistant how to read it, what *inferred* means, that
+something missing was not found rather than absent, and where new knowledge goes: into your notes file, under the
+heading of the thing it is about. The next run carries it into the pages, so the wiki is rebuilt, never hand-edited.
+No language model is called to write it and no key is needed.
+
+To use it, give your assistant the pack folder (or paste `llms-full.txt`) and ask.
 
 ## How "how the tools connect" is found
 
@@ -268,6 +305,10 @@ handoff247 check  [PROJECT] [--notes FILE] [--min PERCENT]
 - Languages without an analyzer (Go, Rust, Java, …) are listed with line counts but not parsed yet.
 - MCP tool names from the C# SDK are derived from method names and marked `*`; confirm with the client's `tools/list`.
 - Diagrams are capped for readability (large folders collapse into one box; shared foundations lose their incoming arrows).
+- The graph lays out every entity in the browser. Above about 1,200 entities it starts with types, packages,
+  variables, ports, hosts and tools switched off; switch them on in the legend.
+- A folder of projects gets a graph and a wiki per project. The index links them (`llms.txt`) but there is no single
+  graph across projects yet.
 
 ## Development
 
@@ -278,3 +319,7 @@ python -m handoff247 build . -o docs/handoff        # HandOff247's own pack
 
 `tests/fixtures/mini` is a small fake app wired like PlayBookOS; every connection type the tool claims to find has an
 assertion in `tests/test_handoff.py`. How the code is organised is in [docs/handoff](docs/handoff/README.md).
+
+## License
+
+[MIT](LICENSE)

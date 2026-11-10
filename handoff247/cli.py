@@ -70,6 +70,8 @@ def _go(args) -> int:
         info = write_pack(project, out, notes, "auto", "", date, DEFAULT_NAME)
         print(f"HandOff247 {__version__}: {info['files']} files, {len(info['diagrams'])} diagrams "
               f"({', '.join(info['diagrams']) or 'none'}), 6 pages")
+        print(f"ontology: {info['entities']} things, {info['relations']} relations (ontology.json, Graph tab); "
+              f"wiki: {info['wiki_pages']} pages (wiki/, llms.txt)")
         print(f"notes: {notes_path} ({'created' if not existing else f'{added} heading(s) added'})")
         _print_readiness(info["readiness"])
         todo_topics = [k for k, _ in skeleton(project) if k.startswith(("Project", "Topic: ")) and not notes.get(k)]
@@ -143,6 +145,7 @@ def main(argv: list[str] | None = None) -> int:
               f"{len({m['name'] for m in L['modes']})} modes, {sum(len(t['ops']) for t in L['tables'])} operations, "
               f"{len(L['routes'])} routes, {len(L['mcp_tools'])} MCP tools")
         print(f"diagrams: {', '.join(info['diagrams']) or 'none'} · source links: {info['links']}")
+        print(f"ontology: {info['entities']} things, {info['relations']} relations · wiki: {info['wiki_pages']} pages")
         if info["applied"] or info["untranslated"] or info["unused"]:
             print(f"translations: {info['applied']} used, {info['untranslated']} text(s) still in another language"
                   + (f", {info['unused']} row(s) no longer match the code" if info["unused"] else ""))
