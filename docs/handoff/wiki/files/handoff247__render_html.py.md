@@ -12,7 +12,7 @@ source: "handoff247/render_html.py"
 - **Class:** File — A file of the project (images and other assets are left out).
 - **Language:** Python
 - **Kind of file:** code
-- **Lines:** 527
+- **Lines:** 537
 - **Source:** [handoff247/render_html.py](../../../../handoff247/render_html.py)
 
 **Notes from the previous owner**
@@ -34,7 +34,7 @@ source: "handoff247/render_html.py"
 **is imported by** ←
 
 - [`handoff247/build.py`](handoff247__build.py.md) · [handoff247/build.py:13](../../../../handoff247/build.py#L13)
-- [`handoff247/workspace.py`](handoff247__workspace.py.md) · [handoff247/workspace.py:22](../../../../handoff247/workspace.py#L22)
+- [`handoff247/workspace.py`](handoff247__workspace.py.md) · [handoff247/workspace.py:23](../../../../handoff247/workspace.py#L23)
 
 ## Comment in the file
 
@@ -42,4 +42,4 @@ Single-file interactive viewer (index.html). *(module docstring)*
 
 ## Defined here
 
-- `render` — function, [line 491](../../../../handoff247/render_html.py#L491)
+- `render` — function, [line 498](../../../../handoff247/render_html.py#L498)

@@ -35,7 +35,8 @@ source: "handoff247/pipeline.py"
 **is imported by** ←
 
 - [`handoff247/cli.py`](handoff247__cli.py.md) · [handoff247/cli.py:12](../../../../handoff247/cli.py#L12)
-- [`handoff247/workspace.py`](handoff247__workspace.py.md) · [handoff247/workspace.py:21](../../../../handoff247/workspace.py#L21)
+- [`handoff247/mcp.py`](handoff247__mcp.py.md) · [handoff247/mcp.py:24](../../../../handoff247/mcp.py#L24)
+- [`handoff247/workspace.py`](handoff247__workspace.py.md) · [handoff247/workspace.py:22](../../../../handoff247/workspace.py#L22)
 - [`tests/test_handoff.py`](tests__test_handoff.py.md) · [tests/test_handoff.py:19](../../../../tests/test_handoff.py#L19)
 
 ## Comment in the file

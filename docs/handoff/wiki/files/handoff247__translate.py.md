@@ -31,8 +31,9 @@ source: "handoff247/translate.py"
 
 - [`handoff247/build.py`](handoff247__build.py.md) · [handoff247/build.py:9](../../../../handoff247/build.py#L9)
 - [`handoff247/cli.py`](handoff247__cli.py.md) · [handoff247/cli.py:9](../../../../handoff247/cli.py#L9)
+- [`handoff247/mcp.py`](handoff247__mcp.py.md) · [handoff247/mcp.py:22](../../../../handoff247/mcp.py#L22)
 - [`handoff247/notes.py`](handoff247__notes.py.md) · [handoff247/notes.py:14](../../../../handoff247/notes.py#L14)
-- [`tests/test_handoff.py`](tests__test_handoff.py.md) · [tests/test_handoff.py:438](../../../../tests/test_handoff.py#L438)
+- [`tests/test_handoff.py`](tests__test_handoff.py.md) · [tests/test_handoff.py:533](../../../../tests/test_handoff.py#L533)
 
 ## Comment in the file
 

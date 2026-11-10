@@ -12,7 +12,7 @@ source: "tests/test_handoff.py"
 - **Class:** File — A file of the project (images and other assets are left out).
 - **Language:** Python
 - **Kind of file:** test
-- **Lines:** 447
+- **Lines:** 542
 - **Source:** [tests/test_handoff.py](../../../../tests/test_handoff.py)
 
 **Notes from the previous owner**
@@ -32,7 +32,7 @@ source: "tests/test_handoff.py"
 - [`handoff247/cli.py`](handoff247__cli.py.md) · [tests/test_handoff.py:17](../../../../tests/test_handoff.py#L17)
 - [`handoff247/lexer.py`](handoff247__lexer.py.md) · [tests/test_handoff.py:18](../../../../tests/test_handoff.py#L18)
 - [`handoff247/pipeline.py`](handoff247__pipeline.py.md) · [tests/test_handoff.py:19](../../../../tests/test_handoff.py#L19)
-- [`handoff247/translate.py`](handoff247__translate.py.md) · [tests/test_handoff.py:438](../../../../tests/test_handoff.py#L438)
+- [`handoff247/translate.py`](handoff247__translate.py.md) · [tests/test_handoff.py:533](../../../../tests/test_handoff.py#L533)
 
 **refers to** →
 
@@ -88,5 +88,7 @@ End-to-end and unit tests. *(module docstring)*
 - `PackTests.test_git_state_and_files_only_on_this_computer` — method, [line 294](../../../../tests/test_handoff.py#L294)
 - `PackTests.test_go_one_project` — method, [line 323](../../../../tests/test_handoff.py#L323)
 - `PackTests.test_ontology_graph_and_wiki` — method, [line 348](../../../../tests/test_handoff.py#L348)
-- `PackTests.test_go_folder_of_projects` — method, [line 403](../../../../tests/test_handoff.py#L403)
-- `PackTests.test_foreign_detection` — method, [line 437](../../../../tests/test_handoff.py#L437)
+- `PackTests.test_model_summaries` — method, [line 403](../../../../tests/test_handoff.py#L403)
+- `PackTests.test_mcp_server` — method, [line 455](../../../../tests/test_handoff.py#L455)
+- `PackTests.test_go_folder_of_projects` — method, [line 498](../../../../tests/test_handoff.py#L498)
+- `PackTests.test_foreign_detection` — method, [line 532](../../../../tests/test_handoff.py#L532)

@@ -12,7 +12,7 @@ source: "handoff247/wiki.py"
 - **Class:** File — A file of the project (images and other assets are left out).
 - **Language:** Python
 - **Kind of file:** code
-- **Lines:** 372
+- **Lines:** 391
 - **Source:** [handoff247/wiki.py](../../../../handoff247/wiki.py)
 
 **Notes from the previous owner**
@@ -32,7 +32,7 @@ source: "handoff247/wiki.py"
 
 **refers to** →
 
-- [`README.md`](README.md.md) · [handoff247/wiki.py:221](../../../../handoff247/wiki.py#L221)
+- [`README.md`](README.md.md) · [handoff247/wiki.py:225](../../../../handoff247/wiki.py#L225)
 
 **is part of** ←
 
@@ -57,11 +57,12 @@ The LLM wiki: the ontology written out as small, interlinked Markdown pages that
 - `Wiki.note` — method, [line 128](../../../../handoff247/wiki.py#L128)
 - `Wiki.relations` — method, [line 134](../../../../handoff247/wiki.py#L134)
 - `Wiki.body` — method, [line 158](../../../../handoff247/wiki.py#L158) — Summary, attributes, the owner's note and the relations of one entity.
-- `Wiki.entity_page` — method, [line 178](../../../../handoff247/wiki.py#L178)
-- `Wiki.list_page` — method, [line 198](../../../../handoff247/wiki.py#L198)
-- `Wiki.overview` — method, [line 208](../../../../handoff247/wiki.py#L208)
-- `Wiki.notes_page` — method, [line 246](../../../../handoff247/wiki.py#L246)
-- `Wiki.index` — method, [line 255](../../../../handoff247/wiki.py#L255)
-- `Wiki.agents` — method, [line 298](../../../../handoff247/wiki.py#L298)
-- `Wiki.llms_txt` — method, [line 329](../../../../handoff247/wiki.py#L329)
-- `Wiki.render` — method, [line 354](../../../../handoff247/wiki.py#L354) — Pack-relative path → text for every wiki file, llms.txt and llms-full.txt included.
+- `Wiki.entity_page` — method, [line 182](../../../../handoff247/wiki.py#L182)
+- `Wiki.list_page` — method, [line 202](../../../../handoff247/wiki.py#L202)
+- `Wiki.overview` — method, [line 212](../../../../handoff247/wiki.py#L212)
+- `Wiki.notes_page` — method, [line 250](../../../../handoff247/wiki.py#L250)
+- `Wiki.index` — method, [line 259](../../../../handoff247/wiki.py#L259)
+- `Wiki.line_summary` — method, [line 303](../../../../handoff247/wiki.py#L303)
+- `Wiki.agents` — method, [line 312](../../../../handoff247/wiki.py#L312)
+- `Wiki.llms_txt` — method, [line 348](../../../../handoff247/wiki.py#L348)
+- `Wiki.render` — method, [line 373](../../../../handoff247/wiki.py#L373) — Pack-relative path → text for every wiki file, llms.txt and llms-full.txt included.

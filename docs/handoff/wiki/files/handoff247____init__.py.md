@@ -27,11 +27,13 @@ source: "handoff247/__init__.py"
 
 - [`handoff247/build.py`](handoff247__build.py.md) · [handoff247/build.py:9](../../../../handoff247/build.py#L9)
 - [`handoff247/cli.py`](handoff247__cli.py.md) · [handoff247/cli.py:9](../../../../handoff247/cli.py#L9)
+- [`handoff247/mcp.py`](handoff247__mcp.py.md) · [handoff247/mcp.py:22](../../../../handoff247/mcp.py#L22)
 - [`handoff247/notes.py`](handoff247__notes.py.md) · [handoff247/notes.py:14](../../../../handoff247/notes.py#L14)
 - [`handoff247/ontology.py`](handoff247__ontology.py.md) · [handoff247/ontology.py:10](../../../../handoff247/ontology.py#L10)
 - [`handoff247/pipeline.py`](handoff247__pipeline.py.md) · [handoff247/pipeline.py:6](../../../../handoff247/pipeline.py#L6)
 - [`handoff247/render_html.py`](handoff247__render_html.py.md) · [handoff247/render_html.py:9](../../../../handoff247/render_html.py#L9)
 - [`handoff247/render_md.py`](handoff247__render_md.py.md) · [handoff247/render_md.py:7](../../../../handoff247/render_md.py#L7)
+- [`handoff247/summarize.py`](handoff247__summarize.py.md) · [handoff247/summarize.py:27](../../../../handoff247/summarize.py#L27)
 - [`handoff247/wiki.py`](handoff247__wiki.py.md) · [handoff247/wiki.py:26](../../../../handoff247/wiki.py#L26)
 - [`handoff247/workspace.py`](handoff247__workspace.py.md) · [handoff247/workspace.py:16](../../../../handoff247/workspace.py#L16)
 - [`tests/test_handoff.py`](tests__test_handoff.py.md) · [tests/test_handoff.py:15](../../../../tests/test_handoff.py#L15)

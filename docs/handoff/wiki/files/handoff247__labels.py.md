@@ -12,7 +12,7 @@ source: "handoff247/labels.py"
 - **Class:** File — A file of the project (images and other assets are left out).
 - **Language:** Python
 - **Kind of file:** code
-- **Lines:** 254
+- **Lines:** 255
 - **Source:** [handoff247/labels.py](../../../../handoff247/labels.py)
 
 **Notes from the previous owner**
@@ -36,4 +36,4 @@ Every generated heading and label in one place, so the wording stays the same ac
 
 ## Defined here
 
-- `t` — function, [line 252](../../../../handoff247/labels.py#L252)
+- `t` — function, [line 253](../../../../handoff247/labels.py#L253)

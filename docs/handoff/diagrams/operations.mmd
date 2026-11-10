@@ -21,6 +21,13 @@ flowchart LR
     n12("inline expression"):::hub
   end
   n9 -->|".python-version, .tool-versions, go.mod"| n12
+  n13{{"handoff247/mcp.py:250<br/>handoff247/mcp.py:250"}}:::table
+  subgraph g14["Callers"]
+  end
+  subgraph g15["Handlers"]
+    n16("inline expression"):::hub
+  end
+  n13 -->|"initialize, ping, tools/call … (4)"| n16
   classDef entry fill:#fde68a,stroke:#b45309,color:#1f2937
   classDef launcher fill:#e0e7ff,stroke:#4338ca,color:#1f2937
   classDef mode fill:#dcfce7,stroke:#15803d,color:#1f2937

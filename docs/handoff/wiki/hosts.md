@@ -30,15 +30,15 @@ A host name found in a URL.
 
 ## `github.com`
 
-> in 6 URL(s)
+> in 7 URL(s)
 
 - **Class:** External host — A host name found in a URL.
 
 **is mentioned in** ←
 
-- [`README.md`](files/README.md.md) · [README.md:37](../../../README.md#L37)
-- [`handoff247/cli.py`](files/handoff247__cli.py.md) · [handoff247/cli.py:120](../../../handoff247/cli.py#L120)
-- [`handoff247/render_md.py`](files/handoff247__render_md.py.md) · [handoff247/render_md.py:635](../../../handoff247/render_md.py#L635)
+- [`README.md`](files/README.md.md) · [README.md:40](../../../README.md#L40)
+- [`handoff247/cli.py`](files/handoff247__cli.py.md) · [handoff247/cli.py:135](../../../handoff247/cli.py#L135)
+- [`handoff247/render_md.py`](files/handoff247__render_md.py.md) · [handoff247/render_md.py:638](../../../handoff247/render_md.py#L638)
 - [`pyproject.toml`](files/pyproject.toml.md) · [pyproject.toml:21](../../../pyproject.toml#L21)
 
 ## `llmstxt.org`
@@ -49,4 +49,4 @@ A host name found in a URL.
 
 **is mentioned in** ←
 
-- [`README.md`](files/README.md.md) · [README.md:124](../../../README.md#L124)
+- [`README.md`](files/README.md.md) · [README.md:127](../../../README.md#L127)

@@ -48,6 +48,7 @@ source: "handoff247/model.py"
 - [`handoff247/ontology.py`](handoff247__ontology.py.md) · [handoff247/ontology.py:12](../../../../handoff247/ontology.py#L12)
 - [`handoff247/pipeline.py`](handoff247__pipeline.py.md) · [handoff247/pipeline.py:9](../../../../handoff247/pipeline.py#L9)
 - [`handoff247/render_md.py`](handoff247__render_md.py.md) · [handoff247/render_md.py:11](../../../../handoff247/render_md.py#L11)
+- [`handoff247/summarize.py`](handoff247__summarize.py.md) · [handoff247/summarize.py:28](../../../../handoff247/summarize.py#L28)
 - [`handoff247/translate.py`](handoff247__translate.py.md) · [handoff247/translate.py:15](../../../../handoff247/translate.py#L15)
 
 ## Comment in the file

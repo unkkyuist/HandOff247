@@ -12,7 +12,7 @@ source: "handoff247/ontology.py"
 - **Class:** File — A file of the project (images and other assets are left out).
 - **Language:** Python
 - **Kind of file:** code
-- **Lines:** 278
+- **Lines:** 283
 - **Source:** [handoff247/ontology.py](../../../../handoff247/ontology.py)
 
 **Notes from the previous owner**
@@ -36,6 +36,7 @@ source: "handoff247/ontology.py"
 **is imported by** ←
 
 - [`handoff247/build.py`](handoff247__build.py.md) · [handoff247/build.py:9](../../../../handoff247/build.py#L9)
+- [`handoff247/mcp.py`](handoff247__mcp.py.md) · [handoff247/mcp.py:22](../../../../handoff247/mcp.py#L22)
 
 ## Comment in the file
 

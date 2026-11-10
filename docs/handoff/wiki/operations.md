@@ -6,7 +6,7 @@ generator: HandOff247
 
 A switch or mapping that turns an operation name into the code that handles it.
 
-2 found. [Back to the index](index.md)
+3 found. [Back to the index](index.md)
 
 ## `handoff247/analyzers/__init__.py:7`
 
@@ -55,3 +55,21 @@ A switch or mapping that turns an operation name into the code that handles it.
 **is defined in** ←
 
 - [`handoff247/leaving.py`](files/handoff247__leaving.py.md) · [handoff247/leaving.py:257](../../../handoff247/leaving.py#L257)
+
+## `handoff247/mcp.py:250`
+
+> 4 operation(s), picked by `method`
+
+- **Class:** Dispatch table — A switch or mapping that turns an operation name into the code that handles it.
+- **Source:** [handoff247/mcp.py:250](../../../handoff247/mcp.py#L250)
+
+**has operation** →
+
+- [`initialize`](operations/initialize.md) · [handoff247/mcp.py:250](../../../handoff247/mcp.py#L250)
+- [`ping`](operations/ping.md) · [handoff247/mcp.py:256](../../../handoff247/mcp.py#L256)
+- [`tools/call`](operations/tools__call.md) · [handoff247/mcp.py:260](../../../handoff247/mcp.py#L260)
+- [`tools/list`](operations/tools__list.md) · [handoff247/mcp.py:258](../../../handoff247/mcp.py#L258)
+
+**is defined in** ←
+
+- [`handoff247/mcp.py`](files/handoff247__mcp.py.md) · [handoff247/mcp.py:250](../../../handoff247/mcp.py#L250)

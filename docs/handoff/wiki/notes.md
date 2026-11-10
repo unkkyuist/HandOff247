@@ -9,7 +9,7 @@ Written by a person in `HANDOFF.notes.md`; nothing on this page was derived from
 ## What the project is
 
 HandOff247 reads a project folder and writes a handoff pack for the next person: diagrams, structure, extracted comments and a map of how the tools connect. It is static analysis only (it never imports or runs the target's code) and it is standard-library Python, so `python -m handoff247` works on any machine with Python 3.10+.
-Status: v0.4.0. `python -m handoff247 <folder>` does everything in one step (notes file, pack, handover checklist), and a folder that holds several projects gets one pack per project plus an index. Since v0.4.0 every pack also holds the ontology (`ontology.json`), a graph of it in the viewer, and a wiki for AI assistants (`wiki/`, `llms.txt`). The first real target was PlayBookOS (see examples/playbookos). C#, Python, JavaScript/TypeScript, PowerShell, shell and batch have analyzers; other languages are inventoried but not parsed. Output is English; a project's own comments and headings in another language get English versions from the notes file's `## Translations` table.
+Status: v0.5.0. `python -m handoff247 <folder>` does everything in one step (notes file, pack, handover checklist), and a folder that holds several projects gets one pack per project plus an index. Since v0.4.0 every pack also holds the ontology (`ontology.json`), a graph of it in the viewer, and a wiki for AI assistants (`wiki/`, `llms.txt`). v0.5.0 adds optional file summaries written through the signed-in Codex CLI (`--summarize`) and an MCP server (`handoff247 mcp`) through which an AI agent reads the project and writes notes. The first real target was PlayBookOS (see examples/playbookos). C#, Python, JavaScript/TypeScript, PowerShell, shell and batch have analyzers; other languages are inventoried but not parsed. Output is English; a project's own comments and headings in another language get English versions from the notes file's `## Translations` table.
 
 ## Successor checklist
 
@@ -32,7 +32,8 @@ None. The tool needs no keys. The GitHub Action only uses the workflow's own che
 ## Open work and next steps
 
 - A folder of projects has a graph and a wiki per project but no single graph across projects; `workspace.py` only writes an `llms.txt` that links them.
-- The wiki is generated without a language model. If prose written by a model is wanted, the place for it is the notes file (see `wiki/AGENTS.md` in any pack), not the generator.
+- Codex is the only engine for `--summarize` (`summarize.codex_call`). Another signed-in CLI (Claude Code's `claude -p`, for example) would be a second function with the same signature: prompt in, JSON text out.
+- The MCP server is tested by driving it over stdio (`test_mcp_server`) and was tried once by hand with Codex. It speaks protocol versions up to 2025-11-25 and offers tools only, no resources or prompts.
 - Go, Rust, Java and other languages are only inventoried. An analyzer for one of them is the natural next piece: copy the shape of `analyzers/python.py` and add an assertion per fact to the tests.
 - The workspace index has no example in `examples/`; it is covered by `test_go_folder_of_projects` only.
 

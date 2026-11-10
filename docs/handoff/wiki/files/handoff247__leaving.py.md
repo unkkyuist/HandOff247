@@ -45,8 +45,10 @@ source: "handoff247/leaving.py"
 **is imported by** ←
 
 - [`handoff247/cli.py`](handoff247__cli.py.md) · [handoff247/cli.py:9](../../../../handoff247/cli.py#L9)
+- [`handoff247/mcp.py`](handoff247__mcp.py.md) · [handoff247/mcp.py:22](../../../../handoff247/mcp.py#L22)
 - [`handoff247/pipeline.py`](handoff247__pipeline.py.md) · [handoff247/pipeline.py:6](../../../../handoff247/pipeline.py#L6)
 - [`handoff247/render_md.py`](handoff247__render_md.py.md) · [handoff247/render_md.py:7](../../../../handoff247/render_md.py#L7)
+- [`handoff247/summarize.py`](handoff247__summarize.py.md) · [handoff247/summarize.py:27](../../../../handoff247/summarize.py#L27)
 - [`handoff247/workspace.py`](handoff247__workspace.py.md) · [handoff247/workspace.py:16](../../../../handoff247/workspace.py#L16)
 
 ## Comment in the file

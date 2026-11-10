@@ -1,15 +1,25 @@
 {
  "generator": "HandOff247",
- "version": "0.4.0",
+ "version": "0.5.0",
  "generated": "2026-11-10",
  "project": {
   "name": "HandOff247",
   "git": {
-   "head": "5be3bdf",
-   "head_full": "5be3bdf76a7fd49d842f3405784b3d29ce9a52e4",
+   "head": "ffbe44f",
+   "head_full": "ffbe44ff71e767d7b7797c7afa652378c06761b9",
    "branch": "main",
    "remote": "https://github.com/unkkyuist/HandOff247.git",
    "commits": [
+    {
+     "sha": "ffbe44f",
+     "date": "2026-11-10",
+     "subject": "v0.5.0: Codex summaries (--summarize) and an MCP server for AI agents"
+    },
+    {
+     "sha": "aa7a1ae",
+     "date": "2026-11-10",
+     "subject": "Regenerate the self-documentation pack at 5be3bdf"
+    },
     {
      "sha": "5be3bdf",
      "date": "2026-11-10",
@@ -46,11 +56,11 @@
   }
  },
  "notes": {
-  "Project": "HandOff247 reads a project folder and writes a handoff pack for the next person: diagrams, structure, extracted comments and a map of how the tools connect. It is static analysis only (it never imports or runs the target's code) and it is standard-library Python, so `python -m handoff247` works on any machine with Python 3.10+.\nStatus: v0.4.0. `python -m handoff247 <folder>` does everything in one step (notes file, pack, handover checklist), and a folder that holds several projects gets one pack per project plus an index. Since v0.4.0 every pack also holds the ontology (`ontology.json`), a graph of it in the viewer, and a wiki for AI assistants (`wiki/`, `llms.txt`). The first real target was PlayBookOS (see examples/playbookos). C#, Python, JavaScript/TypeScript, PowerShell, shell and batch have analyzers; other languages are inventoried but not parsed. Output is English; a project's own comments and headings in another language get English versions from the notes file's `## Translations` table.",
+  "Project": "HandOff247 reads a project folder and writes a handoff pack for the next person: diagrams, structure, extracted comments and a map of how the tools connect. It is static analysis only (it never imports or runs the target's code) and it is standard-library Python, so `python -m handoff247` works on any machine with Python 3.10+.\nStatus: v0.5.0. `python -m handoff247 <folder>` does everything in one step (notes file, pack, handover checklist), and a folder that holds several projects gets one pack per project plus an index. Since v0.4.0 every pack also holds the ontology (`ontology.json`), a graph of it in the viewer, and a wiki for AI assistants (`wiki/`, `llms.txt`). v0.5.0 adds optional file summaries written through the signed-in Codex CLI (`--summarize`) and an MCP server (`handoff247 mcp`) through which an AI agent reads the project and writes notes. The first real target was PlayBookOS (see examples/playbookos). C#, Python, JavaScript/TypeScript, PowerShell, shell and batch have analyzers; other languages are inventoried but not parsed. Output is English; a project's own comments and headings in another language get English versions from the notes file's `## Translations` table.",
   "Topic: Successor checklist": "1. Run the tests: `python -m unittest discover -s tests`.\n2. Regenerate the examples after any analyzer change: `python -m handoff247 build <PlayBookOS checkout> --name PlayBookOS -o examples/playbookos --notes examples/playbookos.notes.md --date <date>`. If an analyzer change surfaces new Korean comments or headings, `check --notes examples/playbookos.notes.md` reports them; add their rows to the Translations table there. Read the diff of the generated pages: a change there is a change in what successors will be told.\n3. Regenerate this pack after committing and pushing, so its Handover page does not report your own work as uncommitted: `python -m handoff247 . --date <date>`.\n4. Open `index.html` of a pack in a browser and check that every diagram renders (Mermaid errors show as red text in the page).",
   "Topic: Known issues and risks": "- The rule that matters most: a wrong statement is worse than a missing one. When a pattern is ambiguous the analyzers leave it out; inferences (for example a wrapper passed in as a parameter) are labelled and drawn dashed. Keep it that way.\n- Analysis is regex/lexer based for everything except Python (which uses `ast`). Code built from runtime strings, reflection or dependency-injection containers is not followed.\n- MCP tool names from the C# SDK are derived from method names (snake_case, `Async` removed) and marked with * in the pack.\n- Mermaid labels must go through `mermaid.esc`; `*`, `_` and backticks are escaped because Mermaid otherwise formats them as Markdown.",
   "Topic: Credentials and accounts": "None. The tool needs no keys. The GitHub Action only uses the workflow's own checkout.",
-  "Topic: Open work and next steps": "- A folder of projects has a graph and a wiki per project but no single graph across projects; `workspace.py` only writes an `llms.txt` that links them.\n- The wiki is generated without a language model. If prose written by a model is wanted, the place for it is the notes file (see `wiki/AGENTS.md` in any pack), not the generator.\n- Go, Rust, Java and other languages are only inventoried. An analyzer for one of them is the natural next piece: copy the shape of `analyzers/python.py` and add an assertion per fact to the tests.\n- The workspace index has no example in `examples/`; it is covered by `test_go_folder_of_projects` only.",
+  "Topic: Open work and next steps": "- A folder of projects has a graph and a wiki per project but no single graph across projects; `workspace.py` only writes an `llms.txt` that links them.\n- Codex is the only engine for `--summarize` (`summarize.codex_call`). Another signed-in CLI (Claude Code's `claude -p`, for example) would be a second function with the same signature: prompt in, JSON text out.\n- The MCP server is tested by driving it over stdio (`test_mcp_server`) and was tried once by hand with Codex. It speaks protocol versions up to 2025-11-25 and offers tools only, no resources or prompts.\n- Go, Rust, Java and other languages are only inventoried. An analyzer for one of them is the natural next piece: copy the shape of `analyzers/python.py` and add an assertion per fact to the tests.\n- The workspace index has no example in `examples/`; it is covered by `test_go_folder_of_projects` only.",
   "Topic: Deploy and release": "There is no server and no package upload. A release is a push to `main` on GitHub; people run it from a clone or use the repository as a GitHub Action (`uses: unkkyuist/HandOff247@main`), so `main` is what users get. Bump the version in `handoff247/__init__.py` and `pyproject.toml` together. To roll back, revert the commit.",
   "Topic: Routine operations": "Nothing runs on a schedule. CI runs on every push and pull request. The viewer loads marked, DOMPurify and Mermaid from jsDelivr at pinned versions (`render_html.py`); check now and then that those versions still load.",
   "Topic: Data and backups": "The tool stores nothing. Its only state is the Git repository. Generated packs can always be rebuilt; a project's `HANDOFF.notes.md` cannot, so it belongs in that project's repository.",
@@ -71,6 +81,8 @@
   "File: handoff247/wiki.py": "Writes the ontology as Markdown pages plus `llms.txt` and `llms-full.txt`. `assign_pages` decides which page describes an entity (own page for files, areas, modes, operations and MCP tools; a list page for the small classes; a type lives on its file's page). File names are slugs with `/` as `__`; Windows reserved names get a `_` prefix. The pages are regenerated on every run, so durable knowledge belongs in the notes file; `agents()` is the page that tells an assistant so.",
   "File: handoff247/cli.py": "Four commands: `go`, `build`, `notes`, `check`. A first argument that is not a command is taken as a folder for `go`. `go` decides between one project and a folder of projects (`workspace.is_workspace`), then does notes + build + report. `check --min N` exits 1 when fewer than N% of files have notes, which is how CI can enforce documentation.",
   "File: handoff247/leaving.py": "The handover findings: Git state (uncommitted, commits on no remote, stashes, authors), files Git ignores that are present, absolute paths, hosts in URLs, TODO comments, key and token patterns, declared tool versions, and the readiness rows. Two rules to keep: a secret hit records file, line and kind but never the value, and anything that cannot be known is left out (no history figures for shallow clones, no \"pushed\" row without a remote). `JUNK_DIRS` decides which ignored folders are build output; add to it when a pack lists noise.",
+  "File: handoff247/summarize.py": "The optional `--summarize` step. It shells out to `codex exec` (read-only sandbox, empty temporary folder, `--ephemeral`, an output schema) with batches of files and their analysis facts, and keeps the answers in `<notes>.summaries.json` keyed by path with a content hash. Rules to keep: a file with a note is never sent; key-like lines are replaced with `[removed]` before sending (`redact`); answers for ids that were not asked for are dropped; a summary whose file hash no longer matches is ignored. `prepare()` is what the CLI and the workspace call before writing a pack.",
+  "File: handoff247/mcp.py": "The MCP server (`handoff247 mcp`): newline-delimited JSON-RPC on stdin/stdout, with `sys.stdout` pointed at stderr so stray prints cannot corrupt the protocol. Six tools; only `handoff_write_note` and `handoff_build` write. `handoff_write_note` accepts only skeleton headings (plus `Op:` for real operations), never overwrites filled text without `replace`, rejects key-like text and appends the agent mark. The analysed project is cached per folder and dropped after every write.",
   "File: handoff247/workspace.py": "The folder-of-projects mode: finds projects one or two levels down, builds a pack for each, and writes the index (README.md, index.html, workspace.json, workspace.mmd). It does not write into the projects: notes for a project without its own notes file go to `<out>/notes/`. One failing project is listed as failed and the rest continue. Cross-project arrows come only from paths that resolve into another project's folder.",
   "File: handoff247/connect.py": "Turns per-file facts into edges and connection maps. The key idea: string keys of a dispatch table (`\"list\"`, `\"ontology.search\"`) are followed to every caller (`api('list')`, `cli('list')`, `Call(\"list\")`, `cli list` in docs), and each caller's wrapper function is inspected to tell HTTP, CLI process or in-process apart. A caller group only counts when it uses two or more keys or a dotted key, so ordinary strings like \"git\" are not mistaken for operations.",
   "File: handoff247/labels.py": "Every generated heading and label, in one table, so pages and diagrams use the same words. Extracted comments and notes never pass through it.",
@@ -132,8 +144,8 @@
    "path": "HANDOFF.notes.md",
    "lang": "markdown",
    "category": "docs",
-   "lines": 131,
-   "size": 13547,
+   "lines": 138,
+   "size": 15102,
    "summary": "HandOff247 notes.",
    "summary_source": "first paragraph",
    "symbols": [
@@ -194,7 +206,7 @@
     {
      "name": "Topic: Deploy and release",
      "kind": "h2",
-     "line": 34,
+     "line": 35,
      "doc": "",
      "parent": "",
      "public": true,
@@ -203,7 +215,7 @@
     {
      "name": "Topic: Routine operations",
      "kind": "h2",
-     "line": 37,
+     "line": 38,
      "doc": "",
      "parent": "",
      "public": true,
@@ -212,7 +224,7 @@
     {
      "name": "Topic: Data and backups",
      "kind": "h2",
-     "line": 40,
+     "line": 41,
      "doc": "",
      "parent": "",
      "public": true,
@@ -221,7 +233,7 @@
     {
      "name": "Topic: People and contacts",
      "kind": "h2",
-     "line": 43,
+     "line": 44,
      "doc": "",
      "parent": "",
      "public": true,
@@ -230,7 +242,7 @@
     {
      "name": "Area: .github",
      "kind": "h2",
-     "line": 46,
+     "line": 47,
      "doc": "",
      "parent": "",
      "public": true,
@@ -239,7 +251,7 @@
     {
      "name": "Area: handoff247",
      "kind": "h2",
-     "line": 49,
+     "line": 50,
      "doc": "",
      "parent": "",
      "public": true,
@@ -248,7 +260,7 @@
     {
      "name": "Area: tests",
      "kind": "h2",
-     "line": 52,
+     "line": 53,
      "doc": "",
      "parent": "",
      "public": true,
@@ -257,7 +269,7 @@
     {
      "name": "File: handoff247/__init__.py",
      "kind": "h2",
-     "line": 55,
+     "line": 56,
      "doc": "",
      "parent": "",
      "public": true,
@@ -266,7 +278,7 @@
     {
      "name": "File: handoff247/__main__.py",
      "kind": "h2",
-     "line": 58,
+     "line": 59,
      "doc": "",
      "parent": "",
      "public": true,
@@ -275,7 +287,7 @@
     {
      "name": "File: handoff247/analyzers/__init__.py",
      "kind": "h2",
-     "line": 61,
+     "line": 62,
      "doc": "",
      "parent": "",
      "public": true,
@@ -284,7 +296,7 @@
     {
      "name": "File: handoff247/analyzers/csharp.py",
      "kind": "h2",
-     "line": 64,
+     "line": 65,
      "doc": "",
      "parent": "",
      "public": true,
@@ -293,7 +305,7 @@
     {
      "name": "File: handoff247/analyzers/docs.py",
      "kind": "h2",
-     "line": 67,
+     "line": 68,
      "doc": "",
      "parent": "",
      "public": true,
@@ -302,7 +314,7 @@
     {
      "name": "File: handoff247/analyzers/python.py",
      "kind": "h2",
-     "line": 70,
+     "line": 71,
      "doc": "",
      "parent": "",
      "public": true,
@@ -311,7 +323,7 @@
     {
      "name": "File: handoff247/analyzers/shell.py",
      "kind": "h2",
-     "line": 73,
+     "line": 74,
      "doc": "",
      "parent": "",
      "public": true,
@@ -320,7 +332,7 @@
     {
      "name": "File: handoff247/analyzers/web.py",
      "kind": "h2",
-     "line": 76,
+     "line": 77,
      "doc": "",
      "parent": "",
      "public": true,
@@ -329,7 +341,7 @@
     {
      "name": "File: handoff247/build.py",
      "kind": "h2",
-     "line": 79,
+     "line": 80,
      "doc": "",
      "parent": "",
      "public": true,
@@ -338,7 +350,7 @@
     {
      "name": "File: handoff247/ontology.py",
      "kind": "h2",
-     "line": 82,
+     "line": 83,
      "doc": "",
      "parent": "",
      "public": true,
@@ -347,7 +359,7 @@
     {
      "name": "File: handoff247/wiki.py",
      "kind": "h2",
-     "line": 85,
+     "line": 86,
      "doc": "",
      "parent": "",
      "public": true,
@@ -356,7 +368,7 @@
     {
      "name": "File: handoff247/cli.py",
      "kind": "h2",
-     "line": 88,
+     "line": 89,
      "doc": "",
      "parent": "",
      "public": true,
@@ -365,7 +377,25 @@
     {
      "name": "File: handoff247/leaving.py",
      "kind": "h2",
-     "line": 91,
+     "line": 92,
+     "doc": "",
+     "parent": "",
+     "public": true,
+     "end_line": 0
+    },
+    {
+     "name": "File: handoff247/summarize.py",
+     "kind": "h2",
+     "line": 95,
+     "doc": "",
+     "parent": "",
+     "public": true,
+     "end_line": 0
+    },
+    {
+     "name": "File: handoff247/mcp.py",
+     "kind": "h2",
+     "line": 98,
      "doc": "",
      "parent": "",
      "public": true,
@@ -374,7 +404,7 @@
     {
      "name": "File: handoff247/workspace.py",
      "kind": "h2",
-     "line": 94,
+     "line": 101,
      "doc": "",
      "parent": "",
      "public": true,
@@ -383,7 +413,7 @@
     {
      "name": "File: handoff247/connect.py",
      "kind": "h2",
-     "line": 97,
+     "line": 104,
      "doc": "",
      "parent": "",
      "public": true,
@@ -392,7 +422,7 @@
     {
      "name": "File: handoff247/labels.py",
      "kind": "h2",
-     "line": 100,
+     "line": 107,
      "doc": "",
      "parent": "",
      "public": true,
@@ -401,7 +431,7 @@
     {
      "name": "File: handoff247/inventory.py",
      "kind": "h2",
-     "line": 103,
+     "line": 110,
      "doc": "",
      "parent": "",
      "public": true,
@@ -410,7 +440,7 @@
     {
      "name": "File: handoff247/lexer.py",
      "kind": "h2",
-     "line": 106,
+     "line": 113,
      "doc": "",
      "parent": "",
      "public": true,
@@ -419,7 +449,7 @@
     {
      "name": "File: handoff247/mermaid.py",
      "kind": "h2",
-     "line": 109,
+     "line": 116,
      "doc": "",
      "parent": "",
      "public": true,
@@ -428,7 +458,7 @@
     {
      "name": "File: handoff247/model.py",
      "kind": "h2",
-     "line": 112,
+     "line": 119,
      "doc": "",
      "parent": "",
      "public": true,
@@ -437,7 +467,7 @@
     {
      "name": "File: handoff247/notes.py",
      "kind": "h2",
-     "line": 115,
+     "line": 122,
      "doc": "",
      "parent": "",
      "public": true,
@@ -446,7 +476,7 @@
     {
      "name": "File: handoff247/pipeline.py",
      "kind": "h2",
-     "line": 118,
+     "line": 125,
      "doc": "",
      "parent": "",
      "public": true,
@@ -455,7 +485,7 @@
     {
      "name": "File: handoff247/render_html.py",
      "kind": "h2",
-     "line": 121,
+     "line": 128,
      "doc": "",
      "parent": "",
      "public": true,
@@ -464,7 +494,7 @@
     {
      "name": "File: handoff247/render_md.py",
      "kind": "h2",
-     "line": 124,
+     "line": 131,
      "doc": "",
      "parent": "",
      "public": true,
@@ -473,7 +503,7 @@
     {
      "name": "File: handoff247/translate.py",
      "kind": "h2",
-     "line": 127,
+     "line": 134,
      "doc": "",
      "parent": "",
      "public": true,
@@ -482,7 +512,7 @@
     {
      "name": "File: tests/test_handoff.py",
      "kind": "h2",
-     "line": 130,
+     "line": 137,
      "doc": "",
      "parent": "",
      "public": true,
@@ -512,8 +542,8 @@
    "path": "README.md",
    "lang": "markdown",
    "category": "docs",
-   "lines": 325,
-   "size": 20118,
+   "lines": 400,
+   "size": 24434,
    "summary": "Hand Off 24-7 is a good-bye project for passing your existing projects to the next person.",
    "summary_source": "first paragraph",
    "symbols": [
@@ -529,7 +559,7 @@
     {
      "name": "See it",
      "kind": "h2",
-     "line": 33,
+     "line": 36,
      "doc": "",
      "parent": "",
      "public": true,
@@ -538,7 +568,7 @@
     {
      "name": "Quick start",
      "kind": "h2",
-     "line": 58,
+     "line": 61,
      "doc": "",
      "parent": "",
      "public": true,
@@ -547,7 +577,7 @@
     {
      "name": "A folder full of projects",
      "kind": "h2",
-     "line": 88,
+     "line": 91,
      "doc": "",
      "parent": "",
      "public": true,
@@ -556,7 +586,7 @@
     {
      "name": "What is in a pack",
      "kind": "h2",
-     "line": 110,
+     "line": 113,
      "doc": "",
      "parent": "",
      "public": true,
@@ -565,7 +595,25 @@
     {
      "name": "Ontology, graph and wiki",
      "kind": "h2",
-     "line": 137,
+     "line": 140,
+     "doc": "",
+     "parent": "",
+     "public": true,
+     "end_line": 0
+    },
+    {
+     "name": "Summaries written by Codex (optional)",
+     "kind": "h2",
+     "line": 171,
+     "doc": "",
+     "parent": "",
+     "public": true,
+     "end_line": 0
+    },
+    {
+     "name": "MCP server: let an AI agent finish the handoff",
+     "kind": "h2",
+     "line": 194,
      "doc": "",
      "parent": "",
      "public": true,
@@ -574,7 +622,7 @@
     {
      "name": "How \"how the tools connect\" is found",
      "kind": "h2",
-     "line": 168,
+     "line": 235,
      "doc": "",
      "parent": "",
      "public": true,
@@ -583,7 +631,7 @@
     {
      "name": "The notes file",
      "kind": "h2",
-     "line": 187,
+     "line": 254,
      "doc": "",
      "parent": "",
      "public": true,
@@ -592,7 +640,7 @@
     {
      "name": "What the handover page checks",
      "kind": "h2",
-     "line": 213,
+     "line": 280,
      "doc": "",
      "parent": "",
      "public": true,
@@ -601,7 +649,7 @@
     {
      "name": "Projects commented in another language",
      "kind": "h2",
-     "line": 232,
+     "line": 299,
      "doc": "",
      "parent": "",
      "public": true,
@@ -610,7 +658,7 @@
     {
      "name": "Keep it current (the 24/7 part)",
      "kind": "h2",
-     "line": 254,
+     "line": 321,
      "doc": "",
      "parent": "",
      "public": true,
@@ -619,7 +667,7 @@
     {
      "name": "Command reference",
      "kind": "h2",
-     "line": 284,
+     "line": 351,
      "doc": "",
      "parent": "",
      "public": true,
@@ -628,7 +676,7 @@
     {
      "name": "Limits",
      "kind": "h2",
-     "line": 301,
+     "line": 374,
      "doc": "",
      "parent": "",
      "public": true,
@@ -637,7 +685,7 @@
     {
      "name": "Development",
      "kind": "h2",
-     "line": 313,
+     "line": 388,
      "doc": "",
      "parent": "",
      "public": true,
@@ -646,7 +694,7 @@
     {
      "name": "License",
      "kind": "h2",
-     "line": 323,
+     "line": 398,
      "doc": "",
      "parent": "",
      "public": true,
@@ -656,39 +704,43 @@
    "imports": [
     [
      "examples/playbookos/README.md",
-     37
+     40
     ],
     [
      "docs/handoff/README.md",
-     38
+     41
     ],
     [
      "examples/playbookos/HANDOVER.md",
-     53
-    ],
-    [
-     "examples/playbookos.notes.md",
      56
     ],
     [
+     "examples/playbookos.notes.md",
+     59
+    ],
+    [
      "examples/playbookos/ontology.json",
-     142
+     145
     ],
     [
      "examples/playbookos/wiki/index.md",
-     159
+     162
     ],
     [
      "examples/playbookos/llms.txt",
-     159
+     162
+    ],
+    [
+     "examples/playbookos.summaries.json",
+     192
     ],
     [
      "docs/handoff/README.md",
-     321
+     396
     ],
     [
      "LICENSE",
-     325
+     400
     ]
    ],
    "tags": [],
@@ -714,7 +766,7 @@
    "lang": "python",
    "category": "code",
    "lines": 5,
-   "size": 176,
+   "size": 171,
    "summary": "HandOff247 — turn a project folder into a handoff pack for the next person.",
    "summary_source": "module docstring",
    "symbols": [],
@@ -1347,8 +1399,8 @@
    "path": "handoff247/cli.py",
    "lang": "python",
    "category": "code",
-   "lines": 196,
-   "size": 11115,
+   "lines": 219,
+   "size": 12505,
    "summary": "Command line: build a pack, create/extend the notes file, check documentation coverage.",
    "summary_source": "module docstring",
    "symbols": [
@@ -1371,31 +1423,40 @@
      "end_line": 24
     },
     {
-     "name": "_print_readiness",
+     "name": "_summary_args",
      "kind": "function",
      "line": 30,
      "doc": "",
      "parent": "",
      "public": false,
-     "end_line": 35
+     "end_line": 37
+    },
+    {
+     "name": "_print_readiness",
+     "kind": "function",
+     "line": 43,
+     "doc": "",
+     "parent": "",
+     "public": false,
+     "end_line": 48
     },
     {
      "name": "_go",
      "kind": "function",
-     "line": 38,
+     "line": 51,
      "doc": "One step for a person about to leave: notes file, pack, and what is still open.",
      "parent": "",
      "public": false,
-     "end_line": 89
+     "end_line": 103
     },
     {
      "name": "main",
      "kind": "function",
-     "line": 92,
+     "line": 106,
      "doc": "",
      "parent": "",
      "public": true,
-     "end_line": 196
+     "end_line": 219
     }
    ],
    "imports": [
@@ -1432,6 +1493,10 @@
      9
     ],
     [
+     ".summarize",
+     9
+    ],
+    [
      ".translate",
      9
     ],
@@ -1453,11 +1518,19 @@
     ],
     [
      ".render_md",
-     182
+     205
     ],
     [
      "webbrowser",
-     87
+     101
+    ],
+    [
+     ".",
+     150
+    ],
+    [
+     ".mcp",
+     150
     ]
    ],
    "tags": [],
@@ -1580,8 +1653,8 @@
    "path": "handoff247/inventory.py",
    "lang": "python",
    "category": "code",
-   "lines": 252,
-   "size": 11005,
+   "lines": 254,
+   "size": 11153,
    "summary": "Find the project's files and classify them.",
    "summary_source": "module docstring",
    "symbols": [
@@ -1637,34 +1710,34 @@
      "doc": "",
      "parent": "",
      "public": false,
-     "end_line": 159
+     "end_line": 161
     },
     {
      "name": "_git_summary",
      "kind": "function",
-     "line": 162,
+     "line": 164,
      "doc": "",
      "parent": "",
      "public": false,
-     "end_line": 182
+     "end_line": 184
     },
     {
      "name": "classify",
      "kind": "function",
-     "line": 185,
+     "line": 187,
      "doc": "",
      "parent": "",
      "public": true,
-     "end_line": 218
+     "end_line": 220
     },
     {
      "name": "load",
      "kind": "function",
-     "line": 221,
+     "line": 223,
      "doc": "",
      "parent": "",
      "public": true,
-     "end_line": 252
+     "end_line": 254
     }
    ],
    "imports": [
@@ -1701,19 +1774,19 @@
    "path": "handoff247/labels.py",
    "lang": "python",
    "category": "code",
-   "lines": 254,
-   "size": 14007,
+   "lines": 255,
+   "size": 14104,
    "summary": "Every generated heading and label in one place, so the wording stays the same across pages and diagrams.",
    "summary_source": "module docstring",
    "symbols": [
     {
      "name": "t",
      "kind": "function",
-     "line": 252,
+     "line": 253,
      "doc": "",
      "parent": "",
      "public": true,
-     "end_line": 254
+     "end_line": 255
     }
    ],
    "imports": [
@@ -1994,6 +2067,238 @@
     [
      "re",
      287
+    ]
+   ],
+   "tags": [],
+   "skipped": "",
+   "translated": []
+  },
+  {
+   "path": "handoff247/mcp.py",
+   "lang": "python",
+   "category": "code",
+   "lines": 311,
+   "size": 17776,
+   "summary": "MCP server (stdio, JSON-RPC 2.0, one message per line) so an AI agent can work on a handoff: build the pack, see what is still undocumented, read the ontology and the source, and write notes under the right heading.",
+   "summary_source": "module docstring",
+   "symbols": [
+    {
+     "name": "_schema",
+     "kind": "function",
+     "line": 39,
+     "doc": "",
+     "parent": "",
+     "public": false,
+     "end_line": 40
+    },
+    {
+     "name": "ToolError",
+     "kind": "class",
+     "line": 82,
+     "doc": "",
+     "parent": "",
+     "public": true,
+     "end_line": 83
+    },
+    {
+     "name": "Server",
+     "kind": "class",
+     "line": 86,
+     "doc": "",
+     "parent": "",
+     "public": true,
+     "end_line": 278
+    },
+    {
+     "name": "root",
+     "kind": "method",
+     "line": 92,
+     "doc": "",
+     "parent": "Server",
+     "public": true,
+     "end_line": 99
+    },
+    {
+     "name": "model",
+     "kind": "method",
+     "line": 101,
+     "doc": "",
+     "parent": "Server",
+     "public": true,
+     "end_line": 111
+    },
+    {
+     "name": "forget",
+     "kind": "method",
+     "line": 113,
+     "doc": "",
+     "parent": "Server",
+     "public": true,
+     "end_line": 114
+    },
+    {
+     "name": "handoff_build",
+     "kind": "method",
+     "line": 117,
+     "doc": "",
+     "parent": "Server",
+     "public": true,
+     "end_line": 125
+    },
+    {
+     "name": "handoff_todo",
+     "kind": "method",
+     "line": 127,
+     "doc": "",
+     "parent": "Server",
+     "public": true,
+     "end_line": 149
+    },
+    {
+     "name": "handoff_search",
+     "kind": "method",
+     "line": 151,
+     "doc": "",
+     "parent": "Server",
+     "public": true,
+     "end_line": 162
+    },
+    {
+     "name": "handoff_entity",
+     "kind": "method",
+     "line": 164,
+     "doc": "",
+     "parent": "Server",
+     "public": true,
+     "end_line": 186
+    },
+    {
+     "name": "handoff_source",
+     "kind": "method",
+     "line": 188,
+     "doc": "",
+     "parent": "Server",
+     "public": true,
+     "end_line": 203
+    },
+    {
+     "name": "handoff_write_note",
+     "kind": "method",
+     "line": 205,
+     "doc": "",
+     "parent": "Server",
+     "public": true,
+     "end_line": 242
+    },
+    {
+     "name": "handle",
+     "kind": "method",
+     "line": 245,
+     "doc": "",
+     "parent": "Server",
+     "public": true,
+     "end_line": 278
+    },
+    {
+     "name": "_note_heading",
+     "kind": "function",
+     "line": 281,
+     "doc": "",
+     "parent": "",
+     "public": false,
+     "end_line": 283
+    },
+    {
+     "name": "_error",
+     "kind": "function",
+     "line": 286,
+     "doc": "",
+     "parent": "",
+     "public": false,
+     "end_line": 287
+    },
+    {
+     "name": "serve",
+     "kind": "function",
+     "line": 290,
+     "doc": "",
+     "parent": "",
+     "public": true,
+     "end_line": 311
+    }
+   ],
+   "imports": [
+    [
+     "__future__",
+     12
+    ],
+    [
+     "contextlib",
+     14
+    ],
+    [
+     "datetime",
+     15
+    ],
+    [
+     "io",
+     16
+    ],
+    [
+     "json",
+     17
+    ],
+    [
+     "re",
+     18
+    ],
+    [
+     "sys",
+     19
+    ],
+    [
+     "pathlib",
+     20
+    ],
+    [
+     ".",
+     22
+    ],
+    [
+     ".__version__",
+     22
+    ],
+    [
+     ".leaving",
+     22
+    ],
+    [
+     ".ontology",
+     22
+    ],
+    [
+     ".summarize",
+     22
+    ],
+    [
+     ".translate",
+     22
+    ],
+    [
+     ".notes",
+     23
+    ],
+    [
+     ".pipeline",
+     24
+    ],
+    [
+     ".cli",
+     119
+    ],
+    [
+     ".render_md",
+     131
     ]
    ],
    "tags": [],
@@ -2492,8 +2797,8 @@
    "path": "handoff247/ontology.py",
    "lang": "python",
    "category": "code",
-   "lines": 278,
-   "size": 16589,
+   "lines": 283,
+   "size": 16904,
    "summary": "The project as an ontology: typed entities and typed relations between them.",
    "summary_source": "module docstring",
    "symbols": [
@@ -2540,7 +2845,7 @@
      "doc": "",
      "parent": "",
      "public": true,
-     "end_line": 278
+     "end_line": 283
     }
    ],
    "imports": [
@@ -2630,19 +2935,19 @@
    "path": "handoff247/render_html.py",
    "lang": "python",
    "category": "code",
-   "lines": 527,
-   "size": 36829,
+   "lines": 537,
+   "size": 37731,
    "summary": "Single-file interactive viewer (index.html).",
    "summary_source": "module docstring",
    "symbols": [
     {
      "name": "render",
      "kind": "function",
-     "line": 491,
+     "line": 498,
      "doc": "",
      "parent": "",
      "public": true,
-     "end_line": 527
+     "end_line": 537
     }
    ],
    "imports": [
@@ -2675,8 +2980,8 @@
    "path": "handoff247/render_md.py",
    "lang": "python",
    "category": "code",
-   "lines": 651,
-   "size": 35605,
+   "lines": 654,
+   "size": 35850,
    "summary": "Markdown pages of the handoff pack.",
    "summary_source": "module docstring",
    "symbols": [
@@ -2741,7 +3046,7 @@
      "doc": "",
      "parent": "",
      "public": true,
-     "end_line": 620
+     "end_line": 623
     },
     {
      "name": "header",
@@ -2858,16 +3163,16 @@
      "doc": "",
      "parent": "Pages",
      "public": true,
-     "end_line": 620
+     "end_line": 623
     },
     {
      "name": "make_linker",
      "kind": "function",
-     "line": 623,
+     "line": 626,
      "doc": "",
      "parent": "",
      "public": true,
-     "end_line": 651
+     "end_line": 654
     }
    ],
    "imports": [
@@ -2917,11 +3222,240 @@
     ],
     [
      "os",
-     624
+     627
     ],
     [
      "pathlib",
-     625
+     628
+    ]
+   ],
+   "tags": [],
+   "skipped": "",
+   "translated": []
+  },
+  {
+   "path": "handoff247/summarize.py",
+   "lang": "python",
+   "category": "code",
+   "lines": 325,
+   "size": 14612,
+   "summary": "Optional: short descriptions of files, written by a language model through a command-line tool the user is already signed in to (today: the Codex CLI).",
+   "summary_source": "module docstring",
+   "symbols": [
+    {
+     "name": "EngineError",
+     "kind": "class",
+     "line": 57,
+     "doc": "",
+     "parent": "",
+     "public": true,
+     "end_line": 58
+    },
+    {
+     "name": "cache_path",
+     "kind": "function",
+     "line": 62,
+     "doc": "",
+     "parent": "",
+     "public": true,
+     "end_line": 65
+    },
+    {
+     "name": "digest",
+     "kind": "function",
+     "line": 68,
+     "doc": "",
+     "parent": "",
+     "public": true,
+     "end_line": 69
+    },
+    {
+     "name": "load_cache",
+     "kind": "function",
+     "line": 72,
+     "doc": "",
+     "parent": "",
+     "public": true,
+     "end_line": 77
+    },
+    {
+     "name": "save_cache",
+     "kind": "function",
+     "line": 80,
+     "doc": "",
+     "parent": "",
+     "public": true,
+     "end_line": 88
+    },
+    {
+     "name": "fresh",
+     "kind": "function",
+     "line": 91,
+     "doc": "Cache entries whose file still has the content they were written for.",
+     "parent": "",
+     "public": true,
+     "end_line": 98
+    },
+    {
+     "name": "attach",
+     "kind": "function",
+     "line": 101,
+     "doc": "Put the fresh summaries into ``project.links['model_summaries']``; returns how many.",
+     "parent": "",
+     "public": true,
+     "end_line": 105
+    },
+    {
+     "name": "redact",
+     "kind": "function",
+     "line": 109,
+     "doc": "",
+     "parent": "",
+     "public": true,
+     "end_line": 117
+    },
+    {
+     "name": "_facts",
+     "kind": "function",
+     "line": 120,
+     "doc": "",
+     "parent": "",
+     "public": false,
+     "end_line": 149
+    },
+    {
+     "name": "_block",
+     "kind": "function",
+     "line": 152,
+     "doc": "",
+     "parent": "",
+     "public": false,
+     "end_line": 162
+    },
+    {
+     "name": "targets",
+     "kind": "function",
+     "line": 165,
+     "doc": "",
+     "parent": "",
+     "public": true,
+     "end_line": 172
+    },
+    {
+     "name": "batches",
+     "kind": "function",
+     "line": 175,
+     "doc": "",
+     "parent": "",
+     "public": true,
+     "end_line": 186
+    },
+    {
+     "name": "parse_answer",
+     "kind": "function",
+     "line": 189,
+     "doc": "id -> summary, keeping only ids that were asked for and non-empty text.",
+     "parent": "",
+     "public": true,
+     "end_line": 204
+    },
+    {
+     "name": "codex_status",
+     "kind": "function",
+     "line": 208,
+     "doc": "",
+     "parent": "",
+     "public": true,
+     "end_line": 221
+    },
+    {
+     "name": "codex_call",
+     "kind": "function",
+     "line": 224,
+     "doc": "",
+     "parent": "",
+     "public": true,
+     "end_line": 250
+    },
+    {
+     "name": "prepare",
+     "kind": "function",
+     "line": 254,
+     "doc": "What every command does before writing a pack: load the cached summaries and, when ``args.summarize`` is set, write the missing ones first.",
+     "parent": "",
+     "public": true,
+     "end_line": 273
+    },
+    {
+     "name": "run",
+     "kind": "function",
+     "line": 276,
+     "doc": "Summarize every code file that has no note and no fresh summary yet.",
+     "parent": "",
+     "public": true,
+     "end_line": 325
+    }
+   ],
+   "imports": [
+    [
+     "__future__",
+     14
+    ],
+    [
+     "datetime",
+     16
+    ],
+    [
+     "hashlib",
+     17
+    ],
+    [
+     "json",
+     18
+    ],
+    [
+     "re",
+     19
+    ],
+    [
+     "shutil",
+     20
+    ],
+    [
+     "subprocess",
+     21
+    ],
+    [
+     "tempfile",
+     22
+    ],
+    [
+     "threading",
+     23
+    ],
+    [
+     "concurrent.futures",
+     24
+    ],
+    [
+     "pathlib",
+     25
+    ],
+    [
+     ".",
+     27
+    ],
+    [
+     ".__version__",
+     27
+    ],
+    [
+     ".leaving",
+     27
+    ],
+    [
+     ".model",
+     28
     ]
    ],
    "tags": [],
@@ -3027,8 +3561,8 @@
    "path": "handoff247/wiki.py",
    "lang": "python",
    "category": "code",
-   "lines": 372,
-   "size": 20810,
+   "lines": 391,
+   "size": 21864,
    "summary": "The LLM wiki: the ontology written out as small, interlinked Markdown pages that an AI assistant (or a person) can read one at a time.",
    "summary_source": "module docstring",
    "symbols": [
@@ -3075,7 +3609,7 @@
      "doc": "",
      "parent": "",
      "public": true,
-     "end_line": 372
+     "end_line": 391
     },
     {
      "name": "href",
@@ -3138,79 +3672,88 @@
      "doc": "Summary, attributes, the owner's note and the relations of one entity.",
      "parent": "Wiki",
      "public": true,
-     "end_line": 175
+     "end_line": 179
     },
     {
      "name": "entity_page",
      "kind": "method",
-     "line": 178,
+     "line": 182,
      "doc": "",
      "parent": "Wiki",
      "public": true,
-     "end_line": 196
+     "end_line": 200
     },
     {
      "name": "list_page",
      "kind": "method",
-     "line": 198,
+     "line": 202,
      "doc": "",
      "parent": "Wiki",
      "public": true,
-     "end_line": 206
+     "end_line": 210
     },
     {
      "name": "overview",
      "kind": "method",
-     "line": 208,
+     "line": 212,
      "doc": "",
      "parent": "Wiki",
      "public": true,
-     "end_line": 244
+     "end_line": 248
     },
     {
      "name": "notes_page",
      "kind": "method",
-     "line": 246,
+     "line": 250,
      "doc": "",
      "parent": "Wiki",
      "public": true,
-     "end_line": 253
+     "end_line": 257
     },
     {
      "name": "index",
      "kind": "method",
-     "line": 255,
+     "line": 259,
      "doc": "",
      "parent": "Wiki",
      "public": true,
-     "end_line": 296
+     "end_line": 300
+    },
+    {
+     "name": "line_summary",
+     "kind": "method",
+     "line": 303,
+     "doc": "",
+     "parent": "Wiki",
+     "public": true,
+     "end_line": 310
     },
     {
      "name": "agents",
      "kind": "method",
-     "line": 298,
+     "line": 312,
      "doc": "",
      "parent": "Wiki",
      "public": true,
-     "end_line": 327
+     "end_line": 346
     },
     {
      "name": "llms_txt",
      "kind": "method",
-     "line": 329,
+     "line": 348,
      "doc": "",
      "parent": "Wiki",
      "public": true,
-     "end_line": 352
+     "end_line": 371
     },
     {
      "name": "render",
      "kind": "method",
-     "line": 354,
+     "line": 373,
      "doc": "Pack-relative path → text for every wiki file, llms.txt and llms-full.txt included.",
      "parent": "Wiki",
      "public": true,
-     "end_line": 372
+     "end_line": 391
     }
    ],
    "imports": [
@@ -3267,145 +3810,145 @@
    "path": "handoff247/workspace.py",
    "lang": "python",
    "category": "code",
-   "lines": 345,
-   "size": 17252,
+   "lines": 350,
+   "size": 17618,
    "summary": "A folder that holds several projects: one pack per project plus an index of all of them.",
    "summary_source": "module docstring",
    "symbols": [
     {
      "name": "project_reason",
      "kind": "function",
-     "line": 32,
+     "line": 33,
      "doc": "Why a folder counts as a project ('' when it does not).",
      "parent": "",
      "public": true,
-     "end_line": 49
+     "end_line": 50
     },
     {
      "name": "_children",
      "kind": "function",
-     "line": 52,
+     "line": 53,
      "doc": "",
      "parent": "",
      "public": false,
-     "end_line": 63
+     "end_line": 64
     },
     {
      "name": "find_projects",
      "kind": "function",
-     "line": 66,
+     "line": 67,
      "doc": "Projects one or two levels below ``root`` and the folders where none was recognised.",
      "parent": "",
      "public": true,
-     "end_line": 81
+     "end_line": 82
     },
     {
      "name": "is_workspace",
      "kind": "function",
-     "line": 84,
+     "line": 85,
      "doc": "True when ``root`` holds projects rather than being one: it has no manifest of its own or at least two sub-folders that are their own Git repositories.",
      "parent": "",
      "public": true,
-     "end_line": 91
+     "end_line": 92
     },
     {
      "name": "slug",
      "kind": "function",
-     "line": 94,
+     "line": 95,
      "doc": "",
      "parent": "",
      "public": true,
-     "end_line": 95
+     "end_line": 96
     },
     {
      "name": "_norm",
      "kind": "function",
-     "line": 98,
+     "line": 99,
      "doc": "",
      "parent": "",
      "public": false,
-     "end_line": 99
+     "end_line": 100
     },
     {
      "name": "cross_refs",
      "kind": "function",
-     "line": 102,
+     "line": 103,
      "doc": "Paths in this project's files that point into another project's folder.",
      "parent": "",
      "public": true,
-     "end_line": 141
+     "end_line": 142
     },
     {
      "name": "_describe",
      "kind": "function",
-     "line": 144,
+     "line": 145,
      "doc": "",
      "parent": "",
      "public": false,
-     "end_line": 150
+     "end_line": 151
     },
     {
      "name": "_git_cell",
      "kind": "function",
-     "line": 153,
+     "line": 154,
      "doc": "",
      "parent": "",
      "public": false,
-     "end_line": 166
+     "end_line": 167
     },
     {
      "name": "attention",
      "kind": "function",
-     "line": 169,
+     "line": 170,
      "doc": "What must not be lost when the computer goes away, most serious first.",
      "parent": "",
      "public": true,
-     "end_line": 188
+     "end_line": 189
     },
     {
      "name": "summarize",
      "kind": "function",
-     "line": 191,
+     "line": 192,
      "doc": "",
      "parent": "",
      "public": true,
-     "end_line": 207
+     "end_line": 208
     },
     {
      "name": "diagram",
      "kind": "function",
-     "line": 210,
+     "line": 211,
      "doc": "",
      "parent": "",
      "public": true,
-     "end_line": 223
+     "end_line": 224
     },
     {
      "name": "index_md",
      "kind": "function",
-     "line": 226,
+     "line": 227,
      "doc": "",
      "parent": "",
      "public": true,
-     "end_line": 269
+     "end_line": 270
     },
     {
      "name": "index_html",
      "kind": "function",
-     "line": 290,
+     "line": 291,
      "doc": "",
      "parent": "",
      "public": true,
-     "end_line": 301
+     "end_line": 302
     },
     {
      "name": "build_workspace",
      "kind": "function",
-     "line": 304,
+     "line": 305,
      "doc": "",
      "parent": "",
      "public": true,
-     "end_line": 345
+     "end_line": 350
     }
    ],
    "imports": [
@@ -3450,32 +3993,40 @@
      16
     ],
     [
-     ".build",
+     ".",
      17
     ],
     [
-     ".inventory",
+     ".summarize",
+     17
+    ],
+    [
+     ".build",
      18
     ],
     [
-     ".mermaid",
+     ".inventory",
      19
     ],
     [
-     ".notes",
+     ".mermaid",
      20
     ],
     [
-     ".pipeline",
+     ".notes",
      21
     ],
     [
-     ".render_html",
+     ".pipeline",
      22
     ],
     [
-     ".render_md",
+     ".render_html",
      23
+    ],
+    [
+     ".render_md",
+     24
     ]
    ],
    "tags": [],
@@ -3487,7 +4038,7 @@
    "lang": "toml",
    "category": "config",
    "lines": 27,
-   "size": 891,
+   "size": 864,
    "summary": "Turn a project folder into a handoff pack: diagrams, structure, comments, how the tools connect, an ontology graph and a wiki for AI assistants.",
    "summary_source": "pyproject",
    "symbols": [
@@ -3510,8 +4061,8 @@
    "path": "tests/test_handoff.py",
    "lang": "python",
    "category": "test",
-   "lines": 447,
-   "size": 26742,
+   "lines": 542,
+   "size": 33883,
    "summary": "End-to-end and unit tests.",
    "summary_source": "module docstring",
    "symbols": [
@@ -3675,7 +4226,7 @@
      "doc": "",
      "parent": "",
      "public": true,
-     "end_line": 443
+     "end_line": 538
     },
     {
      "name": "setUp",
@@ -3777,22 +4328,40 @@
      "end_line": 401
     },
     {
-     "name": "test_go_folder_of_projects",
+     "name": "test_model_summaries",
      "kind": "method",
      "line": 403,
      "doc": "",
      "parent": "PackTests",
      "public": true,
-     "end_line": 435
+     "end_line": 453
+    },
+    {
+     "name": "test_mcp_server",
+     "kind": "method",
+     "line": 455,
+     "doc": "",
+     "parent": "PackTests",
+     "public": true,
+     "end_line": 496
+    },
+    {
+     "name": "test_go_folder_of_projects",
+     "kind": "method",
+     "line": 498,
+     "doc": "",
+     "parent": "PackTests",
+     "public": true,
+     "end_line": 530
     },
     {
      "name": "test_foreign_detection",
      "kind": "method",
-     "line": 437,
+     "line": 532,
      "doc": "",
      "parent": "PackTests",
      "public": true,
-     "end_line": 443
+     "end_line": 538
     }
    ],
    "imports": [
@@ -3853,8 +4422,16 @@
      289
     ],
     [
+     "handoff247",
+     404
+    ],
+    [
+     "subprocess",
+     456
+    ],
+    [
      "handoff247.translate",
-     438
+     533
     ]
    ],
    "tags": [
@@ -3877,7 +4454,7 @@
    "src": "README.md",
    "dst": "LICENSE",
    "kind": "documents",
-   "line": 325,
+   "line": 400,
    "count": 1,
    "label": ""
   },
@@ -4150,7 +4727,7 @@
    "dst": "handoff247/__init__.py",
    "kind": "imports",
    "line": 9,
-   "count": 1,
+   "count": 2,
    "label": ""
   },
   {
@@ -4166,6 +4743,14 @@
    "dst": "handoff247/leaving.py",
    "kind": "imports",
    "line": 9,
+   "count": 1,
+   "label": ""
+  },
+  {
+   "src": "handoff247/cli.py",
+   "dst": "handoff247/mcp.py",
+   "kind": "imports",
+   "line": 150,
    "count": 1,
    "label": ""
   },
@@ -4189,7 +4774,15 @@
    "src": "handoff247/cli.py",
    "dst": "handoff247/render_md.py",
    "kind": "imports",
-   "line": 182,
+   "line": 205,
+   "count": 1,
+   "label": ""
+  },
+  {
+   "src": "handoff247/cli.py",
+   "dst": "handoff247/summarize.py",
+   "kind": "imports",
+   "line": 9,
    "count": 1,
    "label": ""
   },
@@ -4262,6 +4855,78 @@
    "dst": "pyproject.toml",
    "kind": "refers",
    "line": 239,
+   "count": 1,
+   "label": ""
+  },
+  {
+   "src": "handoff247/mcp.py",
+   "dst": "handoff247/__init__.py",
+   "kind": "imports",
+   "line": 22,
+   "count": 1,
+   "label": ""
+  },
+  {
+   "src": "handoff247/mcp.py",
+   "dst": "handoff247/cli.py",
+   "kind": "imports",
+   "line": 119,
+   "count": 1,
+   "label": ""
+  },
+  {
+   "src": "handoff247/mcp.py",
+   "dst": "handoff247/leaving.py",
+   "kind": "imports",
+   "line": 22,
+   "count": 1,
+   "label": ""
+  },
+  {
+   "src": "handoff247/mcp.py",
+   "dst": "handoff247/notes.py",
+   "kind": "imports",
+   "line": 23,
+   "count": 1,
+   "label": ""
+  },
+  {
+   "src": "handoff247/mcp.py",
+   "dst": "handoff247/ontology.py",
+   "kind": "imports",
+   "line": 22,
+   "count": 1,
+   "label": ""
+  },
+  {
+   "src": "handoff247/mcp.py",
+   "dst": "handoff247/pipeline.py",
+   "kind": "imports",
+   "line": 24,
+   "count": 1,
+   "label": ""
+  },
+  {
+   "src": "handoff247/mcp.py",
+   "dst": "handoff247/render_md.py",
+   "kind": "imports",
+   "line": 131,
+   "count": 1,
+   "label": ""
+  },
+  {
+   "src": "handoff247/mcp.py",
+   "dst": "handoff247/summarize.py",
+   "kind": "imports",
+   "line": 22,
+   "count": 1,
+   "label": ""
+  },
+  {
+   "src": "handoff247/mcp.py",
+   "dst": "handoff247/translate.py",
+   "kind": "imports",
+   "line": 22,
    "count": 1,
    "label": ""
   },
@@ -4490,6 +5155,30 @@
    "label": ""
   },
   {
+   "src": "handoff247/summarize.py",
+   "dst": "handoff247/__init__.py",
+   "kind": "imports",
+   "line": 27,
+   "count": 1,
+   "label": ""
+  },
+  {
+   "src": "handoff247/summarize.py",
+   "dst": "handoff247/leaving.py",
+   "kind": "imports",
+   "line": 27,
+   "count": 1,
+   "label": ""
+  },
+  {
+   "src": "handoff247/summarize.py",
+   "dst": "handoff247/model.py",
+   "kind": "imports",
+   "line": 28,
+   "count": 1,
+   "label": ""
+  },
+  {
    "src": "handoff247/translate.py",
    "dst": "handoff247/model.py",
    "kind": "imports",
@@ -4533,7 +5222,7 @@
    "src": "handoff247/wiki.py",
    "dst": "README.md",
    "kind": "refers",
-   "line": 221,
+   "line": 225,
    "count": 1,
    "label": ""
   },
@@ -4542,14 +5231,14 @@
    "dst": "handoff247/__init__.py",
    "kind": "imports",
    "line": 16,
-   "count": 1,
+   "count": 2,
    "label": ""
   },
   {
    "src": "handoff247/workspace.py",
    "dst": "handoff247/build.py",
    "kind": "imports",
-   "line": 17,
+   "line": 18,
    "count": 1,
    "label": ""
   },
@@ -4557,7 +5246,7 @@
    "src": "handoff247/workspace.py",
    "dst": "handoff247/inventory.py",
    "kind": "imports",
-   "line": 18,
+   "line": 19,
    "count": 1,
    "label": ""
   },
@@ -4573,7 +5262,7 @@
    "src": "handoff247/workspace.py",
    "dst": "handoff247/mermaid.py",
    "kind": "imports",
-   "line": 19,
+   "line": 20,
    "count": 1,
    "label": ""
   },
@@ -4581,7 +5270,7 @@
    "src": "handoff247/workspace.py",
    "dst": "handoff247/notes.py",
    "kind": "imports",
-   "line": 20,
+   "line": 21,
    "count": 1,
    "label": ""
   },
@@ -4589,7 +5278,7 @@
    "src": "handoff247/workspace.py",
    "dst": "handoff247/pipeline.py",
    "kind": "imports",
-   "line": 21,
+   "line": 22,
    "count": 1,
    "label": ""
   },
@@ -4597,7 +5286,7 @@
    "src": "handoff247/workspace.py",
    "dst": "handoff247/render_html.py",
    "kind": "imports",
-   "line": 22,
+   "line": 23,
    "count": 1,
    "label": ""
   },
@@ -4605,7 +5294,15 @@
    "src": "handoff247/workspace.py",
    "dst": "handoff247/render_md.py",
    "kind": "imports",
-   "line": 23,
+   "line": 24,
+   "count": 1,
+   "label": ""
+  },
+  {
+   "src": "handoff247/workspace.py",
+   "dst": "handoff247/summarize.py",
+   "kind": "imports",
+   "line": 17,
    "count": 1,
    "label": ""
   },
@@ -4613,7 +5310,7 @@
    "src": "handoff247/workspace.py",
    "dst": "README.md",
    "kind": "refers",
-   "line": 340,
+   "line": 345,
    "count": 3,
    "label": ""
   },
@@ -4621,7 +5318,7 @@
    "src": "handoff247/workspace.py",
    "dst": "pyproject.toml",
    "kind": "refers",
-   "line": 25,
+   "line": 26,
    "count": 1,
    "label": ""
   },
@@ -4630,7 +5327,7 @@
    "dst": "handoff247/__init__.py",
    "kind": "imports",
    "line": 15,
-   "count": 1,
+   "count": 2,
    "label": ""
   },
   {
@@ -4669,7 +5366,7 @@
    "src": "tests/test_handoff.py",
    "dst": "handoff247/translate.py",
    "kind": "imports",
-   "line": 438,
+   "line": 533,
    "count": 1,
    "label": ""
   },
@@ -4678,7 +5375,7 @@
    "dst": "HANDOFF.notes.md",
    "kind": "refers",
    "line": 153,
-   "count": 7,
+   "count": 9,
    "label": ""
   },
   {
@@ -4708,7 +5405,7 @@
    },
    {
     "file": "tests/test_handoff.py",
-    "line": 446,
+    "line": 541,
     "style": "__main__ guard"
    }
   ],
@@ -4973,6 +5670,64 @@
       "routes": []
      }
     ]
+   },
+   {
+    "id": "handoff247/mcp.py:250",
+    "file": "handoff247/mcp.py",
+    "line": 250,
+    "cls": "",
+    "method": "",
+    "selector": "method",
+    "ops": [
+     {
+      "key": "initialize",
+      "line": 250,
+      "handler_type": "",
+      "handler_method": "",
+      "handler_file": "",
+      "expr": "",
+      "used_by": [],
+      "documented_in": [],
+      "mcp_tools": [],
+      "routes": []
+     },
+     {
+      "key": "ping",
+      "line": 256,
+      "handler_type": "",
+      "handler_method": "",
+      "handler_file": "",
+      "expr": "",
+      "used_by": [],
+      "documented_in": [],
+      "mcp_tools": [],
+      "routes": []
+     },
+     {
+      "key": "tools/list",
+      "line": 258,
+      "handler_type": "",
+      "handler_method": "",
+      "handler_file": "",
+      "expr": "",
+      "used_by": [],
+      "documented_in": [],
+      "mcp_tools": [],
+      "routes": []
+     },
+     {
+      "key": "tools/call",
+      "line": 260,
+      "handler_type": "",
+      "handler_method": "",
+      "handler_file": "",
+      "expr": "",
+      "used_by": [],
+      "documented_in": [],
+      "mcp_tools": [],
+      "routes": []
+     }
+    ]
    }
   ],
   "routes": [],
@@ -5046,7 +5801,7 @@
    },
    {
     "file": "handoff247/inventory.py",
-    "line": 164,
+    "line": 166,
     "cmd": "git",
     "text": "git -C {root} {*args}",
     "targets": [],
@@ -5081,10 +5836,46 @@
     "script": ""
    },
    {
+    "file": "handoff247/summarize.py",
+    "line": 213,
+    "cmd": "{exe}",
+    "text": "{exe} login status",
+    "targets": [],
+    "arg": "",
+    "mode": "",
+    "urls": [],
+    "ci": false,
+    "script": ""
+   },
+   {
+    "file": "handoff247/summarize.py",
+    "line": 238,
+    "cmd": "{cmd}",
+    "text": "{cmd}",
+    "targets": [],
+    "arg": "",
+    "mode": "",
+    "urls": [],
+    "ci": false,
+    "script": ""
+   },
+   {
     "file": "tests/test_handoff.py",
     "line": 290,
     "cmd": "git",
     "text": "git -C {cwd} -c user.name=T -c user.email=t@example.com -c commit.gpgsign=false {*args}",
+    "targets": [],
+    "arg": "",
+    "mode": "",
+    "urls": [],
+    "ci": false,
+    "script": ""
+   },
+   {
+    "file": "tests/test_handoff.py",
+    "line": 473,
+    "cmd": "{sys.executable}",
+    "text": "{sys.executable} -m handoff247 mcp {self.root}",
     "targets": [],
     "arg": "",
     "mode": "",
@@ -5107,34 +5898,40 @@
   "hubs": [
    {
     "file": "handoff247/model.py",
-    "used_by": 16
+    "used_by": 17
    }
   ],
   "build_targets": [],
   "subcommands": [
    {
     "file": "handoff247/cli.py",
-    "line": 106,
+    "line": 120,
     "name": "go",
     "help": "one step: create or extend the notes file, build the pack, list what is left; a folder of projects gets one pack per project plus an index"
    },
    {
     "file": "handoff247/cli.py",
-    "line": 115,
+    "line": 130,
     "name": "build",
     "help": "analyze the project and write the handoff pack"
    },
    {
     "file": "handoff247/cli.py",
-    "line": 122,
+    "line": 138,
     "name": "notes",
     "help": "create the notes file or add headings for new files/modes/folders"
    },
    {
     "file": "handoff247/cli.py",
-    "line": 124,
+    "line": 140,
     "name": "check",
     "help": "report what is still undocumented; non-zero exit below --min"
+   },
+   {
+    "file": "handoff247/cli.py",
+    "line": 143,
+    "name": "mcp",
+    "help": "run an MCP server (stdio) so an AI agent can read the ontology and source and write notes; add it to Codex or Claude Code as a command"
    }
   ],
   "script_params": [],
@@ -5147,11 +5944,11 @@
      "code": [
       {
        "file": "handoff247/cli.py",
-       "line": 120
+       "line": 135
       },
       {
        "file": "handoff247/render_md.py",
-       "line": 635
+       "line": 638
       },
       {
        "file": "pyproject.toml",
@@ -5161,10 +5958,10 @@
      "docs": [
       {
        "file": "README.md",
-       "line": 37
+       "line": 40
       }
      ],
-     "count": 6
+     "count": 7
     },
     {
      "host": "cdn.jsdelivr.net",
@@ -5194,7 +5991,7 @@
      "docs": [
       {
        "file": "README.md",
-       "line": 124
+       "line": 127
       }
      ],
      "count": 1
@@ -5219,12 +6016,12 @@
     "authors": [
      {
       "name": "R B",
-      "commits": 6,
+      "commits": 8,
       "last": "2026-11-10",
       "first": "2026-11-09"
      }
     ],
-    "commits": 6,
+    "commits": 8,
     "first_commit": "2026-11-09",
     "last_commit": "2026-11-10"
    },
@@ -5277,6 +6074,7 @@
     ]
    }
   },
+  "model_summaries": {},
   "translations": [],
   "untranslated": [],
   "readiness": [

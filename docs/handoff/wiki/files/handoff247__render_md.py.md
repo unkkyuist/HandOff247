@@ -12,7 +12,7 @@ source: "handoff247/render_md.py"
 - **Class:** File — A file of the project (images and other assets are left out).
 - **Language:** Python
 - **Kind of file:** code
-- **Lines:** 651
+- **Lines:** 654
 - **Source:** [handoff247/render_md.py](../../../../handoff247/render_md.py)
 
 **Notes from the previous owner**
@@ -40,7 +40,7 @@ source: "handoff247/render_md.py"
 
 **mentions** →
 
-- [`github.com`](../hosts.md) · [handoff247/render_md.py:635](../../../../handoff247/render_md.py#L635)
+- [`github.com`](../hosts.md) · [handoff247/render_md.py:638](../../../../handoff247/render_md.py#L638)
 
 **is part of** ←
 
@@ -49,9 +49,10 @@ source: "handoff247/render_md.py"
 **is imported by** ←
 
 - [`handoff247/build.py`](handoff247__build.py.md) · [handoff247/build.py:14](../../../../handoff247/build.py#L14)
-- [`handoff247/cli.py`](handoff247__cli.py.md) · [handoff247/cli.py:182](../../../../handoff247/cli.py#L182)
+- [`handoff247/cli.py`](handoff247__cli.py.md) · [handoff247/cli.py:205](../../../../handoff247/cli.py#L205)
+- [`handoff247/mcp.py`](handoff247__mcp.py.md) · [handoff247/mcp.py:131](../../../../handoff247/mcp.py#L131)
 - [`handoff247/wiki.py`](handoff247__wiki.py.md) · [handoff247/wiki.py:29](../../../../handoff247/wiki.py#L29)
-- [`handoff247/workspace.py`](handoff247__workspace.py.md) · [handoff247/workspace.py:23](../../../../handoff247/workspace.py#L23)
+- [`handoff247/workspace.py`](handoff247__workspace.py.md) · [handoff247/workspace.py:24](../../../../handoff247/workspace.py#L24)
 
 ## Comment in the file
 
@@ -79,4 +80,4 @@ Markdown pages of the handoff pack. *(module docstring)*
 - `Pages.connections` — method, [line 460](../../../../handoff247/render_md.py#L460)
 - `Pages.codemap` — method, [line 522](../../../../handoff247/render_md.py#L522)
 - `Pages.file_cards` — method, [line 557](../../../../handoff247/render_md.py#L557)
-- `make_linker` — function, [line 623](../../../../handoff247/render_md.py#L623)
+- `make_linker` — function, [line 626](../../../../handoff247/render_md.py#L626)

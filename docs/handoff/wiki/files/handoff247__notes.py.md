@@ -43,9 +43,10 @@ source: "handoff247/notes.py"
 
 - [`handoff247/build.py`](handoff247__build.py.md) · [handoff247/build.py:12](../../../../handoff247/build.py#L12)
 - [`handoff247/cli.py`](handoff247__cli.py.md) · [handoff247/cli.py:11](../../../../handoff247/cli.py#L11)
+- [`handoff247/mcp.py`](handoff247__mcp.py.md) · [handoff247/mcp.py:23](../../../../handoff247/mcp.py#L23)
 - [`handoff247/render_md.py`](handoff247__render_md.py.md) · [handoff247/render_md.py:12](../../../../handoff247/render_md.py#L12)
 - [`handoff247/wiki.py`](handoff247__wiki.py.md) · [handoff247/wiki.py:28](../../../../handoff247/wiki.py#L28)
-- [`handoff247/workspace.py`](handoff247__workspace.py.md) · [handoff247/workspace.py:20](../../../../handoff247/workspace.py#L20)
+- [`handoff247/workspace.py`](handoff247__workspace.py.md) · [handoff247/workspace.py:21](../../../../handoff247/workspace.py#L21)
 
 ## Comment in the file
 
