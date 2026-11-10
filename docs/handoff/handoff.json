@@ -1,15 +1,25 @@
 {
  "generator": "HandOff247",
- "version": "0.3.0",
+ "version": "0.4.0",
  "generated": "2026-11-10",
  "project": {
   "name": "HandOff247",
   "git": {
-   "head": "719c129",
-   "head_full": "719c129182f98a4752a7ec31bc6599ffdd018e13",
+   "head": "5be3bdf",
+   "head_full": "5be3bdf76a7fd49d842f3405784b3d29ce9a52e4",
    "branch": "main",
    "remote": "https://github.com/unkkyuist/HandOff247.git",
    "commits": [
+    {
+     "sha": "5be3bdf",
+     "date": "2026-11-10",
+     "subject": "v0.4.0: ontology, graph view, LLM wiki, MIT license"
+    },
+    {
+     "sha": "f9c86ae",
+     "date": "2026-11-10",
+     "subject": "Regenerate the self-documentation pack at 719c129"
+    },
     {
      "sha": "719c129",
      "date": "2026-11-10",
@@ -36,11 +46,11 @@
   }
  },
  "notes": {
-  "Project": "HandOff247 reads a project folder and writes a handoff pack for the next person: diagrams, structure, extracted comments and a map of how the tools connect. It is static analysis only (it never imports or runs the target's code) and it is standard-library Python, so `python -m handoff247` works on any machine with Python 3.10+.\nStatus: v0.3.0. `python -m handoff247 <folder>` does everything in one step (notes file, pack, handover checklist), and a folder that holds several projects gets one pack per project plus an index. The first real target was PlayBookOS (see examples/playbookos). C#, Python, JavaScript/TypeScript, PowerShell, shell and batch have analyzers; other languages are inventoried but not parsed. Output is English; a project's own comments and headings in another language get English versions from the notes file's `## Translations` table.",
+  "Project": "HandOff247 reads a project folder and writes a handoff pack for the next person: diagrams, structure, extracted comments and a map of how the tools connect. It is static analysis only (it never imports or runs the target's code) and it is standard-library Python, so `python -m handoff247` works on any machine with Python 3.10+.\nStatus: v0.4.0. `python -m handoff247 <folder>` does everything in one step (notes file, pack, handover checklist), and a folder that holds several projects gets one pack per project plus an index. Since v0.4.0 every pack also holds the ontology (`ontology.json`), a graph of it in the viewer, and a wiki for AI assistants (`wiki/`, `llms.txt`). The first real target was PlayBookOS (see examples/playbookos). C#, Python, JavaScript/TypeScript, PowerShell, shell and batch have analyzers; other languages are inventoried but not parsed. Output is English; a project's own comments and headings in another language get English versions from the notes file's `## Translations` table.",
   "Topic: Successor checklist": "1. Run the tests: `python -m unittest discover -s tests`.\n2. Regenerate the examples after any analyzer change: `python -m handoff247 build <PlayBookOS checkout> --name PlayBookOS -o examples/playbookos --notes examples/playbookos.notes.md --date <date>`. If an analyzer change surfaces new Korean comments or headings, `check --notes examples/playbookos.notes.md` reports them; add their rows to the Translations table there. Read the diff of the generated pages: a change there is a change in what successors will be told.\n3. Regenerate this pack after committing and pushing, so its Handover page does not report your own work as uncommitted: `python -m handoff247 . --date <date>`.\n4. Open `index.html` of a pack in a browser and check that every diagram renders (Mermaid errors show as red text in the page).",
   "Topic: Known issues and risks": "- The rule that matters most: a wrong statement is worse than a missing one. When a pattern is ambiguous the analyzers leave it out; inferences (for example a wrapper passed in as a parameter) are labelled and drawn dashed. Keep it that way.\n- Analysis is regex/lexer based for everything except Python (which uses `ast`). Code built from runtime strings, reflection or dependency-injection containers is not followed.\n- MCP tool names from the C# SDK are derived from method names (snake_case, `Async` removed) and marked with * in the pack.\n- Mermaid labels must go through `mermaid.esc`; `*`, `_` and backticks are escaped because Mermaid otherwise formats them as Markdown.",
   "Topic: Credentials and accounts": "None. The tool needs no keys. The GitHub Action only uses the workflow's own checkout.",
-  "Topic: Open work and next steps": "- The repository has no LICENSE file yet; the owner has not chosen one.\n- Go, Rust, Java and other languages are only inventoried. An analyzer for one of them is the natural next piece: copy the shape of `analyzers/python.py` and add an assertion per fact to the tests.\n- The workspace index has no example in `examples/`; it is covered by `test_go_folder_of_projects` only.",
+  "Topic: Open work and next steps": "- A folder of projects has a graph and a wiki per project but no single graph across projects; `workspace.py` only writes an `llms.txt` that links them.\n- The wiki is generated without a language model. If prose written by a model is wanted, the place for it is the notes file (see `wiki/AGENTS.md` in any pack), not the generator.\n- Go, Rust, Java and other languages are only inventoried. An analyzer for one of them is the natural next piece: copy the shape of `analyzers/python.py` and add an assertion per fact to the tests.\n- The workspace index has no example in `examples/`; it is covered by `test_go_folder_of_projects` only.",
   "Topic: Deploy and release": "There is no server and no package upload. A release is a push to `main` on GitHub; people run it from a clone or use the repository as a GitHub Action (`uses: unkkyuist/HandOff247@main`), so `main` is what users get. Bump the version in `handoff247/__init__.py` and `pyproject.toml` together. To roll back, revert the commit.",
   "Topic: Routine operations": "Nothing runs on a schedule. CI runs on every push and pull request. The viewer loads marked, DOMPurify and Mermaid from jsDelivr at pinned versions (`render_html.py`); check now and then that those versions still load.",
   "Topic: Data and backups": "The tool stores nothing. Its only state is the Git repository. Generated packs can always be rebuilt; a project's `HANDOFF.notes.md` cannot, so it belongs in that project's repository.",
@@ -56,7 +66,9 @@
   "File: handoff247/analyzers/python.py": "Uses `ast`, never imports the file. Finds argparse sub-commands, subprocess launches (rendered with `{variable}` placeholders), env reads/writes, dict/if-chain/match dispatch tables, Flask/FastAPI routes and MCP tool decorators.",
   "File: handoff247/analyzers/shell.py": "PowerShell, POSIX shell and batch: leading comment / .SYNOPSIS as summary, `$env:` / `export` / `set` variables, and command lines that launch something (dotnet, python, powershell -File, `&` call operator, start URL).",
   "File: handoff247/analyzers/web.py": "JavaScript/TypeScript (imports, exported functions with spans, `fetch` calls, Express routes, MCP registrations, `case` tables), HTML (`<script src>`, `<link>`, inline scripts) and CSS imports.",
-  "File: handoff247/build.py": "Writes the pack: six Markdown pages, `diagrams/*.mmd`, `handoff.json` (its first key `\"generator\": \"HandOff247\"` is how later runs recognise and skip an old pack) and `index.html`.",
+  "File: handoff247/build.py": "Writes the pack: six Markdown pages, `diagrams/*.mmd`, `handoff.json` (its first key `\"generator\": \"HandOff247\"` is how later runs recognise and skip an old pack), `ontology.json`, the wiki and `index.html`. `write_wiki` deletes wiki pages of an earlier run that no longer exist, but only files that start with the generator mark, so a page someone added by hand stays.",
+  "File: handoff247/ontology.py": "Turns `project.links` and `project.edges` into typed entities and relations. It detects nothing itself; add a new kind of fact in an analyzer or in `connect.py` first, then map it here. `CLASSES` and `RELATIONS` are the schema: a class has a colour group and a shape (the graph has eight colours, so classes share one and differ by shape), a relation has a label for each direction. `_Builder.rel` drops a relation whose ends are not both entities, which is why assets and system environment variables never appear.",
+  "File: handoff247/wiki.py": "Writes the ontology as Markdown pages plus `llms.txt` and `llms-full.txt`. `assign_pages` decides which page describes an entity (own page for files, areas, modes, operations and MCP tools; a list page for the small classes; a type lives on its file's page). File names are slugs with `/` as `__`; Windows reserved names get a `_` prefix. The pages are regenerated on every run, so durable knowledge belongs in the notes file; `agents()` is the page that tells an assistant so.",
   "File: handoff247/cli.py": "Four commands: `go`, `build`, `notes`, `check`. A first argument that is not a command is taken as a folder for `go`. `go` decides between one project and a folder of projects (`workspace.is_workspace`), then does notes + build + report. `check --min N` exits 1 when fewer than N% of files have notes, which is how CI can enforce documentation.",
   "File: handoff247/leaving.py": "The handover findings: Git state (uncommitted, commits on no remote, stashes, authors), files Git ignores that are present, absolute paths, hosts in URLs, TODO comments, key and token patterns, declared tool versions, and the readiness rows. Two rules to keep: a secret hit records file, line and kind but never the value, and anything that cannot be known is left out (no history figures for shallow clones, no \"pushed\" row without a remote). `JUNK_DIRS` decides which ignored folders are build output; add to it when a pack lists noise.",
   "File: handoff247/workspace.py": "The folder-of-projects mode: finds projects one or two levels down, builds a pack for each, and writes the index (README.md, index.html, workspace.json, workspace.mmd). It does not write into the projects: notes for a project without its own notes file go to `<out>/notes/`. One failing project is listed as failed and the rest continue. Cross-project arrows come only from paths that resolve into another project's folder.",
@@ -68,7 +80,7 @@
   "File: handoff247/model.py": "Dataclasses: FileInfo, Symbol, Fact, Edge, Project. A Fact is one observation with a file and line; everything in the pack traces back to one.",
   "File: handoff247/notes.py": "Parses and extends the notes file. `update` only appends missing headings and missing Translations rows; it never rewrites existing text. Stale headings (for deleted files) are reported, not removed.",
   "File: handoff247/pipeline.py": "analyze_project(): inventory, per-file analysis, linking.",
-  "File: handoff247/render_html.py": "The single-file viewer. It embeds the Markdown pages and loads marked, DOMPurify and Mermaid from jsDelivr at pinned versions. Diagram nodes are matched back to files through the `flowchart-nN-` element ids, so clicking a node opens that file's card.",
+  "File: handoff247/render_html.py": "The single-file viewer. It embeds the Markdown pages and loads marked, DOMPurify and Mermaid from jsDelivr at pinned versions. Diagram nodes are matched back to files through the `flowchart-nN-` element ids, so clicking a node opens that file's card. The Graph tab is hand-written canvas code with no library: a force layout with a fixed seed (the same picture every run), hit testing, and names drawn most-connected first without overlap. The eight colours are the `--g1`…`--g8` variables; do not add a ninth, give a new class a shape inside an existing group. Wiki pages are embedded too, and `resolveHref` turns their page-relative links into pack-relative ones.",
   "File: handoff247/render_md.py": "The six Markdown pages; `handover()` puts each of the leaver's answers next to what `leaving.py` found. `Linker` decides how file:line references are linked: relative when the pack is inside the project, GitHub blob URLs at the exact commit when it is outside, plain text otherwise.",
   "File: handoff247/translate.py": "Finds extracted prose with letters outside the Latin script (summaries, doc comments, Markdown headings, MCP tool descriptions, sub-command help, commit subjects) and swaps in the English from the notes' Translations table. Matching is exact apart from spacing, so a comment that changed later shows its original again instead of a stale translation. Identifiers such as file names are never touched.",
   "File: tests/test_handoff.py": "Runs the full pipeline on a copy of the fixture outside Git, so both file-listing paths are covered."
@@ -120,8 +132,8 @@
    "path": "HANDOFF.notes.md",
    "lang": "markdown",
    "category": "docs",
-   "lines": 124,
-   "size": 11346,
+   "lines": 131,
+   "size": 13547,
    "summary": "HandOff247 notes.",
    "summary_source": "first paragraph",
    "symbols": [
@@ -182,7 +194,7 @@
     {
      "name": "Topic: Deploy and release",
      "kind": "h2",
-     "line": 33,
+     "line": 34,
      "doc": "",
      "parent": "",
      "public": true,
@@ -191,7 +203,7 @@
     {
      "name": "Topic: Routine operations",
      "kind": "h2",
-     "line": 36,
+     "line": 37,
      "doc": "",
      "parent": "",
      "public": true,
@@ -200,7 +212,7 @@
     {
      "name": "Topic: Data and backups",
      "kind": "h2",
-     "line": 39,
+     "line": 40,
      "doc": "",
      "parent": "",
      "public": true,
@@ -209,7 +221,7 @@
     {
      "name": "Topic: People and contacts",
      "kind": "h2",
-     "line": 42,
+     "line": 43,
      "doc": "",
      "parent": "",
      "public": true,
@@ -218,7 +230,7 @@
     {
      "name": "Area: .github",
      "kind": "h2",
-     "line": 45,
+     "line": 46,
      "doc": "",
      "parent": "",
      "public": true,
@@ -227,7 +239,7 @@
     {
      "name": "Area: handoff247",
      "kind": "h2",
-     "line": 48,
+     "line": 49,
      "doc": "",
      "parent": "",
      "public": true,
@@ -236,7 +248,7 @@
     {
      "name": "Area: tests",
      "kind": "h2",
-     "line": 51,
+     "line": 52,
      "doc": "",
      "parent": "",
      "public": true,
@@ -245,7 +257,7 @@
     {
      "name": "File: handoff247/__init__.py",
      "kind": "h2",
-     "line": 54,
+     "line": 55,
      "doc": "",
      "parent": "",
      "public": true,
@@ -254,7 +266,7 @@
     {
      "name": "File: handoff247/__main__.py",
      "kind": "h2",
-     "line": 57,
+     "line": 58,
      "doc": "",
      "parent": "",
      "public": true,
@@ -263,7 +275,7 @@
     {
      "name": "File: handoff247/analyzers/__init__.py",
      "kind": "h2",
-     "line": 60,
+     "line": 61,
      "doc": "",
      "parent": "",
      "public": true,
@@ -272,7 +284,7 @@
     {
      "name": "File: handoff247/analyzers/csharp.py",
      "kind": "h2",
-     "line": 63,
+     "line": 64,
      "doc": "",
      "parent": "",
      "public": true,
@@ -281,7 +293,7 @@
     {
      "name": "File: handoff247/analyzers/docs.py",
      "kind": "h2",
-     "line": 66,
+     "line": 67,
      "doc": "",
      "parent": "",
      "public": true,
@@ -290,7 +302,7 @@
     {
      "name": "File: handoff247/analyzers/python.py",
      "kind": "h2",
-     "line": 69,
+     "line": 70,
      "doc": "",
      "parent": "",
      "public": true,
@@ -299,7 +311,7 @@
     {
      "name": "File: handoff247/analyzers/shell.py",
      "kind": "h2",
-     "line": 72,
+     "line": 73,
      "doc": "",
      "parent": "",
      "public": true,
@@ -308,7 +320,7 @@
     {
      "name": "File: handoff247/analyzers/web.py",
      "kind": "h2",
-     "line": 75,
+     "line": 76,
      "doc": "",
      "parent": "",
      "public": true,
@@ -317,7 +329,25 @@
     {
      "name": "File: handoff247/build.py",
      "kind": "h2",
-     "line": 78,
+     "line": 79,
+     "doc": "",
+     "parent": "",
+     "public": true,
+     "end_line": 0
+    },
+    {
+     "name": "File: handoff247/ontology.py",
+     "kind": "h2",
+     "line": 82,
+     "doc": "",
+     "parent": "",
+     "public": true,
+     "end_line": 0
+    },
+    {
+     "name": "File: handoff247/wiki.py",
+     "kind": "h2",
+     "line": 85,
      "doc": "",
      "parent": "",
      "public": true,
@@ -326,7 +356,7 @@
     {
      "name": "File: handoff247/cli.py",
      "kind": "h2",
-     "line": 81,
+     "line": 88,
      "doc": "",
      "parent": "",
      "public": true,
@@ -335,7 +365,7 @@
     {
      "name": "File: handoff247/leaving.py",
      "kind": "h2",
-     "line": 84,
+     "line": 91,
      "doc": "",
      "parent": "",
      "public": true,
@@ -344,7 +374,7 @@
     {
      "name": "File: handoff247/workspace.py",
      "kind": "h2",
-     "line": 87,
+     "line": 94,
      "doc": "",
      "parent": "",
      "public": true,
@@ -353,7 +383,7 @@
     {
      "name": "File: handoff247/connect.py",
      "kind": "h2",
-     "line": 90,
+     "line": 97,
      "doc": "",
      "parent": "",
      "public": true,
@@ -362,7 +392,7 @@
     {
      "name": "File: handoff247/labels.py",
      "kind": "h2",
-     "line": 93,
+     "line": 100,
      "doc": "",
      "parent": "",
      "public": true,
@@ -371,7 +401,7 @@
     {
      "name": "File: handoff247/inventory.py",
      "kind": "h2",
-     "line": 96,
+     "line": 103,
      "doc": "",
      "parent": "",
      "public": true,
@@ -380,7 +410,7 @@
     {
      "name": "File: handoff247/lexer.py",
      "kind": "h2",
-     "line": 99,
+     "line": 106,
      "doc": "",
      "parent": "",
      "public": true,
@@ -389,7 +419,7 @@
     {
      "name": "File: handoff247/mermaid.py",
      "kind": "h2",
-     "line": 102,
+     "line": 109,
      "doc": "",
      "parent": "",
      "public": true,
@@ -398,7 +428,7 @@
     {
      "name": "File: handoff247/model.py",
      "kind": "h2",
-     "line": 105,
+     "line": 112,
      "doc": "",
      "parent": "",
      "public": true,
@@ -407,7 +437,7 @@
     {
      "name": "File: handoff247/notes.py",
      "kind": "h2",
-     "line": 108,
+     "line": 115,
      "doc": "",
      "parent": "",
      "public": true,
@@ -416,7 +446,7 @@
     {
      "name": "File: handoff247/pipeline.py",
      "kind": "h2",
-     "line": 111,
+     "line": 118,
      "doc": "",
      "parent": "",
      "public": true,
@@ -425,7 +455,7 @@
     {
      "name": "File: handoff247/render_html.py",
      "kind": "h2",
-     "line": 114,
+     "line": 121,
      "doc": "",
      "parent": "",
      "public": true,
@@ -434,7 +464,7 @@
     {
      "name": "File: handoff247/render_md.py",
      "kind": "h2",
-     "line": 117,
+     "line": 124,
      "doc": "",
      "parent": "",
      "public": true,
@@ -443,7 +473,7 @@
     {
      "name": "File: handoff247/translate.py",
      "kind": "h2",
-     "line": 120,
+     "line": 127,
      "doc": "",
      "parent": "",
      "public": true,
@@ -452,7 +482,7 @@
     {
      "name": "File: tests/test_handoff.py",
      "kind": "h2",
-     "line": 123,
+     "line": 130,
      "doc": "",
      "parent": "",
      "public": true,
@@ -465,11 +495,25 @@
    "translated": []
   },
   {
+   "path": "LICENSE",
+   "lang": "other",
+   "category": "other",
+   "lines": 21,
+   "size": 1087,
+   "summary": "",
+   "summary_source": "",
+   "symbols": [],
+   "imports": [],
+   "tags": [],
+   "skipped": "",
+   "translated": []
+  },
+  {
    "path": "README.md",
    "lang": "markdown",
    "category": "docs",
-   "lines": 280,
-   "size": 16450,
+   "lines": 325,
+   "size": 20118,
    "summary": "Hand Off 24-7 is a good-bye project for passing your existing projects to the next person.",
    "summary_source": "first paragraph",
    "symbols": [
@@ -485,7 +529,7 @@
     {
      "name": "See it",
      "kind": "h2",
-     "line": 30,
+     "line": 33,
      "doc": "",
      "parent": "",
      "public": true,
@@ -494,7 +538,7 @@
     {
      "name": "Quick start",
      "kind": "h2",
-     "line": 55,
+     "line": 58,
      "doc": "",
      "parent": "",
      "public": true,
@@ -503,7 +547,7 @@
     {
      "name": "A folder full of projects",
      "kind": "h2",
-     "line": 85,
+     "line": 88,
      "doc": "",
      "parent": "",
      "public": true,
@@ -512,7 +556,16 @@
     {
      "name": "What is in a pack",
      "kind": "h2",
-     "line": 107,
+     "line": 110,
+     "doc": "",
+     "parent": "",
+     "public": true,
+     "end_line": 0
+    },
+    {
+     "name": "Ontology, graph and wiki",
+     "kind": "h2",
+     "line": 137,
      "doc": "",
      "parent": "",
      "public": true,
@@ -521,7 +574,7 @@
     {
      "name": "How \"how the tools connect\" is found",
      "kind": "h2",
-     "line": 131,
+     "line": 168,
      "doc": "",
      "parent": "",
      "public": true,
@@ -530,7 +583,7 @@
     {
      "name": "The notes file",
      "kind": "h2",
-     "line": 150,
+     "line": 187,
      "doc": "",
      "parent": "",
      "public": true,
@@ -539,7 +592,7 @@
     {
      "name": "What the handover page checks",
      "kind": "h2",
-     "line": 176,
+     "line": 213,
      "doc": "",
      "parent": "",
      "public": true,
@@ -548,7 +601,7 @@
     {
      "name": "Projects commented in another language",
      "kind": "h2",
-     "line": 195,
+     "line": 232,
      "doc": "",
      "parent": "",
      "public": true,
@@ -557,7 +610,7 @@
     {
      "name": "Keep it current (the 24/7 part)",
      "kind": "h2",
-     "line": 217,
+     "line": 254,
      "doc": "",
      "parent": "",
      "public": true,
@@ -566,7 +619,7 @@
     {
      "name": "Command reference",
      "kind": "h2",
-     "line": 247,
+     "line": 284,
      "doc": "",
      "parent": "",
      "public": true,
@@ -575,7 +628,7 @@
     {
      "name": "Limits",
      "kind": "h2",
-     "line": 264,
+     "line": 301,
      "doc": "",
      "parent": "",
      "public": true,
@@ -584,7 +637,16 @@
     {
      "name": "Development",
      "kind": "h2",
-     "line": 272,
+     "line": 313,
+     "doc": "",
+     "parent": "",
+     "public": true,
+     "end_line": 0
+    },
+    {
+     "name": "License",
+     "kind": "h2",
+     "line": 323,
      "doc": "",
      "parent": "",
      "public": true,
@@ -594,23 +656,39 @@
    "imports": [
     [
      "examples/playbookos/README.md",
-     34
+     37
     ],
     [
      "docs/handoff/README.md",
-     35
+     38
     ],
     [
      "examples/playbookos/HANDOVER.md",
-     50
-    ],
-    [
-     "examples/playbookos.notes.md",
      53
     ],
     [
+     "examples/playbookos.notes.md",
+     56
+    ],
+    [
+     "examples/playbookos/ontology.json",
+     142
+    ],
+    [
+     "examples/playbookos/wiki/index.md",
+     159
+    ],
+    [
+     "examples/playbookos/llms.txt",
+     159
+    ],
+    [
      "docs/handoff/README.md",
-     280
+     321
+    ],
+    [
+     "LICENSE",
+     325
     ]
    ],
    "tags": [],
@@ -636,7 +714,7 @@
    "lang": "python",
    "category": "code",
    "lines": 5,
-   "size": 171,
+   "size": 176,
    "summary": "HandOff247 — turn a project folder into a handoff pack for the next person.",
    "summary_source": "module docstring",
    "symbols": [],
@@ -1166,8 +1244,8 @@
    "path": "handoff247/build.py",
    "lang": "python",
    "category": "code",
-   "lines": 61,
-   "size": 2984,
+   "lines": 91,
+   "size": 4559,
    "summary": "Write the handoff pack to disk.",
    "summary_source": "module docstring",
    "symbols": [
@@ -1187,7 +1265,16 @@
      "doc": "Render every page.",
      "parent": "",
      "public": true,
-     "end_line": 61
+     "end_line": 69
+    },
+    {
+     "name": "write_wiki",
+     "kind": "function",
+     "line": 72,
+     "doc": "Write the wiki and remove pages of an earlier run that no longer exist.",
+     "parent": "",
+     "public": true,
+     "end_line": 91
     }
    ],
    "imports": [
@@ -1220,7 +1307,15 @@
      9
     ],
     [
+     ".ontology",
+     9
+    ],
+    [
      ".translate",
+     9
+    ],
+    [
+     ".wiki",
      9
     ],
     [
@@ -1252,8 +1347,8 @@
    "path": "handoff247/cli.py",
    "lang": "python",
    "category": "code",
-   "lines": 193,
-   "size": 10616,
+   "lines": 196,
+   "size": 11115,
    "summary": "Command line: build a pack, create/extend the notes file, check documentation coverage.",
    "summary_source": "module docstring",
    "symbols": [
@@ -1291,16 +1386,16 @@
      "doc": "One step for a person about to leave: notes file, pack, and what is still open.",
      "parent": "",
      "public": false,
-     "end_line": 87
+     "end_line": 89
     },
     {
      "name": "main",
      "kind": "function",
-     "line": 90,
+     "line": 92,
      "doc": "",
      "parent": "",
      "public": true,
-     "end_line": 193
+     "end_line": 196
     }
    ],
    "imports": [
@@ -1358,11 +1453,11 @@
     ],
     [
      ".render_md",
-     179
+     182
     ],
     [
      "webbrowser",
-     85
+     87
     ]
    ],
    "tags": [],
@@ -1606,19 +1701,19 @@
    "path": "handoff247/labels.py",
    "lang": "python",
    "category": "code",
-   "lines": 251,
-   "size": 13367,
+   "lines": 254,
+   "size": 14007,
    "summary": "Every generated heading and label in one place, so the wording stays the same across pages and diagrams.",
    "summary_source": "module docstring",
    "symbols": [
     {
      "name": "t",
      "kind": "function",
-     "line": 249,
+     "line": 252,
      "doc": "",
      "parent": "",
      "public": true,
-     "end_line": 251
+     "end_line": 254
     }
    ],
    "imports": [
@@ -2394,6 +2489,87 @@
    "translated": []
   },
   {
+   "path": "handoff247/ontology.py",
+   "lang": "python",
+   "category": "code",
+   "lines": 278,
+   "size": 16589,
+   "summary": "The project as an ontology: typed entities and typed relations between them.",
+   "summary_source": "module docstring",
+   "symbols": [
+    {
+     "name": "first_line",
+     "kind": "function",
+     "line": 70,
+     "doc": "",
+     "parent": "",
+     "public": true,
+     "end_line": 75
+    },
+    {
+     "name": "_Builder",
+     "kind": "class",
+     "line": 78,
+     "doc": "",
+     "parent": "",
+     "public": false,
+     "end_line": 116
+    },
+    {
+     "name": "ent",
+     "kind": "method",
+     "line": 84,
+     "doc": "",
+     "parent": "_Builder",
+     "public": true,
+     "end_line": 98
+    },
+    {
+     "name": "rel",
+     "kind": "method",
+     "line": 100,
+     "doc": "",
+     "parent": "_Builder",
+     "public": true,
+     "end_line": 116
+    },
+    {
+     "name": "build",
+     "kind": "function",
+     "line": 119,
+     "doc": "",
+     "parent": "",
+     "public": true,
+     "end_line": 278
+    }
+   ],
+   "imports": [
+    [
+     "__future__",
+     8
+    ],
+    [
+     ".",
+     10
+    ],
+    [
+     ".__version__",
+     10
+    ],
+    [
+     ".connect",
+     11
+    ],
+    [
+     ".model",
+     12
+    ]
+   ],
+   "tags": [],
+   "skipped": "",
+   "translated": []
+  },
+  {
    "path": "handoff247/pipeline.py",
    "lang": "python",
    "category": "code",
@@ -2454,19 +2630,19 @@
    "path": "handoff247/render_html.py",
    "lang": "python",
    "category": "code",
-   "lines": 236,
-   "size": 15958,
+   "lines": 527,
+   "size": 36829,
    "summary": "Single-file interactive viewer (index.html).",
    "summary_source": "module docstring",
    "symbols": [
     {
      "name": "render",
      "kind": "function",
-     "line": 205,
+     "line": 491,
      "doc": "",
      "parent": "",
      "public": true,
-     "end_line": 236
+     "end_line": 527
     }
    ],
    "imports": [
@@ -2499,8 +2675,8 @@
    "path": "handoff247/render_md.py",
    "lang": "python",
    "category": "code",
-   "lines": 648,
-   "size": 35383,
+   "lines": 651,
+   "size": 35605,
    "summary": "Markdown pages of the handoff pack.",
    "summary_source": "module docstring",
    "symbols": [
@@ -2565,7 +2741,7 @@
      "doc": "",
      "parent": "",
      "public": true,
-     "end_line": 617
+     "end_line": 620
     },
     {
      "name": "header",
@@ -2610,88 +2786,88 @@
      "doc": "",
      "parent": "Pages",
      "public": true,
-     "end_line": 238
+     "end_line": 241
     },
     {
      "name": "ready",
      "kind": "method",
-     "line": 241,
-     "doc": "",
-     "parent": "Pages",
-     "public": true,
-     "end_line": 244
-    },
-    {
-     "name": "where",
-     "kind": "method",
-     "line": 246,
+     "line": 244,
      "doc": "",
      "parent": "Pages",
      "public": true,
      "end_line": 247
     },
     {
-     "name": "topic",
+     "name": "where",
      "kind": "method",
      "line": 249,
      "doc": "",
      "parent": "Pages",
      "public": true,
-     "end_line": 251
+     "end_line": 250
+    },
+    {
+     "name": "topic",
+     "kind": "method",
+     "line": 252,
+     "doc": "",
+     "parent": "Pages",
+     "public": true,
+     "end_line": 254
     },
     {
      "name": "handover",
      "kind": "method",
-     "line": 253,
+     "line": 256,
      "doc": "",
      "parent": "Pages",
      "public": true,
-     "end_line": 378
+     "end_line": 381
     },
     {
      "name": "running",
      "kind": "method",
-     "line": 381,
+     "line": 384,
      "doc": "",
      "parent": "Pages",
      "public": true,
-     "end_line": 454
+     "end_line": 457
     },
     {
      "name": "connections",
      "kind": "method",
-     "line": 457,
+     "line": 460,
      "doc": "",
      "parent": "Pages",
      "public": true,
-     "end_line": 516
+     "end_line": 519
     },
     {
      "name": "codemap",
      "kind": "method",
-     "line": 519,
+     "line": 522,
      "doc": "",
      "parent": "Pages",
      "public": true,
-     "end_line": 551
+     "end_line": 554
     },
     {
      "name": "file_cards",
      "kind": "method",
-     "line": 554,
+     "line": 557,
      "doc": "",
      "parent": "Pages",
      "public": true,
-     "end_line": 617
+     "end_line": 620
     },
     {
      "name": "make_linker",
      "kind": "function",
-     "line": 620,
+     "line": 623,
      "doc": "",
      "parent": "",
      "public": true,
-     "end_line": 648
+     "end_line": 651
     }
    ],
    "imports": [
@@ -2741,11 +2917,11 @@
     ],
     [
      "os",
-     621
+     624
     ],
     [
      "pathlib",
-     622
+     625
     ]
    ],
    "tags": [],
@@ -2848,11 +3024,251 @@
    "translated": []
   },
   {
+   "path": "handoff247/wiki.py",
+   "lang": "python",
+   "category": "code",
+   "lines": 372,
+   "size": 20810,
+   "summary": "The LLM wiki: the ontology written out as small, interlinked Markdown pages that an AI assistant (or a person) can read one at a time.",
+   "summary_source": "module docstring",
+   "symbols": [
+    {
+     "name": "_slug",
+     "kind": "function",
+     "line": 45,
+     "doc": "",
+     "parent": "",
+     "public": false,
+     "end_line": 55
+    },
+    {
+     "name": "assign_pages",
+     "kind": "function",
+     "line": 58,
+     "doc": "Give every entity the pack-relative path of the wiki page that describes it.",
+     "parent": "",
+     "public": true,
+     "end_line": 73
+    },
+    {
+     "name": "_code",
+     "kind": "function",
+     "line": 76,
+     "doc": "",
+     "parent": "",
+     "public": false,
+     "end_line": 77
+    },
+    {
+     "name": "_value",
+     "kind": "function",
+     "line": 80,
+     "doc": "",
+     "parent": "",
+     "public": false,
+     "end_line": 85
+    },
+    {
+     "name": "Wiki",
+     "kind": "class",
+     "line": 88,
+     "doc": "",
+     "parent": "",
+     "public": true,
+     "end_line": 372
+    },
+    {
+     "name": "href",
+     "kind": "method",
+     "line": 106,
+     "doc": "",
+     "parent": "Wiki",
+     "public": true,
+     "end_line": 107
+    },
+    {
+     "name": "ref",
+     "kind": "method",
+     "line": 109,
+     "doc": "",
+     "parent": "Wiki",
+     "public": true,
+     "end_line": 114
+    },
+    {
+     "name": "src",
+     "kind": "method",
+     "line": 116,
+     "doc": "",
+     "parent": "Wiki",
+     "public": true,
+     "end_line": 117
+    },
+    {
+     "name": "front",
+     "kind": "method",
+     "line": 119,
+     "doc": "",
+     "parent": "Wiki",
+     "public": true,
+     "end_line": 126
+    },
+    {
+     "name": "note",
+     "kind": "method",
+     "line": 128,
+     "doc": "",
+     "parent": "Wiki",
+     "public": true,
+     "end_line": 132
+    },
+    {
+     "name": "relations",
+     "kind": "method",
+     "line": 134,
+     "doc": "",
+     "parent": "Wiki",
+     "public": true,
+     "end_line": 156
+    },
+    {
+     "name": "body",
+     "kind": "method",
+     "line": 158,
+     "doc": "Summary, attributes, the owner's note and the relations of one entity.",
+     "parent": "Wiki",
+     "public": true,
+     "end_line": 175
+    },
+    {
+     "name": "entity_page",
+     "kind": "method",
+     "line": 178,
+     "doc": "",
+     "parent": "Wiki",
+     "public": true,
+     "end_line": 196
+    },
+    {
+     "name": "list_page",
+     "kind": "method",
+     "line": 198,
+     "doc": "",
+     "parent": "Wiki",
+     "public": true,
+     "end_line": 206
+    },
+    {
+     "name": "overview",
+     "kind": "method",
+     "line": 208,
+     "doc": "",
+     "parent": "Wiki",
+     "public": true,
+     "end_line": 244
+    },
+    {
+     "name": "notes_page",
+     "kind": "method",
+     "line": 246,
+     "doc": "",
+     "parent": "Wiki",
+     "public": true,
+     "end_line": 253
+    },
+    {
+     "name": "index",
+     "kind": "method",
+     "line": 255,
+     "doc": "",
+     "parent": "Wiki",
+     "public": true,
+     "end_line": 296
+    },
+    {
+     "name": "agents",
+     "kind": "method",
+     "line": 298,
+     "doc": "",
+     "parent": "Wiki",
+     "public": true,
+     "end_line": 327
+    },
+    {
+     "name": "llms_txt",
+     "kind": "method",
+     "line": 329,
+     "doc": "",
+     "parent": "Wiki",
+     "public": true,
+     "end_line": 352
+    },
+    {
+     "name": "render",
+     "kind": "method",
+     "line": 354,
+     "doc": "Pack-relative path → text for every wiki file, llms.txt and llms-full.txt included.",
+     "parent": "Wiki",
+     "public": true,
+     "end_line": 372
+    }
+   ],
+   "imports": [
+    [
+     "__future__",
+     18
+    ],
+    [
+     "hashlib",
+     20
+    ],
+    [
+     "json",
+     21
+    ],
+    [
+     "posixpath",
+     22
+    ],
+    [
+     "re",
+     23
+    ],
+    [
+     "collections",
+     24
+    ],
+    [
+     ".",
+     26
+    ],
+    [
+     ".__version__",
+     26
+    ],
+    [
+     ".labels",
+     27
+    ],
+    [
+     ".notes",
+     28
+    ],
+    [
+     ".render_md",
+     29
+    ]
+   ],
+   "tags": [],
+   "skipped": "",
+   "translated": []
+  },
+  {
    "path": "handoff247/workspace.py",
    "lang": "python",
    "category": "code",
-   "lines": 339,
-   "size": 16254,
+   "lines": 345,
+   "size": 17252,
    "summary": "A folder that holds several projects: one pack per project plus an index of all of them.",
    "summary_source": "module docstring",
    "symbols": [
@@ -2971,25 +3387,25 @@
      "doc": "",
      "parent": "",
      "public": true,
-     "end_line": 268
+     "end_line": 269
     },
     {
      "name": "index_html",
      "kind": "function",
-     "line": 289,
+     "line": 290,
      "doc": "",
      "parent": "",
      "public": true,
-     "end_line": 300
+     "end_line": 301
     },
     {
      "name": "build_workspace",
      "kind": "function",
-     "line": 303,
+     "line": 304,
      "doc": "",
      "parent": "",
      "public": true,
-     "end_line": 339
+     "end_line": 345
     }
    ],
    "imports": [
@@ -3070,9 +3486,9 @@
    "path": "pyproject.toml",
    "lang": "toml",
    "category": "config",
-   "lines": 26,
-   "size": 741,
-   "summary": "Turn a project folder into a handoff pack: diagrams, structure, comments and how the tools connect.",
+   "lines": 27,
+   "size": 891,
+   "summary": "Turn a project folder into a handoff pack: diagrams, structure, comments, how the tools connect, an ontology graph and a wiki for AI assistants.",
    "summary_source": "pyproject",
    "symbols": [
     {
@@ -3094,280 +3510,289 @@
    "path": "tests/test_handoff.py",
    "lang": "python",
    "category": "test",
-   "lines": 391,
-   "size": 22768,
+   "lines": 447,
+   "size": 26742,
    "summary": "End-to-end and unit tests.",
    "summary_source": "module docstring",
    "symbols": [
     {
      "name": "copy_fixture",
      "kind": "function",
-     "line": 23,
+     "line": 24,
      "doc": "Copy outside any Git work tree so the plain directory walk is exercised too.",
      "parent": "",
      "public": true,
-     "end_line": 27
+     "end_line": 28
     },
     {
      "name": "LexerTests",
      "kind": "class",
-     "line": 30,
+     "line": 31,
      "doc": "",
      "parent": "",
      "public": true,
-     "end_line": 45
+     "end_line": 46
     },
     {
      "name": "test_csharp_strings_and_comments_are_blanked",
      "kind": "method",
-     "line": 31,
+     "line": 32,
      "doc": "",
      "parent": "LexerTests",
      "public": true,
-     "end_line": 39
+     "end_line": 40
     },
     {
      "name": "test_js_regex_and_template",
      "kind": "method",
-     "line": 41,
+     "line": 42,
      "doc": "",
      "parent": "LexerTests",
      "public": true,
-     "end_line": 45
+     "end_line": 46
     },
     {
      "name": "AnalysisTests",
      "kind": "class",
-     "line": 48,
+     "line": 49,
      "doc": "",
      "parent": "",
      "public": true,
-     "end_line": 138
+     "end_line": 139
     },
     {
      "name": "setUpClass",
      "kind": "method",
-     "line": 50,
+     "line": 51,
      "doc": "",
      "parent": "AnalysisTests",
      "public": true,
-     "end_line": 54
+     "end_line": 55
     },
     {
      "name": "tearDownClass",
      "kind": "method",
-     "line": 57,
+     "line": 58,
      "doc": "",
      "parent": "AnalysisTests",
      "public": true,
-     "end_line": 58
+     "end_line": 59
     },
     {
      "name": "test_modes",
      "kind": "method",
-     "line": 60,
+     "line": 61,
      "doc": "",
      "parent": "AnalysisTests",
      "public": true,
-     "end_line": 66
+     "end_line": 67
     },
     {
      "name": "test_dispatch_table_and_handlers",
      "kind": "method",
-     "line": 68,
+     "line": 69,
      "doc": "",
      "parent": "AnalysisTests",
      "public": true,
-     "end_line": 75
+     "end_line": 76
     },
     {
      "name": "test_routes_forward_to_table",
      "kind": "method",
-     "line": 77,
+     "line": 78,
      "doc": "",
      "parent": "AnalysisTests",
      "public": true,
-     "end_line": 80
+     "end_line": 81
     },
     {
      "name": "test_mcp_tools",
      "kind": "method",
-     "line": 82,
+     "line": 83,
      "doc": "",
      "parent": "AnalysisTests",
      "public": true,
-     "end_line": 89
+     "end_line": 90
     },
     {
      "name": "test_callers_and_channels",
      "kind": "method",
-     "line": 91,
+     "line": 92,
      "doc": "",
      "parent": "AnalysisTests",
      "public": true,
-     "end_line": 102
+     "end_line": 103
     },
     {
      "name": "test_launch_chain",
      "kind": "method",
-     "line": 104,
+     "line": 105,
      "doc": "",
      "parent": "AnalysisTests",
      "public": true,
-     "end_line": 110
+     "end_line": 111
     },
     {
      "name": "test_environment_and_ports",
      "kind": "method",
-     "line": 112,
+     "line": 113,
      "doc": "",
      "parent": "AnalysisTests",
      "public": true,
-     "end_line": 118
+     "end_line": 119
     },
     {
      "name": "test_code_edges",
      "kind": "method",
-     "line": 120,
+     "line": 121,
      "doc": "",
      "parent": "AnalysisTests",
      "public": true,
-     "end_line": 125
+     "end_line": 126
     },
     {
      "name": "test_comments_extracted",
      "kind": "method",
-     "line": 127,
+     "line": 128,
      "doc": "",
      "parent": "AnalysisTests",
      "public": true,
-     "end_line": 133
+     "end_line": 134
     },
     {
      "name": "test_cli_usage_in_docs",
      "kind": "method",
-     "line": 135,
+     "line": 136,
      "doc": "",
      "parent": "AnalysisTests",
      "public": true,
-     "end_line": 138
+     "end_line": 139
     },
     {
      "name": "PackTests",
      "kind": "class",
-     "line": 141,
+     "line": 142,
      "doc": "",
      "parent": "",
      "public": true,
-     "end_line": 387
+     "end_line": 443
     },
     {
      "name": "setUp",
      "kind": "method",
-     "line": 142,
+     "line": 143,
      "doc": "",
      "parent": "PackTests",
      "public": true,
-     "end_line": 144
+     "end_line": 145
     },
     {
      "name": "tearDown",
      "kind": "method",
-     "line": 146,
+     "line": 147,
      "doc": "",
      "parent": "PackTests",
      "public": true,
-     "end_line": 147
+     "end_line": 148
     },
     {
      "name": "test_build_notes_check_cycle",
      "kind": "method",
-     "line": 149,
+     "line": 150,
      "doc": "",
      "parent": "PackTests",
      "public": true,
-     "end_line": 191
+     "end_line": 192
     },
     {
      "name": "test_handoffignore",
      "kind": "method",
-     "line": 193,
+     "line": 194,
      "doc": "",
      "parent": "PackTests",
      "public": true,
-     "end_line": 199
+     "end_line": 200
     },
     {
      "name": "test_python_dispatch_needs_callables",
      "kind": "method",
-     "line": 201,
+     "line": 202,
      "doc": "",
      "parent": "PackTests",
      "public": true,
-     "end_line": 212
+     "end_line": 213
     },
     {
      "name": "test_notes_parse_is_lossless_for_existing_text",
      "kind": "method",
-     "line": 214,
+     "line": 215,
      "doc": "",
      "parent": "PackTests",
      "public": true,
-     "end_line": 217
+     "end_line": 218
     },
     {
      "name": "test_translations_cycle",
      "kind": "method",
-     "line": 219,
+     "line": 220,
      "doc": "",
      "parent": "PackTests",
      "public": true,
-     "end_line": 259
+     "end_line": 260
     },
     {
      "name": "test_handover_findings",
      "kind": "method",
-     "line": 273,
+     "line": 274,
      "doc": "",
      "parent": "PackTests",
      "public": true,
-     "end_line": 285
+     "end_line": 286
     },
     {
      "name": "test_git_state_and_files_only_on_this_computer",
      "kind": "method",
-     "line": 293,
+     "line": 294,
      "doc": "",
      "parent": "PackTests",
      "public": true,
-     "end_line": 320
+     "end_line": 321
     },
     {
      "name": "test_go_one_project",
      "kind": "method",
-     "line": 322,
+     "line": 323,
      "doc": "",
      "parent": "PackTests",
      "public": true,
-     "end_line": 345
+     "end_line": 346
+    },
+    {
+     "name": "test_ontology_graph_and_wiki",
+     "kind": "method",
+     "line": 348,
+     "doc": "",
+     "parent": "PackTests",
+     "public": true,
+     "end_line": 401
     },
     {
      "name": "test_go_folder_of_projects",
      "kind": "method",
-     "line": 347,
+     "line": 403,
      "doc": "",
      "parent": "PackTests",
      "public": true,
-     "end_line": 379
+     "end_line": 435
     },
     {
      "name": "test_foreign_detection",
      "kind": "method",
-     "line": 381,
+     "line": 437,
      "doc": "",
      "parent": "PackTests",
      "public": true,
-     "end_line": 387
+     "end_line": 443
     }
    ],
    "imports": [
@@ -3380,52 +3805,56 @@
      4
     ],
     [
-     "shutil",
+     "re",
      5
     ],
     [
-     "sys",
+     "shutil",
      6
     ],
     [
-     "tempfile",
+     "sys",
      7
     ],
     [
-     "unittest",
+     "tempfile",
      8
     ],
     [
-     "pathlib",
+     "unittest",
      9
     ],
     [
-     "handoff247",
-     14
+     "pathlib",
+     10
     ],
     [
-     "handoff247.build",
+     "handoff247",
      15
     ],
     [
-     "handoff247.cli",
+     "handoff247.build",
      16
     ],
     [
-     "handoff247.lexer",
+     "handoff247.cli",
      17
     ],
     [
-     "handoff247.pipeline",
+     "handoff247.lexer",
      18
     ],
     [
+     "handoff247.pipeline",
+     19
+    ],
+    [
      "subprocess",
-     288
+     289
     ],
     [
      "handoff247.translate",
-     382
+     438
     ]
    ],
    "tags": [
@@ -3441,6 +3870,14 @@
    "dst": "README.md",
    "kind": "runs",
    "line": 33,
+   "count": 1,
+   "label": ""
+  },
+  {
+   "src": "README.md",
+   "dst": "LICENSE",
+   "kind": "documents",
+   "line": 325,
    "count": 1,
    "label": ""
   },
@@ -3654,6 +4091,14 @@
   },
   {
    "src": "handoff247/build.py",
+   "dst": "handoff247/ontology.py",
+   "kind": "imports",
+   "line": 9,
+   "count": 1,
+   "label": ""
+  },
+  {
+   "src": "handoff247/build.py",
    "dst": "handoff247/render_html.py",
    "kind": "imports",
    "line": 13,
@@ -3671,6 +4116,14 @@
   {
    "src": "handoff247/build.py",
    "dst": "handoff247/translate.py",
+   "kind": "imports",
+   "line": 9,
+   "count": 1,
+   "label": ""
+  },
+  {
+   "src": "handoff247/build.py",
+   "dst": "handoff247/wiki.py",
    "kind": "imports",
    "line": 9,
    "count": 1,
@@ -3736,7 +4189,7 @@
    "src": "handoff247/cli.py",
    "dst": "handoff247/render_md.py",
    "kind": "imports",
-   "line": 179,
+   "line": 182,
    "count": 1,
    "label": ""
   },
@@ -3885,6 +4338,38 @@
    "label": ""
   },
   {
+   "src": "handoff247/ontology.py",
+   "dst": "handoff247/__init__.py",
+   "kind": "imports",
+   "line": 10,
+   "count": 1,
+   "label": ""
+  },
+  {
+   "src": "handoff247/ontology.py",
+   "dst": "handoff247/connect.py",
+   "kind": "imports",
+   "line": 11,
+   "count": 1,
+   "label": ""
+  },
+  {
+   "src": "handoff247/ontology.py",
+   "dst": "handoff247/model.py",
+   "kind": "imports",
+   "line": 12,
+   "count": 1,
+   "label": ""
+  },
+  {
+   "src": "handoff247/ontology.py",
+   "dst": "README.md",
+   "kind": "refers",
+   "line": 128,
+   "count": 1,
+   "label": ""
+  },
+  {
    "src": "handoff247/pipeline.py",
    "dst": "handoff247/__init__.py",
    "kind": "imports",
@@ -4013,6 +4498,46 @@
    "label": ""
   },
   {
+   "src": "handoff247/wiki.py",
+   "dst": "handoff247/__init__.py",
+   "kind": "imports",
+   "line": 26,
+   "count": 1,
+   "label": ""
+  },
+  {
+   "src": "handoff247/wiki.py",
+   "dst": "handoff247/labels.py",
+   "kind": "imports",
+   "line": 27,
+   "count": 1,
+   "label": ""
+  },
+  {
+   "src": "handoff247/wiki.py",
+   "dst": "handoff247/notes.py",
+   "kind": "imports",
+   "line": 28,
+   "count": 1,
+   "label": ""
+  },
+  {
+   "src": "handoff247/wiki.py",
+   "dst": "handoff247/render_md.py",
+   "kind": "imports",
+   "line": 29,
+   "count": 1,
+   "label": ""
+  },
+  {
+   "src": "handoff247/wiki.py",
+   "dst": "README.md",
+   "kind": "refers",
+   "line": 221,
+   "count": 1,
+   "label": ""
+  },
+  {
    "src": "handoff247/workspace.py",
    "dst": "handoff247/__init__.py",
    "kind": "imports",
@@ -4088,8 +4613,8 @@
    "src": "handoff247/workspace.py",
    "dst": "README.md",
    "kind": "refers",
-   "line": 333,
-   "count": 2,
+   "line": 340,
+   "count": 3,
    "label": ""
   },
   {
@@ -4104,7 +4629,7 @@
    "src": "tests/test_handoff.py",
    "dst": "handoff247/__init__.py",
    "kind": "imports",
-   "line": 14,
+   "line": 15,
    "count": 1,
    "label": ""
   },
@@ -4112,7 +4637,7 @@
    "src": "tests/test_handoff.py",
    "dst": "handoff247/build.py",
    "kind": "imports",
-   "line": 15,
+   "line": 16,
    "count": 1,
    "label": ""
   },
@@ -4120,7 +4645,7 @@
    "src": "tests/test_handoff.py",
    "dst": "handoff247/cli.py",
    "kind": "imports",
-   "line": 16,
+   "line": 17,
    "count": 1,
    "label": ""
   },
@@ -4128,7 +4653,7 @@
    "src": "tests/test_handoff.py",
    "dst": "handoff247/lexer.py",
    "kind": "imports",
-   "line": 17,
+   "line": 18,
    "count": 1,
    "label": ""
   },
@@ -4136,7 +4661,7 @@
    "src": "tests/test_handoff.py",
    "dst": "handoff247/pipeline.py",
    "kind": "imports",
-   "line": 18,
+   "line": 19,
    "count": 1,
    "label": ""
   },
@@ -4144,7 +4669,7 @@
    "src": "tests/test_handoff.py",
    "dst": "handoff247/translate.py",
    "kind": "imports",
-   "line": 382,
+   "line": 438,
    "count": 1,
    "label": ""
   },
@@ -4152,15 +4677,15 @@
    "src": "tests/test_handoff.py",
    "dst": "HANDOFF.notes.md",
    "kind": "refers",
-   "line": 152,
-   "count": 6,
+   "line": 153,
+   "count": 7,
    "label": ""
   },
   {
    "src": "tests/test_handoff.py",
    "dst": "README.md",
    "kind": "refers",
-   "line": 138,
+   "line": 139,
    "count": 12,
    "label": ""
   },
@@ -4168,7 +4693,7 @@
    "src": "tests/test_handoff.py",
    "dst": "pyproject.toml",
    "kind": "refers",
-   "line": 271,
+   "line": 272,
    "count": 1,
    "label": ""
   }
@@ -4183,7 +4708,7 @@
    },
    {
     "file": "tests/test_handoff.py",
-    "line": 390,
+    "line": 446,
     "style": "__main__ guard"
    }
   ],
@@ -4557,7 +5082,7 @@
    },
    {
     "file": "tests/test_handoff.py",
-    "line": 289,
+    "line": 290,
     "cmd": "git",
     "text": "git -C {cwd} -c user.name=T -c user.email=t@example.com -c commit.gpgsign=false {*args}",
     "targets": [],
@@ -4573,7 +5098,7 @@
    {
     "port": 5050,
     "file": "tests/test_handoff.py",
-    "line": 110,
+    "line": 111,
     "source": "address literal"
    }
   ],
@@ -4582,32 +5107,32 @@
   "hubs": [
    {
     "file": "handoff247/model.py",
-    "used_by": 15
+    "used_by": 16
    }
   ],
   "build_targets": [],
   "subcommands": [
    {
     "file": "handoff247/cli.py",
-    "line": 104,
+    "line": 106,
     "name": "go",
     "help": "one step: create or extend the notes file, build the pack, list what is left; a folder of projects gets one pack per project plus an index"
    },
    {
     "file": "handoff247/cli.py",
-    "line": 113,
+    "line": 115,
     "name": "build",
     "help": "analyze the project and write the handoff pack"
    },
    {
     "file": "handoff247/cli.py",
-    "line": 120,
+    "line": 122,
     "name": "notes",
     "help": "create the notes file or add headings for new files/modes/folders"
    },
    {
     "file": "handoff247/cli.py",
-    "line": 122,
+    "line": 124,
     "name": "check",
     "help": "report what is still undocumented; non-zero exit below --min"
    }
@@ -4622,21 +5147,21 @@
      "code": [
       {
        "file": "handoff247/cli.py",
-       "line": 118
+       "line": 120
       },
       {
        "file": "handoff247/render_md.py",
-       "line": 632
+       "line": 635
       },
       {
        "file": "pyproject.toml",
-       "line": 20
+       "line": 21
       }
      ],
      "docs": [
       {
        "file": "README.md",
-       "line": 34
+       "line": 37
       }
      ],
      "count": 6
@@ -4657,10 +5182,21 @@
      "code": [
       {
        "file": "tests/test_handoff.py",
-       "line": 268
+       "line": 269
       }
      ],
      "docs": [],
+     "count": 1
+    },
+    {
+     "host": "llmstxt.org",
+     "code": [],
+     "docs": [
+      {
+       "file": "README.md",
+       "line": 124
+      }
+     ],
      "count": 1
     }
    ],
@@ -4683,12 +5219,12 @@
     "authors": [
      {
       "name": "R B",
-      "commits": 4,
+      "commits": 6,
       "last": "2026-11-10",
       "first": "2026-11-09"
      }
     ],
-    "commits": 4,
+    "commits": 6,
     "first_commit": "2026-11-09",
     "last_commit": "2026-11-10"
    },
@@ -4698,7 +5234,7 @@
      "tool": "Python",
      "version": ">=3.10",
      "file": "pyproject.toml",
-     "line": 10
+     "line": 11
     }
    ],
    "commands": [
@@ -4715,7 +5251,7 @@
       },
       {
        "file": "tests/test_handoff.py",
-       "line": 289
+       "line": 290
       }
      ],
      "count": 5
@@ -4734,7 +5270,7 @@
    "secret_env": [],
    "has": {
     "readme": "README.md",
-    "license": "",
+    "license": "LICENSE",
     "tests": 1,
     "ci": [
      ".github/workflows/ci.yml"
@@ -4765,8 +5301,8 @@
    {
     "key": "license",
     "label": "A license file says who may use the code",
-    "state": "todo",
-    "detail": "no LICENSE file"
+    "state": "ok",
+    "detail": "LICENSE"
    },
    {
     "key": "git",

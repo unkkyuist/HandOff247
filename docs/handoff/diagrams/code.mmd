@@ -16,16 +16,18 @@ flowchart LR
     n15["leaving.py"]:::file
     n16["lexer.py"]:::file
     n17["mermaid.py"]:::file
-    n18["model.py<br/>(used by 15 files)"]:::hub
+    n18["model.py<br/>(used by 16 files)"]:::hub
     n19["notes.py"]:::file
-    n20["pipeline.py"]:::file
-    n21["render#95;html.py"]:::file
-    n22["render#95;md.py"]:::file
-    n23["translate.py"]:::file
-    n24["workspace.py"]:::file
+    n20["ontology.py"]:::file
+    n21["pipeline.py"]:::file
+    n22["render#95;html.py"]:::file
+    n23["render#95;md.py"]:::file
+    n24["translate.py"]:::file
+    n25["wiki.py"]:::file
+    n26["workspace.py"]:::file
   end
-  subgraph g25["tests"]
-    n26["test#95;handoff.py"]:::entry
+  subgraph g27["tests"]
+    n28["test#95;handoff.py"]:::entry
   end
   n3 --> n11
   n4 --> n5
@@ -41,51 +43,59 @@ flowchart LR
   n10 --> n2
   n10 --> n17
   n10 --> n19
-  n10 --> n21
+  n10 --> n20
   n10 --> n22
   n10 --> n23
+  n10 --> n24
+  n10 --> n25
   n11 --> n2
   n11 --> n10
   n11 --> n15
   n11 --> n19
-  n11 --> n20
-  n11 --> n22
+  n11 --> n21
   n11 --> n23
   n11 --> n24
+  n11 --> n26
   n15 --> n13
   n17 --> n12
   n17 --> n14
   n19 --> n2
   n19 --> n12
   n19 --> n14
-  n19 --> n23
+  n19 --> n24
   n20 --> n2
-  n20 --> n4
   n20 --> n12
-  n20 --> n13
-  n20 --> n15
   n21 --> n2
+  n21 --> n4
+  n21 --> n12
+  n21 --> n13
+  n21 --> n15
   n22 --> n2
-  n22 --> n12
-  n22 --> n14
-  n22 --> n15
-  n22 --> n17
-  n22 --> n19
-  n24 --> n2
-  n24 --> n10
-  n24 --> n13
-  n24 --> n15
-  n24 --> n17
-  n24 --> n19
-  n24 --> n20
-  n24 --> n21
-  n24 --> n22
+  n23 --> n2
+  n23 --> n12
+  n23 --> n14
+  n23 --> n15
+  n23 --> n17
+  n23 --> n19
+  n25 --> n2
+  n25 --> n14
+  n25 --> n19
+  n25 --> n23
   n26 --> n2
   n26 --> n10
-  n26 --> n11
-  n26 --> n16
-  n26 --> n20
+  n26 --> n13
+  n26 --> n15
+  n26 --> n17
+  n26 --> n19
+  n26 --> n21
+  n26 --> n22
   n26 --> n23
+  n28 --> n2
+  n28 --> n10
+  n28 --> n11
+  n28 --> n16
+  n28 --> n21
+  n28 --> n24
   classDef entry fill:#fde68a,stroke:#b45309,color:#1f2937
   classDef launcher fill:#e0e7ff,stroke:#4338ca,color:#1f2937
   classDef mode fill:#dcfce7,stroke:#15803d,color:#1f2937

@@ -1,0 +1,2708 @@
+{
+ "generator": "HandOff247",
+ "kind": "ontology",
+ "version": "0.4.0",
+ "project": "HandOff247",
+ "schema": {
+  "classes": [
+   {
+    "id": "Project",
+    "label": "Project",
+    "plural": "Project",
+    "group": "structure",
+    "shape": "diamond",
+    "description": "The thing being handed over."
+   },
+   {
+    "id": "Area",
+    "label": "Area",
+    "plural": "Areas",
+    "group": "structure",
+    "shape": "square",
+    "description": "A top-level folder of the project."
+   },
+   {
+    "id": "File",
+    "label": "File",
+    "plural": "Files",
+    "group": "file",
+    "shape": "circle",
+    "description": "A file of the project (images and other assets are left out)."
+   },
+   {
+    "id": "Type",
+    "label": "Type",
+    "plural": "Types",
+    "group": "type",
+    "shape": "circle",
+    "description": "A class, record, struct, interface or enum defined in a file."
+   },
+   {
+    "id": "Mode",
+    "label": "Run mode",
+    "plural": "Run modes",
+    "group": "run",
+    "shape": "diamond",
+    "description": "A way to start the program, picked by its first argument."
+   },
+   {
+    "id": "Subcommand",
+    "label": "Sub-command",
+    "plural": "Sub-commands",
+    "group": "run",
+    "shape": "square",
+    "description": "A sub-command of a command-line parser."
+   },
+   {
+    "id": "Table",
+    "label": "Dispatch table",
+    "plural": "Dispatch tables",
+    "group": "operation",
+    "shape": "square",
+    "description": "A switch or mapping that turns an operation name into the code that handles it."
+   },
+   {
+    "id": "Operation",
+    "label": "Operation",
+    "plural": "Operations",
+    "group": "operation",
+    "shape": "circle",
+    "description": "One named operation of a dispatch table."
+   },
+   {
+    "id": "Route",
+    "label": "HTTP route",
+    "plural": "HTTP routes",
+    "group": "interface",
+    "shape": "triangle",
+    "description": "An HTTP endpoint the program serves."
+   },
+   {
+    "id": "McpTool",
+    "label": "MCP tool",
+    "plural": "MCP tools",
+    "group": "interface",
+    "shape": "diamond",
+    "description": "A tool the program offers to AI clients over MCP."
+   },
+   {
+    "id": "EnvVar",
+    "label": "Environment variable",
+    "plural": "Environment variables",
+    "group": "config",
+    "shape": "circle",
+    "description": "An environment variable the code reads or sets (operating-system variables are left out)."
+   },
+   {
+    "id": "Port",
+    "label": "Port",
+    "plural": "Ports",
+    "group": "config",
+    "shape": "square",
+    "description": "A network port number found in an address or a port setting."
+   },
+   {
+    "id": "Package",
+    "label": "Package",
+    "plural": "Packages",
+    "group": "outside",
+    "shape": "circle",
+    "description": "A third-party package the project declares or imports."
+   },
+   {
+    "id": "Host",
+    "label": "External host",
+    "plural": "External hosts",
+    "group": "outside",
+    "shape": "triangle",
+    "description": "A host name found in a URL."
+   },
+   {
+    "id": "Command",
+    "label": "Command-line tool",
+    "plural": "Command-line tools",
+    "group": "outside",
+    "shape": "square",
+    "description": "A well-known program the project's scripts start; it has to be installed."
+   },
+   {
+    "id": "Person",
+    "label": "Person",
+    "plural": "People",
+    "group": "outside",
+    "shape": "diamond",
+    "description": "An author in the Git history."
+   }
+  ],
+  "relations": [
+   {
+    "id": "contains",
+    "label": "contains",
+    "inverse": "is part of",
+    "description": "Project → area → file."
+   },
+   {
+    "id": "defines",
+    "label": "defines",
+    "inverse": "is defined in",
+    "description": "The file holds the definition."
+   },
+   {
+    "id": "imports",
+    "label": "imports",
+    "inverse": "is imported by",
+    "description": "Import or include statement."
+   },
+   {
+    "id": "uses",
+    "label": "uses",
+    "inverse": "is used by",
+    "description": "The code names a type defined in the other file; a run mode uses a type."
+   },
+   {
+    "id": "injects",
+    "label": "takes as a dependency",
+    "inverse": "is a dependency of",
+    "description": "Constructor parameter of that type."
+   },
+   {
+    "id": "extends",
+    "label": "extends",
+    "inverse": "is extended by",
+    "description": "Base class or implemented interface."
+   },
+   {
+    "id": "loads",
+    "label": "loads",
+    "inverse": "is loaded by",
+    "description": "A page loads a script or stylesheet."
+   },
+   {
+    "id": "runs",
+    "label": "runs",
+    "inverse": "is run by",
+    "description": "A script or configuration starts the other file."
+   },
+   {
+    "id": "refers",
+    "label": "refers to",
+    "inverse": "is referred to by",
+    "description": "A string in the file is the other file's path."
+   },
+   {
+    "id": "references",
+    "label": "references",
+    "inverse": "is referenced by",
+    "description": "Project reference in a build file."
+   },
+   {
+    "id": "documents",
+    "label": "documents",
+    "inverse": "is documented in",
+    "description": "A document links to the file or shows the operation in an example."
+   },
+   {
+    "id": "serves",
+    "label": "serves",
+    "inverse": "is served by",
+    "description": "A run mode passes requests to the dispatch table."
+   },
+   {
+    "id": "exposes",
+    "label": "exposes",
+    "inverse": "is exposed by",
+    "description": "A run mode registers the HTTP route."
+   },
+   {
+    "id": "hasOperation",
+    "label": "has operation",
+    "inverse": "is an operation of",
+    "description": "Key of the dispatch table."
+   },
+   {
+    "id": "handledBy",
+    "label": "is handled by",
+    "inverse": "handles",
+    "description": "The file that holds the handler the table calls."
+   },
+   {
+    "id": "calls",
+    "label": "calls",
+    "inverse": "is called from",
+    "description": "The file asks for the operation by name (over HTTP, a process or in-process)."
+   },
+   {
+    "id": "invokes",
+    "label": "invokes",
+    "inverse": "is invoked by",
+    "description": "An MCP tool runs the operation."
+   },
+   {
+    "id": "forwardsTo",
+    "label": "forwards to",
+    "inverse": "receives from",
+    "description": "An HTTP route hands the request to the dispatch table."
+   },
+   {
+    "id": "reads",
+    "label": "reads",
+    "inverse": "is read by",
+    "description": "The file reads the environment variable."
+   },
+   {
+    "id": "sets",
+    "label": "sets",
+    "inverse": "is set by",
+    "description": "The file sets the environment variable."
+   },
+   {
+    "id": "mentions",
+    "label": "mentions",
+    "inverse": "is mentioned in",
+    "description": "The host or port appears in the file."
+   },
+   {
+    "id": "dependsOn",
+    "label": "depends on",
+    "inverse": "is a dependency of",
+    "description": "The file declares or imports the package."
+   },
+   {
+    "id": "starts",
+    "label": "starts",
+    "inverse": "is started by",
+    "description": "The file starts the command-line tool."
+   },
+   {
+    "id": "authored",
+    "label": "has commits in",
+    "inverse": "has commits by",
+    "description": "Author in the Git history of the project."
+   }
+  ]
+ },
+ "counts": {
+  "Project": 1,
+  "Area": 3,
+  "File": 34,
+  "Type": 16,
+  "Subcommand": 4,
+  "Table": 2,
+  "Operation": 20,
+  "Port": 1,
+  "Host": 4,
+  "Command": 2,
+  "Person": 1
+ },
+ "entities": [
+  {
+   "id": "project:HandOff247",
+   "type": "Project",
+   "name": "HandOff247",
+   "summary": "HandOff247 reads a project folder and writes a handoff pack for the next person: diagrams, structure, extracted comments and a map of how the tools connect. It is static analysis only (it never imports or runs the targe…",
+   "page": "wiki/overview.md"
+  },
+  {
+   "id": "area:.github",
+   "type": "Area",
+   "name": ".github",
+   "summary": "CI: unit tests on Linux and Windows (Python 3.10 and 3.12), a self-documentation run, and a run of the composite action against the test fixture.",
+   "attrs": {
+    "files": 1
+   },
+   "page": "wiki/areas/github.md"
+  },
+  {
+   "id": "area:handoff247",
+   "type": "Area",
+   "name": "handoff247",
+   "summary": "The package. Data flows inventory → analyzers → connect → (mermaid, render_md, render_html) → build. pipeline.py wires the first three; cli.py and build.py the rest.",
+   "attrs": {
+    "files": 25
+   },
+   "page": "wiki/areas/handoff247.md"
+  },
+  {
+   "id": "area:tests",
+   "type": "Area",
+   "name": "tests",
+   "summary": "`test_handoff.py` plus `fixtures/mini`, a small fake app (C# + JS + Python + PowerShell + batch) wired the same way as PlayBookOS: three modes, one dispatch switch, HTTP route, MCP tools, launch scripts. Every connectio…",
+   "attrs": {
+    "files": 1
+   },
+   "page": "wiki/areas/tests.md"
+  },
+  {
+   "id": "file:.github/workflows/ci.yml",
+   "type": "File",
+   "name": ".github/workflows/ci.yml",
+   "summary": "CI workflow: CI",
+   "file": ".github/workflows/ci.yml",
+   "attrs": {
+    "language": "yaml",
+    "category": "config",
+    "lines": 33
+   },
+   "page": "wiki/files/github__workflows__ci.yml.md"
+  },
+  {
+   "id": "file:.gitignore",
+   "type": "File",
+   "name": ".gitignore",
+   "file": ".gitignore",
+   "attrs": {
+    "language": "ignore",
+    "category": "config",
+    "lines": 9
+   },
+   "page": "wiki/files/gitignore.md"
+  },
+  {
+   "id": "file:.handoffignore",
+   "type": "File",
+   "name": ".handoffignore",
+   "file": ".handoffignore",
+   "attrs": {
+    "language": "other",
+    "category": "other",
+    "lines": 5
+   },
+   "page": "wiki/files/handoffignore.md"
+  },
+  {
+   "id": "file:action.yml",
+   "type": "File",
+   "name": "action.yml",
+   "file": "action.yml",
+   "attrs": {
+    "language": "yaml",
+    "category": "config",
+    "lines": 40
+   },
+   "page": "wiki/files/action.yml.md"
+  },
+  {
+   "id": "file:HANDOFF.notes.md",
+   "type": "File",
+   "name": "HANDOFF.notes.md",
+   "summary": "HandOff247 notes.",
+   "file": "HANDOFF.notes.md",
+   "attrs": {
+    "language": "markdown",
+    "category": "docs",
+    "lines": 131
+   },
+   "page": "wiki/files/HANDOFF.notes.md.md"
+  },
+  {
+   "id": "file:handoff247/__init__.py",
+   "type": "File",
+   "name": "handoff247/__init__.py",
+   "summary": "Holds `__version__`; the version is printed in every generated page.",
+   "file": "handoff247/__init__.py",
+   "attrs": {
+    "language": "python",
+    "category": "code",
+    "lines": 5
+   },
+   "page": "wiki/files/handoff247____init__.py.md"
+  },
+  {
+   "id": "file:handoff247/__main__.py",
+   "type": "File",
+   "name": "handoff247/__main__.py",
+   "summary": "Lets `python -m handoff247` run the CLI.",
+   "file": "handoff247/__main__.py",
+   "attrs": {
+    "language": "python",
+    "category": "code",
+    "lines": 3
+   },
+   "page": "wiki/files/handoff247____main__.py.md"
+  },
+  {
+   "id": "file:handoff247/analyzers/__init__.py",
+   "type": "File",
+   "name": "handoff247/analyzers/__init__.py",
+   "summary": "Maps a file's language to its analyzer. An exception inside one analyzer marks only that file as \"not parsed\"; it never stops the run.",
+   "file": "handoff247/analyzers/__init__.py",
+   "attrs": {
+    "language": "python",
+    "category": "code",
+    "lines": 37
+   },
+   "page": "wiki/files/handoff247__analyzers____init__.py.md"
+  },
+  {
+   "id": "file:handoff247/analyzers/csharp.py",
+   "type": "File",
+   "name": "handoff247/analyzers/csharp.py",
+   "summary": "The richest analyzer: types and primary-constructor dependencies, entry modes (`if (mode == \"x\")` in the entry file), `switch` dispatch tables with handler resolution, minimal-API routes, `[McpServerTool]` methods, envi…",
+   "file": "handoff247/analyzers/csharp.py",
+   "attrs": {
+    "language": "python",
+    "category": "code",
+    "lines": 435
+   },
+   "page": "wiki/files/handoff247__analyzers__csharp.py.md"
+  },
+  {
+   "id": "file:handoff247/analyzers/docs.py",
+   "type": "File",
+   "name": "handoff247/analyzers/docs.py",
+   "summary": "Markdown (summary, headings, relative links, code blocks for `<mode> <op>` usage), plus config formats: .csproj, package.json, pyproject, requirements, MCP client configs (`mcpServers` / `[mcp_servers]`), Dockerfile, Gi…",
+   "file": "handoff247/analyzers/docs.py",
+   "attrs": {
+    "language": "python",
+    "category": "code",
+    "lines": 211
+   },
+   "page": "wiki/files/handoff247__analyzers__docs.py.md"
+  },
+  {
+   "id": "file:handoff247/analyzers/python.py",
+   "type": "File",
+   "name": "handoff247/analyzers/python.py",
+   "summary": "Uses `ast`, never imports the file. Finds argparse sub-commands, subprocess launches (rendered with `{variable}` placeholders), env reads/writes, dict/if-chain/match dispatch tables, Flask/FastAPI routes and MCP tool de…",
+   "file": "handoff247/analyzers/python.py",
+   "attrs": {
+    "language": "python",
+    "category": "code",
+    "lines": 281
+   },
+   "page": "wiki/files/handoff247__analyzers__python.py.md"
+  },
+  {
+   "id": "file:handoff247/analyzers/shell.py",
+   "type": "File",
+   "name": "handoff247/analyzers/shell.py",
+   "summary": "PowerShell, POSIX shell and batch: leading comment / .SYNOPSIS as summary, `$env:` / `export` / `set` variables, and command lines that launch something (dotnet, python, powershell -File, `&` call operator, start URL).",
+   "file": "handoff247/analyzers/shell.py",
+   "attrs": {
+    "language": "python",
+    "category": "code",
+    "lines": 178
+   },
+   "page": "wiki/files/handoff247__analyzers__shell.py.md"
+  },
+  {
+   "id": "file:handoff247/analyzers/web.py",
+   "type": "File",
+   "name": "handoff247/analyzers/web.py",
+   "summary": "JavaScript/TypeScript (imports, exported functions with spans, `fetch` calls, Express routes, MCP registrations, `case` tables), HTML (`<script src>`, `<link>`, inline scripts) and CSS imports.",
+   "file": "handoff247/analyzers/web.py",
+   "attrs": {
+    "language": "python",
+    "category": "code",
+    "lines": 138
+   },
+   "page": "wiki/files/handoff247__analyzers__web.py.md"
+  },
+  {
+   "id": "file:handoff247/build.py",
+   "type": "File",
+   "name": "handoff247/build.py",
+   "summary": "Writes the pack: six Markdown pages, `diagrams/*.mmd`, `handoff.json` (its first key `\"generator\": \"HandOff247\"` is how later runs recognise and skip an old pack), `ontology.json`, the wiki and `index.html`. `write_wiki…",
+   "file": "handoff247/build.py",
+   "attrs": {
+    "language": "python",
+    "category": "code",
+    "lines": 91
+   },
+   "page": "wiki/files/handoff247__build.py.md"
+  },
+  {
+   "id": "file:handoff247/cli.py",
+   "type": "File",
+   "name": "handoff247/cli.py",
+   "summary": "Four commands: `go`, `build`, `notes`, `check`. A first argument that is not a command is taken as a folder for `go`. `go` decides between one project and a folder of projects (`workspace.is_workspace`), then does notes…",
+   "file": "handoff247/cli.py",
+   "attrs": {
+    "language": "python",
+    "category": "code",
+    "lines": 196
+   },
+   "page": "wiki/files/handoff247__cli.py.md"
+  },
+  {
+   "id": "file:handoff247/connect.py",
+   "type": "File",
+   "name": "handoff247/connect.py",
+   "summary": "Turns per-file facts into edges and connection maps. The key idea: string keys of a dispatch table (`\"list\"`, `\"ontology.search\"`) are followed to every caller (`api('list')`, `cli('list')`, `Call(\"list\")`, `cli list` i…",
+   "file": "handoff247/connect.py",
+   "attrs": {
+    "language": "python",
+    "category": "code",
+    "lines": 677
+   },
+   "page": "wiki/files/handoff247__connect.py.md"
+  },
+  {
+   "id": "file:handoff247/inventory.py",
+   "type": "File",
+   "name": "handoff247/inventory.py",
+   "summary": "Lists files with `git ls-files` (so .gitignore applies), falls back to a directory walk, applies `.handoffignore` and skips folders that contain an earlier pack.",
+   "file": "handoff247/inventory.py",
+   "attrs": {
+    "language": "python",
+    "category": "code",
+    "lines": 252
+   },
+   "page": "wiki/files/handoff247__inventory.py.md"
+  },
+  {
+   "id": "file:handoff247/labels.py",
+   "type": "File",
+   "name": "handoff247/labels.py",
+   "summary": "Every generated heading and label, in one table, so pages and diagrams use the same words. Extracted comments and notes never pass through it.",
+   "file": "handoff247/labels.py",
+   "attrs": {
+    "language": "python",
+    "category": "code",
+    "lines": 254
+   },
+   "page": "wiki/files/handoff247__labels.py.md"
+  },
+  {
+   "id": "file:handoff247/leaving.py",
+   "type": "File",
+   "name": "handoff247/leaving.py",
+   "summary": "The handover findings: Git state (uncommitted, commits on no remote, stashes, authors), files Git ignores that are present, absolute paths, hosts in URLs, TODO comments, key and token patterns, declared tool versions, a…",
+   "file": "handoff247/leaving.py",
+   "attrs": {
+    "language": "python",
+    "category": "code",
+    "lines": 383
+   },
+   "page": "wiki/files/handoff247__leaving.py.md"
+  },
+  {
+   "id": "file:handoff247/lexer.py",
+   "type": "File",
+   "name": "handoff247/lexer.py",
+   "summary": "Produces two views of C-like source with identical offsets: strings+comments blanked (for identifiers) and comments blanked (for literal patterns). Handles C# verbatim, interpolated and raw strings and JS template and r…",
+   "file": "handoff247/lexer.py",
+   "attrs": {
+    "language": "python",
+    "category": "code",
+    "lines": 311
+   },
+   "page": "wiki/files/handoff247__lexer.py.md"
+  },
+  {
+   "id": "file:handoff247/mermaid.py",
+   "type": "File",
+   "name": "handoff247/mermaid.py",
+   "summary": "Builds the five diagrams. `system` collapses launch scripts into one node when there are more than three; `code` hides incoming arrows of shared foundations (hubs) so the rest stays readable.",
+   "file": "handoff247/mermaid.py",
+   "attrs": {
+    "language": "python",
+    "category": "code",
+    "lines": 476
+   },
+   "page": "wiki/files/handoff247__mermaid.py.md"
+  },
+  {
+   "id": "file:handoff247/model.py",
+   "type": "File",
+   "name": "handoff247/model.py",
+   "summary": "Dataclasses: FileInfo, Symbol, Fact, Edge, Project. A Fact is one observation with a file and line; everything in the pack traces back to one.",
+   "file": "handoff247/model.py",
+   "attrs": {
+    "language": "python",
+    "category": "code",
+    "lines": 91
+   },
+   "page": "wiki/files/handoff247__model.py.md"
+  },
+  {
+   "id": "file:handoff247/notes.py",
+   "type": "File",
+   "name": "handoff247/notes.py",
+   "summary": "Parses and extends the notes file. `update` only appends missing headings and missing Translations rows; it never rewrites existing text. Stale headings (for deleted files) are reported, not removed.",
+   "file": "handoff247/notes.py",
+   "attrs": {
+    "language": "python",
+    "category": "code",
+    "lines": 201
+   },
+   "page": "wiki/files/handoff247__notes.py.md"
+  },
+  {
+   "id": "file:handoff247/ontology.py",
+   "type": "File",
+   "name": "handoff247/ontology.py",
+   "summary": "Turns `project.links` and `project.edges` into typed entities and relations. It detects nothing itself; add a new kind of fact in an analyzer or in `connect.py` first, then map it here. `CLASSES` and `RELATIONS` are the…",
+   "file": "handoff247/ontology.py",
+   "attrs": {
+    "language": "python",
+    "category": "code",
+    "lines": 278
+   },
+   "page": "wiki/files/handoff247__ontology.py.md"
+  },
+  {
+   "id": "file:handoff247/pipeline.py",
+   "type": "File",
+   "name": "handoff247/pipeline.py",
+   "summary": "analyze_project(): inventory, per-file analysis, linking.",
+   "file": "handoff247/pipeline.py",
+   "attrs": {
+    "language": "python",
+    "category": "code",
+    "lines": 21
+   },
+   "page": "wiki/files/handoff247__pipeline.py.md"
+  },
+  {
+   "id": "file:handoff247/render_html.py",
+   "type": "File",
+   "name": "handoff247/render_html.py",
+   "summary": "The single-file viewer. It embeds the Markdown pages and loads marked, DOMPurify and Mermaid from jsDelivr at pinned versions. Diagram nodes are matched back to files through the `flowchart-nN-` element ids, so clicking…",
+   "file": "handoff247/render_html.py",
+   "attrs": {
+    "language": "python",
+    "category": "code",
+    "lines": 527
+   },
+   "page": "wiki/files/handoff247__render_html.py.md"
+  },
+  {
+   "id": "file:handoff247/render_md.py",
+   "type": "File",
+   "name": "handoff247/render_md.py",
+   "summary": "The six Markdown pages; `handover()` puts each of the leaver's answers next to what `leaving.py` found. `Linker` decides how file:line references are linked: relative when the pack is inside the project, GitHub blob URL…",
+   "file": "handoff247/render_md.py",
+   "attrs": {
+    "language": "python",
+    "category": "code",
+    "lines": 651
+   },
+   "page": "wiki/files/handoff247__render_md.py.md"
+  },
+  {
+   "id": "file:handoff247/translate.py",
+   "type": "File",
+   "name": "handoff247/translate.py",
+   "summary": "Finds extracted prose with letters outside the Latin script (summaries, doc comments, Markdown headings, MCP tool descriptions, sub-command help, commit subjects) and swaps in the English from the notes' Translations ta…",
+   "file": "handoff247/translate.py",
+   "attrs": {
+    "language": "python",
+    "category": "code",
+    "lines": 93
+   },
+   "page": "wiki/files/handoff247__translate.py.md"
+  },
+  {
+   "id": "file:handoff247/wiki.py",
+   "type": "File",
+   "name": "handoff247/wiki.py",
+   "summary": "Writes the ontology as Markdown pages plus `llms.txt` and `llms-full.txt`. `assign_pages` decides which page describes an entity (own page for files, areas, modes, operations and MCP tools; a list page for the small cla…",
+   "file": "handoff247/wiki.py",
+   "attrs": {
+    "language": "python",
+    "category": "code",
+    "lines": 372
+   },
+   "page": "wiki/files/handoff247__wiki.py.md"
+  },
+  {
+   "id": "file:handoff247/workspace.py",
+   "type": "File",
+   "name": "handoff247/workspace.py",
+   "summary": "The folder-of-projects mode: finds projects one or two levels down, builds a pack for each, and writes the index (README.md, index.html, workspace.json, workspace.mmd). It does not write into the projects: notes for a p…",
+   "file": "handoff247/workspace.py",
+   "attrs": {
+    "language": "python",
+    "category": "code",
+    "lines": 345
+   },
+   "page": "wiki/files/handoff247__workspace.py.md"
+  },
+  {
+   "id": "file:LICENSE",
+   "type": "File",
+   "name": "LICENSE",
+   "file": "LICENSE",
+   "attrs": {
+    "language": "other",
+    "category": "other",
+    "lines": 21
+   },
+   "page": "wiki/files/LICENSE.md"
+  },
+  {
+   "id": "file:pyproject.toml",
+   "type": "File",
+   "name": "pyproject.toml",
+   "summary": "Turn a project folder into a handoff pack: diagrams, structure, comments, how the tools connect, an ontology graph and a wiki for AI assistants.",
+   "file": "pyproject.toml",
+   "attrs": {
+    "language": "toml",
+    "category": "config",
+    "lines": 27
+   },
+   "page": "wiki/files/pyproject.toml.md"
+  },
+  {
+   "id": "file:README.md",
+   "type": "File",
+   "name": "README.md",
+   "summary": "Hand Off 24-7 is a good-bye project for passing your existing projects to the next person.",
+   "file": "README.md",
+   "attrs": {
+    "language": "markdown",
+    "category": "docs",
+    "lines": 325
+   },
+   "page": "wiki/files/README.md.md"
+  },
+  {
+   "id": "file:tests/test_handoff.py",
+   "type": "File",
+   "name": "tests/test_handoff.py",
+   "summary": "Runs the full pipeline on a copy of the fixture outside Git, so both file-listing paths are covered.",
+   "file": "tests/test_handoff.py",
+   "attrs": {
+    "language": "python",
+    "category": "test",
+    "lines": 447
+   },
+   "page": "wiki/files/tests__test_handoff.py.md"
+  },
+  {
+   "id": "type:tests/test_handoff.py#AnalysisTests",
+   "type": "Type",
+   "name": "AnalysisTests",
+   "file": "tests/test_handoff.py",
+   "line": 49,
+   "attrs": {
+    "kind": "class"
+   },
+   "page": "wiki/files/tests__test_handoff.py.md"
+  },
+  {
+   "id": "type:handoff247/lexer.py#Comment",
+   "type": "Type",
+   "name": "Comment",
+   "file": "handoff247/lexer.py",
+   "line": 22,
+   "attrs": {
+    "kind": "class"
+   },
+   "page": "wiki/files/handoff247__lexer.py.md"
+  },
+  {
+   "id": "type:handoff247/model.py#Edge",
+   "type": "Type",
+   "name": "Edge",
+   "file": "handoff247/model.py",
+   "line": 65,
+   "attrs": {
+    "kind": "class"
+   },
+   "page": "wiki/files/handoff247__model.py.md"
+  },
+  {
+   "id": "type:handoff247/model.py#Fact",
+   "type": "Type",
+   "name": "Fact",
+   "summary": "One observation.",
+   "file": "handoff247/model.py",
+   "line": 25,
+   "attrs": {
+    "kind": "class"
+   },
+   "page": "wiki/files/handoff247__model.py.md"
+  },
+  {
+   "id": "type:handoff247/connect.py#FileIndex",
+   "type": "Type",
+   "name": "FileIndex",
+   "file": "handoff247/connect.py",
+   "line": 37,
+   "attrs": {
+    "kind": "class"
+   },
+   "page": "wiki/files/handoff247__connect.py.md"
+  },
+  {
+   "id": "type:handoff247/model.py#FileInfo",
+   "type": "Type",
+   "name": "FileInfo",
+   "file": "handoff247/model.py",
+   "line": 38,
+   "attrs": {
+    "kind": "class"
+   },
+   "page": "wiki/files/handoff247__model.py.md"
+  },
+  {
+   "id": "type:handoff247/mermaid.py#Flow",
+   "type": "Type",
+   "name": "Flow",
+   "file": "handoff247/mermaid.py",
+   "line": 34,
+   "attrs": {
+    "kind": "class"
+   },
+   "page": "wiki/files/handoff247__mermaid.py.md"
+  },
+  {
+   "id": "type:handoff247/lexer.py#Lexed",
+   "type": "Type",
+   "name": "Lexed",
+   "file": "handoff247/lexer.py",
+   "line": 30,
+   "attrs": {
+    "kind": "class"
+   },
+   "page": "wiki/files/handoff247__lexer.py.md"
+  },
+  {
+   "id": "type:tests/test_handoff.py#LexerTests",
+   "type": "Type",
+   "name": "LexerTests",
+   "file": "tests/test_handoff.py",
+   "line": 31,
+   "attrs": {
+    "kind": "class"
+   },
+   "page": "wiki/files/tests__test_handoff.py.md"
+  },
+  {
+   "id": "type:handoff247/render_md.py#Linker",
+   "type": "Type",
+   "name": "Linker",
+   "summary": "Turns file:line into a link.",
+   "file": "handoff247/render_md.py",
+   "line": 19,
+   "attrs": {
+    "kind": "class"
+   },
+   "page": "wiki/files/handoff247__render_md.py.md"
+  },
+  {
+   "id": "type:handoff247/notes.py#Notes",
+   "type": "Type",
+   "name": "Notes",
+   "file": "handoff247/notes.py",
+   "line": 34,
+   "attrs": {
+    "kind": "class"
+   },
+   "page": "wiki/files/handoff247__notes.py.md"
+  },
+  {
+   "id": "type:tests/test_handoff.py#PackTests",
+   "type": "Type",
+   "name": "PackTests",
+   "file": "tests/test_handoff.py",
+   "line": 142,
+   "attrs": {
+    "kind": "class"
+   },
+   "page": "wiki/files/tests__test_handoff.py.md"
+  },
+  {
+   "id": "type:handoff247/render_md.py#Pages",
+   "type": "Type",
+   "name": "Pages",
+   "file": "handoff247/render_md.py",
+   "line": 67,
+   "attrs": {
+    "kind": "class"
+   },
+   "page": "wiki/files/handoff247__render_md.py.md"
+  },
+  {
+   "id": "type:handoff247/model.py#Project",
+   "type": "Type",
+   "name": "Project",
+   "file": "handoff247/model.py",
+   "line": 75,
+   "attrs": {
+    "kind": "class"
+   },
+   "page": "wiki/files/handoff247__model.py.md"
+  },
+  {
+   "id": "type:handoff247/model.py#Symbol",
+   "type": "Type",
+   "name": "Symbol",
+   "file": "handoff247/model.py",
+   "line": 14,
+   "attrs": {
+    "kind": "class"
+   },
+   "page": "wiki/files/handoff247__model.py.md"
+  },
+  {
+   "id": "type:handoff247/wiki.py#Wiki",
+   "type": "Type",
+   "name": "Wiki",
+   "file": "handoff247/wiki.py",
+   "line": 88,
+   "attrs": {
+    "kind": "class"
+   },
+   "page": "wiki/files/handoff247__wiki.py.md"
+  },
+  {
+   "id": "subcmd:build",
+   "type": "Subcommand",
+   "name": "build",
+   "summary": "analyze the project and write the handoff pack",
+   "file": "handoff247/cli.py",
+   "line": 115,
+   "page": "wiki/subcommands.md"
+  },
+  {
+   "id": "subcmd:check",
+   "type": "Subcommand",
+   "name": "check",
+   "summary": "report what is still undocumented; non-zero exit below --min",
+   "file": "handoff247/cli.py",
+   "line": 124,
+   "page": "wiki/subcommands.md"
+  },
+  {
+   "id": "subcmd:go",
+   "type": "Subcommand",
+   "name": "go",
+   "summary": "one step: create or extend the notes file, build the pack, list what is left; a folder of projects gets one pack per project plus an index",
+   "file": "handoff247/cli.py",
+   "line": 106,
+   "page": "wiki/subcommands.md"
+  },
+  {
+   "id": "subcmd:notes",
+   "type": "Subcommand",
+   "name": "notes",
+   "summary": "create the notes file or add headings for new files/modes/folders",
+   "file": "handoff247/cli.py",
+   "line": 122,
+   "page": "wiki/subcommands.md"
+  },
+  {
+   "id": "table:handoff247/analyzers/__init__.py:7",
+   "type": "Table",
+   "name": "handoff247/analyzers/__init__.py:7",
+   "summary": "17 operation(s), picked by `dict`",
+   "file": "handoff247/analyzers/__init__.py",
+   "line": 7,
+   "page": "wiki/operations.md"
+  },
+  {
+   "id": "table:handoff247/leaving.py:257",
+   "type": "Table",
+   "name": "handoff247/leaving.py:257",
+   "summary": "3 operation(s), picked by `name`",
+   "file": "handoff247/leaving.py",
+   "line": 257,
+   "page": "wiki/operations.md"
+  },
+  {
+   "id": "op:.python-version",
+   "type": "Operation",
+   "name": ".python-version",
+   "file": "handoff247/leaving.py",
+   "line": 257,
+   "page": "wiki/operations/python-version.md"
+  },
+  {
+   "id": "op:.tool-versions",
+   "type": "Operation",
+   "name": ".tool-versions",
+   "file": "handoff247/leaving.py",
+   "line": 259,
+   "page": "wiki/operations/tool-versions.md"
+  },
+  {
+   "id": "op:batch",
+   "type": "Operation",
+   "name": "batch",
+   "summary": "handled by `shell.analyze_batch`",
+   "file": "handoff247/analyzers/__init__.py",
+   "line": 16,
+   "attrs": {
+    "handler": "shell.analyze_batch",
+    "expression": "shell.analyze_batch"
+   },
+   "page": "wiki/operations/batch.md"
+  },
+  {
+   "id": "op:csharp",
+   "type": "Operation",
+   "name": "csharp",
+   "summary": "handled by `csharp.analyze`",
+   "file": "handoff247/analyzers/__init__.py",
+   "line": 8,
+   "attrs": {
+    "handler": "csharp.analyze",
+    "expression": "csharp.analyze"
+   },
+   "page": "wiki/operations/csharp.md"
+  },
+  {
+   "id": "op:css",
+   "type": "Operation",
+   "name": "css",
+   "summary": "handled by `web.analyze_css`",
+   "file": "handoff247/analyzers/__init__.py",
+   "line": 13,
+   "attrs": {
+    "handler": "web.analyze_css",
+    "expression": "web.analyze_css"
+   },
+   "page": "wiki/operations/css.md"
+  },
+  {
+   "id": "op:dockerfile",
+   "type": "Operation",
+   "name": "dockerfile",
+   "summary": "handled by `docs.analyze_dockerfile`",
+   "file": "handoff247/analyzers/__init__.py",
+   "line": 23,
+   "attrs": {
+    "handler": "docs.analyze_dockerfile",
+    "expression": "docs.analyze_dockerfile"
+   },
+   "page": "wiki/operations/dockerfile.md"
+  },
+  {
+   "id": "op:go.mod",
+   "type": "Operation",
+   "name": "go.mod",
+   "file": "handoff247/leaving.py",
+   "line": 264,
+   "page": "wiki/operations/go.mod.md"
+  },
+  {
+   "id": "op:html",
+   "type": "Operation",
+   "name": "html",
+   "summary": "handled by `web.analyze_html`",
+   "file": "handoff247/analyzers/__init__.py",
+   "line": 12,
+   "attrs": {
+    "handler": "web.analyze_html",
+    "expression": "web.analyze_html"
+   },
+   "page": "wiki/operations/html.md"
+  },
+  {
+   "id": "op:javascript",
+   "type": "Operation",
+   "name": "javascript",
+   "summary": "handled by `web.analyze_js`",
+   "file": "handoff247/analyzers/__init__.py",
+   "line": 10,
+   "attrs": {
+    "handler": "web.analyze_js",
+    "expression": "web.analyze_js"
+   },
+   "page": "wiki/operations/javascript.md"
+  },
+  {
+   "id": "op:json",
+   "type": "Operation",
+   "name": "json",
+   "summary": "handled by `docs.analyze_json`",
+   "file": "handoff247/analyzers/__init__.py",
+   "line": 19,
+   "attrs": {
+    "handler": "docs.analyze_json",
+    "expression": "docs.analyze_json"
+   },
+   "page": "wiki/operations/json.md"
+  },
+  {
+   "id": "op:markdown",
+   "type": "Operation",
+   "name": "markdown",
+   "summary": "handled by `docs.analyze_markdown`",
+   "file": "handoff247/analyzers/__init__.py",
+   "line": 17,
+   "attrs": {
+    "handler": "docs.analyze_markdown",
+    "expression": "docs.analyze_markdown"
+   },
+   "page": "wiki/operations/markdown.md"
+  },
+  {
+   "id": "op:msbuild",
+   "type": "Operation",
+   "name": "msbuild",
+   "summary": "handled by `docs.analyze_msbuild`",
+   "file": "handoff247/analyzers/__init__.py",
+   "line": 22,
+   "attrs": {
+    "handler": "docs.analyze_msbuild",
+    "expression": "docs.analyze_msbuild"
+   },
+   "page": "wiki/operations/msbuild.md"
+  },
+  {
+   "id": "op:powershell",
+   "type": "Operation",
+   "name": "powershell",
+   "summary": "handled by `shell.analyze_powershell`",
+   "file": "handoff247/analyzers/__init__.py",
+   "line": 14,
+   "attrs": {
+    "handler": "shell.analyze_powershell",
+    "expression": "shell.analyze_powershell"
+   },
+   "page": "wiki/operations/powershell.md"
+  },
+  {
+   "id": "op:python",
+   "type": "Operation",
+   "name": "python",
+   "summary": "handled by `python.analyze`",
+   "file": "handoff247/analyzers/__init__.py",
+   "line": 9,
+   "attrs": {
+    "handler": "python.analyze",
+    "expression": "python.analyze"
+   },
+   "page": "wiki/operations/python.md"
+  },
+  {
+   "id": "op:requirements",
+   "type": "Operation",
+   "name": "requirements",
+   "summary": "handled by `docs.analyze_requirements`",
+   "file": "handoff247/analyzers/__init__.py",
+   "line": 21,
+   "attrs": {
+    "handler": "docs.analyze_requirements",
+    "expression": "docs.analyze_requirements"
+   },
+   "page": "wiki/operations/requirements.md"
+  },
+  {
+   "id": "op:shell",
+   "type": "Operation",
+   "name": "shell",
+   "summary": "handled by `shell.analyze_shell`",
+   "file": "handoff247/analyzers/__init__.py",
+   "line": 15,
+   "attrs": {
+    "handler": "shell.analyze_shell",
+    "expression": "shell.analyze_shell"
+   },
+   "page": "wiki/operations/shell.md"
+  },
+  {
+   "id": "op:text",
+   "type": "Operation",
+   "name": "text",
+   "summary": "handled by `docs.analyze_text`",
+   "file": "handoff247/analyzers/__init__.py",
+   "line": 18,
+   "attrs": {
+    "handler": "docs.analyze_text",
+    "expression": "docs.analyze_text"
+   },
+   "page": "wiki/operations/text.md"
+  },
+  {
+   "id": "op:toml",
+   "type": "Operation",
+   "name": "toml",
+   "summary": "handled by `docs.analyze_toml`",
+   "file": "handoff247/analyzers/__init__.py",
+   "line": 20,
+   "attrs": {
+    "handler": "docs.analyze_toml",
+    "expression": "docs.analyze_toml"
+   },
+   "page": "wiki/operations/toml.md"
+  },
+  {
+   "id": "op:typescript",
+   "type": "Operation",
+   "name": "typescript",
+   "summary": "handled by `web.analyze_js`",
+   "file": "handoff247/analyzers/__init__.py",
+   "line": 11,
+   "attrs": {
+    "handler": "web.analyze_js",
+    "expression": "web.analyze_js"
+   },
+   "page": "wiki/operations/typescript.md"
+  },
+  {
+   "id": "op:yaml",
+   "type": "Operation",
+   "name": "yaml",
+   "summary": "handled by `docs.analyze_yaml`",
+   "file": "handoff247/analyzers/__init__.py",
+   "line": 24,
+   "attrs": {
+    "handler": "docs.analyze_yaml",
+    "expression": "docs.analyze_yaml"
+   },
+   "page": "wiki/operations/yaml.md"
+  },
+  {
+   "id": "port:5050",
+   "type": "Port",
+   "name": "5050",
+   "summary": "address literal",
+   "page": "wiki/ports.md"
+  },
+  {
+   "id": "host:api.partner-billing.com",
+   "type": "Host",
+   "name": "api.partner-billing.com",
+   "summary": "in 1 URL(s)",
+   "page": "wiki/hosts.md"
+  },
+  {
+   "id": "host:cdn.jsdelivr.net",
+   "type": "Host",
+   "name": "cdn.jsdelivr.net",
+   "summary": "in 3 URL(s)",
+   "page": "wiki/hosts.md"
+  },
+  {
+   "id": "host:github.com",
+   "type": "Host",
+   "name": "github.com",
+   "summary": "in 6 URL(s)",
+   "page": "wiki/hosts.md"
+  },
+  {
+   "id": "host:llmstxt.org",
+   "type": "Host",
+   "name": "llmstxt.org",
+   "summary": "in 1 URL(s)",
+   "page": "wiki/hosts.md"
+  },
+  {
+   "id": "cmd:git",
+   "type": "Command",
+   "name": "git",
+   "summary": "started in 5 place(s)",
+   "page": "wiki/commands.md"
+  },
+  {
+   "id": "cmd:python",
+   "type": "Command",
+   "name": "python",
+   "summary": "started in 3 place(s)",
+   "page": "wiki/commands.md"
+  },
+  {
+   "id": "person:R B",
+   "type": "Person",
+   "name": "R B",
+   "summary": "6 commit(s), 2026-11-09 to 2026-11-10",
+   "page": "wiki/people.md"
+  }
+ ],
+ "relations": [
+  {
+   "s": "area:.github",
+   "p": "contains",
+   "o": "file:.github/workflows/ci.yml"
+  },
+  {
+   "s": "area:handoff247",
+   "p": "contains",
+   "o": "file:handoff247/__init__.py"
+  },
+  {
+   "s": "area:handoff247",
+   "p": "contains",
+   "o": "file:handoff247/__main__.py"
+  },
+  {
+   "s": "area:handoff247",
+   "p": "contains",
+   "o": "file:handoff247/analyzers/__init__.py"
+  },
+  {
+   "s": "area:handoff247",
+   "p": "contains",
+   "o": "file:handoff247/analyzers/csharp.py"
+  },
+  {
+   "s": "area:handoff247",
+   "p": "contains",
+   "o": "file:handoff247/analyzers/docs.py"
+  },
+  {
+   "s": "area:handoff247",
+   "p": "contains",
+   "o": "file:handoff247/analyzers/python.py"
+  },
+  {
+   "s": "area:handoff247",
+   "p": "contains",
+   "o": "file:handoff247/analyzers/shell.py"
+  },
+  {
+   "s": "area:handoff247",
+   "p": "contains",
+   "o": "file:handoff247/analyzers/web.py"
+  },
+  {
+   "s": "area:handoff247",
+   "p": "contains",
+   "o": "file:handoff247/build.py"
+  },
+  {
+   "s": "area:handoff247",
+   "p": "contains",
+   "o": "file:handoff247/cli.py"
+  },
+  {
+   "s": "area:handoff247",
+   "p": "contains",
+   "o": "file:handoff247/connect.py"
+  },
+  {
+   "s": "area:handoff247",
+   "p": "contains",
+   "o": "file:handoff247/inventory.py"
+  },
+  {
+   "s": "area:handoff247",
+   "p": "contains",
+   "o": "file:handoff247/labels.py"
+  },
+  {
+   "s": "area:handoff247",
+   "p": "contains",
+   "o": "file:handoff247/leaving.py"
+  },
+  {
+   "s": "area:handoff247",
+   "p": "contains",
+   "o": "file:handoff247/lexer.py"
+  },
+  {
+   "s": "area:handoff247",
+   "p": "contains",
+   "o": "file:handoff247/mermaid.py"
+  },
+  {
+   "s": "area:handoff247",
+   "p": "contains",
+   "o": "file:handoff247/model.py"
+  },
+  {
+   "s": "area:handoff247",
+   "p": "contains",
+   "o": "file:handoff247/notes.py"
+  },
+  {
+   "s": "area:handoff247",
+   "p": "contains",
+   "o": "file:handoff247/ontology.py"
+  },
+  {
+   "s": "area:handoff247",
+   "p": "contains",
+   "o": "file:handoff247/pipeline.py"
+  },
+  {
+   "s": "area:handoff247",
+   "p": "contains",
+   "o": "file:handoff247/render_html.py"
+  },
+  {
+   "s": "area:handoff247",
+   "p": "contains",
+   "o": "file:handoff247/render_md.py"
+  },
+  {
+   "s": "area:handoff247",
+   "p": "contains",
+   "o": "file:handoff247/translate.py"
+  },
+  {
+   "s": "area:handoff247",
+   "p": "contains",
+   "o": "file:handoff247/wiki.py"
+  },
+  {
+   "s": "area:handoff247",
+   "p": "contains",
+   "o": "file:handoff247/workspace.py"
+  },
+  {
+   "s": "area:tests",
+   "p": "contains",
+   "o": "file:tests/test_handoff.py"
+  },
+  {
+   "s": "file:.github/workflows/ci.yml",
+   "p": "runs",
+   "o": "file:README.md",
+   "file": ".github/workflows/ci.yml",
+   "line": 33
+  },
+  {
+   "s": "file:.github/workflows/ci.yml",
+   "p": "starts",
+   "o": "cmd:python",
+   "file": ".github/workflows/ci.yml",
+   "line": 20
+  },
+  {
+   "s": "file:README.md",
+   "p": "documents",
+   "o": "file:LICENSE",
+   "file": "README.md",
+   "line": 325
+  },
+  {
+   "s": "file:README.md",
+   "p": "mentions",
+   "o": "host:github.com",
+   "file": "README.md",
+   "line": 37
+  },
+  {
+   "s": "file:README.md",
+   "p": "mentions",
+   "o": "host:llmstxt.org",
+   "file": "README.md",
+   "line": 124
+  },
+  {
+   "s": "file:handoff247/__main__.py",
+   "p": "imports",
+   "o": "file:handoff247/cli.py",
+   "file": "handoff247/__main__.py",
+   "line": 1
+  },
+  {
+   "s": "file:handoff247/analyzers/__init__.py",
+   "p": "defines",
+   "o": "table:handoff247/analyzers/__init__.py:7",
+   "file": "handoff247/analyzers/__init__.py",
+   "line": 7
+  },
+  {
+   "s": "file:handoff247/analyzers/__init__.py",
+   "p": "imports",
+   "o": "file:handoff247/analyzers/csharp.py",
+   "file": "handoff247/analyzers/__init__.py",
+   "line": 5
+  },
+  {
+   "s": "file:handoff247/analyzers/__init__.py",
+   "p": "imports",
+   "o": "file:handoff247/analyzers/docs.py",
+   "file": "handoff247/analyzers/__init__.py",
+   "line": 5
+  },
+  {
+   "s": "file:handoff247/analyzers/__init__.py",
+   "p": "imports",
+   "o": "file:handoff247/analyzers/python.py",
+   "file": "handoff247/analyzers/__init__.py",
+   "line": 5
+  },
+  {
+   "s": "file:handoff247/analyzers/__init__.py",
+   "p": "imports",
+   "o": "file:handoff247/analyzers/shell.py",
+   "file": "handoff247/analyzers/__init__.py",
+   "line": 5
+  },
+  {
+   "s": "file:handoff247/analyzers/__init__.py",
+   "p": "imports",
+   "o": "file:handoff247/analyzers/web.py",
+   "file": "handoff247/analyzers/__init__.py",
+   "line": 5
+  },
+  {
+   "s": "file:handoff247/analyzers/__init__.py",
+   "p": "imports",
+   "o": "file:handoff247/model.py",
+   "file": "handoff247/analyzers/__init__.py",
+   "line": 4
+  },
+  {
+   "s": "file:handoff247/analyzers/csharp.py",
+   "p": "imports",
+   "o": "file:handoff247/lexer.py",
+   "file": "handoff247/analyzers/csharp.py",
+   "line": 7
+  },
+  {
+   "s": "file:handoff247/analyzers/csharp.py",
+   "p": "imports",
+   "o": "file:handoff247/model.py",
+   "file": "handoff247/analyzers/csharp.py",
+   "line": 8
+  },
+  {
+   "s": "file:handoff247/analyzers/docs.py",
+   "p": "imports",
+   "o": "file:handoff247/lexer.py",
+   "file": "handoff247/analyzers/docs.py",
+   "line": 8
+  },
+  {
+   "s": "file:handoff247/analyzers/docs.py",
+   "p": "imports",
+   "o": "file:handoff247/model.py",
+   "file": "handoff247/analyzers/docs.py",
+   "line": 9
+  },
+  {
+   "s": "file:handoff247/analyzers/python.py",
+   "p": "imports",
+   "o": "file:handoff247/lexer.py",
+   "file": "handoff247/analyzers/python.py",
+   "line": 9
+  },
+  {
+   "s": "file:handoff247/analyzers/python.py",
+   "p": "imports",
+   "o": "file:handoff247/model.py",
+   "file": "handoff247/analyzers/python.py",
+   "line": 10
+  },
+  {
+   "s": "file:handoff247/analyzers/shell.py",
+   "p": "imports",
+   "o": "file:handoff247/lexer.py",
+   "file": "handoff247/analyzers/shell.py",
+   "line": 6
+  },
+  {
+   "s": "file:handoff247/analyzers/shell.py",
+   "p": "imports",
+   "o": "file:handoff247/model.py",
+   "file": "handoff247/analyzers/shell.py",
+   "line": 7
+  },
+  {
+   "s": "file:handoff247/analyzers/web.py",
+   "p": "imports",
+   "o": "file:handoff247/lexer.py",
+   "file": "handoff247/analyzers/web.py",
+   "line": 6
+  },
+  {
+   "s": "file:handoff247/analyzers/web.py",
+   "p": "imports",
+   "o": "file:handoff247/model.py",
+   "file": "handoff247/analyzers/web.py",
+   "line": 7
+  },
+  {
+   "s": "file:handoff247/build.py",
+   "p": "imports",
+   "o": "file:handoff247/__init__.py",
+   "file": "handoff247/build.py",
+   "line": 9
+  },
+  {
+   "s": "file:handoff247/build.py",
+   "p": "imports",
+   "o": "file:handoff247/mermaid.py",
+   "file": "handoff247/build.py",
+   "line": 10
+  },
+  {
+   "s": "file:handoff247/build.py",
+   "p": "imports",
+   "o": "file:handoff247/model.py",
+   "file": "handoff247/build.py",
+   "line": 11
+  },
+  {
+   "s": "file:handoff247/build.py",
+   "p": "imports",
+   "o": "file:handoff247/notes.py",
+   "file": "handoff247/build.py",
+   "line": 12
+  },
+  {
+   "s": "file:handoff247/build.py",
+   "p": "imports",
+   "o": "file:handoff247/ontology.py",
+   "file": "handoff247/build.py",
+   "line": 9
+  },
+  {
+   "s": "file:handoff247/build.py",
+   "p": "imports",
+   "o": "file:handoff247/render_html.py",
+   "file": "handoff247/build.py",
+   "line": 13
+  },
+  {
+   "s": "file:handoff247/build.py",
+   "p": "imports",
+   "o": "file:handoff247/render_md.py",
+   "file": "handoff247/build.py",
+   "line": 14
+  },
+  {
+   "s": "file:handoff247/build.py",
+   "p": "imports",
+   "o": "file:handoff247/translate.py",
+   "file": "handoff247/build.py",
+   "line": 9
+  },
+  {
+   "s": "file:handoff247/build.py",
+   "p": "imports",
+   "o": "file:handoff247/wiki.py",
+   "file": "handoff247/build.py",
+   "line": 9
+  },
+  {
+   "s": "file:handoff247/build.py",
+   "p": "refers",
+   "o": "file:HANDOFF.notes.md",
+   "file": "handoff247/build.py",
+   "line": 34
+  },
+  {
+   "s": "file:handoff247/build.py",
+   "p": "refers",
+   "o": "file:README.md",
+   "file": "handoff247/build.py",
+   "line": 16
+  },
+  {
+   "s": "file:handoff247/cli.py",
+   "p": "defines",
+   "o": "subcmd:build",
+   "file": "handoff247/cli.py",
+   "line": 115
+  },
+  {
+   "s": "file:handoff247/cli.py",
+   "p": "defines",
+   "o": "subcmd:check",
+   "file": "handoff247/cli.py",
+   "line": 124
+  },
+  {
+   "s": "file:handoff247/cli.py",
+   "p": "defines",
+   "o": "subcmd:go",
+   "file": "handoff247/cli.py",
+   "line": 106
+  },
+  {
+   "s": "file:handoff247/cli.py",
+   "p": "defines",
+   "o": "subcmd:notes",
+   "file": "handoff247/cli.py",
+   "line": 122
+  },
+  {
+   "s": "file:handoff247/cli.py",
+   "p": "imports",
+   "o": "file:handoff247/__init__.py",
+   "file": "handoff247/cli.py",
+   "line": 9
+  },
+  {
+   "s": "file:handoff247/cli.py",
+   "p": "imports",
+   "o": "file:handoff247/build.py",
+   "file": "handoff247/cli.py",
+   "line": 10
+  },
+  {
+   "s": "file:handoff247/cli.py",
+   "p": "imports",
+   "o": "file:handoff247/leaving.py",
+   "file": "handoff247/cli.py",
+   "line": 9
+  },
+  {
+   "s": "file:handoff247/cli.py",
+   "p": "imports",
+   "o": "file:handoff247/notes.py",
+   "file": "handoff247/cli.py",
+   "line": 11
+  },
+  {
+   "s": "file:handoff247/cli.py",
+   "p": "imports",
+   "o": "file:handoff247/pipeline.py",
+   "file": "handoff247/cli.py",
+   "line": 12
+  },
+  {
+   "s": "file:handoff247/cli.py",
+   "p": "imports",
+   "o": "file:handoff247/render_md.py",
+   "file": "handoff247/cli.py",
+   "line": 182
+  },
+  {
+   "s": "file:handoff247/cli.py",
+   "p": "imports",
+   "o": "file:handoff247/translate.py",
+   "file": "handoff247/cli.py",
+   "line": 9
+  },
+  {
+   "s": "file:handoff247/cli.py",
+   "p": "imports",
+   "o": "file:handoff247/workspace.py",
+   "file": "handoff247/cli.py",
+   "line": 9
+  },
+  {
+   "s": "file:handoff247/cli.py",
+   "p": "mentions",
+   "o": "host:github.com",
+   "file": "handoff247/cli.py",
+   "line": 120
+  },
+  {
+   "s": "file:handoff247/connect.py",
+   "p": "defines",
+   "o": "type:handoff247/connect.py#FileIndex",
+   "file": "handoff247/connect.py",
+   "line": 37
+  },
+  {
+   "s": "file:handoff247/connect.py",
+   "p": "imports",
+   "o": "file:handoff247/model.py",
+   "file": "handoff247/connect.py",
+   "line": 11
+  },
+  {
+   "s": "file:handoff247/inventory.py",
+   "p": "imports",
+   "o": "file:handoff247/model.py",
+   "file": "handoff247/inventory.py",
+   "line": 14
+  },
+  {
+   "s": "file:handoff247/inventory.py",
+   "p": "starts",
+   "o": "cmd:git",
+   "file": "handoff247/inventory.py",
+   "line": 95
+  },
+  {
+   "s": "file:handoff247/leaving.py",
+   "p": "defines",
+   "o": "table:handoff247/leaving.py:257",
+   "file": "handoff247/leaving.py",
+   "line": 257
+  },
+  {
+   "s": "file:handoff247/leaving.py",
+   "p": "imports",
+   "o": "file:handoff247/inventory.py",
+   "file": "handoff247/leaving.py",
+   "line": 15
+  },
+  {
+   "s": "file:handoff247/leaving.py",
+   "p": "imports",
+   "o": "file:handoff247/model.py",
+   "file": "handoff247/leaving.py",
+   "line": 16
+  },
+  {
+   "s": "file:handoff247/leaving.py",
+   "p": "refers",
+   "o": "file:HANDOFF.notes.md",
+   "file": "handoff247/leaving.py",
+   "line": 18
+  },
+  {
+   "s": "file:handoff247/leaving.py",
+   "p": "refers",
+   "o": "file:README.md",
+   "file": "handoff247/leaving.py",
+   "line": 66
+  },
+  {
+   "s": "file:handoff247/leaving.py",
+   "p": "refers",
+   "o": "file:pyproject.toml",
+   "file": "handoff247/leaving.py",
+   "line": 239
+  },
+  {
+   "s": "file:handoff247/leaving.py",
+   "p": "starts",
+   "o": "cmd:git",
+   "file": "handoff247/leaving.py",
+   "line": 73
+  },
+  {
+   "s": "file:handoff247/lexer.py",
+   "p": "defines",
+   "o": "type:handoff247/lexer.py#Comment",
+   "file": "handoff247/lexer.py",
+   "line": 22
+  },
+  {
+   "s": "file:handoff247/lexer.py",
+   "p": "defines",
+   "o": "type:handoff247/lexer.py#Lexed",
+   "file": "handoff247/lexer.py",
+   "line": 30
+  },
+  {
+   "s": "file:handoff247/mermaid.py",
+   "p": "defines",
+   "o": "type:handoff247/mermaid.py#Flow",
+   "file": "handoff247/mermaid.py",
+   "line": 34
+  },
+  {
+   "s": "file:handoff247/mermaid.py",
+   "p": "imports",
+   "o": "file:handoff247/connect.py",
+   "file": "handoff247/mermaid.py",
+   "line": 10
+  },
+  {
+   "s": "file:handoff247/mermaid.py",
+   "p": "imports",
+   "o": "file:handoff247/labels.py",
+   "file": "handoff247/mermaid.py",
+   "line": 11
+  },
+  {
+   "s": "file:handoff247/mermaid.py",
+   "p": "imports",
+   "o": "file:handoff247/model.py",
+   "file": "handoff247/mermaid.py",
+   "line": 12
+  },
+  {
+   "s": "file:handoff247/model.py",
+   "p": "defines",
+   "o": "type:handoff247/model.py#Edge",
+   "file": "handoff247/model.py",
+   "line": 65
+  },
+  {
+   "s": "file:handoff247/model.py",
+   "p": "defines",
+   "o": "type:handoff247/model.py#Fact",
+   "file": "handoff247/model.py",
+   "line": 25
+  },
+  {
+   "s": "file:handoff247/model.py",
+   "p": "defines",
+   "o": "type:handoff247/model.py#FileInfo",
+   "file": "handoff247/model.py",
+   "line": 38
+  },
+  {
+   "s": "file:handoff247/model.py",
+   "p": "defines",
+   "o": "type:handoff247/model.py#Project",
+   "file": "handoff247/model.py",
+   "line": 75
+  },
+  {
+   "s": "file:handoff247/model.py",
+   "p": "defines",
+   "o": "type:handoff247/model.py#Symbol",
+   "file": "handoff247/model.py",
+   "line": 14
+  },
+  {
+   "s": "file:handoff247/notes.py",
+   "p": "defines",
+   "o": "type:handoff247/notes.py#Notes",
+   "file": "handoff247/notes.py",
+   "line": 34
+  },
+  {
+   "s": "file:handoff247/notes.py",
+   "p": "imports",
+   "o": "file:handoff247/__init__.py",
+   "file": "handoff247/notes.py",
+   "line": 14
+  },
+  {
+   "s": "file:handoff247/notes.py",
+   "p": "imports",
+   "o": "file:handoff247/connect.py",
+   "file": "handoff247/notes.py",
+   "line": 15
+  },
+  {
+   "s": "file:handoff247/notes.py",
+   "p": "imports",
+   "o": "file:handoff247/labels.py",
+   "file": "handoff247/notes.py",
+   "line": 16
+  },
+  {
+   "s": "file:handoff247/notes.py",
+   "p": "imports",
+   "o": "file:handoff247/model.py",
+   "file": "handoff247/notes.py",
+   "line": 17
+  },
+  {
+   "s": "file:handoff247/notes.py",
+   "p": "imports",
+   "o": "file:handoff247/translate.py",
+   "file": "handoff247/notes.py",
+   "line": 14
+  },
+  {
+   "s": "file:handoff247/notes.py",
+   "p": "refers",
+   "o": "file:HANDOFF.notes.md",
+   "file": "handoff247/notes.py",
+   "line": 19
+  },
+  {
+   "s": "file:handoff247/ontology.py",
+   "p": "imports",
+   "o": "file:handoff247/__init__.py",
+   "file": "handoff247/ontology.py",
+   "line": 10
+  },
+  {
+   "s": "file:handoff247/ontology.py",
+   "p": "imports",
+   "o": "file:handoff247/connect.py",
+   "file": "handoff247/ontology.py",
+   "line": 11
+  },
+  {
+   "s": "file:handoff247/ontology.py",
+   "p": "imports",
+   "o": "file:handoff247/model.py",
+   "file": "handoff247/ontology.py",
+   "line": 12
+  },
+  {
+   "s": "file:handoff247/ontology.py",
+   "p": "refers",
+   "o": "file:README.md",
+   "file": "handoff247/ontology.py",
+   "line": 128
+  },
+  {
+   "s": "file:handoff247/pipeline.py",
+   "p": "imports",
+   "o": "file:handoff247/__init__.py",
+   "file": "handoff247/pipeline.py",
+   "line": 6
+  },
+  {
+   "s": "file:handoff247/pipeline.py",
+   "p": "imports",
+   "o": "file:handoff247/analyzers/__init__.py",
+   "file": "handoff247/pipeline.py",
+   "line": 6
+  },
+  {
+   "s": "file:handoff247/pipeline.py",
+   "p": "imports",
+   "o": "file:handoff247/connect.py",
+   "file": "handoff247/pipeline.py",
+   "line": 7
+  },
+  {
+   "s": "file:handoff247/pipeline.py",
+   "p": "imports",
+   "o": "file:handoff247/inventory.py",
+   "file": "handoff247/pipeline.py",
+   "line": 8
+  },
+  {
+   "s": "file:handoff247/pipeline.py",
+   "p": "imports",
+   "o": "file:handoff247/leaving.py",
+   "file": "handoff247/pipeline.py",
+   "line": 6
+  },
+  {
+   "s": "file:handoff247/pipeline.py",
+   "p": "imports",
+   "o": "file:handoff247/model.py",
+   "file": "handoff247/pipeline.py",
+   "line": 9
+  },
+  {
+   "s": "file:handoff247/render_html.py",
+   "p": "imports",
+   "o": "file:handoff247/__init__.py",
+   "file": "handoff247/render_html.py",
+   "line": 9
+  },
+  {
+   "s": "file:handoff247/render_html.py",
+   "p": "mentions",
+   "o": "host:cdn.jsdelivr.net",
+   "file": "handoff247/render_html.py",
+   "line": 11
+  },
+  {
+   "s": "file:handoff247/render_md.py",
+   "p": "defines",
+   "o": "type:handoff247/render_md.py#Linker",
+   "file": "handoff247/render_md.py",
+   "line": 19
+  },
+  {
+   "s": "file:handoff247/render_md.py",
+   "p": "defines",
+   "o": "type:handoff247/render_md.py#Pages",
+   "file": "handoff247/render_md.py",
+   "line": 67
+  },
+  {
+   "s": "file:handoff247/render_md.py",
+   "p": "imports",
+   "o": "file:handoff247/__init__.py",
+   "file": "handoff247/render_md.py",
+   "line": 7
+  },
+  {
+   "s": "file:handoff247/render_md.py",
+   "p": "imports",
+   "o": "file:handoff247/connect.py",
+   "file": "handoff247/render_md.py",
+   "line": 8
+  },
+  {
+   "s": "file:handoff247/render_md.py",
+   "p": "imports",
+   "o": "file:handoff247/labels.py",
+   "file": "handoff247/render_md.py",
+   "line": 9
+  },
+  {
+   "s": "file:handoff247/render_md.py",
+   "p": "imports",
+   "o": "file:handoff247/leaving.py",
+   "file": "handoff247/render_md.py",
+   "line": 7
+  },
+  {
+   "s": "file:handoff247/render_md.py",
+   "p": "imports",
+   "o": "file:handoff247/mermaid.py",
+   "file": "handoff247/render_md.py",
+   "line": 10
+  },
+  {
+   "s": "file:handoff247/render_md.py",
+   "p": "imports",
+   "o": "file:handoff247/model.py",
+   "file": "handoff247/render_md.py",
+   "line": 11
+  },
+  {
+   "s": "file:handoff247/render_md.py",
+   "p": "imports",
+   "o": "file:handoff247/notes.py",
+   "file": "handoff247/render_md.py",
+   "line": 12
+  },
+  {
+   "s": "file:handoff247/render_md.py",
+   "p": "mentions",
+   "o": "host:github.com",
+   "file": "handoff247/render_md.py",
+   "line": 635
+  },
+  {
+   "s": "file:handoff247/render_md.py",
+   "p": "refers",
+   "o": "file:README.md",
+   "file": "handoff247/render_md.py",
+   "line": 110
+  },
+  {
+   "s": "file:handoff247/translate.py",
+   "p": "imports",
+   "o": "file:handoff247/model.py",
+   "file": "handoff247/translate.py",
+   "line": 15
+  },
+  {
+   "s": "file:handoff247/wiki.py",
+   "p": "defines",
+   "o": "type:handoff247/wiki.py#Wiki",
+   "file": "handoff247/wiki.py",
+   "line": 88
+  },
+  {
+   "s": "file:handoff247/wiki.py",
+   "p": "imports",
+   "o": "file:handoff247/__init__.py",
+   "file": "handoff247/wiki.py",
+   "line": 26
+  },
+  {
+   "s": "file:handoff247/wiki.py",
+   "p": "imports",
+   "o": "file:handoff247/labels.py",
+   "file": "handoff247/wiki.py",
+   "line": 27
+  },
+  {
+   "s": "file:handoff247/wiki.py",
+   "p": "imports",
+   "o": "file:handoff247/notes.py",
+   "file": "handoff247/wiki.py",
+   "line": 28
+  },
+  {
+   "s": "file:handoff247/wiki.py",
+   "p": "imports",
+   "o": "file:handoff247/render_md.py",
+   "file": "handoff247/wiki.py",
+   "line": 29
+  },
+  {
+   "s": "file:handoff247/wiki.py",
+   "p": "refers",
+   "o": "file:README.md",
+   "file": "handoff247/wiki.py",
+   "line": 221
+  },
+  {
+   "s": "file:handoff247/workspace.py",
+   "p": "imports",
+   "o": "file:handoff247/__init__.py",
+   "file": "handoff247/workspace.py",
+   "line": 16
+  },
+  {
+   "s": "file:handoff247/workspace.py",
+   "p": "imports",
+   "o": "file:handoff247/build.py",
+   "file": "handoff247/workspace.py",
+   "line": 17
+  },
+  {
+   "s": "file:handoff247/workspace.py",
+   "p": "imports",
+   "o": "file:handoff247/inventory.py",
+   "file": "handoff247/workspace.py",
+   "line": 18
+  },
+  {
+   "s": "file:handoff247/workspace.py",
+   "p": "imports",
+   "o": "file:handoff247/leaving.py",
+   "file": "handoff247/workspace.py",
+   "line": 16
+  },
+  {
+   "s": "file:handoff247/workspace.py",
+   "p": "imports",
+   "o": "file:handoff247/mermaid.py",
+   "file": "handoff247/workspace.py",
+   "line": 19
+  },
+  {
+   "s": "file:handoff247/workspace.py",
+   "p": "imports",
+   "o": "file:handoff247/notes.py",
+   "file": "handoff247/workspace.py",
+   "line": 20
+  },
+  {
+   "s": "file:handoff247/workspace.py",
+   "p": "imports",
+   "o": "file:handoff247/pipeline.py",
+   "file": "handoff247/workspace.py",
+   "line": 21
+  },
+  {
+   "s": "file:handoff247/workspace.py",
+   "p": "imports",
+   "o": "file:handoff247/render_html.py",
+   "file": "handoff247/workspace.py",
+   "line": 22
+  },
+  {
+   "s": "file:handoff247/workspace.py",
+   "p": "imports",
+   "o": "file:handoff247/render_md.py",
+   "file": "handoff247/workspace.py",
+   "line": 23
+  },
+  {
+   "s": "file:handoff247/workspace.py",
+   "p": "refers",
+   "o": "file:README.md",
+   "file": "handoff247/workspace.py",
+   "line": 340
+  },
+  {
+   "s": "file:handoff247/workspace.py",
+   "p": "refers",
+   "o": "file:pyproject.toml",
+   "file": "handoff247/workspace.py",
+   "line": 25
+  },
+  {
+   "s": "file:pyproject.toml",
+   "p": "mentions",
+   "o": "host:github.com",
+   "file": "pyproject.toml",
+   "line": 21
+  },
+  {
+   "s": "file:tests/test_handoff.py",
+   "p": "defines",
+   "o": "type:tests/test_handoff.py#AnalysisTests",
+   "file": "tests/test_handoff.py",
+   "line": 49
+  },
+  {
+   "s": "file:tests/test_handoff.py",
+   "p": "defines",
+   "o": "type:tests/test_handoff.py#LexerTests",
+   "file": "tests/test_handoff.py",
+   "line": 31
+  },
+  {
+   "s": "file:tests/test_handoff.py",
+   "p": "defines",
+   "o": "type:tests/test_handoff.py#PackTests",
+   "file": "tests/test_handoff.py",
+   "line": 142
+  },
+  {
+   "s": "file:tests/test_handoff.py",
+   "p": "imports",
+   "o": "file:handoff247/__init__.py",
+   "file": "tests/test_handoff.py",
+   "line": 15
+  },
+  {
+   "s": "file:tests/test_handoff.py",
+   "p": "imports",
+   "o": "file:handoff247/build.py",
+   "file": "tests/test_handoff.py",
+   "line": 16
+  },
+  {
+   "s": "file:tests/test_handoff.py",
+   "p": "imports",
+   "o": "file:handoff247/cli.py",
+   "file": "tests/test_handoff.py",
+   "line": 17
+  },
+  {
+   "s": "file:tests/test_handoff.py",
+   "p": "imports",
+   "o": "file:handoff247/lexer.py",
+   "file": "tests/test_handoff.py",
+   "line": 18
+  },
+  {
+   "s": "file:tests/test_handoff.py",
+   "p": "imports",
+   "o": "file:handoff247/pipeline.py",
+   "file": "tests/test_handoff.py",
+   "line": 19
+  },
+  {
+   "s": "file:tests/test_handoff.py",
+   "p": "imports",
+   "o": "file:handoff247/translate.py",
+   "file": "tests/test_handoff.py",
+   "line": 438
+  },
+  {
+   "s": "file:tests/test_handoff.py",
+   "p": "mentions",
+   "o": "host:api.partner-billing.com",
+   "file": "tests/test_handoff.py",
+   "line": 269
+  },
+  {
+   "s": "file:tests/test_handoff.py",
+   "p": "mentions",
+   "o": "port:5050",
+   "file": "tests/test_handoff.py",
+   "line": 111,
+   "label": "address literal"
+  },
+  {
+   "s": "file:tests/test_handoff.py",
+   "p": "refers",
+   "o": "file:HANDOFF.notes.md",
+   "file": "tests/test_handoff.py",
+   "line": 153
+  },
+  {
+   "s": "file:tests/test_handoff.py",
+   "p": "refers",
+   "o": "file:README.md",
+   "file": "tests/test_handoff.py",
+   "line": 139
+  },
+  {
+   "s": "file:tests/test_handoff.py",
+   "p": "refers",
+   "o": "file:pyproject.toml",
+   "file": "tests/test_handoff.py",
+   "line": 272
+  },
+  {
+   "s": "file:tests/test_handoff.py",
+   "p": "starts",
+   "o": "cmd:git",
+   "file": "tests/test_handoff.py",
+   "line": 290
+  },
+  {
+   "s": "op:batch",
+   "p": "handledBy",
+   "o": "file:handoff247/analyzers/shell.py",
+   "file": "handoff247/analyzers/__init__.py",
+   "line": 16,
+   "label": "shell.analyze_batch"
+  },
+  {
+   "s": "op:csharp",
+   "p": "handledBy",
+   "o": "file:handoff247/analyzers/csharp.py",
+   "file": "handoff247/analyzers/__init__.py",
+   "line": 8,
+   "label": "csharp.analyze"
+  },
+  {
+   "s": "op:css",
+   "p": "handledBy",
+   "o": "file:handoff247/analyzers/web.py",
+   "file": "handoff247/analyzers/__init__.py",
+   "line": 13,
+   "label": "web.analyze_css"
+  },
+  {
+   "s": "op:dockerfile",
+   "p": "handledBy",
+   "o": "file:handoff247/analyzers/docs.py",
+   "file": "handoff247/analyzers/__init__.py",
+   "line": 23,
+   "label": "docs.analyze_dockerfile"
+  },
+  {
+   "s": "op:html",
+   "p": "handledBy",
+   "o": "file:handoff247/analyzers/web.py",
+   "file": "handoff247/analyzers/__init__.py",
+   "line": 12,
+   "label": "web.analyze_html"
+  },
+  {
+   "s": "op:javascript",
+   "p": "handledBy",
+   "o": "file:handoff247/analyzers/web.py",
+   "file": "handoff247/analyzers/__init__.py",
+   "line": 10,
+   "label": "web.analyze_js"
+  },
+  {
+   "s": "op:json",
+   "p": "handledBy",
+   "o": "file:handoff247/analyzers/docs.py",
+   "file": "handoff247/analyzers/__init__.py",
+   "line": 19,
+   "label": "docs.analyze_json"
+  },
+  {
+   "s": "op:markdown",
+   "p": "handledBy",
+   "o": "file:handoff247/analyzers/docs.py",
+   "file": "handoff247/analyzers/__init__.py",
+   "line": 17,
+   "label": "docs.analyze_markdown"
+  },
+  {
+   "s": "op:msbuild",
+   "p": "handledBy",
+   "o": "file:handoff247/analyzers/docs.py",
+   "file": "handoff247/analyzers/__init__.py",
+   "line": 22,
+   "label": "docs.analyze_msbuild"
+  },
+  {
+   "s": "op:powershell",
+   "p": "handledBy",
+   "o": "file:handoff247/analyzers/shell.py",
+   "file": "handoff247/analyzers/__init__.py",
+   "line": 14,
+   "label": "shell.analyze_powershell"
+  },
+  {
+   "s": "op:python",
+   "p": "handledBy",
+   "o": "file:handoff247/analyzers/python.py",
+   "file": "handoff247/analyzers/__init__.py",
+   "line": 9,
+   "label": "python.analyze"
+  },
+  {
+   "s": "op:requirements",
+   "p": "handledBy",
+   "o": "file:handoff247/analyzers/docs.py",
+   "file": "handoff247/analyzers/__init__.py",
+   "line": 21,
+   "label": "docs.analyze_requirements"
+  },
+  {
+   "s": "op:shell",
+   "p": "handledBy",
+   "o": "file:handoff247/analyzers/shell.py",
+   "file": "handoff247/analyzers/__init__.py",
+   "line": 15,
+   "label": "shell.analyze_shell"
+  },
+  {
+   "s": "op:text",
+   "p": "handledBy",
+   "o": "file:handoff247/analyzers/docs.py",
+   "file": "handoff247/analyzers/__init__.py",
+   "line": 18,
+   "label": "docs.analyze_text"
+  },
+  {
+   "s": "op:toml",
+   "p": "handledBy",
+   "o": "file:handoff247/analyzers/docs.py",
+   "file": "handoff247/analyzers/__init__.py",
+   "line": 20,
+   "label": "docs.analyze_toml"
+  },
+  {
+   "s": "op:typescript",
+   "p": "handledBy",
+   "o": "file:handoff247/analyzers/web.py",
+   "file": "handoff247/analyzers/__init__.py",
+   "line": 11,
+   "label": "web.analyze_js"
+  },
+  {
+   "s": "op:yaml",
+   "p": "handledBy",
+   "o": "file:handoff247/analyzers/docs.py",
+   "file": "handoff247/analyzers/__init__.py",
+   "line": 24,
+   "label": "docs.analyze_yaml"
+  },
+  {
+   "s": "person:R B",
+   "p": "authored",
+   "o": "project:HandOff247"
+  },
+  {
+   "s": "project:HandOff247",
+   "p": "contains",
+   "o": "area:.github"
+  },
+  {
+   "s": "project:HandOff247",
+   "p": "contains",
+   "o": "area:handoff247"
+  },
+  {
+   "s": "project:HandOff247",
+   "p": "contains",
+   "o": "area:tests"
+  },
+  {
+   "s": "project:HandOff247",
+   "p": "contains",
+   "o": "file:.gitignore"
+  },
+  {
+   "s": "project:HandOff247",
+   "p": "contains",
+   "o": "file:.handoffignore"
+  },
+  {
+   "s": "project:HandOff247",
+   "p": "contains",
+   "o": "file:HANDOFF.notes.md"
+  },
+  {
+   "s": "project:HandOff247",
+   "p": "contains",
+   "o": "file:LICENSE"
+  },
+  {
+   "s": "project:HandOff247",
+   "p": "contains",
+   "o": "file:README.md"
+  },
+  {
+   "s": "project:HandOff247",
+   "p": "contains",
+   "o": "file:action.yml"
+  },
+  {
+   "s": "project:HandOff247",
+   "p": "contains",
+   "o": "file:pyproject.toml"
+  },
+  {
+   "s": "table:handoff247/analyzers/__init__.py:7",
+   "p": "hasOperation",
+   "o": "op:batch",
+   "file": "handoff247/analyzers/__init__.py",
+   "line": 16
+  },
+  {
+   "s": "table:handoff247/analyzers/__init__.py:7",
+   "p": "hasOperation",
+   "o": "op:csharp",
+   "file": "handoff247/analyzers/__init__.py",
+   "line": 8
+  },
+  {
+   "s": "table:handoff247/analyzers/__init__.py:7",
+   "p": "hasOperation",
+   "o": "op:css",
+   "file": "handoff247/analyzers/__init__.py",
+   "line": 13
+  },
+  {
+   "s": "table:handoff247/analyzers/__init__.py:7",
+   "p": "hasOperation",
+   "o": "op:dockerfile",
+   "file": "handoff247/analyzers/__init__.py",
+   "line": 23
+  },
+  {
+   "s": "table:handoff247/analyzers/__init__.py:7",
+   "p": "hasOperation",
+   "o": "op:html",
+   "file": "handoff247/analyzers/__init__.py",
+   "line": 12
+  },
+  {
+   "s": "table:handoff247/analyzers/__init__.py:7",
+   "p": "hasOperation",
+   "o": "op:javascript",
+   "file": "handoff247/analyzers/__init__.py",
+   "line": 10
+  },
+  {
+   "s": "table:handoff247/analyzers/__init__.py:7",
+   "p": "hasOperation",
+   "o": "op:json",
+   "file": "handoff247/analyzers/__init__.py",
+   "line": 19
+  },
+  {
+   "s": "table:handoff247/analyzers/__init__.py:7",
+   "p": "hasOperation",
+   "o": "op:markdown",
+   "file": "handoff247/analyzers/__init__.py",
+   "line": 17
+  },
+  {
+   "s": "table:handoff247/analyzers/__init__.py:7",
+   "p": "hasOperation",
+   "o": "op:msbuild",
+   "file": "handoff247/analyzers/__init__.py",
+   "line": 22
+  },
+  {
+   "s": "table:handoff247/analyzers/__init__.py:7",
+   "p": "hasOperation",
+   "o": "op:powershell",
+   "file": "handoff247/analyzers/__init__.py",
+   "line": 14
+  },
+  {
+   "s": "table:handoff247/analyzers/__init__.py:7",
+   "p": "hasOperation",
+   "o": "op:python",
+   "file": "handoff247/analyzers/__init__.py",
+   "line": 9
+  },
+  {
+   "s": "table:handoff247/analyzers/__init__.py:7",
+   "p": "hasOperation",
+   "o": "op:requirements",
+   "file": "handoff247/analyzers/__init__.py",
+   "line": 21
+  },
+  {
+   "s": "table:handoff247/analyzers/__init__.py:7",
+   "p": "hasOperation",
+   "o": "op:shell",
+   "file": "handoff247/analyzers/__init__.py",
+   "line": 15
+  },
+  {
+   "s": "table:handoff247/analyzers/__init__.py:7",
+   "p": "hasOperation",
+   "o": "op:text",
+   "file": "handoff247/analyzers/__init__.py",
+   "line": 18
+  },
+  {
+   "s": "table:handoff247/analyzers/__init__.py:7",
+   "p": "hasOperation",
+   "o": "op:toml",
+   "file": "handoff247/analyzers/__init__.py",
+   "line": 20
+  },
+  {
+   "s": "table:handoff247/analyzers/__init__.py:7",
+   "p": "hasOperation",
+   "o": "op:typescript",
+   "file": "handoff247/analyzers/__init__.py",
+   "line": 11
+  },
+  {
+   "s": "table:handoff247/analyzers/__init__.py:7",
+   "p": "hasOperation",
+   "o": "op:yaml",
+   "file": "handoff247/analyzers/__init__.py",
+   "line": 24
+  },
+  {
+   "s": "table:handoff247/leaving.py:257",
+   "p": "hasOperation",
+   "o": "op:.python-version",
+   "file": "handoff247/leaving.py",
+   "line": 257
+  },
+  {
+   "s": "table:handoff247/leaving.py:257",
+   "p": "hasOperation",
+   "o": "op:.tool-versions",
+   "file": "handoff247/leaving.py",
+   "line": 259
+  },
+  {
+   "s": "table:handoff247/leaving.py:257",
+   "p": "hasOperation",
+   "o": "op:go.mod",
+   "file": "handoff247/leaving.py",
+   "line": 264
+  }
+ ],
+ "generated": "2026-11-10"
+}
