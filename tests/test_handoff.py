@@ -400,6 +400,101 @@ class PackTests(unittest.TestCase):
         self.assertFalse(stale.exists())
         self.assertTrue(mine.exists())
 
+    def test_model_summaries(self):
+        from handoff247 import summarize
+        self._leaver_script()
+        notes_file = self.root / "HANDOFF.notes.md"
+        self.assertEqual(main([str(self.root), "--date", "2026-01-01"]), 0)
+        notes_file.write_text(re.sub(r"## File: Store\.cs\nTODO[^\n]*", "## File: Store.cs\nWritten by the owner.",
+                                     notes_file.read_text(encoding="utf-8")), encoding="utf-8")
+        project = analyze_project(self.root)
+        notes = notes_mod.load(notes_file)
+        prompts = []
+
+        def fake(prompt):
+            prompts.append(prompt)
+            ids = re.findall(r"^### id: (\S+)\npath: (\S+)", prompt, re.M)
+            items = [{"id": i, "summary": f"Model text for {p}."} for i, p in ids]
+            items.append({"id": "nope", "summary": "an id that was never asked for"})
+            return json.dumps({"items": items})
+        fake.engine = "fake"
+        cache = summarize.cache_path(notes_file)
+        self.assertEqual(cache.name, "HANDOFF.summaries.json")
+        st = summarize.run(project, notes, cache, call=fake, log=lambda m: None, date="2026-01-01")
+        self.assertGreater(st["written"], 3)
+        self.assertEqual(st["failed"], 0)
+        sent = "\n".join(prompts)
+        self.assertNotIn("path: Store.cs", sent)                     # the owner's note wins: not asked
+        self.assertIn("path: sync.ps1", sent)
+        self.assertNotIn("AKIA", sent)                               # key-shaped lines never leave the computer
+        self.assertIn("[removed]", sent)
+        data = json.loads(cache.read_text(encoding="utf-8"))["files"]
+        self.assertNotIn("nope", json.dumps(data))
+        self.assertEqual(data["sync.ps1"]["summary"], "Model text for sync.ps1.")
+        # a second run asks for nothing; the pack shows the text with its label and the checklist does not count it
+        self.assertEqual(summarize.run(project, notes, cache, call=fake, log=lambda m: None)["asked"], 0)
+        self.assertEqual(main([str(self.root), "--date", "2026-01-01"]), 0)
+        out = self.root / "docs" / "handoff"
+        page = (out / "wiki" / "files" / "sync.ps1.md").read_text(encoding="utf-8")
+        self.assertIn("Written by a language model (fake, 2026-01-01); not checked by a person", page)
+        self.assertIn("Model text for sync.ps1.", page)
+        index = (out / "wiki" / "index.md").read_text(encoding="utf-8")
+        self.assertIn("*(model)* Model text for McpTools.cs.", index)     # a file with no comment and no note
+        self.assertIn("— Copy the export to the share.", index)          # the file's own comment comes first
+        self.assertNotIn("Model text for Store.cs", (out / "llms-full.txt").read_text(encoding="utf-8"))
+        onto = json.loads((out / "ontology.json").read_text(encoding="utf-8"))
+        ent = next(e for e in onto["entities"] if e["id"] == "file:McpTools.cs")
+        self.assertEqual(ent["model_summary"]["engine"], "fake")
+        self.assertNotIn("summary", ent)                              # model text is never the plain summary
+        self.assertNotIn("HANDOFF.summaries.json", {f["path"] for f in json.loads((out / "handoff.json").read_text(encoding="utf-8"))["files"]})
+        # a changed file loses its summary until the next --summarize run
+        (self.root / "sync.ps1").write_text("# changed\n", encoding="utf-8")
+        self.assertEqual(main([str(self.root), "--date", "2026-01-01"]), 0)
+        self.assertNotIn("Model text for sync.ps1", (out / "wiki" / "files" / "sync.ps1.md").read_text(encoding="utf-8"))
+
+    def test_mcp_server(self):
+        import subprocess
+        msgs = [{"jsonrpc": "2.0", "id": 1, "method": "initialize", "params": {"protocolVersion": "2025-06-18", "capabilities": {},
+                                                                                "clientInfo": {"name": "test", "version": "0"}}},
+                {"jsonrpc": "2.0", "method": "notifications/initialized"},
+                {"jsonrpc": "2.0", "id": 2, "method": "tools/list"}]
+        calls = [("handoff_todo", {"limit": 5}),
+                 ("handoff_entity", {"id": "op:list"}),
+                 ("handoff_search", {"query": "store", "type": "File"}),
+                 ("handoff_source", {"path": "Store.cs", "start": 1, "end": 3}),
+                 ("handoff_source", {"path": "../outside.txt"}),
+                 ("handoff_write_note", {"heading": "File: Store.cs", "text": "Keeps the records; see Store.cs:4."}),
+                 ("handoff_write_note", {"heading": "File: Store.cs", "text": "second try"}),
+                 ("handoff_write_note", {"heading": "File: Nope.cs", "text": "x"}),
+                 ("handoff_write_note", {"heading": "Topic: Credentials and accounts", "text": "key AKIA" + "ABCDEFGHIJKLMNOP"}),
+                 ("handoff_build", {})]
+        msgs += [{"jsonrpc": "2.0", "id": 10 + i, "method": "tools/call", "params": {"name": n, "arguments": a}}
+                 for i, (n, a) in enumerate(calls)]
+        r = subprocess.run([sys.executable, "-m", "handoff247", "mcp", str(self.root)], cwd=ROOT, capture_output=True,
+                           input="\n".join(json.dumps(m) for m in msgs) + "\n", text=True, encoding="utf-8", timeout=120)
+        replies = {m["id"]: m for m in map(json.loads, r.stdout.splitlines())}   # stdout carries only JSON-RPC
+        self.assertEqual(len(replies), 2 + len(calls))
+        self.assertEqual(replies[1]["result"]["serverInfo"]["name"], "handoff247")
+        self.assertEqual(len(replies[2]["result"]["tools"]), 6)
+        res = {n: replies[10 + i]["result"] for i, (n, _) in enumerate(calls) if n not in ("handoff_source", "handoff_write_note")}
+        text = lambda i: replies[10 + i]["result"]["content"][0]["text"]        # noqa: E731
+        err = lambda i: replies[10 + i]["result"]["isError"]                     # noqa: E731
+        self.assertIn('"heading": "Project"', text(0))
+        self.assertIn('"id": "file:Store.cs"', text(1))
+        self.assertIn("Store.cs", text(2))
+        self.assertIn("    1  namespace Mini;", text(3))
+        self.assertTrue(err(4))                                                  # only files of the project
+        self.assertFalse(err(5))
+        self.assertTrue(err(6))                                                  # never over existing text
+        self.assertTrue(err(7))                                                  # only known headings
+        self.assertTrue(err(8))                                                  # never a secret
+        self.assertFalse(res["handoff_build"]["isError"])
+        self.assertIn("handover checklist", text(9))
+        notes = (self.root / "HANDOFF.notes.md").read_text(encoding="utf-8")
+        self.assertIn("Keeps the records; see Store.cs:4.\n\n_Written by an AI agent through the HandOff247 MCP server", notes)
+        self.assertNotIn("AKIA", notes)
+        self.assertIn("Keeps the records", (self.root / "docs" / "handoff" / "wiki" / "files" / "Store.cs.md").read_text(encoding="utf-8"))
+
     def test_go_folder_of_projects(self):
         ws = self.tmp / "ws"
         (ws / "Tools").mkdir(parents=True)

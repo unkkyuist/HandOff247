@@ -12,6 +12,7 @@ This wiki describes **PlayBookOS** for an AI assistant that has to answer questi
 2. Each page is one thing. `Relations` lists what it points to (→) and what points to it (←); follow those links.
 3. A `file:line` next to a statement is where it was observed. Open that source before you change code.
 4. *inferred* marks a conclusion, not an observation. Check it in the source before relying on it.
+   Text labelled *written by a language model* (and *(model)* in lists) was not checked by a person either.
 5. Something that is not in the wiki was not found. That does not mean it does not exist: code built from runtime strings, reflection or dependency-injection containers is not followed. Say that you do not know.
 6. [notes.md](notes.md) is the only human-written page. "Not answered" there is a question for a person.
 
@@ -80,3 +81,7 @@ Write plain sentences, say only what you verified in the source, and never paste
 - `../llms.txt` — short entry point; `../llms-full.txt` — every page of this wiki in one file
 - `../ontology.json` — entities (`id`, `type`, `name`, `summary`, `page`) and relations (`s`, `p`, `o`, `file`, `line`)
 - `../index.html` — viewer with a graph of the same ontology
+
+## Working through MCP
+
+`python -m handoff247 mcp` is an MCP server over the same data: search and read entities, read source lines, list what is still undocumented, and write notes under the right heading (marked as written by an agent). It is the supported way for an assistant to add to this wiki.

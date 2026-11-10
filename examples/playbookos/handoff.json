@@ -1,6 +1,6 @@
 {
  "generator": "HandOff247",
- "version": "0.4.0",
+ "version": "0.5.0",
  "generated": "2026-11-10",
  "project": {
   "name": "PlayBookOS",
@@ -17556,6 +17556,512 @@
     "license": "",
     "tests": 9,
     "ci": []
+   }
+  },
+  "model_summaries": {
+   "Access.cs": {
+    "sha": "5253f82ddc888432",
+    "summary": "Stores server account identity data and session records under the configured home directory. It provides account setup, login, token validation, and logout, with password-derived hashes, expiring sessions, and login-attempt limits.",
+    "engine": "codex",
+    "model": "",
+    "date": "2026-11-10",
+    "prompt": 1
+   },
+   "AgentWorker.cs": {
+    "sha": "0321678da6b19839",
+    "summary": "Runs the background worker that registers the device, claims eligible runs, launches provider processes, streams their output, and reports completion evidence. It also exposes worker status and configuration, recovers recorded running processes on startup, and supplies local project instructions and context to each run.",
+    "engine": "codex",
+    "model": "",
+    "date": "2026-11-10",
+    "prompt": 1
+   },
+   "Connection.cs": {
+    "sha": "a4ed48192d066396",
+    "summary": "Stores device and server connection settings in client.json and provides connection status, configuration, connect, disconnect, and API request methods. It validates server URLs, sends JSON over HTTP, and converts request failures into domain errors.",
+    "engine": "codex",
+    "model": "",
+    "date": "2026-11-10",
+    "prompt": 1
+   },
+   "Desktop.cs": {
+    "sha": "b726a38c933f5bb2",
+    "summary": "Opens a Windows folder browser dialog and returns the selected path. On other operating systems it returns an empty path with a flag indicating that the path must be entered manually.",
+    "engine": "codex",
+    "model": "",
+    "date": "2026-11-10",
+    "prompt": 1
+   },
+   "Domain.cs": {
+    "sha": "aac9a1266d518b49",
+    "summary": "Defines shared records for entries, writes, and change history, along with the DomainError exception and JSON serialization helpers. The helpers serialize and deserialize using shared web-style JSON options and read string values from JSON objects with an optional fallback.",
+    "engine": "codex",
+    "model": "",
+    "date": "2026-11-10",
+    "prompt": 1
+   },
+   "Folders.cs": {
+    "sha": "66cc7288e45a9ec3",
+    "summary": "Provides project-scoped file listing and folder operations, including folder creation and planning moves between project-relative paths. The shown code filters protected directories and links, checks path boundaries and registered references, fingerprints move sources, and prepares record updates for a planned move.",
+    "engine": "codex",
+    "model": "",
+    "date": "2026-11-10",
+    "prompt": 1
+   },
+   "Harnesses.cs": {
+    "sha": "15f2259b76107351",
+    "summary": "Stores project harness proposals, trial snapshots, comparisons, and reviewed adoption or disablement in the project store. It enqueues paired read-only trial runs, checks revisions and evidence before adoption, and records reviewed lessons as research entries.",
+    "engine": "codex",
+    "model": "",
+    "date": "2026-11-10",
+    "prompt": 1
+   },
+   "Library.cs": {
+    "sha": "51375c2f711ad865",
+    "summary": "Stores shared asset copies by SHA-256 hash, records their metadata, and provides listing, download, local resolution, preview, and TXT-reading operations. Registration accepts selected project files with supported extensions up to 32 MiB; the original files are not moved or rewritten.",
+    "engine": "codex",
+    "model": "",
+    "date": "2026-11-10",
+    "prompt": 1
+   },
+   "McpTools.cs": {
+    "sha": "1249c27789a5bab9",
+    "summary": "Exposes PlayBook operations as MCP tools by forwarding their arguments to Operations.Execute and returning JSON results. The visible methods cover records, ontology, assets, exports, tools, folders, project scans, orchestration, and harness state; the excerpt ends before the full class.",
+    "engine": "codex",
+    "model": "",
+    "date": "2026-11-10",
+    "prompt": 1
+   },
+   "Ontology.cs": {
+    "sha": "dca28d0aa7cb7698",
+    "summary": "Maintains an ontology projection and source ledger in the Store, validating managed records and providing methods for ingest, search, references, usage records, external connections, synchronization, and rebuilds. The visible code records source revisions and review status, and labels retrieved source material as evidence rather than authorization or verification; the excerpt shows only part of the implementation.",
+    "engine": "codex",
+    "model": "",
+    "date": "2026-11-10",
+    "prompt": 1
+   },
+   "Orchestration.cs": {
+    "sha": "15984fc3e713a4c1",
+    "summary": "Stores worker registrations and AI runs in the revisioned Store, queues work with project, permission, dependency, and delegation checks, and provides state, claim, heartbeat, and cancellation operations. Claiming work checks worker availability and run constraints, then supplies project context, dependency outputs, and ontology references; the excerpt ends partway through heartbeat handling.",
+    "engine": "codex",
+    "model": "",
+    "date": "2026-11-10",
+    "prompt": 1
+   },
+   "Program.cs": {
+    "sha": "b60f05e340e5ac3b",
+    "summary": "Initializes PlayBook services and selects worker, CLI, MCP, agent, local web server, or shared server behavior from the command-line mode. In server modes it configures the HTTP endpoints, access checks, API operation dispatch, media preview, health response, and MCP transport.",
+    "engine": "codex",
+    "model": "",
+    "date": "2026-11-10",
+    "prompt": 1
+   },
+   "ProjectScanner.cs": {
+    "sha": "bc0a33abf12c2e8d",
+    "summary": "ProjectScanner recursively scans a selected folder, skips configured directory names and links, and records candidate folders with project markers, file names, instruction files, and any existing registration. Import validates selected candidates against the saved scan, preserves existing registrations, and creates project records for new selections.",
+    "engine": "codex",
+    "model": "",
+    "date": "2026-11-10",
+    "prompt": 1
+   },
+   "Providers.cs": {
+    "sha": "e075a61a9b201bf3",
+    "summary": "Providers locates the Codex or Claude CLI, checks installation and login status, and can open a login process on Windows. It also builds MCP configuration and provider-specific process arguments for running a PlayBook job.",
+    "engine": "codex",
+    "model": "",
+    "date": "2026-11-10",
+    "prompt": 1
+   },
+   "START_GRAPHIFY.cmd": {
+    "sha": "b315b06efa6095cb",
+    "summary": "This batch launcher runs graphify.ps1 with the start argument from its own directory. If that succeeds, it opens the local Graphify page at port 7334 for project playbook.",
+    "engine": "codex",
+    "model": "",
+    "date": "2026-11-10",
+    "prompt": 1
+   },
+   "START_PLAYBOOK.cmd": {
+    "sha": "6faaaf9025c81c1a",
+    "summary": "This batch launcher runs playbook.ps1 with the serve argument from its own directory.",
+    "engine": "codex",
+    "model": "",
+    "date": "2026-11-10",
+    "prompt": 1
+   },
+   "Start-PlayBook-Desktop.ps1": {
+    "sha": "64b49a4e98aa1451",
+    "summary": "The PowerShell script starts the PlayBook server on port 7331, building the Release executable when it is missing. It checks that an existing server uses the same data folder, waits for startup, and optionally opens the local page in a browser.",
+    "engine": "codex",
+    "model": "",
+    "date": "2026-11-10",
+    "prompt": 1
+   },
+   "ToolRunner.cs": {
+    "sha": "597f5f137a305631",
+    "summary": "ToolRunner reads local tool definitions, reports process and HTTP status, and starts or stops tool processes it owns. It records run state and audit entries, and exposes recent log output for each registered tool.",
+    "engine": "codex",
+    "model": "",
+    "date": "2026-11-10",
+    "prompt": 1
+   },
+   "Workspace.cs": {
+    "sha": "3aba5b8761a68b0d",
+    "summary": "Workspace resolves project files within registered project roots, provides text and media previews, and copies supported files into a shared asset directory with hash checks. It also builds project context, discovers project folders, and retrieves Git status, revision, and recent commit information; the excerpt ends as its command-running method begins.",
+    "engine": "codex",
+    "model": "",
+    "date": "2026-11-10",
+    "prompt": 1
+   },
+   "graphify.ps1": {
+    "sha": "1b9a21cf388522b9",
+    "summary": "The PowerShell wrapper sets a default PlayBook data directory and UTF-8 Python output, then passes its arguments to scripts/graphify-playbook.py and returns that process's exit code.",
+    "engine": "codex",
+    "model": "",
+    "date": "2026-11-10",
+    "prompt": 1
+   },
+   "playbook-harness.ps1": {
+    "sha": "9214eebd83399433",
+    "summary": "This PowerShell wrapper sets default PlayBook home and port values, builds the harness runtime if its DLL is missing, and runs that DLL with the supplied arguments.",
+    "engine": "codex",
+    "model": "",
+    "date": "2026-11-10",
+    "prompt": 1
+   },
+   "playbook.ps1": {
+    "sha": "8564da9704fa49b2",
+    "summary": "This PowerShell wrapper sets a default PlayBook data directory, builds the Release DLL if needed, and runs it with the supplied arguments from the project directory.",
+    "engine": "codex",
+    "model": "",
+    "date": "2026-11-10",
+    "prompt": 1
+   },
+   "playbook.sh": {
+    "sha": "67b79a93ce4e0513",
+    "summary": "This shell wrapper sets the default PlayBook data directory, builds the Release DLL if it is missing, and executes it with the supplied arguments from the project directory.",
+    "engine": "codex",
+    "model": "",
+    "date": "2026-11-10",
+    "prompt": 1
+   },
+   "portable/INSTALL_PLAYBOOK.cmd": {
+    "sha": "6f3641b0661553a9",
+    "summary": "This batch file runs portable/Install-PlayBook.ps1 with PowerShell in STA mode and passes along its arguments. It pauses if the installer exits with an error.",
+    "engine": "codex",
+    "model": "",
+    "date": "2026-11-10",
+    "prompt": 1
+   },
+   "portable/Install-PlayBook.ps1": {
+    "sha": "e3167a343ad2f7c5",
+    "summary": "The installer validates the extracted package against its manifest and SHA-256 hashes, then copies files into the selected install folder, backing up files it replaces. It configures the selected workspace, can create a desktop shortcut, and launches PlayBook unless `-NoLaunch` is set.",
+    "engine": "codex",
+    "model": "",
+    "date": "2026-11-10",
+    "prompt": 1
+   },
+   "portable/START_PLAYBOOK.cmd": {
+    "sha": "ec6dfc8412318b85",
+    "summary": "Runs `Start-PlayBook.ps1` from the batch file’s folder, passing along command-line arguments. It pauses if PowerShell returns an error.",
+    "engine": "codex",
+    "model": "",
+    "date": "2026-11-10",
+    "prompt": 1
+   },
+   "portable/STOP_PLAYBOOK.cmd": {
+    "sha": "9cffa1b4f3f9e05b",
+    "summary": "Runs `Stop-PlayBook.ps1` from the batch file’s folder. It pauses if PowerShell returns an error.",
+    "engine": "codex",
+    "model": "",
+    "date": "2026-11-10",
+    "prompt": 1
+   },
+   "portable/Start-PlayBook.ps1": {
+    "sha": "db93a9d4e879c587",
+    "summary": "Creates the data folder, finds an existing PlayBook server for that data location or starts one on an available localhost port from 7331 to 7360, and waits for its health check. It prints the server URL and opens it in a browser unless `-NoBrowser` is set.",
+    "engine": "codex",
+    "model": "",
+    "date": "2026-11-10",
+    "prompt": 1
+   },
+   "portable/Stop-PlayBook.ps1": {
+    "sha": "46fc19ec0b98eb79",
+    "summary": "Reads the saved process identity and port, checks that the process still matches, then asks the local app to disable its worker before stopping that process. It prints a message that project data is preserved.",
+    "engine": "codex",
+    "model": "",
+    "date": "2026-11-10",
+    "prompt": 1
+   },
+   "portable/oz/install.py": {
+    "sha": "11b8cee95f3d5a83",
+    "summary": "Provides the Mac installer’s package verification, configuration, launch, MCP setup, and diagnostic actions, along with a bounded update path for logging-related files. The shown portion also defines helpers for JSON file access, hashing, runtime archive extraction, Claude MCP configuration merging, port selection, and PlayBook setup.",
+    "engine": "codex",
+    "model": "",
+    "date": "2026-11-10",
+    "prompt": 1
+   },
+   "portable/oz/oz_graphify_mcp.py": {
+    "sha": "bdc9d128489d9976",
+    "summary": "Implements an MCP server with tools to list and register local projects, analyze and search their code graphs, sync a code overview, and record user-confirmed workflows. It calls the PlayBook bridge for project and workflow records and exposes local support status and bundle creation tools.",
+    "engine": "codex",
+    "model": "",
+    "date": "2026-11-10",
+    "prompt": 1
+   },
+   "portable/oz/oz_mcp_proxy.py": {
+    "sha": "81fdb4960be77e67",
+    "summary": "Runs a child MCP server and forwards messages between it and standard input/output. It records allowlisted request and response metadata in the local audit journal, without recording protocol bodies.",
+    "engine": "codex",
+    "model": "",
+    "date": "2026-11-10",
+    "prompt": 1
+   },
+   "portable/oz/oz_support.py": {
+    "sha": "d55350a9ac88b06a",
+    "summary": "Writes a bounded local audit journal containing filtered event metadata and provides a status summary of recent errors and unanswered requests. On request, it creates a local ZIP support bundle with filtered audit records and a checksum file.",
+    "engine": "codex",
+    "model": "",
+    "date": "2026-11-10",
+    "prompt": 1
+   },
+   "scripts/central-smoke.py": {
+    "sha": "10b62345baaf92dd",
+    "summary": "Creates isolated fixtures to exercise recursive project scanning, authentication, shared references, run queue and lease behavior, delegation, and two connected device clients. It launches PlayBook server and client processes, checks their HTTP and MCP behavior, and uses a deterministic provider fixture for model-process checks.",
+    "engine": "codex",
+    "model": "",
+    "date": "2026-11-10",
+    "prompt": 1
+   },
+   "scripts/check-package.py": {
+    "sha": "f780efcec3a84f39",
+    "summary": "Installs the Windows release package into a temporary folder and exercises its CLI, installer, launcher, and stop script. It checks package hashes, upgrade preservation, health and GUI responses, and records the results in `artifacts/package-check.json`.",
+    "engine": "codex",
+    "model": "",
+    "date": "2026-11-10",
+    "prompt": 1
+   },
+   "scripts/fixtures/harness-provider.py": {
+    "sha": "20b49cd88e01a13b",
+    "summary": "Implements a deterministic provider process for harness wiring checks without calling a model. It reports fixture version or authentication status, otherwise reads the harness prompt, checks provider arguments and trial tool restrictions, and returns fixture data.",
+    "engine": "codex",
+    "model": "",
+    "date": "2026-11-10",
+    "prompt": 1
+   },
+   "scripts/fixtures/provider.py": {
+    "sha": "713d421086f06cdc",
+    "summary": "Implements a deterministic CLI provider fixture without calling a model or checking real authentication. It reports fixture version or login status, otherwise checks the prompt context and emits a fixed result; a wait prompt makes the process sleep for 120 seconds.",
+    "engine": "codex",
+    "model": "",
+    "date": "2026-11-10",
+    "prompt": 1
+   },
+   "scripts/folders-smoke.py": {
+    "sha": "137a77411064a5a0",
+    "summary": "Creates isolated filesystem and SQLite scenarios to exercise folder creation, move previews and application, reference updates, and recovery. It checks rejection of unsafe or stale operations and writes the check results to `artifacts/folders-smoke.json`.",
+    "engine": "codex",
+    "model": "",
+    "date": "2026-11-10",
+    "prompt": 1
+   },
+   "scripts/graphify-playbook.py": {
+    "sha": "a6ad474f95a87244",
+    "summary": "Provides a local Graphify companion that invokes PlayBook’s CLI, analyzes a registered project’s code into a Graphify snapshot, builds an ontology overview feed, and can sync or query the graph. The shown code also serves as the foundation for project selection and the local dashboard API, with analysis state and snapshots stored under the PlayBook data directory.",
+    "engine": "codex",
+    "model": "",
+    "date": "2026-11-10",
+    "prompt": 1
+   },
+   "scripts/graphify-smoke.py": {
+    "sha": "0bde010a96b44616",
+    "summary": "Runs isolated integration checks for Graphify extraction, ontology feed generation and sync, the local dashboard, and Graphify and PlayBook MCP tools. It uses a temporary project and ledger, checks that failed analysis preserves the previous snapshot, and writes results to `artifacts/graphify-smoke-results.json`.",
+    "engine": "codex",
+    "model": "",
+    "date": "2026-11-10",
+    "prompt": 1
+   },
+   "scripts/graphify/index.html": {
+    "sha": "8c7191ef4244f087",
+    "summary": "This page lets a user select a PlayBook project, generate or refresh its code graph, sync a graph summary to the ontology, and search the graph. It displays analysis status, graph and summary counts, provenance, and links to the graph and report; its client code calls local API endpoints for these actions.",
+    "engine": "codex",
+    "model": "",
+    "date": "2026-11-10",
+    "prompt": 1
+   },
+   "scripts/harness-smoke.py": {
+    "sha": "5bedb76d13689c6b",
+    "summary": "This script exercises harness proposal, paired baseline and candidate trials, review and adoption using a temporary project, SQLite data, and deterministic provider fixtures. It starts the PlayBook process and checks CLI, HTTP, worker, and MCP behavior; its docstring says the checks do not verify model quality or macOS behavior.",
+    "engine": "codex",
+    "model": "",
+    "date": "2026-11-10",
+    "prompt": 1
+   },
+   "scripts/ontology-smoke.py": {
+    "sha": "b45a57a641497f4a",
+    "summary": "This script runs ontology integration checks against a temporary database and local fixtures, using the PlayBook CLI and real transports. The shown checks cover record projections, search, run usage and provenance, ingestion, revisions, and rollback; the excerpt does not show the rest of the checks.",
+    "engine": "codex",
+    "model": "",
+    "date": "2026-11-10",
+    "prompt": 1
+   },
+   "scripts/oz-logging-smoke.py": {
+    "sha": "c515f09d7b0f30ba",
+    "summary": "This script exercises Oz logging and support-bundle behavior using temporary configurations, fixture processes, and concurrent writers. Its checks cover content-free audit events, error and crash handling, log rotation, bundle contents and checksums, and installer diagnostics; it writes a JSON report with the check results.",
+    "engine": "codex",
+    "model": "",
+    "date": "2026-11-10",
+    "prompt": 1
+   },
+   "scripts/oz-package-smoke.py": {
+    "sha": "aa1418a778c39631",
+    "summary": "This script audits staged Oz Mac package payloads and exercises installer and MCP behavior on Windows. It checks package manifests, architecture markers, bundled files and shell syntax, then uses fixtures and installed MCP servers to check installation, analysis, ledger integration, diagnostics, and audit records.",
+    "engine": "codex",
+    "model": "",
+    "date": "2026-11-10",
+    "prompt": 1
+   },
+   "scripts/package-oz-mac.py": {
+    "sha": "585566c779344945",
+    "summary": "Stages Mac handoff packages for Apple Silicon and Intel by copying published app files, Python dependencies, Graphify assets, setup scripts, and notices into a staging directory. It checks the bundled Python archive checksum, screens staged files for private data and machine paths, writes a manifest, and creates ZIP archives (plus an Intel TAR.XZ archive).",
+    "engine": "codex",
+    "model": "",
+    "date": "2026-11-10",
+    "prompt": 1
+   },
+   "scripts/package.py": {
+    "sha": "578cd12913d8ff4a",
+    "summary": "Packages a published directory into a portable ZIP for Windows or macOS. It copies selected README and documentation files, adds startup instructions, checks for private data and logs, writes a file-hash manifest, and records the archive checksum.",
+    "engine": "codex",
+    "model": "",
+    "date": "2026-11-10",
+    "prompt": 1
+   },
+   "scripts/prepare-public-source.py": {
+    "sha": "560bb83a0569daec",
+    "summary": "Copies an explicit set of source, documentation, web, portable, example, and script files into a fresh public-source snapshot directory. It rejects private data and selected generated files, records hashes for the copied files, and writes a manifest indicating that private Git history was not included.",
+    "engine": "codex",
+    "model": "",
+    "date": "2026-11-10",
+    "prompt": 1
+   },
+   "scripts/real-provider-smoke.py": {
+    "sha": "a5da1f6838502a25",
+    "summary": "Runs a read-only smoke workflow using already signed-in Codex and Claude CLIs against a temporary project, separate data directory, and local server. It checks provider execution, shared-reference access, and handoff between runs, then writes a results report; Claude access may be reported as blocked when the organization disables subscription access.",
+    "engine": "codex",
+    "model": "",
+    "date": "2026-11-10",
+    "prompt": 1
+   },
+   "scripts/smoke.py": {
+    "sha": "512622d18aa62638",
+    "summary": "Runs end-to-end checks against a temporary SQLite database through the CLI, HTTP API, and MCP transports. It checks record validation and persistence, project context, assets, backups, concurrent writes, authentication, MCP tools, and managed tool processes, then writes a results report.",
+    "engine": "codex",
+    "model": "",
+    "date": "2026-11-10",
+    "prompt": 1
+   },
+   "wwwroot/app.js": {
+    "sha": "ed32bc497e2d2e37",
+    "summary": "Implements the browser interface for PlayBook OS, loading modules for folders, assets, agents, ontology, media, and other project views. It fetches project and record data from the API, renders navigation and project tabs, and provides actions for viewing, editing, approving, and verifying records.",
+    "engine": "codex",
+    "model": "",
+    "date": "2026-11-10",
+    "prompt": 1
+   },
+   "wwwroot/assets.js": {
+    "sha": "76d6277e9c7c000f",
+    "summary": "Renders a project file inventory with search, type filters, previews, file actions, registered asset records, and shared assets. It also formats file metadata and compares project paths to identify registered files.",
+    "engine": "codex",
+    "model": "",
+    "date": "2026-11-10",
+    "prompt": 1
+   },
+   "wwwroot/context-menu.js": {
+    "sha": "7fdd9935f106a119",
+    "summary": "Creates a positioned context menu from supplied items, runs the selected action, and displays action errors in the page toast. It also provides a keyboard handler for opening the menu with the Context Menu key or Shift+F10.",
+    "engine": "codex",
+    "model": "",
+    "date": "2026-11-10",
+    "prompt": 1
+   },
+   "wwwroot/flowchart.js": {
+    "sha": "3f38e57e058c3a38",
+    "summary": "Displays a project's Mermaid flowchart source, loads the vendored Mermaid script on first use, and renders the diagram. If rendering fails, it shows an error message and the source remains available in a details section.",
+    "engine": "codex",
+    "model": "",
+    "date": "2026-11-10",
+    "prompt": 1
+   },
+   "wwwroot/folders.js": {
+    "sha": "e309f0f6d73a2fb9",
+    "summary": "Renders a browser for a project's folders and files, with navigation, breadcrumbs, image previews, and context menus. It also provides dialogs to create folders and preview and apply file or folder moves, including updates to registered PlayBook paths.",
+    "engine": "codex",
+    "model": "",
+    "date": "2026-11-10",
+    "prompt": 1
+   },
+   "wwwroot/harness.js": {
+    "sha": "b82ce4be622093da",
+    "summary": "Renders controls for proposing task guidance, queuing paired read-only trials, comparing their outputs, and adopting reviewed guidance. The interface requires review confirmation before disabling or adopting guidance.",
+    "engine": "codex",
+    "model": "",
+    "date": "2026-11-10",
+    "prompt": 1
+   },
+   "wwwroot/i18n.js": {
+    "sha": "71c53600ebbb9181",
+    "summary": "Provides Korean-to-English message lookup, placeholder substitution, language selection, and page translation for marked text and attributes. It stores the chosen language in local storage and updates the page URL when the language changes.",
+    "engine": "codex",
+    "model": "",
+    "date": "2026-11-10",
+    "prompt": 1
+   },
+   "wwwroot/index.html": {
+    "sha": "c17b9f82126d29b1",
+    "summary": "Defines the page structure for the PlayBook interface, including navigation, project search, header controls, content area, toast, record editor, and viewer dialogs. It loads the stylesheet and the JavaScript application module.",
+    "engine": "codex",
+    "model": "",
+    "date": "2026-11-10",
+    "prompt": 1
+   },
+   "wwwroot/inventory.js": {
+    "sha": "88f12cfd275af392",
+    "summary": "Renders a project's review summary and a button to view its review evidence. It also renders a searchable, category-filtered project catalog with project cards and review status.",
+    "engine": "codex",
+    "model": "",
+    "date": "2026-11-10",
+    "prompt": 1
+   },
+   "wwwroot/media.js": {
+    "sha": "d02d0159b46df622",
+    "summary": "Fetches and displays project images, thumbnails, video, PDF, and text previews. It also tracks thumbnail object URLs for cleanup and sends the session key with media requests.",
+    "engine": "codex",
+    "model": "",
+    "date": "2026-11-10",
+    "prompt": 1
+   },
+   "wwwroot/ontology.js": {
+    "sha": "a8bc8302cc615c61",
+    "summary": "Renders the ontology workbench for searching knowledge, collecting and viewing references, recording how references are used, and editing entities and relations. It builds the interface with translated labels and calls the supplied API for ontology operations; the displayed code also handles search results and reference selection.",
+    "engine": "codex",
+    "model": "",
+    "date": "2026-11-10",
+    "prompt": 1
+   },
+   "wwwroot/style.css": {
+    "sha": "57d70dd0a03239d4",
+    "summary": "Defines the application’s visual styles, including the sidebar, navigation, panels, forms, buttons, media previews, and responsive layouts. The shown rules also style the ontology workbench, with further styles omitted.",
+    "engine": "codex",
+    "model": "",
+    "date": "2026-11-10",
+    "prompt": 1
+   },
+   "wwwroot/workspace-ui.js": {
+    "sha": "a08b6ec4f480812e",
+    "summary": "Renders setup and AI-agent screens. The shown code scans a selected folder for project directories and imports chosen folders, and displays worker/provider status and controls, plus a form for queuing AI work and optional review.",
+    "engine": "codex",
+    "model": "",
+    "date": "2026-11-10",
+    "prompt": 1
    }
   },
   "translations": [

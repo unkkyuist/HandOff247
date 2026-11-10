@@ -7,6 +7,10 @@ source: "START_PLAYBOOK.cmd"
 
 # `START_PLAYBOOK.cmd`
 
+**Written by a language model (codex, 2026-11-10); not checked by a person.** Check it against the source before relying on it.
+
+> This batch launcher runs playbook.ps1 with the serve argument from its own directory.
+
 - **Class:** File — A file of the project (images and other assets are left out).
 - **Language:** Batch
 - **Kind of file:** script

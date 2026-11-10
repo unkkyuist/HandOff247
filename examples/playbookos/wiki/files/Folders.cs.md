@@ -7,6 +7,10 @@ source: "Folders.cs"
 
 # `Folders.cs`
 
+**Written by a language model (codex, 2026-11-10); not checked by a person.** Check it against the source before relying on it.
+
+> Provides project-scoped file listing and folder operations, including folder creation and planning moves between project-relative paths. The shown code filters protected directories and links, checks path boundaries and registered references, fingerprints move sources, and prepares record updates for a planned move.
+
 - **Class:** File — A file of the project (images and other assets are left out).
 - **Language:** C#
 - **Kind of file:** code

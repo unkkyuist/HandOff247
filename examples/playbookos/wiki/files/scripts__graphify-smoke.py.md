@@ -9,6 +9,10 @@ source: "scripts/graphify-smoke.py"
 
 > Real Graphify/PlayBook integration checks, using an isolated ledger and source.
 
+**Written by a language model (codex, 2026-11-10); not checked by a person.** Check it against the source before relying on it.
+
+> Runs isolated integration checks for Graphify extraction, ontology feed generation and sync, the local dashboard, and Graphify and PlayBook MCP tools. It uses a temporary project and ledger, checks that failed analysis preserves the previous snapshot, and writes results to `artifacts/graphify-smoke-results.json`.
+
 - **Class:** File — A file of the project (images and other assets are left out).
 - **Language:** Python
 - **Kind of file:** test

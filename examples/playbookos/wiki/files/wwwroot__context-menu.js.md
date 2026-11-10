@@ -7,6 +7,10 @@ source: "wwwroot/context-menu.js"
 
 # `wwwroot/context-menu.js`
 
+**Written by a language model (codex, 2026-11-10); not checked by a person.** Check it against the source before relying on it.
+
+> Creates a positioned context menu from supplied items, runs the selected action, and displays action errors in the page toast. It also provides a keyboard handler for opening the menu with the Context Menu key or Shift+F10.
+
 - **Class:** File — A file of the project (images and other assets are left out).
 - **Language:** JavaScript
 - **Kind of file:** code

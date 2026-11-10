@@ -7,6 +7,10 @@ source: "ProjectScanner.cs"
 
 # `ProjectScanner.cs`
 
+**Written by a language model (codex, 2026-11-10); not checked by a person.** Check it against the source before relying on it.
+
+> ProjectScanner recursively scans a selected folder, skips configured directory names and links, and records candidate folders with project markers, file names, instruction files, and any existing registration. Import validates selected candidates against the saved scan, preserves existing registrations, and creates project records for new selections.
+
 - **Class:** File — A file of the project (images and other assets are left out).
 - **Language:** C#
 - **Kind of file:** code

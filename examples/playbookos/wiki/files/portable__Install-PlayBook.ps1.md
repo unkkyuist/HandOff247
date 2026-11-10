@@ -7,6 +7,10 @@ source: "portable/Install-PlayBook.ps1"
 
 # `portable/Install-PlayBook.ps1`
 
+**Written by a language model (codex, 2026-11-10); not checked by a person.** Check it against the source before relying on it.
+
+> The installer validates the extracted package against its manifest and SHA-256 hashes, then copies files into the selected install folder, backing up files it replaces. It configures the selected workspace, can create a desktop shortcut, and launches PlayBook unless `-NoLaunch` is set.
+
 - **Class:** File — A file of the project (images and other assets are left out).
 - **Language:** PowerShell
 - **Kind of file:** script

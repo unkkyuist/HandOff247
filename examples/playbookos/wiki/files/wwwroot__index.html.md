@@ -9,6 +9,10 @@ source: "wwwroot/index.html"
 
 > Project PlayBook
 
+**Written by a language model (codex, 2026-11-10); not checked by a person.** Check it against the source before relying on it.
+
+> Defines the page structure for the PlayBook interface, including navigation, project search, header controls, content area, toast, record editor, and viewer dialogs. It loads the stylesheet and the JavaScript application module.
+
 - **Class:** File — A file of the project (images and other assets are left out).
 - **Language:** HTML
 - **Kind of file:** web

@@ -9,6 +9,10 @@ source: "portable/oz/oz_support.py"
 
 > Bounded, content-free local audit journal and opt-in troubleshooting exports.
 
+**Written by a language model (codex, 2026-11-10); not checked by a person.** Check it against the source before relying on it.
+
+> Writes a bounded local audit journal containing filtered event metadata and provides a status summary of recent errors and unanswered requests. On request, it creates a local ZIP support bundle with filtered audit records and a checksum file.
+
 - **Class:** File — A file of the project (images and other assets are left out).
 - **Language:** Python
 - **Kind of file:** code

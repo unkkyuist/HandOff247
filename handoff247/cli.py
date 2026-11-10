@@ -6,7 +6,7 @@ import datetime
 import sys
 from pathlib import Path
 
-from . import __version__, leaving, translate, workspace
+from . import __version__, leaving, summarize, translate, workspace
 from .build import write_pack
 from .notes import DEFAULT_NAME, load, skeleton, update
 from .pipeline import analyze_project
@@ -24,7 +24,20 @@ def _notes_path(args) -> Path:
     return Path(args.notes) if args.notes else Path(args.project) / DEFAULT_NAME
 
 
-COMMANDS = ("go", "build", "notes", "check")
+COMMANDS = ("go", "build", "notes", "check", "mcp")
+
+
+def _summary_args(p: argparse.ArgumentParser) -> None:
+    g = p.add_argument_group("summaries written by a language model (optional)")
+    g.add_argument("--summarize", action="store_true",
+                   help="ask the Codex CLI you are signed in to for a short description of each code file without a note "
+                        "(labelled as model-written; never counted as a note)")
+    g.add_argument("--model", help="model for Codex (default: Codex's own default)")
+    g.add_argument("--jobs", type=int, default=3, help="requests to run at the same time (default 3)")
+    g.add_argument("--limit", type=int, default=0, help="summarize at most this many files in this run (0 = all)")
+
+
+summaries = summarize.prepare
 
 
 def _print_readiness(rows: list[dict]) -> None:
@@ -45,7 +58,7 @@ def _go(args) -> int:
     ws_out = Path(args.out) if args.out else root / "handoff"
     as_workspace = args.workspace or (not args.single and workspace.is_workspace(root, ws_out))
     if as_workspace:
-        data = workspace.build_workspace(root, ws_out, date, args.exclude)
+        data = workspace.build_workspace(root, ws_out, date, args.exclude, summaries_for=args)
         if not data["projects"] and not data["failed"]:
             print(f"error: no project found under {root} (use --single to treat the folder itself as one)", file=sys.stderr)
             return 2
@@ -67,6 +80,7 @@ def _go(args) -> int:
         added, rows, existing = update(notes_path, project)
         out = Path(args.out) if args.out else root / "docs" / "handoff"
         notes = load(notes_path)
+        summaries(project, notes, summarize.cache_path(notes_path), args)
         info = write_pack(project, out, notes, "auto", "", date, DEFAULT_NAME)
         print(f"HandOff247 {__version__}: {info['files']} files, {len(info['diagrams'])} diagrams "
               f"({', '.join(info['diagrams']) or 'none'}), 6 pages")
@@ -112,6 +126,7 @@ def main(argv: list[str] | None = None) -> int:
     go.add_argument("--date", help="date printed in the pack (default: today)")
     go.add_argument("--exclude", action="append", default=[], metavar="GLOB", help="skip matching paths (repeatable)")
     go.add_argument("--open", action="store_true", help="open the result in the browser")
+    _summary_args(go)
     b = sub.add_parser("build", help="analyze the project and write the handoff pack")
     _common(b)
     b.add_argument("-o", "--out", help="output folder (default: ./handoff/<name>)")
@@ -119,14 +134,21 @@ def main(argv: list[str] | None = None) -> int:
                    help="how file:line references link to source (auto: relative inside the project, GitHub blob URL otherwise)")
     b.add_argument("--link-base", default="", help="URL prefix for source links, e.g. https://github.com/me/repo/blob/main/")
     b.add_argument("--date", help="date printed in the pack (default: today); pin it in CI for stable diffs")
+    _summary_args(b)
     n = sub.add_parser("notes", help="create the notes file or add headings for new files/modes/folders")
     _common(n)
     c = sub.add_parser("check", help="report what is still undocumented; non-zero exit below --min")
     _common(c)
     c.add_argument("--min", type=float, default=0.0, help="minimum share (0-100) of files with notes")
+    m = sub.add_parser("mcp", help="run an MCP server (stdio) so an AI agent can read the ontology and source "
+                       "and write notes; add it to Codex or Claude Code as a command")
+    m.add_argument("project", nargs="?", default="", help="default project folder for the tools (optional)")
     args = ap.parse_args(argv)
     if args.cmd == "go":
         return _go(args)
+    if args.cmd == "mcp":
+        from . import mcp
+        return mcp.serve(args.project or None)
 
     root = Path(args.project)
     if not root.is_dir():
@@ -138,6 +160,7 @@ def main(argv: list[str] | None = None) -> int:
     if args.cmd == "build":
         out = Path(args.out) if args.out else Path.cwd() / "handoff" / project.name
         notes = load(notes_path)
+        summaries(project, notes, summarize.cache_path(notes_path), args)
         label = notes_path.name if notes_path.parent.resolve() == root.resolve() else notes_path.as_posix()
         info = write_pack(project, out, notes, args.links, args.link_base, args.date, label)
         L = project.links

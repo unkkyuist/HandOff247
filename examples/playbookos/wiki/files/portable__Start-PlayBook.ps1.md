@@ -7,6 +7,10 @@ source: "portable/Start-PlayBook.ps1"
 
 # `portable/Start-PlayBook.ps1`
 
+**Written by a language model (codex, 2026-11-10); not checked by a person.** Check it against the source before relying on it.
+
+> Creates the data folder, finds an existing PlayBook server for that data location or starts one on an available localhost port from 7331 to 7360, and waits for its health check. It prints the server URL and opens it in a browser unless `-NoBrowser` is set.
+
 - **Class:** File — A file of the project (images and other assets are left out).
 - **Language:** PowerShell
 - **Kind of file:** script

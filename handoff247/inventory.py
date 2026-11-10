@@ -152,6 +152,8 @@ def _keep(paths: list[str], root: Path, skip_dirs: set[str]) -> list[str]:
             continue
         if any(g and p.startswith(g) for g in generated):
             continue
+        if parts[-1].endswith(".summaries.json"):
+            continue                        # HandOff247's own cache of model-written summaries
         full = root / p
         if not full.is_file() or full.is_symlink():
             continue

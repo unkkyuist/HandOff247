@@ -9,6 +9,10 @@ source: "scripts/graphify-playbook.py"
 
 > Local Graphify companion using PlayBook's existing tool and ontology APIs.
 
+**Written by a language model (codex, 2026-11-10); not checked by a person.** Check it against the source before relying on it.
+
+> Provides a local Graphify companion that invokes PlayBook’s CLI, analyzes a registered project’s code into a Graphify snapshot, builds an ontology overview feed, and can sync or query the graph. The shown code also serves as the foundation for project selection and the local dashboard API, with analysis state and snapshots stored under the PlayBook data directory.
+
 - **Class:** File — A file of the project (images and other assets are left out).
 - **Language:** Python
 - **Kind of file:** code

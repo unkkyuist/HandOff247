@@ -7,6 +7,10 @@ source: "Program.cs"
 
 # `Program.cs`
 
+**Written by a language model (codex, 2026-11-10); not checked by a person.** Check it against the source before relying on it.
+
+> Initializes PlayBook services and selects worker, CLI, MCP, agent, local web server, or shared server behavior from the command-line mode. In server modes it configures the HTTP endpoints, access checks, API operation dispatch, media preview, health response, and MCP transport.
+
 - **Class:** File — A file of the project (images and other assets are left out).
 - **Language:** C#
 - **Kind of file:** code

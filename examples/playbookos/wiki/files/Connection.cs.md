@@ -7,6 +7,10 @@ source: "Connection.cs"
 
 # `Connection.cs`
 
+**Written by a language model (codex, 2026-11-10); not checked by a person.** Check it against the source before relying on it.
+
+> Stores device and server connection settings in client.json and provides connection status, configuration, connect, disconnect, and API request methods. It validates server URLs, sends JSON over HTTP, and converts request failures into domain errors.
+
 - **Class:** File — A file of the project (images and other assets are left out).
 - **Language:** C#
 - **Kind of file:** code

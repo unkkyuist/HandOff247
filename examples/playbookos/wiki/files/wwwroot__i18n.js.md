@@ -7,6 +7,10 @@ source: "wwwroot/i18n.js"
 
 # `wwwroot/i18n.js`
 
+**Written by a language model (codex, 2026-11-10); not checked by a person.** Check it against the source before relying on it.
+
+> Provides Korean-to-English message lookup, placeholder substitution, language selection, and page translation for marked text and attributes. It stores the chosen language in local storage and updates the page URL when the language changes.
+
 - **Class:** File — A file of the project (images and other assets are left out).
 - **Language:** JavaScript
 - **Kind of file:** code

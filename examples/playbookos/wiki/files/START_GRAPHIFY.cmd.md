@@ -7,6 +7,10 @@ source: "START_GRAPHIFY.cmd"
 
 # `START_GRAPHIFY.cmd`
 
+**Written by a language model (codex, 2026-11-10); not checked by a person.** Check it against the source before relying on it.
+
+> This batch launcher runs graphify.ps1 with the start argument from its own directory. If that succeeds, it opens the local Graphify page at port 7334 for project playbook.
+
 - **Class:** File — A file of the project (images and other assets are left out).
 - **Language:** Batch
 - **Kind of file:** script

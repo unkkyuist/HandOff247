@@ -9,6 +9,10 @@ source: "scripts/harness-smoke.py"
 
 > Harness proposal/trial/adoption tests on isolated SQLite and real worker/provider processes.
 
+**Written by a language model (codex, 2026-11-10); not checked by a person.** Check it against the source before relying on it.
+
+> This script exercises harness proposal, paired baseline and candidate trials, review and adoption using a temporary project, SQLite data, and deterministic provider fixtures. It starts the PlayBook process and checks CLI, HTTP, worker, and MCP behavior; its docstring says the checks do not verify model quality or macOS behavior.
+
 - **Class:** File — A file of the project (images and other assets are left out).
 - **Language:** Python
 - **Kind of file:** test

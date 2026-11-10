@@ -62,6 +62,8 @@ article th{background:var(--chip);font-weight:600}
 .list li{padding:4px 0;border-bottom:1px dashed var(--line)}
 .filehit{display:block;padding:8px 10px;border:1px solid var(--line);border-radius:8px;margin:6px 0;cursor:pointer;background:var(--panel)}
 .filehit:hover{border-color:var(--accent)}
+.model{border-left:3px dashed var(--muted);padding:.2em .9em;margin:.4em 0}
+.model p{margin:.3em 0}
 .note{border-left:3px solid #d97706;background:rgba(217,119,6,.08);padding:.4em .9em;border-radius:0 8px 8px 0;white-space:pre-wrap}
 :root{--g1:#2a78d6;--g2:#eb6834;--g3:#1baf7a;--g4:#eda100;--g5:#e87ba4;--g6:#008300;--g7:#6250d6;--g8:#e34948;--edge:#b9bec8}
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--g1:#3987e5;--g2:#d95926;--g3:#199e70;--g4:#c98500;--g5:#d55181;--g6:#008300;--g7:#9085e9;--g8:#e66767;--edge:#4a5261}}
@@ -199,6 +201,7 @@ function openCard(path, line) {
   if (f.source_url) h += `<p><a href="${esc(f.source_url)}${line ? '#L' + line : ''}" target="_blank" rel="noopener">Open source ↗</a></p>`;
   if (G.byId['file:' + f.path]) h += `<p><button class="act" type="button" data-rel="1">Relations and wiki page</button></p>`;
   if (f.note) h += `<h3>Notes</h3><div class="note">${esc(f.note)}</div>`;
+  if (f.model) h += `<h3>Summary</h3>${modelBlock(f.model)}`;
   if (f.summary) h += `<h3>Comment</h3><p>${esc(f.summary)} <span class="muted">(${esc(f.summary_source)})</span></p>`;
   if (f.translated) h += `<p class="muted">${f.translated} heading(s) or comment(s) here are English versions from the notes file; the originals are in handoff.json.</p>`;
   if (f.symbols.length) h += `<h3>Symbols</h3><ul class="list">` + f.symbols.slice(0, 60).map(s => `<li><code>${esc((s.parent && s.kind === 'method' ? s.parent + '.' : '') + s.name)}</code> <span class="muted">${esc(s.kind)} · L${s.line}</span>${s.doc ? '<br>' + esc(s.doc) : ''}</li>`).join('') + '</ul>';
@@ -210,6 +213,9 @@ function openCard(path, line) {
   card.querySelectorAll('a[data-path]').forEach(a => a.onclick = e => { e.preventDefault(); openCard(a.dataset.path, +a.dataset.line); });
   card.querySelector('[data-rel]')?.addEventListener('click', () => openEntity('file:' + f.path));
   const d = document.getElementById('drawer'); d.classList.add('open'); d.setAttribute('aria-hidden', 'false'); d.scrollTop = 0;
+}
+function modelBlock(m) {
+  return `<div class="model"><span class="chip">language model</span> <span class="muted">${esc(m.engine || '')} · ${esc(m.date || '')} · not checked by a person</span><p>${esc(m.summary)}</p></div>`;
 }
 function closeDrawer() { const d = document.getElementById('drawer'); d.classList.remove('open'); d.setAttribute('aria-hidden', 'true'); }
 document.addEventListener('keydown', e => { if (e.key === 'Escape') closeDrawer(); });
@@ -244,6 +250,7 @@ function openEntity(id) {
   const n = G.byId[id]; if (!n) return; const e = n.e;
   let h = `<h2>${esc(e.name)}</h2><div><span class="chip">${esc(n.c.label)}</span><span class="chip">${n.deg} relation(s)</span></div>`;
   if (e.summary) h += `<p>${esc(e.summary)}</p>`;
+  if (e.model_summary) h += modelBlock(e.model_summary);
   h += '<p>';
   if (e.page && DATA.pages[e.page]) h += `<button class="act" type="button" data-page="1">Wiki page</button>`;
   if (e.type === 'File' && filesByPath[e.name]) h += `<button class="act" type="button" data-file="1">File card</button>`;
@@ -435,7 +442,7 @@ function gwire() {
     const n = hit(ev); if (n !== G.hover) { G.hover = n; G.dirty = true; }
     cv.style.cursor = n ? 'pointer' : 'grab';
     if (!n) { tip.style.display = 'none'; return; }
-    tip.innerHTML = `<strong>${esc(n.e.name)}</strong><br><span class="muted">${esc(n.c.label)} · ${n.deg} relation(s)</span>${n.e.summary ? '<br>' + esc(n.e.summary) : ''}`;
+    tip.innerHTML = `<strong>${esc(n.e.name)}</strong><br><span class="muted">${esc(n.c.label)} · ${n.deg} relation(s)</span>${n.e.summary ? '<br>' + esc(n.e.summary) : n.e.model_summary ? '<br><em>(model)</em> ' + esc(n.e.model_summary.summary) : ''}`;
     tip.style.display = 'block';
     const r = cv.getBoundingClientRect(), x = ev.clientX - r.left, y = ev.clientY - r.top;
     tip.style.left = Math.max(0, Math.min(x + 14, r.width - tip.offsetWidth - 6)) + 'px';
@@ -472,11 +479,11 @@ function searchPage(q) {
   const page = document.getElementById('page');
   const words = q.toLowerCase().split(/\s+/).filter(Boolean);
   const hits = DATA.files.filter(f => {
-    const hay = (f.path + ' ' + f.summary + ' ' + f.note + ' ' + f.symbols.map(s => s.name + ' ' + s.doc).join(' ')).toLowerCase();
+    const hay = (f.path + ' ' + f.summary + ' ' + f.note + ' ' + (f.model ? f.model.summary : '') + ' ' + f.symbols.map(s => s.name + ' ' + s.doc).join(' ')).toLowerCase();
     return words.every(w => hay.includes(w));
   });
   page.innerHTML = `<h1>Search</h1><p class="muted">${hits.length} / ${DATA.files.length}</p>` +
-    hits.slice(0, 300).map(f => `<div class="filehit" data-path="${esc(f.path)}"><strong>${esc(f.path)}</strong> <span class="chip">${esc(f.lang)}</span><br><span class="muted">${esc(f.note || f.summary || '')}</span></div>`).join('');
+    hits.slice(0, 300).map(f => `<div class="filehit" data-path="${esc(f.path)}"><strong>${esc(f.path)}</strong> <span class="chip">${esc(f.lang)}</span><br><span class="muted">${esc(f.note || f.summary || (f.model ? '(model) ' + f.model.summary : ''))}</span></div>`).join('');
   page.querySelectorAll('.filehit').forEach(el => el.onclick = () => openCard(el.dataset.path));
 }
 document.getElementById('q').addEventListener('input', e => searchPage(e.target.value));
@@ -494,6 +501,8 @@ def render(project, pages: dict[str, str], diagrams: dict, notes, date: str, lin
         out_edges.setdefault(e.src, []).append({"kind": e.kind, "other": e.dst, "label": e.label})
         in_edges.setdefault(e.dst, []).append({"kind": e.kind, "other": e.src, "label": e.label})
     files = []
+    model_text = {p: {k: m[k] for k in ("summary", "engine", "date") if m.get(k)}
+                  for p, m in project.links.get("model_summaries", {}).items()}
     for f in project.files:
         if f.category == "asset" and not f.symbols:
             continue
@@ -505,6 +514,7 @@ def render(project, pages: dict[str, str], diagrams: dict, notes, date: str, lin
         files.append({"path": f.path, "lang": f.lang, "category": f.category, "lines": f.lines, "tags": f.tags,
                       "summary": f.summary, "summary_source": f.summary_source, "note": notes.get(f"File: {f.path}"),
                       "source_url": src_url, "translated": len(f.translated),
+                      "model": model_text.get(f.path) if not notes.get(f"File: {f.path}") else None,
                       "symbols": [{"name": s.name, "kind": s.kind, "line": s.line, "doc": s.doc, "parent": s.parent}
                                   for s in f.symbols if s.public][:120],
                       "out": out_edges.get(f.path, [])[:80], "in": in_edges.get(f.path, [])[:80]})
@@ -513,7 +523,7 @@ def render(project, pages: dict[str, str], diagrams: dict, notes, date: str, lin
             "linkBase": linker.base if linker.mode == "url" else "",
             "relPrefix": linker.rel_prefix if linker.mode == "relative" else ""}
     if onto:
-        keep = ("id", "type", "name", "summary", "page")
+        keep = ("id", "type", "name", "summary", "page", "model_summary")
         data["ontology"] = {"classes": onto["schema"]["classes"], "relations": onto["schema"]["relations"],
                             "entities": [{k: e[k] for k in keep if k in e} for e in onto["entities"]],
                             "triples": onto["relations"]}

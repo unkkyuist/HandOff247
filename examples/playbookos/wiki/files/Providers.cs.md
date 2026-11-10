@@ -7,6 +7,10 @@ source: "Providers.cs"
 
 # `Providers.cs`
 
+**Written by a language model (codex, 2026-11-10); not checked by a person.** Check it against the source before relying on it.
+
+> Providers locates the Codex or Claude CLI, checks installation and login status, and can open a login process on Windows. It also builds MCP configuration and provider-specific process arguments for running a PlayBook job.
+
 - **Class:** File — A file of the project (images and other assets are left out).
 - **Language:** C#
 - **Kind of file:** code

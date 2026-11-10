@@ -9,6 +9,10 @@ source: "scripts/folders-smoke.py"
 
 > Real, isolated filesystem + SQLite tests for folder organization.
 
+**Written by a language model (codex, 2026-11-10); not checked by a person.** Check it against the source before relying on it.
+
+> Creates isolated filesystem and SQLite scenarios to exercise folder creation, move previews and application, reference updates, and recovery. It checks rejection of unsafe or stale operations and writes the check results to `artifacts/folders-smoke.json`.
+
 - **Class:** File — A file of the project (images and other assets are left out).
 - **Language:** Python
 - **Kind of file:** test

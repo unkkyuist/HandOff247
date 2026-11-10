@@ -589,6 +589,9 @@ class Pages:
                 note = self.n.get(f"File: {f.path}")
                 if note:
                     s.append(note_block(note, t))
+                ms = L.get("model_summaries", {}).get(f.path)
+                if ms and not note:
+                    s.append(f"> {ms['summary']}  \n> <sub>{t('model_written', engine=ms.get('engine', ''), date=ms.get('date', ''))}</sub>\n")
                 if f.summary:
                     s.append(f"> {f.summary}  \n> <sub>{t('comment_from', src=f.summary_source)}</sub>\n")
                 if f.translated:

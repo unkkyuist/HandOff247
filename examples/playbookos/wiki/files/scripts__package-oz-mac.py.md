@@ -9,6 +9,10 @@ source: "scripts/package-oz-mac.py"
 
 > Build offline Mac handoff ZIPs from explicit native runtime directories.
 
+**Written by a language model (codex, 2026-11-10); not checked by a person.** Check it against the source before relying on it.
+
+> Stages Mac handoff packages for Apple Silicon and Intel by copying published app files, Python dependencies, Graphify assets, setup scripts, and notices into a staging directory. It checks the bundled Python archive checksum, screens staged files for private data and machine paths, writes a manifest, and creates ZIP archives (plus an Intel TAR.XZ archive).
+
 - **Class:** File — A file of the project (images and other assets are left out).
 - **Language:** Python
 - **Kind of file:** code

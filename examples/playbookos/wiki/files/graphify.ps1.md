@@ -7,6 +7,10 @@ source: "graphify.ps1"
 
 # `graphify.ps1`
 
+**Written by a language model (codex, 2026-11-10); not checked by a person.** Check it against the source before relying on it.
+
+> The PowerShell wrapper sets a default PlayBook data directory and UTF-8 Python output, then passes its arguments to scripts/graphify-playbook.py and returns that process's exit code.
+
 - **Class:** File — A file of the project (images and other assets are left out).
 - **Language:** PowerShell
 - **Kind of file:** script

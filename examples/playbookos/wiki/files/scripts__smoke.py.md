@@ -9,6 +9,10 @@ source: "scripts/smoke.py"
 
 > End-to-end tests against a fresh SQLite database, real CLI, HTTP and MCP transports.
 
+**Written by a language model (codex, 2026-11-10); not checked by a person.** Check it against the source before relying on it.
+
+> Runs end-to-end checks against a temporary SQLite database through the CLI, HTTP API, and MCP transports. It checks record validation and persistence, project context, assets, backups, concurrent writes, authentication, MCP tools, and managed tool processes, then writes a results report.
+
 - **Class:** File — A file of the project (images and other assets are left out).
 - **Language:** Python
 - **Kind of file:** test

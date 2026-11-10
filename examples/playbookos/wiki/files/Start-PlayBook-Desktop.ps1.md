@@ -9,6 +9,10 @@ source: "Start-PlayBook-Desktop.ps1"
 
 > For the desktop shortcut: starts the server if it is not running, then opens the UI.
 
+**Written by a language model (codex, 2026-11-10); not checked by a person.** Check it against the source before relying on it.
+
+> The PowerShell script starts the PlayBook server on port 7331, building the Release executable when it is missing. It checks that an existing server uses the same data folder, waits for startup, and optionally opens the local page in a browser.
+
 - **Class:** File — A file of the project (images and other assets are left out).
 - **Language:** PowerShell
 - **Kind of file:** script

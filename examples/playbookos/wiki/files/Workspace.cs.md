@@ -7,6 +7,10 @@ source: "Workspace.cs"
 
 # `Workspace.cs`
 
+**Written by a language model (codex, 2026-11-10); not checked by a person.** Check it against the source before relying on it.
+
+> Workspace resolves project files within registered project roots, provides text and media previews, and copies supported files into a shared asset directory with hash checks. It also builds project context, discovers project folders, and retrieves Git status, revision, and recent commit information; the excerpt ends as its command-running method begins.
+
 - **Class:** File — A file of the project (images and other assets are left out).
 - **Language:** C#
 - **Kind of file:** code

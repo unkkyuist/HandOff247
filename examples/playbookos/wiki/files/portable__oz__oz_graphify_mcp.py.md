@@ -9,6 +9,10 @@ source: "portable/oz/oz_graphify_mcp.py"
 
 > Project-aware Graphify MCP.
 
+**Written by a language model (codex, 2026-11-10); not checked by a person.** Check it against the source before relying on it.
+
+> Implements an MCP server with tools to list and register local projects, analyze and search their code graphs, sync a code overview, and record user-confirmed workflows. It calls the PlayBook bridge for project and workflow records and exposes local support status and bundle creation tools.
+
 - **Class:** File — A file of the project (images and other assets are left out).
 - **Language:** Python
 - **Kind of file:** code

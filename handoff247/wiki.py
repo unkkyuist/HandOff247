@@ -160,7 +160,11 @@ class Wiki:
         s = []
         if e.get("summary"):
             s += [f"> {e['summary']}", ""]
-        facts = [f"- **Class:** {self.classes[e['type']]['label']} — {self.classes[e['type']]['description']}"]
+        ms = e.get("model_summary")
+        if ms:
+            s += [f"**{t('model_written', engine=ms.get('engine', ''), date=ms.get('date', ''))}.** "
+                  "Check it against the source before relying on it.", "", f"> {ms['summary']}", ""]
+        facts =[f"- **Class:** {self.classes[e['type']]['label']} — {self.classes[e['type']]['description']}"]
         for k, v in e.get("attrs", {}).items():
             if k == "language":
                 v = LANG_NAMES.get(v, v)
@@ -270,7 +274,7 @@ class Wiki:
                 return
             s.extend([f"## {title or self.classes[cls]['plural']} ({len(items)})", ""])
             for e in items:
-                s.append(f"- {self.ref(page, e['id'])}" + (f" — {e['summary']}" if e.get("summary") else ""))
+                s.append(f"- {self.ref(page, e['id'])}" + self.line_summary(e))
             s.append("")
         catalog("Area")
         catalog("Mode")
@@ -291,9 +295,19 @@ class Wiki:
                 if area != last:
                     s += ["", f"### {area}", ""]
                     last = area
-                s.append(f"- {self.ref(page, e['id'])}" + (f" — {e['summary']}" if e.get("summary") else ""))
+                s.append(f"- {self.ref(page, e['id'])}" + self.line_summary(e))
             s.append("")
         return "\n".join(s).rstrip("\n") + "\n"
+
+    @staticmethod
+    def line_summary(e: dict) -> str:
+        if e.get("summary"):
+            return f" — {e['summary']}"
+        ms = e.get("model_summary")
+        if ms:
+            text = ms["summary"] if len(ms["summary"]) <= 220 else ms["summary"][:219].rstrip() + "…"
+            return f" — *(model)* {text}"
+        return ""
 
     def agents(self) -> str:
         s = self.front("How to use this wiki")
@@ -304,6 +318,7 @@ class Wiki:
               "2. Each page is one thing. `Relations` lists what it points to (→) and what points to it (←); follow those links.",
               "3. A `file:line` next to a statement is where it was observed. Open that source before you change code.",
               "4. *inferred* marks a conclusion, not an observation. Check it in the source before relying on it.",
+              "   Text labelled *written by a language model* (and *(model)* in lists) was not checked by a person either.",
               "5. Something that is not in the wiki was not found. That does not mean it does not exist: code built from "
               "runtime strings, reflection or dependency-injection containers is not followed. Say that you do not know.",
               "6. [notes.md](notes.md) is the only human-written page. \"Not answered\" there is a question for a person.", "",
@@ -323,7 +338,11 @@ class Wiki:
               "## Files", "",
               "- `../llms.txt` — short entry point; `../llms-full.txt` — every page of this wiki in one file",
               "- `../ontology.json` — entities (`id`, `type`, `name`, `summary`, `page`) and relations (`s`, `p`, `o`, `file`, `line`)",
-              "- `../index.html` — viewer with a graph of the same ontology", ""]
+              "- `../index.html` — viewer with a graph of the same ontology", "",
+              "## Working through MCP", "",
+              "`python -m handoff247 mcp` is an MCP server over the same data: search and read entities, read source "
+              "lines, list what is still undocumented, and write notes under the right heading (marked as written by an "
+              "agent). It is the supported way for an assistant to add to this wiki.", ""]
         return "\n".join(s).rstrip("\n") + "\n"
 
     def llms_txt(self) -> str:

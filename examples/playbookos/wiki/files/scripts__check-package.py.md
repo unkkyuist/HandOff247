@@ -9,6 +9,10 @@ source: "scripts/check-package.py"
 
 > Install the Windows package into an isolated folder and exercise its own launcher.
 
+**Written by a language model (codex, 2026-11-10); not checked by a person.** Check it against the source before relying on it.
+
+> Installs the Windows release package into a temporary folder and exercises its CLI, installer, launcher, and stop script. It checks package hashes, upgrade preservation, health and GUI responses, and records the results in `artifacts/package-check.json`.
+
 - **Class:** File — A file of the project (images and other assets are left out).
 - **Language:** Python
 - **Kind of file:** code

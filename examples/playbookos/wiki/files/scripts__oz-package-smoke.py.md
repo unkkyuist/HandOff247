@@ -9,6 +9,10 @@ source: "scripts/oz-package-smoke.py"
 
 > Audit real Mac payloads and exercise their installer/MCP logic on Windows.
 
+**Written by a language model (codex, 2026-11-10); not checked by a person.** Check it against the source before relying on it.
+
+> This script audits staged Oz Mac package payloads and exercises installer and MCP behavior on Windows. It checks package manifests, architecture markers, bundled files and shell syntax, then uses fixtures and installed MCP servers to check installation, analysis, ledger integration, diagnostics, and audit records.
+
 - **Class:** File — A file of the project (images and other assets are left out).
 - **Language:** Python
 - **Kind of file:** test

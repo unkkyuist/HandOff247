@@ -9,6 +9,10 @@ source: "scripts/prepare-public-source.py"
 
 > Copy an explicit public source snapshot; never copy the private local Git history.
 
+**Written by a language model (codex, 2026-11-10); not checked by a person.** Check it against the source before relying on it.
+
+> Copies an explicit set of source, documentation, web, portable, example, and script files into a fresh public-source snapshot directory. It rejects private data and selected generated files, records hashes for the copied files, and writes a manifest indicating that private Git history was not included.
+
 - **Class:** File — A file of the project (images and other assets are left out).
 - **Language:** Python
 - **Kind of file:** code

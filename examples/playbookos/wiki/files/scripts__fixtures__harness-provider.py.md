@@ -9,6 +9,10 @@ source: "scripts/fixtures/harness-provider.py"
 
 > A deterministic provider process for harness wiring tests; never calls a model.
 
+**Written by a language model (codex, 2026-11-10); not checked by a person.** Check it against the source before relying on it.
+
+> Implements a deterministic provider process for harness wiring checks without calling a model. It reports fixture version or authentication status, otherwise reads the harness prompt, checks provider arguments and trial tool restrictions, and returns fixture data.
+
 - **Class:** File — A file of the project (images and other assets are left out).
 - **Language:** Python
 - **Kind of file:** code

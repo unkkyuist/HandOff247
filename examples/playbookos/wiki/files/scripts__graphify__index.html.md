@@ -9,6 +9,10 @@ source: "scripts/graphify/index.html"
 
 > Graphify · PlayBook
 
+**Written by a language model (codex, 2026-11-10); not checked by a person.** Check it against the source before relying on it.
+
+> This page lets a user select a PlayBook project, generate or refresh its code graph, sync a graph summary to the ontology, and search the graph. It displays analysis status, graph and summary counts, provenance, and links to the graph and report; its client code calls local API endpoints for these actions.
+
 - **Class:** File — A file of the project (images and other assets are left out).
 - **Language:** HTML
 - **Kind of file:** web

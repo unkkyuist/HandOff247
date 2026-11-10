@@ -137,9 +137,14 @@ def build(project: Project, notes) -> dict:
     for area in sorted(a for a in per_area if a != "(root)"):
         b.ent("area:" + area, "Area", area, first_line(notes.get(f"Area: {area}")), files=per_area[area])
         b.rel(pid, "contains", "area:" + area)
+    model_text = L.get("model_summaries", {})
     for f in files:
-        b.ent(fid(f.path), "File", f.path, first_line(notes.get(f"File: {f.path}")) or first_line(f.summary), f.path,
+        note = notes.get(f"File: {f.path}")
+        b.ent(fid(f.path), "File", f.path, first_line(note) or first_line(f.summary), f.path,
               language=f.lang, category=f.category, lines=f.lines, not_parsed=f.skipped)
+        m = model_text.get(f.path)
+        if m and not note:                            # a person's note always wins
+            b.entities[fid(f.path)]["model_summary"] = {k: m[k] for k in ("summary", "engine", "model", "date") if m.get(k)}
         area = area_of(f.path)
         b.rel(pid if area == "(root)" else "area:" + area, "contains", fid(f.path))
     for f in files:

@@ -9,6 +9,10 @@ source: "scripts/central-smoke.py"
 
 > Isolated recursive scanning, authentication, queue/lease and two real device-client processes.
 
+**Written by a language model (codex, 2026-11-10); not checked by a person.** Check it against the source before relying on it.
+
+> Creates isolated fixtures to exercise recursive project scanning, authentication, shared references, run queue and lease behavior, delegation, and two connected device clients. It launches PlayBook server and client processes, checks their HTTP and MCP behavior, and uses a deterministic provider fixture for model-process checks.
+
 - **Class:** File — A file of the project (images and other assets are left out).
 - **Language:** Python
 - **Kind of file:** test

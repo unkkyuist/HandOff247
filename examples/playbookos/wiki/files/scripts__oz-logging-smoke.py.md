@@ -9,6 +9,10 @@ source: "scripts/oz-logging-smoke.py"
 
 > Real-process failure/privacy/concurrency tests for Oz's content-free audit boundary.
 
+**Written by a language model (codex, 2026-11-10); not checked by a person.** Check it against the source before relying on it.
+
+> This script exercises Oz logging and support-bundle behavior using temporary configurations, fixture processes, and concurrent writers. Its checks cover content-free audit events, error and crash handling, log rotation, bundle contents and checksums, and installer diagnostics; it writes a JSON report with the check results.
+
 - **Class:** File — A file of the project (images and other assets are left out).
 - **Language:** Python
 - **Kind of file:** test

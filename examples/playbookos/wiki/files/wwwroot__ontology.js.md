@@ -7,6 +7,10 @@ source: "wwwroot/ontology.js"
 
 # `wwwroot/ontology.js`
 
+**Written by a language model (codex, 2026-11-10); not checked by a person.** Check it against the source before relying on it.
+
+> Renders the ontology workbench for searching knowledge, collecting and viewing references, recording how references are used, and editing entities and relations. It builds the interface with translated labels and calls the supplied API for ontology operations; the displayed code also handles search results and reference selection.
+
 - **Class:** File — A file of the project (images and other assets are left out).
 - **Language:** JavaScript
 - **Kind of file:** code

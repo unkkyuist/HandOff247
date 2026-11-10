@@ -7,6 +7,10 @@ source: "Access.cs"
 
 # `Access.cs`
 
+**Written by a language model (codex, 2026-11-10); not checked by a person.** Check it against the source before relying on it.
+
+> Stores server account identity data and session records under the configured home directory. It provides account setup, login, token validation, and logout, with password-derived hashes, expiring sessions, and login-attempt limits.
+
 - **Class:** File — A file of the project (images and other assets are left out).
 - **Language:** C#
 - **Kind of file:** code

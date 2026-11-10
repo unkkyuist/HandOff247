@@ -9,6 +9,10 @@ source: "scripts/package.py"
 
 > Package an explicit self-contained publish directory, without any live data.
 
+**Written by a language model (codex, 2026-11-10); not checked by a person.** Check it against the source before relying on it.
+
+> Packages a published directory into a portable ZIP for Windows or macOS. It copies selected README and documentation files, adds startup instructions, checks for private data and logs, writes a file-hash manifest, and records the archive checksum.
+
 - **Class:** File — A file of the project (images and other assets are left out).
 - **Language:** Python
 - **Kind of file:** code

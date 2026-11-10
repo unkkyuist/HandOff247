@@ -7,6 +7,10 @@ source: "wwwroot/flowchart.js"
 
 # `wwwroot/flowchart.js`
 
+**Written by a language model (codex, 2026-11-10); not checked by a person.** Check it against the source before relying on it.
+
+> Displays a project's Mermaid flowchart source, loads the vendored Mermaid script on first use, and renders the diagram. If rendering fails, it shows an error message and the source remains available in a details section.
+
 - **Class:** File — A file of the project (images and other assets are left out).
 - **Language:** JavaScript
 - **Kind of file:** code

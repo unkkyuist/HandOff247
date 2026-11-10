@@ -7,6 +7,10 @@ source: "playbook.sh"
 
 # `playbook.sh`
 
+**Written by a language model (codex, 2026-11-10); not checked by a person.** Check it against the source before relying on it.
+
+> This shell wrapper sets the default PlayBook data directory, builds the Release DLL if it is missing, and executes it with the supplied arguments from the project directory.
+
 - **Class:** File — A file of the project (images and other assets are left out).
 - **Language:** Shell
 - **Kind of file:** script

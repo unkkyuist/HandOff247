@@ -7,6 +7,10 @@ source: "wwwroot/workspace-ui.js"
 
 # `wwwroot/workspace-ui.js`
 
+**Written by a language model (codex, 2026-11-10); not checked by a person.** Check it against the source before relying on it.
+
+> Renders setup and AI-agent screens. The shown code scans a selected folder for project directories and imports chosen folders, and displays worker/provider status and controls, plus a form for queuing AI work and optional review.
+
 - **Class:** File — A file of the project (images and other assets are left out).
 - **Language:** JavaScript
 - **Kind of file:** code

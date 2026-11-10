@@ -7,6 +7,10 @@ source: "wwwroot/media.js"
 
 # `wwwroot/media.js`
 
+**Written by a language model (codex, 2026-11-10); not checked by a person.** Check it against the source before relying on it.
+
+> Fetches and displays project images, thumbnails, video, PDF, and text previews. It also tracks thumbnail object URLs for cleanup and sends the session key with media requests.
+
 - **Class:** File — A file of the project (images and other assets are left out).
 - **Language:** JavaScript
 - **Kind of file:** code

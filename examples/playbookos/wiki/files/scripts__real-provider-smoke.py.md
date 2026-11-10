@@ -9,6 +9,10 @@ source: "scripts/real-provider-smoke.py"
 
 > Explicit, small read-only smoke against installed, already signed-in Codex and Claude.
 
+**Written by a language model (codex, 2026-11-10); not checked by a person.** Check it against the source before relying on it.
+
+> Runs a read-only smoke workflow using already signed-in Codex and Claude CLIs against a temporary project, separate data directory, and local server. It checks provider execution, shared-reference access, and handoff between runs, then writes a results report; Claude access may be reported as blocked when the organization disables subscription access.
+
 - **Class:** File — A file of the project (images and other assets are left out).
 - **Language:** Python
 - **Kind of file:** test

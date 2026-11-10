@@ -7,6 +7,10 @@ source: "playbook-harness.ps1"
 
 # `playbook-harness.ps1`
 
+**Written by a language model (codex, 2026-11-10); not checked by a person.** Check it against the source before relying on it.
+
+> This PowerShell wrapper sets default PlayBook home and port values, builds the harness runtime if its DLL is missing, and runs that DLL with the supplied arguments.
+
 - **Class:** File — A file of the project (images and other assets are left out).
 - **Language:** PowerShell
 - **Kind of file:** script

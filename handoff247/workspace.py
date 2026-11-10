@@ -14,6 +14,7 @@ from collections import Counter
 from pathlib import Path
 
 from . import __version__, leaving
+from . import summarize as model_summaries
 from .build import write_pack
 from .inventory import ALWAYS_SKIP_DIRS, CODE_LANGS, SCRIPT_LANGS, classify, excluded, read_ignore
 from .mermaid import Flow
@@ -301,7 +302,8 @@ def index_html(title: str, md: str, date: str) -> str:
             f"<script>{INDEX_SCRIPT}</script>\n</body>\n</html>\n")
 
 
-def build_workspace(root: Path, out: Path, date: str, excludes: list[str] | None = None, log=print) -> dict:
+def build_workspace(root: Path, out: Path, date: str, excludes: list[str] | None = None, log=print,
+                    summaries_for=None) -> dict:
     root, out = root.resolve(), out.resolve()
     patterns = read_ignore(root, excludes)
     dirs, loose = find_projects(root, out, patterns)
@@ -320,6 +322,9 @@ def build_workspace(root: Path, out: Path, date: str, excludes: list[str] | None
             update(notes_path, project)
             notes = load(notes_path)
             label = DEFAULT_NAME if notes_path == own else f"../notes/{notes_path.name}"
+            # model summaries stay in the handoff folder: the projects themselves are not written to
+            model_summaries.prepare(project, notes, out / "notes" / f"{folder}.summaries.json", summaries_for,
+                              log=lambda m: log(f"  {rel}: {m}"))
             info = write_pack(project, out / folder, notes, "local", "", date, label)
             summaries.append(summarize(project, notes, info, rel, folder, cross_refs(project, root, others)))
             x = summaries[-1]

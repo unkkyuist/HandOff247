@@ -7,6 +7,10 @@ source: "Domain.cs"
 
 # `Domain.cs`
 
+**Written by a language model (codex, 2026-11-10); not checked by a person.** Check it against the source before relying on it.
+
+> Defines shared records for entries, writes, and change history, along with the DomainError exception and JSON serialization helpers. The helpers serialize and deserialize using shared web-style JSON options and read string values from JSON objects with an optional fallback.
+
 - **Class:** File — A file of the project (images and other assets are left out).
 - **Language:** C#
 - **Kind of file:** code

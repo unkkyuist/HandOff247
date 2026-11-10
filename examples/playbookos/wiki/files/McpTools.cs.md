@@ -7,6 +7,10 @@ source: "McpTools.cs"
 
 # `McpTools.cs`
 
+**Written by a language model (codex, 2026-11-10); not checked by a person.** Check it against the source before relying on it.
+
+> Exposes PlayBook operations as MCP tools by forwarding their arguments to Operations.Execute and returning JSON results. The visible methods cover records, ontology, assets, exports, tools, folders, project scans, orchestration, and harness state; the excerpt ends before the full class.
+
 - **Class:** File — A file of the project (images and other assets are left out).
 - **Language:** C#
 - **Kind of file:** code

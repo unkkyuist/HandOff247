@@ -7,6 +7,10 @@ source: "wwwroot/style.css"
 
 # `wwwroot/style.css`
 
+**Written by a language model (codex, 2026-11-10); not checked by a person.** Check it against the source before relying on it.
+
+> Defines the application’s visual styles, including the sidebar, navigation, panels, forms, buttons, media previews, and responsive layouts. The shown rules also style the ontology workbench, with further styles omitted.
+
 - **Class:** File — A file of the project (images and other assets are left out).
 - **Language:** CSS
 - **Kind of file:** web

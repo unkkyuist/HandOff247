@@ -27,6 +27,9 @@ your computer goes away.
 - **An ontology, a graph and a wiki for AI assistants.** Everything found is also written as typed entities and
   relations (`ontology.json`), drawn as an interactive graph in the viewer, and laid out as a wiki of small interlinked
   pages with an `llms.txt` entry point, so the next person's assistant can answer questions about the project.
+- **Bring your own AI, if you want.** `--summarize` asks the Codex CLI you are signed in to for short file
+  descriptions, labelled as model-written. `handoff247 mcp` is an MCP server an agent can use to read the project and
+  write the missing notes for you.
 - **English output, whatever language the code is commented in.** Comments and headings written in another language
   get an English version from a table in the notes file; the pack marks them as translated and keeps the originals.
 
@@ -161,9 +164,73 @@ an assistant can read one at a time: each page is one thing, with what it points
 source line next to every statement. `wiki/AGENTS.md` tells the assistant how to read it, what *inferred* means, that
 something missing was not found rather than absent, and where new knowledge goes: into your notes file, under the
 heading of the thing it is about. The next run carries it into the pages, so the wiki is rebuilt, never hand-edited.
-No language model is called to write it and no key is needed.
+By default no language model is called to write it and no key is needed.
 
 To use it, give your assistant the pack folder (or paste `llms-full.txt`) and ask.
+
+## Summaries written by Codex (optional)
+
+```bash
+python -m handoff247 /path/to/project --summarize
+```
+
+With `--summarize`, HandOff247 asks the [Codex CLI](https://github.com/openai/codex) you are already signed in to
+(`codex login`; a ChatGPT business or enterprise sign-in works) for one to three sentences about every code file that
+has no note yet. HandOff247 reads no API key and stores none.
+
+- **Kept apart from what people write.** The text goes to `HANDOFF.summaries.json` next to the notes file, is shown with
+  "Written by a language model (codex, date); not checked by a person" in the wiki, the file cards and the viewer, and
+  marked *(model)* in lists. It never counts as a note in the handover checklist, and a file's note always wins.
+- **Tied to the file.** Each summary stores a hash of the file it describes. When the file changes, the summary is not
+  shown any more, and the next `--summarize` run writes a new one. Runs without the flag reuse the summaries still valid.
+- **What is sent.** Each code file, the facts the analysis found about it, and nothing else. Codex runs `exec` in an
+  empty temporary folder with a read-only sandbox and no saved session. Lines that look like keys, tokens or a password
+  assignment are replaced with `[removed]` before anything leaves the computer.
+- `--limit N` caps the files per run, `--jobs N` the requests at once (default 3), `--model` picks a Codex model.
+
+For PlayBookOS, 63 files took 9 requests and about 50 seconds; the result is in
+[examples/playbookos.summaries.json](examples/playbookos.summaries.json).
+
+## MCP server: let an AI agent finish the handoff
+
+```bash
+python -m handoff247 mcp            # stdio MCP server; optional: a default project folder
+```
+
+Register it with your agent and ask it to document the project. The agent gets six tools:
+
+| Tool | What it does |
+|---|---|
+| `handoff_build` | Writes or refreshes the pack (and creates the notes file); returns the handover checklist |
+| `handoff_todo` | Every heading still without text: open handover questions (flagged *ask the user*), important files, run modes, folders, other files |
+| `handoff_search` | Finds entities of the ontology by name or summary |
+| `handoff_entity` | One entity with all its relations, each with file and line, and the notes heading it belongs under |
+| `handoff_source` | Numbered source lines of a project file (key-like lines replaced with `[removed]`) |
+| `handoff_write_note` | Writes a note under one heading of the notes file |
+
+The writing tool is narrow on purpose: it accepts only headings HandOff247 knows, refuses to overwrite text already
+under a heading unless asked to replace it, refuses text that looks like a key, token or password, and ends every note
+with *Written by an AI agent through the HandOff247 MCP server on <date>; the owner has not confirmed it yet.* The
+other tools only read. The server's instructions tell the agent to ask you the questions code cannot answer
+(credentials, people, deployment) instead of guessing.
+
+Codex (`~/.codex/config.toml`):
+
+```toml
+[mcp_servers.handoff247]
+command = "python"
+args = ["-m", "handoff247", "mcp"]
+env = { PYTHONPATH = "/path/to/HandOff247" }     # not needed after `pip install .`
+```
+
+Claude Code:
+
+```bash
+claude mcp add handoff247 -- python -m handoff247 mcp
+```
+
+Codex asks before it runs a tool that writes (`handoff_write_note`, `handoff_build`); approve it, or start
+`codex exec --approve-for-me` for unattended runs.
 
 ## How "how the tools connect" is found
 
@@ -285,11 +352,17 @@ The action stamps the pack with the last commit date, so an unchanged project pr
 
 ```text
 handoff247 [go]   [FOLDER] [-o OUT] [--single | --workspace] [--date YYYY-MM-DD] [--exclude GLOB] [--open]
+                  [--summarize [--model M] [--jobs N] [--limit N]]
 handoff247 build  [PROJECT] [-o OUT] [--notes FILE] [--name NAME]
                   [--links auto|relative|url|plain] [--link-base URL] [--date YYYY-MM-DD] [--exclude GLOB]
+                  [--summarize [--model M] [--jobs N] [--limit N]]
 handoff247 notes  [PROJECT] [--notes FILE]
 handoff247 check  [PROJECT] [--notes FILE] [--min PERCENT]
+handoff247 mcp    [PROJECT]
 ```
+
+- For a folder of projects, `--summarize` keeps the summaries in `handoff/notes/<project>.summaries.json`, so the
+  projects themselves are still not written to.
 
 - `--links auto` links file:line references relatively when the pack is inside the project, to the GitHub blob at the exact
   commit when it is outside a GitHub checkout, and as plain text otherwise.
@@ -307,6 +380,8 @@ handoff247 check  [PROJECT] [--notes FILE] [--min PERCENT]
 - Diagrams are capped for readability (large folders collapse into one box; shared foundations lose their incoming arrows).
 - The graph lays out every entity in the browser. Above about 1,200 entities it starts with types, packages,
   variables, ports, hosts and tools switched off; switch them on in the legend.
+- Model summaries can be wrong: they are labelled, never counted as notes, and dropped when their file changes, but
+  nobody has checked them. Codex is the only engine so far.
 - A folder of projects gets a graph and a wiki per project. The index links them (`llms.txt`) but there is no single
   graph across projects yet.
 

@@ -1,7 +1,7 @@
 {
  "generator": "HandOff247",
  "kind": "ontology",
- "version": "0.4.0",
+ "version": "0.5.0",
  "project": "PlayBookOS",
  "schema": {
   "classes": [
@@ -394,6 +394,11 @@
     "category": "code",
     "lines": 61
    },
+   "model_summary": {
+    "summary": "Stores server account identity data and session records under the configured home directory. It provides account setup, login, token validation, and logout, with password-derived hashes, expiring sessions, and login-attempt limits.",
+    "engine": "codex",
+    "date": "2026-11-10"
+   },
    "page": "wiki/files/Access.cs.md"
   },
   {
@@ -418,6 +423,11 @@
     "language": "csharp",
     "category": "code",
     "lines": 196
+   },
+   "model_summary": {
+    "summary": "Runs the background worker that registers the device, claims eligible runs, launches provider processes, streams their output, and reports completion evidence. It also exposes worker status and configuration, recovers recorded running processes on startup, and supplies local project instructions and context to each run.",
+    "engine": "codex",
+    "date": "2026-11-10"
    },
    "page": "wiki/files/AgentWorker.cs.md"
   },
@@ -457,6 +467,11 @@
     "category": "code",
     "lines": 78
    },
+   "model_summary": {
+    "summary": "Stores device and server connection settings in client.json and provides connection status, configuration, connect, disconnect, and API request methods. It validates server URLs, sends JSON over HTTP, and converts request failures into domain errors.",
+    "engine": "codex",
+    "date": "2026-11-10"
+   },
    "page": "wiki/files/Connection.cs.md"
   },
   {
@@ -468,6 +483,11 @@
     "language": "csharp",
     "category": "code",
     "lines": 20
+   },
+   "model_summary": {
+    "summary": "Opens a Windows folder browser dialog and returns the selected path. On other operating systems it returns an empty path with a flag indicating that the path must be entered manually.",
+    "engine": "codex",
+    "date": "2026-11-10"
    },
    "page": "wiki/files/Desktop.cs.md"
   },
@@ -624,6 +644,11 @@
     "category": "code",
     "lines": 23
    },
+   "model_summary": {
+    "summary": "Defines shared records for entries, writes, and change history, along with the DomainError exception and JSON serialization helpers. The helpers serialize and deserialize using shared web-style JSON options and read string values from JSON objects with an optional fallback.",
+    "engine": "codex",
+    "date": "2026-11-10"
+   },
    "page": "wiki/files/Domain.cs.md"
   },
   {
@@ -688,6 +713,11 @@
     "category": "code",
     "lines": 259
    },
+   "model_summary": {
+    "summary": "Provides project-scoped file listing and folder operations, including folder creation and planning moves between project-relative paths. The shown code filters protected directories and links, checks path boundaries and registered references, fingerprints move sources, and prepares record updates for a planned move.",
+    "engine": "codex",
+    "date": "2026-11-10"
+   },
    "page": "wiki/files/Folders.cs.md"
   },
   {
@@ -699,6 +729,11 @@
     "language": "powershell",
     "category": "script",
     "lines": 6
+   },
+   "model_summary": {
+    "summary": "The PowerShell wrapper sets a default PlayBook data directory and UTF-8 Python output, then passes its arguments to scripts/graphify-playbook.py and returns that process's exit code.",
+    "engine": "codex",
+    "date": "2026-11-10"
    },
    "page": "wiki/files/graphify.ps1.md"
   },
@@ -712,6 +747,11 @@
     "category": "code",
     "lines": 181
    },
+   "model_summary": {
+    "summary": "Stores project harness proposals, trial snapshots, comparisons, and reviewed adoption or disablement in the project store. It enqueues paired read-only trial runs, checks revisions and evidence before adoption, and records reviewed lessons as research entries.",
+    "engine": "codex",
+    "date": "2026-11-10"
+   },
    "page": "wiki/files/Harnesses.cs.md"
   },
   {
@@ -723,6 +763,11 @@
     "language": "csharp",
     "category": "code",
     "lines": 108
+   },
+   "model_summary": {
+    "summary": "Stores shared asset copies by SHA-256 hash, records their metadata, and provides listing, download, local resolution, preview, and TXT-reading operations. Registration accepts selected project files with supported extensions up to 32 MiB; the original files are not moved or rewritten.",
+    "engine": "codex",
+    "date": "2026-11-10"
    },
    "page": "wiki/files/Library.cs.md"
   },
@@ -736,6 +781,11 @@
     "category": "code",
     "lines": 102
    },
+   "model_summary": {
+    "summary": "Exposes PlayBook operations as MCP tools by forwarding their arguments to Operations.Execute and returning JSON results. The visible methods cover records, ontology, assets, exports, tools, folders, project scans, orchestration, and harness state; the excerpt ends before the full class.",
+    "engine": "codex",
+    "date": "2026-11-10"
+   },
    "page": "wiki/files/McpTools.cs.md"
   },
   {
@@ -747,6 +797,11 @@
     "language": "csharp",
     "category": "code",
     "lines": 505
+   },
+   "model_summary": {
+    "summary": "Maintains an ontology projection and source ledger in the Store, validating managed records and providing methods for ingest, search, references, usage records, external connections, synchronization, and rebuilds. The visible code records source revisions and review status, and labels retrieved source material as evidence rather than authorization or verification; the excerpt shows only part of the implementation.",
+    "engine": "codex",
+    "date": "2026-11-10"
    },
    "page": "wiki/files/Ontology.cs.md"
   },
@@ -773,6 +828,11 @@
     "category": "code",
     "lines": 196
    },
+   "model_summary": {
+    "summary": "Stores worker registrations and AI runs in the revisioned Store, queues work with project, permission, dependency, and delegation checks, and provides state, claim, heartbeat, and cancellation operations. Claiming work checks worker availability and run constraints, then supplies project context, dependency outputs, and ontology references; the excerpt ends partway through heartbeat handling.",
+    "engine": "codex",
+    "date": "2026-11-10"
+   },
    "page": "wiki/files/Orchestration.cs.md"
   },
   {
@@ -797,6 +857,11 @@
     "language": "powershell",
     "category": "script",
     "lines": 12
+   },
+   "model_summary": {
+    "summary": "This PowerShell wrapper sets default PlayBook home and port values, builds the harness runtime if its DLL is missing, and runs that DLL with the supplied arguments.",
+    "engine": "codex",
+    "date": "2026-11-10"
    },
    "page": "wiki/files/playbook-harness.ps1.md"
   },
@@ -823,6 +888,11 @@
     "category": "script",
     "lines": 10
    },
+   "model_summary": {
+    "summary": "This PowerShell wrapper sets a default PlayBook data directory, builds the Release DLL if needed, and runs it with the supplied arguments from the project directory.",
+    "engine": "codex",
+    "date": "2026-11-10"
+   },
    "page": "wiki/files/playbook.ps1.md"
   },
   {
@@ -834,6 +904,11 @@
     "language": "shell",
     "category": "script",
     "lines": 9
+   },
+   "model_summary": {
+    "summary": "This shell wrapper sets the default PlayBook data directory, builds the Release DLL if it is missing, and executes it with the supplied arguments from the project directory.",
+    "engine": "codex",
+    "date": "2026-11-10"
    },
    "page": "wiki/files/playbook.sh.md"
   },
@@ -847,6 +922,11 @@
     "category": "script",
     "lines": 81
    },
+   "model_summary": {
+    "summary": "The installer validates the extracted package against its manifest and SHA-256 hashes, then copies files into the selected install folder, backing up files it replaces. It configures the selected workspace, can create a desktop shortcut, and launches PlayBook unless `-NoLaunch` is set.",
+    "engine": "codex",
+    "date": "2026-11-10"
+   },
    "page": "wiki/files/portable__Install-PlayBook.ps1.md"
   },
   {
@@ -858,6 +938,11 @@
     "language": "batch",
     "category": "script",
     "lines": 3
+   },
+   "model_summary": {
+    "summary": "This batch file runs portable/Install-PlayBook.ps1 with PowerShell in STA mode and passes along its arguments. It pauses if the installer exits with an error.",
+    "engine": "codex",
+    "date": "2026-11-10"
    },
    "page": "wiki/files/portable__INSTALL_PLAYBOOK.cmd.md"
   },
@@ -885,6 +970,11 @@
     "category": "code",
     "lines": 445
    },
+   "model_summary": {
+    "summary": "Provides the Mac installer’s package verification, configuration, launch, MCP setup, and diagnostic actions, along with a bounded update path for logging-related files. The shown portion also defines helpers for JSON file access, hashing, runtime archive extraction, Claude MCP configuration merging, port selection, and PlayBook setup.",
+    "engine": "codex",
+    "date": "2026-11-10"
+   },
    "page": "wiki/files/portable__oz__install.py.md"
   },
   {
@@ -897,6 +987,11 @@
     "language": "python",
     "category": "code",
     "lines": 149
+   },
+   "model_summary": {
+    "summary": "Implements an MCP server with tools to list and register local projects, analyze and search their code graphs, sync a code overview, and record user-confirmed workflows. It calls the PlayBook bridge for project and workflow records and exposes local support status and bundle creation tools.",
+    "engine": "codex",
+    "date": "2026-11-10"
    },
    "page": "wiki/files/portable__oz__oz_graphify_mcp.py.md"
   },
@@ -911,6 +1006,11 @@
     "category": "code",
     "lines": 141
    },
+   "model_summary": {
+    "summary": "Runs a child MCP server and forwards messages between it and standard input/output. It records allowlisted request and response metadata in the local audit journal, without recording protocol bodies.",
+    "engine": "codex",
+    "date": "2026-11-10"
+   },
    "page": "wiki/files/portable__oz__oz_mcp_proxy.py.md"
   },
   {
@@ -923,6 +1023,11 @@
     "language": "python",
     "category": "code",
     "lines": 201
+   },
+   "model_summary": {
+    "summary": "Writes a bounded local audit journal containing filtered event metadata and provides a status summary of recent errors and unanswered requests. On request, it creates a local ZIP support bundle with filtered audit records and a checksum file.",
+    "engine": "codex",
+    "date": "2026-11-10"
    },
    "page": "wiki/files/portable__oz__oz_support.py.md"
   },
@@ -988,6 +1093,11 @@
     "category": "script",
     "lines": 40
    },
+   "model_summary": {
+    "summary": "Creates the data folder, finds an existing PlayBook server for that data location or starts one on an available localhost port from 7331 to 7360, and waits for its health check. It prints the server URL and opens it in a browser unless `-NoBrowser` is set.",
+    "engine": "codex",
+    "date": "2026-11-10"
+   },
    "page": "wiki/files/portable__Start-PlayBook.ps1.md"
   },
   {
@@ -999,6 +1109,11 @@
     "language": "batch",
     "category": "script",
     "lines": 3
+   },
+   "model_summary": {
+    "summary": "Runs `Start-PlayBook.ps1` from the batch file’s folder, passing along command-line arguments. It pauses if PowerShell returns an error.",
+    "engine": "codex",
+    "date": "2026-11-10"
    },
    "page": "wiki/files/portable__START_PLAYBOOK.cmd.md"
   },
@@ -1012,6 +1127,11 @@
     "category": "script",
     "lines": 11
    },
+   "model_summary": {
+    "summary": "Reads the saved process identity and port, checks that the process still matches, then asks the local app to disable its worker before stopping that process. It prints a message that project data is preserved.",
+    "engine": "codex",
+    "date": "2026-11-10"
+   },
    "page": "wiki/files/portable__Stop-PlayBook.ps1.md"
   },
   {
@@ -1023,6 +1143,11 @@
     "language": "batch",
     "category": "script",
     "lines": 3
+   },
+   "model_summary": {
+    "summary": "Runs `Stop-PlayBook.ps1` from the batch file’s folder. It pauses if PowerShell returns an error.",
+    "engine": "codex",
+    "date": "2026-11-10"
    },
    "page": "wiki/files/portable__STOP_PLAYBOOK.cmd.md"
   },
@@ -1036,6 +1161,11 @@
     "category": "code",
     "lines": 111
    },
+   "model_summary": {
+    "summary": "Initializes PlayBook services and selects worker, CLI, MCP, agent, local web server, or shared server behavior from the command-line mode. In server modes it configures the HTTP endpoints, access checks, API operation dispatch, media preview, health response, and MCP transport.",
+    "engine": "codex",
+    "date": "2026-11-10"
+   },
    "page": "wiki/files/Program.cs.md"
   },
   {
@@ -1047,6 +1177,11 @@
     "language": "csharp",
     "category": "code",
     "lines": 84
+   },
+   "model_summary": {
+    "summary": "ProjectScanner recursively scans a selected folder, skips configured directory names and links, and records candidate folders with project markers, file names, instruction files, and any existing registration. Import validates selected candidates against the saved scan, preserves existing registrations, and creates project records for new selections.",
+    "engine": "codex",
+    "date": "2026-11-10"
    },
    "page": "wiki/files/ProjectScanner.cs.md"
   },
@@ -1072,6 +1207,11 @@
     "language": "csharp",
     "category": "code",
     "lines": 124
+   },
+   "model_summary": {
+    "summary": "Providers locates the Codex or Claude CLI, checks installation and login status, and can open a login process on Windows. It also builds MCP configuration and provider-specific process arguments for running a PlayBook job.",
+    "engine": "codex",
+    "date": "2026-11-10"
    },
    "page": "wiki/files/Providers.cs.md"
   },
@@ -1112,6 +1252,11 @@
     "category": "test",
     "lines": 184
    },
+   "model_summary": {
+    "summary": "Creates isolated fixtures to exercise recursive project scanning, authentication, shared references, run queue and lease behavior, delegation, and two connected device clients. It launches PlayBook server and client processes, checks their HTTP and MCP behavior, and uses a deterministic provider fixture for model-process checks.",
+    "engine": "codex",
+    "date": "2026-11-10"
+   },
    "page": "wiki/files/scripts__central-smoke.py.md"
   },
   {
@@ -1124,6 +1269,11 @@
     "language": "python",
     "category": "code",
     "lines": 77
+   },
+   "model_summary": {
+    "summary": "Installs the Windows release package into a temporary folder and exercises its CLI, installer, launcher, and stop script. It checks package hashes, upgrade preservation, health and GUI responses, and records the results in `artifacts/package-check.json`.",
+    "engine": "codex",
+    "date": "2026-11-10"
    },
    "page": "wiki/files/scripts__check-package.py.md"
   },
@@ -1138,6 +1288,11 @@
     "category": "code",
     "lines": 34
    },
+   "model_summary": {
+    "summary": "Implements a deterministic provider process for harness wiring checks without calling a model. It reports fixture version or authentication status, otherwise reads the harness prompt, checks provider arguments and trial tool restrictions, and returns fixture data.",
+    "engine": "codex",
+    "date": "2026-11-10"
+   },
    "page": "wiki/files/scripts__fixtures__harness-provider.py.md"
   },
   {
@@ -1150,6 +1305,11 @@
     "language": "python",
     "category": "code",
     "lines": 28
+   },
+   "model_summary": {
+    "summary": "Implements a deterministic CLI provider fixture without calling a model or checking real authentication. It reports fixture version or login status, otherwise checks the prompt context and emits a fixed result; a wait prompt makes the process sleep for 120 seconds.",
+    "engine": "codex",
+    "date": "2026-11-10"
    },
    "page": "wiki/files/scripts__fixtures__provider.py.md"
   },
@@ -1164,6 +1324,11 @@
     "category": "test",
     "lines": 83
    },
+   "model_summary": {
+    "summary": "Creates isolated filesystem and SQLite scenarios to exercise folder creation, move previews and application, reference updates, and recovery. It checks rejection of unsafe or stale operations and writes the check results to `artifacts/folders-smoke.json`.",
+    "engine": "codex",
+    "date": "2026-11-10"
+   },
    "page": "wiki/files/scripts__folders-smoke.py.md"
   },
   {
@@ -1176,6 +1341,11 @@
     "language": "python",
     "category": "code",
     "lines": 398
+   },
+   "model_summary": {
+    "summary": "Provides a local Graphify companion that invokes PlayBook’s CLI, analyzes a registered project’s code into a Graphify snapshot, builds an ontology overview feed, and can sync or query the graph. The shown code also serves as the foundation for project selection and the local dashboard API, with analysis state and snapshots stored under the PlayBook data directory.",
+    "engine": "codex",
+    "date": "2026-11-10"
    },
    "page": "wiki/files/scripts__graphify-playbook.py.md"
   },
@@ -1190,6 +1360,11 @@
     "category": "test",
     "lines": 157
    },
+   "model_summary": {
+    "summary": "Runs isolated integration checks for Graphify extraction, ontology feed generation and sync, the local dashboard, and Graphify and PlayBook MCP tools. It uses a temporary project and ledger, checks that failed analysis preserves the previous snapshot, and writes results to `artifacts/graphify-smoke-results.json`.",
+    "engine": "codex",
+    "date": "2026-11-10"
+   },
    "page": "wiki/files/scripts__graphify-smoke.py.md"
   },
   {
@@ -1202,6 +1377,11 @@
     "language": "html",
     "category": "web",
     "lines": 32
+   },
+   "model_summary": {
+    "summary": "This page lets a user select a PlayBook project, generate or refresh its code graph, sync a graph summary to the ontology, and search the graph. It displays analysis status, graph and summary counts, provenance, and links to the graph and report; its client code calls local API endpoints for these actions.",
+    "engine": "codex",
+    "date": "2026-11-10"
    },
    "page": "wiki/files/scripts__graphify__index.html.md"
   },
@@ -1216,6 +1396,11 @@
     "category": "test",
     "lines": 216
    },
+   "model_summary": {
+    "summary": "This script exercises harness proposal, paired baseline and candidate trials, review and adoption using a temporary project, SQLite data, and deterministic provider fixtures. It starts the PlayBook process and checks CLI, HTTP, worker, and MCP behavior; its docstring says the checks do not verify model quality or macOS behavior.",
+    "engine": "codex",
+    "date": "2026-11-10"
+   },
    "page": "wiki/files/scripts__harness-smoke.py.md"
   },
   {
@@ -1228,6 +1413,11 @@
     "language": "python",
     "category": "test",
     "lines": 541
+   },
+   "model_summary": {
+    "summary": "This script runs ontology integration checks against a temporary database and local fixtures, using the PlayBook CLI and real transports. The shown checks cover record projections, search, run usage and provenance, ingestion, revisions, and rollback; the excerpt does not show the rest of the checks.",
+    "engine": "codex",
+    "date": "2026-11-10"
    },
    "page": "wiki/files/scripts__ontology-smoke.py.md"
   },
@@ -1242,6 +1432,11 @@
     "category": "test",
     "lines": 139
    },
+   "model_summary": {
+    "summary": "This script exercises Oz logging and support-bundle behavior using temporary configurations, fixture processes, and concurrent writers. Its checks cover content-free audit events, error and crash handling, log rotation, bundle contents and checksums, and installer diagnostics; it writes a JSON report with the check results.",
+    "engine": "codex",
+    "date": "2026-11-10"
+   },
    "page": "wiki/files/scripts__oz-logging-smoke.py.md"
   },
   {
@@ -1254,6 +1449,11 @@
     "language": "python",
     "category": "test",
     "lines": 243
+   },
+   "model_summary": {
+    "summary": "This script audits staged Oz Mac package payloads and exercises installer and MCP behavior on Windows. It checks package manifests, architecture markers, bundled files and shell syntax, then uses fixtures and installed MCP servers to check installation, analysis, ledger integration, diagnostics, and audit records.",
+    "engine": "codex",
+    "date": "2026-11-10"
    },
    "page": "wiki/files/scripts__oz-package-smoke.py.md"
   },
@@ -1268,6 +1468,11 @@
     "category": "code",
     "lines": 197
    },
+   "model_summary": {
+    "summary": "Stages Mac handoff packages for Apple Silicon and Intel by copying published app files, Python dependencies, Graphify assets, setup scripts, and notices into a staging directory. It checks the bundled Python archive checksum, screens staged files for private data and machine paths, writes a manifest, and creates ZIP archives (plus an Intel TAR.XZ archive).",
+    "engine": "codex",
+    "date": "2026-11-10"
+   },
    "page": "wiki/files/scripts__package-oz-mac.py.md"
   },
   {
@@ -1280,6 +1485,11 @@
     "language": "python",
     "category": "code",
     "lines": 44
+   },
+   "model_summary": {
+    "summary": "Packages a published directory into a portable ZIP for Windows or macOS. It copies selected README and documentation files, adds startup instructions, checks for private data and logs, writes a file-hash manifest, and records the archive checksum.",
+    "engine": "codex",
+    "date": "2026-11-10"
    },
    "page": "wiki/files/scripts__package.py.md"
   },
@@ -1294,6 +1504,11 @@
     "category": "code",
     "lines": 27
    },
+   "model_summary": {
+    "summary": "Copies an explicit set of source, documentation, web, portable, example, and script files into a fresh public-source snapshot directory. It rejects private data and selected generated files, records hashes for the copied files, and writes a manifest indicating that private Git history was not included.",
+    "engine": "codex",
+    "date": "2026-11-10"
+   },
    "page": "wiki/files/scripts__prepare-public-source.py.md"
   },
   {
@@ -1306,6 +1521,11 @@
     "language": "python",
     "category": "test",
     "lines": 82
+   },
+   "model_summary": {
+    "summary": "Runs a read-only smoke workflow using already signed-in Codex and Claude CLIs against a temporary project, separate data directory, and local server. It checks provider execution, shared-reference access, and handoff between runs, then writes a results report; Claude access may be reported as blocked when the organization disables subscription access.",
+    "engine": "codex",
+    "date": "2026-11-10"
    },
    "page": "wiki/files/scripts__real-provider-smoke.py.md"
   },
@@ -1320,6 +1540,11 @@
     "category": "test",
     "lines": 173
    },
+   "model_summary": {
+    "summary": "Runs end-to-end checks against a temporary SQLite database through the CLI, HTTP API, and MCP transports. It checks record validation and persistence, project context, assets, backups, concurrent writes, authentication, MCP tools, and managed tool processes, then writes a results report.",
+    "engine": "codex",
+    "date": "2026-11-10"
+   },
    "page": "wiki/files/scripts__smoke.py.md"
   },
   {
@@ -1333,6 +1558,11 @@
     "category": "script",
     "lines": 34
    },
+   "model_summary": {
+    "summary": "The PowerShell script starts the PlayBook server on port 7331, building the Release executable when it is missing. It checks that an existing server uses the same data folder, waits for startup, and optionally opens the local page in a browser.",
+    "engine": "codex",
+    "date": "2026-11-10"
+   },
    "page": "wiki/files/Start-PlayBook-Desktop.ps1.md"
   },
   {
@@ -1345,6 +1575,11 @@
     "category": "script",
     "lines": 5
    },
+   "model_summary": {
+    "summary": "This batch launcher runs graphify.ps1 with the start argument from its own directory. If that succeeds, it opens the local Graphify page at port 7334 for project playbook.",
+    "engine": "codex",
+    "date": "2026-11-10"
+   },
    "page": "wiki/files/START_GRAPHIFY.cmd.md"
   },
   {
@@ -1356,6 +1591,11 @@
     "language": "batch",
     "category": "script",
     "lines": 3
+   },
+   "model_summary": {
+    "summary": "This batch launcher runs playbook.ps1 with the serve argument from its own directory.",
+    "engine": "codex",
+    "date": "2026-11-10"
    },
    "page": "wiki/files/START_PLAYBOOK.cmd.md"
   },
@@ -1382,6 +1622,11 @@
     "category": "code",
     "lines": 132
    },
+   "model_summary": {
+    "summary": "ToolRunner reads local tool definitions, reports process and HTTP status, and starts or stops tool processes it owns. It records run state and audit entries, and exposes recent log output for each registered tool.",
+    "engine": "codex",
+    "date": "2026-11-10"
+   },
    "page": "wiki/files/ToolRunner.cs.md"
   },
   {
@@ -1393,6 +1638,11 @@
     "language": "csharp",
     "category": "code",
     "lines": 264
+   },
+   "model_summary": {
+    "summary": "Workspace resolves project files within registered project roots, provides text and media previews, and copies supported files into a shared asset directory with hash checks. It also builds project context, discovers project folders, and retrieves Git status, revision, and recent commit information; the excerpt ends as its command-running method begins.",
+    "engine": "codex",
+    "date": "2026-11-10"
    },
    "page": "wiki/files/Workspace.cs.md"
   },
@@ -1406,6 +1656,11 @@
     "category": "code",
     "lines": 91
    },
+   "model_summary": {
+    "summary": "Implements the browser interface for PlayBook OS, loading modules for folders, assets, agents, ontology, media, and other project views. It fetches project and record data from the API, renders navigation and project tabs, and provides actions for viewing, editing, approving, and verifying records.",
+    "engine": "codex",
+    "date": "2026-11-10"
+   },
    "page": "wiki/files/wwwroot__app.js.md"
   },
   {
@@ -1417,6 +1672,11 @@
     "language": "javascript",
     "category": "code",
     "lines": 118
+   },
+   "model_summary": {
+    "summary": "Renders a project file inventory with search, type filters, previews, file actions, registered asset records, and shared assets. It also formats file metadata and compares project paths to identify registered files.",
+    "engine": "codex",
+    "date": "2026-11-10"
    },
    "page": "wiki/files/wwwroot__assets.js.md"
   },
@@ -1430,6 +1690,11 @@
     "category": "code",
     "lines": 39
    },
+   "model_summary": {
+    "summary": "Creates a positioned context menu from supplied items, runs the selected action, and displays action errors in the page toast. It also provides a keyboard handler for opening the menu with the Context Menu key or Shift+F10.",
+    "engine": "codex",
+    "date": "2026-11-10"
+   },
    "page": "wiki/files/wwwroot__context-menu.js.md"
   },
   {
@@ -1441,6 +1706,11 @@
     "language": "javascript",
     "category": "code",
     "lines": 50
+   },
+   "model_summary": {
+    "summary": "Displays a project's Mermaid flowchart source, loads the vendored Mermaid script on first use, and renders the diagram. If rendering fails, it shows an error message and the source remains available in a details section.",
+    "engine": "codex",
+    "date": "2026-11-10"
    },
    "page": "wiki/files/wwwroot__flowchart.js.md"
   },
@@ -1454,6 +1724,11 @@
     "category": "code",
     "lines": 103
    },
+   "model_summary": {
+    "summary": "Renders a browser for a project's folders and files, with navigation, breadcrumbs, image previews, and context menus. It also provides dialogs to create folders and preview and apply file or folder moves, including updates to registered PlayBook paths.",
+    "engine": "codex",
+    "date": "2026-11-10"
+   },
    "page": "wiki/files/wwwroot__folders.js.md"
   },
   {
@@ -1466,6 +1741,11 @@
     "category": "code",
     "lines": 71
    },
+   "model_summary": {
+    "summary": "Renders controls for proposing task guidance, queuing paired read-only trials, comparing their outputs, and adopting reviewed guidance. The interface requires review confirmation before disabling or adopting guidance.",
+    "engine": "codex",
+    "date": "2026-11-10"
+   },
    "page": "wiki/files/wwwroot__harness.js.md"
   },
   {
@@ -1477,6 +1757,11 @@
     "language": "javascript",
     "category": "code",
     "lines": 259
+   },
+   "model_summary": {
+    "summary": "Provides Korean-to-English message lookup, placeholder substitution, language selection, and page translation for marked text and attributes. It stores the chosen language in local storage and updates the page URL when the language changes.",
+    "engine": "codex",
+    "date": "2026-11-10"
    },
    "page": "wiki/files/wwwroot__i18n.js.md"
   },
@@ -1491,6 +1776,11 @@
     "category": "web",
     "lines": 9
    },
+   "model_summary": {
+    "summary": "Defines the page structure for the PlayBook interface, including navigation, project search, header controls, content area, toast, record editor, and viewer dialogs. It loads the stylesheet and the JavaScript application module.",
+    "engine": "codex",
+    "date": "2026-11-10"
+   },
    "page": "wiki/files/wwwroot__index.html.md"
   },
   {
@@ -1502,6 +1792,11 @@
     "language": "javascript",
     "category": "code",
     "lines": 45
+   },
+   "model_summary": {
+    "summary": "Renders a project's review summary and a button to view its review evidence. It also renders a searchable, category-filtered project catalog with project cards and review status.",
+    "engine": "codex",
+    "date": "2026-11-10"
    },
    "page": "wiki/files/wwwroot__inventory.js.md"
   },
@@ -1515,6 +1810,11 @@
     "category": "code",
     "lines": 112
    },
+   "model_summary": {
+    "summary": "Fetches and displays project images, thumbnails, video, PDF, and text previews. It also tracks thumbnail object URLs for cleanup and sends the session key with media requests.",
+    "engine": "codex",
+    "date": "2026-11-10"
+   },
    "page": "wiki/files/wwwroot__media.js.md"
   },
   {
@@ -1527,6 +1827,11 @@
     "category": "code",
     "lines": 246
    },
+   "model_summary": {
+    "summary": "Renders the ontology workbench for searching knowledge, collecting and viewing references, recording how references are used, and editing entities and relations. It builds the interface with translated labels and calls the supplied API for ontology operations; the displayed code also handles search results and reference selection.",
+    "engine": "codex",
+    "date": "2026-11-10"
+   },
    "page": "wiki/files/wwwroot__ontology.js.md"
   },
   {
@@ -1538,6 +1843,11 @@
     "language": "css",
     "category": "web",
     "lines": 47
+   },
+   "model_summary": {
+    "summary": "Defines the application’s visual styles, including the sidebar, navigation, panels, forms, buttons, media previews, and responsive layouts. The shown rules also style the ontology workbench, with further styles omitted.",
+    "engine": "codex",
+    "date": "2026-11-10"
    },
    "page": "wiki/files/wwwroot__style.css.md"
   },
@@ -1563,6 +1873,11 @@
     "language": "javascript",
     "category": "code",
     "lines": 149
+   },
+   "model_summary": {
+    "summary": "Renders setup and AI-agent screens. The shown code scans a selected folder for project directories and imports chosen folders, and displays worker/provider status and controls, plus a form for queuing AI work and optional review.",
+    "engine": "codex",
+    "date": "2026-11-10"
    },
    "page": "wiki/files/wwwroot__workspace-ui.js.md"
   },

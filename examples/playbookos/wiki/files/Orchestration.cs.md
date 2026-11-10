@@ -7,6 +7,10 @@ source: "Orchestration.cs"
 
 # `Orchestration.cs`
 
+**Written by a language model (codex, 2026-11-10); not checked by a person.** Check it against the source before relying on it.
+
+> Stores worker registrations and AI runs in the revisioned Store, queues work with project, permission, dependency, and delegation checks, and provides state, claim, heartbeat, and cancellation operations. Claiming work checks worker availability and run constraints, then supplies project context, dependency outputs, and ontology references; the excerpt ends partway through heartbeat handling.
+
 - **Class:** File — A file of the project (images and other assets are left out).
 - **Language:** C#
 - **Kind of file:** code

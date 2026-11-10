@@ -7,6 +7,10 @@ source: "Desktop.cs"
 
 # `Desktop.cs`
 
+**Written by a language model (codex, 2026-11-10); not checked by a person.** Check it against the source before relying on it.
+
+> Opens a Windows folder browser dialog and returns the selected path. On other operating systems it returns an empty path with a flag indicating that the path must be entered manually.
+
 - **Class:** File — A file of the project (images and other assets are left out).
 - **Language:** C#
 - **Kind of file:** code

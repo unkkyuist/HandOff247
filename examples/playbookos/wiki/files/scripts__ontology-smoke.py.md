@@ -9,6 +9,10 @@ source: "scripts/ontology-smoke.py"
 
 > Ontology integration checks using a temporary DB, local fixture and real transports.
 
+**Written by a language model (codex, 2026-11-10); not checked by a person.** Check it against the source before relying on it.
+
+> This script runs ontology integration checks against a temporary database and local fixtures, using the PlayBook CLI and real transports. The shown checks cover record projections, search, run usage and provenance, ingestion, revisions, and rollback; the excerpt does not show the rest of the checks.
+
 - **Class:** File — A file of the project (images and other assets are left out).
 - **Language:** Python
 - **Kind of file:** test

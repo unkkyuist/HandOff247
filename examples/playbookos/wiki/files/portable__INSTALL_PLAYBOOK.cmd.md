@@ -7,6 +7,10 @@ source: "portable/INSTALL_PLAYBOOK.cmd"
 
 # `portable/INSTALL_PLAYBOOK.cmd`
 
+**Written by a language model (codex, 2026-11-10); not checked by a person.** Check it against the source before relying on it.
+
+> This batch file runs portable/Install-PlayBook.ps1 with PowerShell in STA mode and passes along its arguments. It pauses if the installer exits with an error.
+
 - **Class:** File — A file of the project (images and other assets are left out).
 - **Language:** Batch
 - **Kind of file:** script

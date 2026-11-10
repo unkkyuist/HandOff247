@@ -7,6 +7,10 @@ source: "wwwroot/app.js"
 
 # `wwwroot/app.js`
 
+**Written by a language model (codex, 2026-11-10); not checked by a person.** Check it against the source before relying on it.
+
+> Implements the browser interface for PlayBook OS, loading modules for folders, assets, agents, ontology, media, and other project views. It fetches project and record data from the API, renders navigation and project tabs, and provides actions for viewing, editing, approving, and verifying records.
+
 - **Class:** File — A file of the project (images and other assets are left out).
 - **Language:** JavaScript
 - **Kind of file:** code

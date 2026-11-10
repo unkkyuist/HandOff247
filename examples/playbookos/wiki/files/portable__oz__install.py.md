@@ -9,6 +9,10 @@ source: "portable/oz/install.py"
 
 > Oz's offline Mac installer and launch/repair/diagnostic actions.
 
+**Written by a language model (codex, 2026-11-10); not checked by a person.** Check it against the source before relying on it.
+
+> Provides the Mac installer’s package verification, configuration, launch, MCP setup, and diagnostic actions, along with a bounded update path for logging-related files. The shown portion also defines helpers for JSON file access, hashing, runtime archive extraction, Claude MCP configuration merging, port selection, and PlayBook setup.
+
 - **Class:** File — A file of the project (images and other assets are left out).
 - **Language:** Python
 - **Kind of file:** code

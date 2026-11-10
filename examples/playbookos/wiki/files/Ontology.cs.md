@@ -7,6 +7,10 @@ source: "Ontology.cs"
 
 # `Ontology.cs`
 
+**Written by a language model (codex, 2026-11-10); not checked by a person.** Check it against the source before relying on it.
+
+> Maintains an ontology projection and source ledger in the Store, validating managed records and providing methods for ingest, search, references, usage records, external connections, synchronization, and rebuilds. The visible code records source revisions and review status, and labels retrieved source material as evidence rather than authorization or verification; the excerpt shows only part of the implementation.
+
 - **Class:** File — A file of the project (images and other assets are left out).
 - **Language:** C#
 - **Kind of file:** code

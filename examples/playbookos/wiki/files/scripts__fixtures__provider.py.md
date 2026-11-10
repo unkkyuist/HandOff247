@@ -9,6 +9,10 @@ source: "scripts/fixtures/provider.py"
 
 > Deterministic CLI fixture; not a real model/authentication test.
 
+**Written by a language model (codex, 2026-11-10); not checked by a person.** Check it against the source before relying on it.
+
+> Implements a deterministic CLI provider fixture without calling a model or checking real authentication. It reports fixture version or login status, otherwise checks the prompt context and emits a fixed result; a wait prompt makes the process sleep for 120 seconds.
+
 - **Class:** File — A file of the project (images and other assets are left out).
 - **Language:** Python
 - **Kind of file:** code

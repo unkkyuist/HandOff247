@@ -7,6 +7,10 @@ source: "wwwroot/folders.js"
 
 # `wwwroot/folders.js`
 
+**Written by a language model (codex, 2026-11-10); not checked by a person.** Check it against the source before relying on it.
+
+> Renders a browser for a project's folders and files, with navigation, breadcrumbs, image previews, and context menus. It also provides dialogs to create folders and preview and apply file or folder moves, including updates to registered PlayBook paths.
+
 - **Class:** File — A file of the project (images and other assets are left out).
 - **Language:** JavaScript
 - **Kind of file:** code

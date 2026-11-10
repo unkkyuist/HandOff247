@@ -7,6 +7,10 @@ source: "playbook.ps1"
 
 # `playbook.ps1`
 
+**Written by a language model (codex, 2026-11-10); not checked by a person.** Check it against the source before relying on it.
+
+> This PowerShell wrapper sets a default PlayBook data directory, builds the Release DLL if needed, and runs it with the supplied arguments from the project directory.
+
 - **Class:** File — A file of the project (images and other assets are left out).
 - **Language:** PowerShell
 - **Kind of file:** script

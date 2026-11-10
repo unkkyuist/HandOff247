@@ -7,6 +7,10 @@ source: "wwwroot/assets.js"
 
 # `wwwroot/assets.js`
 
+**Written by a language model (codex, 2026-11-10); not checked by a person.** Check it against the source before relying on it.
+
+> Renders a project file inventory with search, type filters, previews, file actions, registered asset records, and shared assets. It also formats file metadata and compares project paths to identify registered files.
+
 - **Class:** File — A file of the project (images and other assets are left out).
 - **Language:** JavaScript
 - **Kind of file:** code

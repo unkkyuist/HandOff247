@@ -42,6 +42,7 @@ STRINGS: dict[str, str] = {
     "page_codemap": "Code map — which file depends on which",
     "page_files": "File cards — one card per file with comments, symbols and links",
     "page_viewer": "Interactive viewer with a graph of everything found (open index.html in a browser)",
+    "model_written": "Written by a language model ({engine}, {date}); not checked by a person",
     "page_wiki": "Wiki for AI assistants — one small page per file, operation, tool and run mode, all interlinked",
     "page_llms": "Entry point for AI assistants (llms.txt convention); llms-full.txt is the whole wiki in one file",
     "page_ontology": "The ontology as data — every entity and relation, with the file and line it was observed at",

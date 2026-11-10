@@ -7,6 +7,10 @@ source: "Library.cs"
 
 # `Library.cs`
 
+**Written by a language model (codex, 2026-11-10); not checked by a person.** Check it against the source before relying on it.
+
+> Stores shared asset copies by SHA-256 hash, records their metadata, and provides listing, download, local resolution, preview, and TXT-reading operations. Registration accepts selected project files with supported extensions up to 32 MiB; the original files are not moved or rewritten.
+
 - **Class:** File — A file of the project (images and other assets are left out).
 - **Language:** C#
 - **Kind of file:** code

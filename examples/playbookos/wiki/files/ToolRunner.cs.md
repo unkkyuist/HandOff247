@@ -7,6 +7,10 @@ source: "ToolRunner.cs"
 
 # `ToolRunner.cs`
 
+**Written by a language model (codex, 2026-11-10); not checked by a person.** Check it against the source before relying on it.
+
+> ToolRunner reads local tool definitions, reports process and HTTP status, and starts or stops tool processes it owns. It records run state and audit entries, and exposes recent log output for each registered tool.
+
 - **Class:** File — A file of the project (images and other assets are left out).
 - **Language:** C#
 - **Kind of file:** code
