@@ -71,11 +71,13 @@ class Notes:
         areas = {area_of(f.path) for f in project.files}
         modes = {m["name"] for m in project.links.get("modes", [])}
         ops = {o["key"] for tb in project.links.get("tables", []) for o in tb["ops"]}
+        users = {u["name"] for u in project.links.get("journeys", {}).get("user_types", [])}
         out = []
         for k in self.order:
             kind, _, name = k.partition(": ")
             if (kind == "File" and name not in paths) or (kind == "Area" and name not in areas) or \
-               (kind == "Mode" and name not in modes) or (kind == "Op" and name not in ops):
+               (kind == "Mode" and name not in modes) or (kind == "Op" and name not in ops) or \
+               (kind == "User" and name not in users):
                 out.append(k)
         return out
 
@@ -138,6 +140,9 @@ def skeleton(project: Project, max_files: int = 400) -> list[tuple[str, str]]:
         if m["name"] not in seen:
             seen.add(m["name"])
             items.append((f"Mode: {m['name']}", t("todo_mode")))
+    for u in project.links.get("journeys", {}).get("user_types", []):
+        if u["kind"] == "role":
+            items.append((f"User: {u['name']}", t("todo_user")))
     for a in sorted({area_of(f.path) for f in project.files} - {"(root)"}):
         items.append((f"Area: {a}", t("todo_area")))
     n = 0

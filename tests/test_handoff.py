@@ -475,7 +475,7 @@ class PackTests(unittest.TestCase):
         replies = {m["id"]: m for m in map(json.loads, r.stdout.splitlines())}   # stdout carries only JSON-RPC
         self.assertEqual(len(replies), 2 + len(calls))
         self.assertEqual(replies[1]["result"]["serverInfo"]["name"], "handoff247")
-        self.assertEqual(len(replies[2]["result"]["tools"]), 6)
+        self.assertEqual(len(replies[2]["result"]["tools"]), 13)
         res = {n: replies[10 + i]["result"] for i, (n, _) in enumerate(calls) if n not in ("handoff_source", "handoff_write_note")}
         text = lambda i: replies[10 + i]["result"]["content"][0]["text"]        # noqa: E731
         err = lambda i: replies[10 + i]["result"]["isError"]                     # noqa: E731
@@ -536,6 +536,525 @@ class PackTests(unittest.TestCase):
         self.assertTrue(foreign("Журнал"))
         self.assertFalse(foreign("Café façade, Straße — naïve"))
         self.assertFalse(foreign("PlayBook.dll cli list"))
+
+
+NEWSROOM = ROOT / "tests" / "fixtures" / "newsroom"
+
+
+def source_line(root: Path, file: str, line: int) -> str:
+    return (root / file).read_text(encoding="utf-8").split("\n")[line - 1]
+
+
+class UserContextTests(unittest.TestCase):
+    """The application from its users' side, on a synthetic app with three user types:
+    an author writes and uploads, an editor reviews and publishes, anyone reads the result.
+    Nothing below is read from a hand-written expectation file: every assertion is about what
+    the analysis found in the fixture's code, and the lines it points at are checked in the files."""
+
+    @classmethod
+    def setUpClass(cls):
+        from handoff247.explore import Explorer
+        cls.tmp = Path(tempfile.mkdtemp())
+        cls.root = cls.tmp / "newsroom"
+        shutil.copytree(NEWSROOM, cls.root)
+        cls.p = analyze_project(cls.root, "Newsroom")
+        cls.j = cls.p.links["journeys"]
+        cls.ex = Explorer(cls.p)
+
+    @classmethod
+    def tearDownClass(cls):
+        shutil.rmtree(cls.tmp, ignore_errors=True)
+
+    def line(self, where: dict) -> str:
+        return source_line(self.root, where["file"], where["line"])
+
+    # ---- a user type decides which flow is found
+    def test_user_types_come_from_role_checks(self):
+        users = {u["name"]: u for u in self.j["user_types"]}
+        self.assertEqual(set(users), {"author", "editor", "anyone"})
+        for ev in users["editor"]["evidence"]:
+            self.assertIn("editor", self.line(ev))                   # each place really names the role
+        self.assertEqual(users["anyone"]["kind"], "anyone")
+        self.assertIn("templates/desk.html", users["author"]["screens"])
+        self.assertNotIn("templates/review.html", users["author"]["screens"])
+        self.assertIn("templates/review.html", users["editor"]["screens"])
+        self.assertIn("templates/home.html", users["anyone"]["screens"])
+
+    def test_each_user_type_has_its_own_flow(self):
+        author = self.ex.user_flow("author")
+        editor = self.ex.user_flow("editor")
+        on = lambda flow: {i["on_screen"] for s in flow["screens"] for i in s["can_do_here"]}   # noqa: E731
+        self.assertIn("Send for review", on(author))
+        self.assertIn("My desk", on(author))                         # menu entry shown to authors only
+        self.assertNotIn("Review queue", on(author))
+        self.assertIn("Review queue", on(editor))
+        self.assertIn("Publish", on(editor))
+        self.assertNotIn("Send for review", on(editor))
+        desk = next(s for s in author["screens"] if s["screen"] == "templates/desk.html")
+        send = next(i for i in desk["can_do_here"] if i["on_screen"] == "Send for review")
+        self.assertEqual(send["shown_when"], ["a.status == 'draft'"])
+        self.assertEqual(send["leads_to"], ["POST /desk/<int:article_id>/submit"])
+        self.assertEqual(desk["layout"], ["templates/base.html"])
+
+    # ---- nothing is closed: one user type's flow leads into the next
+    def test_flows_link_across_user_types(self):
+        author = self.ex.user_flow("author")
+        desk = next(s for s in author["screens"] if s["screen"] == "templates/desk.html")
+        send = next(i for i in desk["can_do_here"] if i["on_screen"] == "Send for review")
+        then = [(t["user_types"], t["screens"], t["feature"]) for t in send["then"]]
+        self.assertIn((["editor"], ["templates/review.html"], "GET /review"), then)       # the queue lists it
+        self.assertIn((["editor"], [], "POST /review/<int:article_id>/publish"), then)    # and publishing tests the same value
+        self.assertTrue(all(t["inferred"] for t in send["then"]))
+        self.assertEqual(set(author["other_user_types"]), {"editor", "anyone"})
+        queue = self.ex.feature("GET /review")
+        self.assertEqual([(h["from_user_types"], h["from_feature"]) for h in queue["receives_from"]],
+                         [(["author"], "POST /desk/<int:article_id>/submit")])
+        back = self.ex.feature("POST /review/<int:article_id>/return")   # the editor's action returns work to the author
+        self.assertTrue(any(h["to_user_types"] == ["author"] and "templates/desk.html" in h["to_screens"] for h in back["hands_over_to"]))
+        shared = self.ex.who_sees("templates/article.html")              # one template, three kinds of viewer
+        self.assertEqual(set(shared), {"author", "editor", "anyone"})
+
+    def test_whole_chain_from_one_user_to_the_public_page(self):
+        """author's action -> code -> data -> editor's follow-up -> what a reader sees."""
+        term = next(t for t in self.j["terms"] if t["text"] == "Send for review")
+        self.assertEqual(self.ex.who_sees(term["screen"]), ["author"])
+        (submit,) = term["leads_to"]
+        feat = self.ex.features[submit]
+        self.assertEqual((feat["file"], self.line(feat).strip()), ("app.py", "def submit(article_id):"))
+        (stmt,) = [q for q in feat["sql"] if q["sets"]]
+        self.assertEqual(stmt["sets"], [{"table": "articles", "column": "status", "value": "in_review"}])
+        self.assertIn("UPDATE articles SET status = 'in_review'", self.line(stmt))
+        self.assertEqual(stmt["via"], "db.send_for_review")
+        (hand,) = [h for h in self.j["handoffs"] if h["from"] == submit]
+        self.assertEqual((hand["to"], self.ex.who(hand["to"])), ("GET /review", ["editor"]))
+        self.assertIn("WHERE status = 'in_review'", self.line(hand["read_at"]))
+        self.assertTrue(hand["inferred"])
+        queue = self.ex.features[hand["to"]]
+        self.assertEqual([r["screen"] for r in queue["renders"]], ["templates/review.html"])
+        row = next(t for t in self.j["terms"] if t["screen"] == "templates/review.html" and t["kind"] == "link")
+        self.assertEqual(row["leads_to"], ["GET /review/<int:article_id>"])
+        detail = self.ex.features[row["leads_to"][0]]["renders"][0]["screen"]
+        publish_term = next(t for t in self.j["terms"] if t["screen"] == detail and t["text"] == "Publish")
+        (publish,) = publish_term["leads_to"]
+        self.assertEqual(self.ex.who(publish), ["editor"])
+        sets = [s for q in self.ex.features[publish]["sql"] for s in q["sets"]]
+        self.assertEqual(sets, [{"table": "articles", "column": "status", "value": "published"}])   # the value was a parameter
+        public = [h["to"] for h in self.j["handoffs"] if h["from"] == publish]
+        self.assertEqual(public, ["GET /"])
+        self.assertEqual(self.ex.who("GET /"), ["anyone"])
+        self.assertEqual([r["screen"] for r in self.ex.features["GET /"]["renders"]], ["templates/home.html"])
+
+    # ---- from the words on a screen to the code
+    def test_screen_term_to_implementation(self):
+        hit = self.ex.find("Headline")
+        new = next(c for c in hit["candidates"] if c["feature"] == "GET,POST /desk/new")
+        field = next(m for m in new["matched"] if m.get("field_in_code"))
+        self.assertEqual((field["on_screen"], field["field_in_code"]), ("Headline", "title"))     # the label is not the identifier
+        term = next(t for t in self.j["terms"] if t["text"] == "Headline" and t["kind"] == "field")
+        self.assertIn('request.form["title"]', self.line(term["read_at"][0]))
+        cover = next(t for t in self.j["terms"] if t["text"] == "Cover image")
+        self.assertIn('request.files.get("cover")', self.line(cover["read_at"][0]))
+        publish = self.ex.find("Publish")["candidates"][0]
+        self.assertEqual(publish["implemented_in"], "app.py:101 publish")
+        self.assertEqual(source_line(self.root, "app.py", 101).strip(), "def publish(article_id):")
+
+    def test_terms_from_locale_files_in_every_language(self):
+        term = next(t for t in self.j["terms"] if t["text"] == "Review queue" and t["kind"] == "link")
+        self.assertEqual(term["i18n"]["key"], "nav.review")
+        self.assertIn("Review queue", self.line(term["i18n"]))
+        self.assertEqual([o["text"] for o in term["other_texts"]], ["검토 대기열"])
+        korean = self.ex.find("검토 대기열에 글이 안 보여요", "editor")           # the user's own words, particle attached
+        self.assertEqual(korean["candidates"][0]["feature"], "GET /review")
+        self.assertTrue(korean["candidates"][0]["for_this_user_type"])
+
+    def test_same_words_in_two_places_are_told_apart(self):
+        hit = self.ex.find("Headline")
+        feats = {c["feature"] for c in hit["candidates"]}
+        self.assertEqual(feats, {"GET,POST /desk/new", "GET /desk"})    # a field label and a table column
+        hit = self.ex.find("review")
+        self.assertGreater(len(hit["candidates"]), 2)
+        self.assertTrue(all(c["implemented_in"] for c in hit["candidates"]))
+        other = self.ex.find("Publish", "author")
+        self.assertFalse(other["candidates"][0]["for_this_user_type"])  # found and shown, marked as another user type's
+        self.assertIn("not_found", self.ex.find("zzzz qqqq"))
+
+    def test_request_gives_points_to_check_not_a_diagnosis(self):
+        hit = self.ex.find("I sent it for review but the editor cannot find it", "author")
+        self.assertEqual(hit["candidates"][0]["feature"], "POST /desk/<int:article_id>/submit")
+        self.assertIn("does not tell which condition applied", hit["how_to_read"])
+        card = self.ex.feature("POST /review/<int:article_id>/publish")
+        checks = " | ".join(c["what"] for c in card["check"])
+        self.assertIn("setting `NEWSROOM_COVER_REQUIRED`", checks)
+        self.assertIn("condition `row['status'] != 'in_review'`", checks)
+        branch = next(b for b in card["branches"] if "COVER_REQUIRED" in b["when"])
+        self.assertIn('shows the message "Add a cover image before publishing"', branch["then"])
+        self.assertIn("COVER_REQUIRED", self.line(branch))
+        steps = card["normal_flow"]
+        gated = next(s for s in steps if "Add a cover image" in s["step"])
+        self.assertTrue(gated["when"])                                  # a conditional step is never told as unconditional
+        update = next(s for s in steps if "sets status = 'published'" in s["step"])
+        self.assertNotIn("when", update)
+        self.assertEqual(update["via"], "db.publish_article")
+        self.assertTrue(card["not_verified"])
+
+    # ---- shared code and shared assets exist once
+    def test_shared_code_and_screens_are_modelled_once(self):
+        ids = [f["id"] for f in self.j["functions"]]
+        self.assertEqual(len(ids), len(set(ids)))
+        get_article = next(f for f in self.j["functions"] if f["id"] == "db.py:get_article")
+        self.assertGreaterEqual(len(get_article["features"]), 4)
+        self.assertEqual(len([s for s in self.j["screens"] if s["id"] == "templates/base.html"]), 1)
+        base = self.ex.screens["templates/base.html"]
+        self.assertEqual(len(base["extended_by"]), 7)
+        self.assertEqual(len([t for t in self.j["terms"] if t["text"] == "Front page"]), 1)   # the menu entry is not copied per screen
+        article = self.ex.screens["templates/article.html"]
+        self.assertEqual(set(article["routes"]), {"GET /articles/<int:article_id>", "GET /preview/<int:article_id>"})
+        from handoff247 import notes as n, ontology
+        onto = ontology.build(self.p, n.Notes())
+        names = [e["id"] for e in onto["entities"]]
+        self.assertEqual(len(names), len(set(names)))
+        self.assertEqual(names.count("func:db.py:get_article"), 1)
+        self.assertEqual(names.count("asset:static/logo.svg"), 1)
+        runs = [r for r in onto["relations"] if r["p"] == "runsCode" and r["o"] == "func:db.py:get_article"]
+        self.assertGreaterEqual(len(runs), 4)                           # many features, one function entity
+
+    # ---- an asset from where it is made to where it shows
+    def test_uploaded_asset_from_form_to_public_page(self):
+        (a,) = self.ex.asset("cover")["assets"]
+        self.assertEqual(a["kind"], "uploaded")
+        self.assertEqual([p["text"] for p in a["comes_from"]["picked_with"]], ["Cover image"])
+        self.assertEqual([(r["feature"], r["user_types"]) for r in a["comes_from"]["registered_by"]],
+                         [("GET,POST /desk/new", ["author"])])
+        (stored,) = a["stored_or_transformed_by"]
+        self.assertEqual(stored["via"], "storage.save_upload")
+        self.assertIn("file.save(", self.line(stored))
+        self.assertNotIn("inferred", stored)                           # traced through the variables, not guessed
+        self.assertEqual(stored["dir_env"], "NEWSROOM_UPLOADS")
+        self.assertEqual([(c["table"], c["column"]) for c in a["linked_data"]], [("articles", "cover")])
+        self.assertIn("INSERT INTO articles", self.line(a["linked_data"][0]))
+        self.assertEqual([r["feature"] for r in a["delivered_by"]], ["GET /uploads/<path:name>"])
+        shown = {x["screen"]: set(x["seen_by"]) for x in a["appears_on"]}
+        self.assertEqual(set(shown), {"templates/home.html", "templates/article.html", "templates/review_detail.html"})
+        self.assertEqual(shown["templates/review_detail.html"], {"editor"})
+        self.assertEqual(set(a["if_replaced_or_deleted"]["user_types"]), {"author", "editor", "anyone"})
+        for use in a["used_in"]:
+            self.assertIn("url_for('uploaded'", self.line(use))
+
+    def test_generated_static_and_unreferenced_assets(self):
+        (gen,) = self.ex.asset("published.csv")["assets"]
+        self.assertEqual(gen["kind"], "generated")
+        self.assertEqual([(r["feature"], r["user_types"]) for r in gen["comes_from"]["written_by"]],
+                         [("POST /review/<int:article_id>/publish", ["editor"])])
+        self.assertIn('open(os.path.join(EXPORT_DIR, "published.csv"), "w"', self.line(gen["comes_from"]["written_by"][0]))
+        self.assertEqual([r["feature"] for r in gen["delivered_by"]], ["GET /published.csv"])
+        self.assertEqual([(x["screen"], x["seen_by"]) for x in gen["appears_on"]], [("templates/home.html", ["anyone"])])
+        (logo,) = self.ex.asset("static/logo.svg")["assets"]
+        self.assertEqual(logo["kind"], "static")
+        self.assertEqual(len(logo["appears_on"]), 8)                    # the layout and the seven screens built on it
+        self.assertTrue(any(x["through_layout"] == "templates/base.html" for x in logo["appears_on"]))
+        (paper,) = self.ex.asset("paper.png")["assets"]                 # referenced from the stylesheet the layout loads
+        self.assertEqual(paper["used_in"][0]["file"], "static/site.css")
+        self.assertIn("templates/home.html", {x["screen"] for x in paper["appears_on"]})
+        (old,) = self.ex.asset("old-banner.png")["assets"]
+        self.assertEqual(old["appears_on"], [])
+        self.assertTrue(any("no reference was found" in x for x in old["not_verified"]))   # unknown, not "unused"
+
+    def test_data_states_carry_the_work_between_user_types(self):
+        (d,) = self.ex.asset("articles")["data"]
+        self.assertEqual(d["defined"], [{"file": "schema.sql", "line": 7}])
+        states = {s["value"]: s for s in d["states"]}
+        self.assertEqual(set(states), {"status = 'draft'", "status = 'in_review'", "status = 'published'"})
+        self.assertEqual([r["user_types"] for r in states["status = 'in_review'"]["set_by"]], [["author"]])
+        self.assertEqual([r["user_types"] for r in states["status = 'in_review'"]["filtered_on_by"]], [["editor"]])
+        tested = states["status = 'draft'"]["tested_in"]
+        self.assertTrue(any(x["where"] == "template" and x["text"] == "Send for review" for x in tested))
+        self.assertTrue(any(x["where"] == "handler" and x["feature"] == "POST /desk/<int:article_id>/submit" for x in tested))
+
+    # ---- from code to the people it reaches
+    def test_code_change_to_user_experience(self):
+        up = self.ex.impact("storage.py", symbol="save_upload")
+        self.assertEqual([f["feature"] for f in up["features"]], ["GET,POST /desk/new"])
+        self.assertEqual(up["user_types_affected"], ["author"])
+        self.assertIn("templates/edit.html", {s["screen"] for s in up["screens"]})
+        stmt = self.ex.impact("db.py", line=49)                         # the UPDATE that sends an article to review
+        (feat,) = stmt["features"]
+        self.assertEqual(feat["feature"], "POST /desk/<int:article_id>/submit")
+        self.assertEqual(feat["then_affects"][0]["user_types"], ["editor"])
+        self.assertEqual(set(stmt["user_types_affected"]), {"author", "editor"})
+        shared = self.ex.impact("db.py", symbol="get_article")
+        self.assertEqual(set(shared["user_types_affected"]), {"author", "editor", "anyone"})
+        layout = self.ex.impact("templates/base.html")
+        self.assertEqual(len(layout["screens"]), 8)
+        self.assertEqual(set(layout["user_types_affected"]), {"author", "editor", "anyone"})
+        words = self.ex.impact("locales/en.json")
+        self.assertIn("templates/review.html", {s["screen"] for s in words["screens"]})
+        css = self.ex.impact("static/site.css")
+        self.assertIn("templates/home.html", {s["screen"] for s in css["screens"]})
+        self.assertTrue(up["not_verified"])
+
+    # ---- every connection has evidence or says it is not verified
+    def test_every_connection_has_evidence_or_is_marked(self):
+        files = {f.path for f in self.p.files}
+
+        def check(where: dict, label: str) -> None:
+            self.assertIn(where["file"], files, label)
+            self.assertGreater(where["line"], 0, label)
+        for t in self.j["terms"]:
+            check(t, t["text"])
+            if t["kind"] in ("link", "button") and t["screen"]:
+                self.assertTrue(t["leads_to"] or t.get("unmatched") or t.get("external") or t.get("asset_file"), t["text"])
+        for f in self.j["features"]:
+            check(f, f["id"])
+            for key in ("renders", "redirects", "fields", "sql", "files", "settings", "branches", "messages", "calls"):
+                for x in f[key]:
+                    check(x, f"{f['id']} {key}")
+            if f["roles"]:
+                self.assertTrue(f["access_evidence"], f["id"])
+        for h in self.j["handoffs"]:
+            check(h["set_at"], "handoff")
+            check(h["read_at"], "handoff")
+            self.assertTrue(h["inferred"])
+        for a in self.j["assets"]:
+            self.assertTrue(a["used_in"] or a["registered_by"] or a["written_by"] or a["unknown"], a["id"])
+        for fid in self.ex.features:
+            card = self.ex.feature(fid)
+            for step in card["normal_flow"]:
+                check(step, fid)
+            self.assertIn("how_to_read", card)
+        open_route = self.ex.feature("GET /uploads/<path:name>")
+        self.assertTrue(any("no access check was found" in x for x in open_route["not_verified"]))
+        self.assertEqual(self.j["gaps"], [])                             # nothing in this fixture had to be left open
+
+    def test_unmatched_and_unanalysed_parts_are_reported(self):
+        tmp = Path(tempfile.mkdtemp())
+        try:
+            shutil.copytree(NEWSROOM, tmp / "n")
+            page = tmp / "n" / "templates" / "home.html"
+            marker = "<h1>Latest articles</h1>"
+            extra = '<a href="/archive">Archive</a>\n<a href="{{ url_for(\'home\') }}">{{ t(\'nav.missing\') }}</a>'
+            page.write_text(page.read_text(encoding="utf-8").replace(marker, marker + "\n" + extra), encoding="utf-8")
+            (tmp / "n" / "server.js").write_text(
+                "const app = require('express')();\napp.post('/api/notes', requireRole('admin'), (req, res) => res.json({}));\n",
+                encoding="utf-8")
+            j = analyze_project(tmp / "n", "N").links["journeys"]
+            gaps = " | ".join(g["what"] for g in j["gaps"])
+            self.assertIn("'Archive' points to '/archive'; no route was found for it", gaps)
+            self.assertIn("translation key 'nav.missing' was not found", gaps)
+            self.assertIn("POST /api/notes: the handler was not analysed", gaps)
+            js = next(f for f in j["features"] if f["id"] == "POST /api/notes")
+            self.assertEqual((js["roles"], js["analysed"]), (["admin"], False))   # the role on the route is read, the body is not
+            self.assertIn("admin", {u["name"] for u in j["user_types"]})
+        finally:
+            shutil.rmtree(tmp, ignore_errors=True)
+
+    # ---- small parts
+    def test_sql_reading(self):
+        from handoff247.handlers import parse_sql
+        q = parse_sql("UPDATE articles SET status = ?, note = 'x' WHERE id = ? AND kind = 'news'", [("lit", "published"), None])
+        self.assertEqual(q["writes"], ["articles"])
+        self.assertEqual({(s["column"], s["value"]) for s in q["sets"]}, {("status", "published"), ("note", "x")})
+        self.assertEqual([(s["column"], s["value"]) for s in q["filters"]], [("kind", "news")])
+        q = parse_sql("SELECT a.id FROM articles a JOIN users u ON u.id = a.author_id WHERE a.status IN ('draft', 'in_review') AND u.role != 'admin'")
+        self.assertEqual(q["reads"], ["articles", "users"])
+        self.assertEqual({(s["table"], s["value"]) for s in q["filters"]}, {("articles", "draft"), ("articles", "in_review")})
+        q = parse_sql("SELECT id FROM a, b WHERE status = 'x'")          # which table the column belongs to is not known
+        self.assertEqual(q["filters"], [])
+        self.assertIsNone(parse_sql("select the best option"))
+        self.assertIsNone(parse_sql("Select a file from the list"))      # a sentence, not a statement
+        self.assertEqual(parse_sql("select * from notes where kind = 'memo'")["reads"], ["notes"])
+        q = parse_sql("INSERT INTO t (a, b) VALUES (?, 'new')", [("name", "stored")])
+        self.assertEqual(q["param_columns"], [{"table": "t", "column": "a", "variable": "stored"}])
+        self.assertEqual(q["sets"], [{"table": "t", "column": "b", "value": "new"}])
+
+    def test_role_conditions_and_route_matching(self):
+        from handoff247.handlers import access_other
+        from handoff247.journeys import match_path
+        from handoff247.screens import roles_in
+        self.assertEqual(roles_in("user and user.role == 'editor'"), ["editor"])
+        self.assertEqual(roles_in("current_user.role in ('editor', 'admin')"), ["editor", "admin"])
+        self.assertEqual(roles_in("user.role != 'editor'"), [])          # says who is not, not who is
+        self.assertEqual(roles_in("not (user.role == 'editor')"), [])
+        self.assertEqual(roles_in("not user.is_admin"), [])
+        self.assertEqual(roles_in("user.is_admin"), ["admin"])
+        self.assertEqual(roles_in("a.status == 'draft'"), [])
+        feats = [{"id": "GET /review/<int:id>", "verb": "GET", "path": "/review/<int:id>"},
+                 {"id": "GET /review/export", "verb": "GET", "path": "/review/export"},
+                 {"id": "POST /api/{op}", "verb": "POST", "path": "/api/{op}"},
+                 {"id": "GET /files/<path:name>", "verb": "GET", "path": "/files/<path:name>"}]
+        self.assertEqual(match_path("/review/*", "GET", feats), ["GET /review/<int:id>"])     # a hole is not a fixed word
+        self.assertEqual(match_path("/review/export", "GET", feats), ["GET /review/export"])
+        self.assertEqual(match_path("/api/", "", feats), ["POST /api/{op}"])
+        self.assertEqual(match_path("/api/list", "GET", feats), [])                          # wrong method
+        self.assertEqual(match_path("/files/a/b.png", "GET", feats), ["GET /files/<path:name>"])
+        cs = ['[Authorize(Roles = "Admin, Editor")]', '[HttpPost("publish")]', "public IActionResult Publish() {"]
+        self.assertEqual(access_other(cs, "csharp", "C.cs", 2)["roles"], ["Admin", "Editor"])
+        self.assertTrue(access_other(["[Authorize]", '[HttpGet("x")]'], "csharp", "C.cs", 2)["signed_in"])
+        js = ["router.get('/admin', requireAuth, (req, res) => res.render('admin'));"]
+        self.assertTrue(access_other(js, "javascript", "s.js", 1)["signed_in"])
+
+    def test_decorators_read_as_access_checks(self):
+        import ast
+        from handoff247.handlers import PyIndex
+        src = ("@app.route('/a')\n@admin_required\ndef a(): pass\n"
+               "@app.route('/b')\n@ajax_only\ndef b(): pass\n"
+               "@app.route('/c')\n@login_required\ndef c(): pass\n"
+               "@app.route('/d')\n@permission_required('articles.publish')\ndef d(): pass\n"
+               "@app.route('/e')\n@roles_accepted('editor', 'chief')\ndef e(): pass\n")
+        nodes = {n.name: n for n in ast.parse(src).body}
+        acc = lambda name: PyIndex.access(None, "x.py", nodes[name])            # noqa: E731
+        self.assertEqual(acc("a")["roles"], ["admin"])
+        self.assertEqual((acc("b")["roles"], [d["text"] for d in acc("b")["unread"]]), ([], ["@ajax_only"]))   # not a user type
+        self.assertTrue(acc("c")["signed_in"])
+        self.assertEqual((acc("d")["roles"], acc("d")["permissions"]), ([], ["articles.publish"]))
+        self.assertEqual(acc("e")["roles"], ["editor", "chief"])
+
+    def test_pages_without_routes_and_their_scripts(self):
+        """A single-page app: no route renders the page, its script calls the API."""
+        tmp = Path(tempfile.mkdtemp())
+        try:
+            j = analyze_project(copy_fixture(tmp), "Mini").links["journeys"]
+            (page,) = j["screens"]
+            self.assertEqual(page["kind"], "page without a known route")
+            self.assertEqual([(c["feature"], c["file"]) for c in page["calls"]], [("POST /api/{operation}", "wwwroot/app.js")])
+            (anyone,) = j["user_types"]
+            self.assertEqual((anyone["name"], anyone["screens"]), ("anyone", ["wwwroot/index.html"]))
+            self.assertTrue(any("handler was not analysed" in g["what"] for g in j["gaps"]))
+        finally:
+            shutil.rmtree(tmp, ignore_errors=True)
+
+    # ---- the pack, the viewer, the command line and the MCP server tell the same story
+    def test_pack_pages_graph_and_wiki(self):
+        self.assertEqual(main([str(self.root), "--date", "2026-01-01"]), 0)
+        out = self.root / "docs" / "handoff"
+        users = (out / "USERS.md").read_text(encoding="utf-8")
+        for heading in ("## User types", "### `author`", "### `editor`", "### `anyone`", "## Hand-overs between features",
+                        "## Words on the screens", "## Assets in context", "## Shared code", "## Not verified by the analysis"):
+            self.assertIn(heading, users)
+        self.assertIn("not access levels of this pack", users)
+        self.assertIn('"Send for review" (button)', users)
+        self.assertIn('"Review queue" / "검토 대기열"', users)
+        self.assertTrue((out / "diagrams" / "users.mmd").is_file())
+        self.assertIn("[USERS.md](USERS.md)", (out / "README.md").read_text(encoding="utf-8"))
+        onto = json.loads((out / "ontology.json").read_text(encoding="utf-8"))
+        ents = {e["id"]: e for e in onto["entities"]}
+        rels = {(r["s"], r["p"], r["o"]): r for r in onto["relations"]}
+        self.assertEqual(ents["user:editor"]["type"], "UserType")
+        self.assertIn(("user:editor", "sees", "screen:templates/review.html"), rels)
+        self.assertIn(("route:GET /review", "openTo", "user:editor"), rels)
+        hand = rels[("route:POST /desk/<int:article_id>/submit", "handsOverTo", "route:GET /review")]
+        self.assertTrue(hand["inferred"])
+        self.assertIn(("asset:upload:cover", "keptIn", "data:articles"), rels)
+        self.assertIn(("screen:templates/home.html", "showsAsset", "asset:upload:cover"), rels)
+        known = {r["id"] for r in onto["schema"]["relations"]}
+        for (s, p, o), r in rels.items():
+            self.assertIn(s, ents)
+            self.assertIn(o, ents)
+            self.assertIn(p, known)
+            if p not in ("contains", "authored"):
+                self.assertTrue(r.get("file"), (s, p, o))
+        link = re.compile(r"\]\(([^)\s]+)\)")
+        pages = list((out / "wiki").rglob("*.md")) + [out / "USERS.md", out / "llms.txt"]
+        for e in ents.values():
+            self.assertTrue((out / e["page"]).is_file(), e["id"])
+        for page in pages:                                               # every link leads somewhere
+            for href in link.findall(page.read_text(encoding="utf-8")):
+                if href.startswith(("http:", "https:", "#")):
+                    continue
+                target = (page.parent / href.split("#")[0].replace("%20", " ")).resolve()
+                self.assertTrue(target.exists(), f"{page.name}: {href}")
+        editor = (out / "wiki" / "users" / "editor.md").read_text(encoding="utf-8")
+        self.assertIn("## Other user types", editor)
+        self.assertIn("](author.md)", editor)                            # one user type's page leads to the others
+        feature = (out / ents["route:POST /review/<int:article_id>/publish"]["page"]).read_text(encoding="utf-8")
+        for heading in ("## Started from", "## What the code does", "## Branches", "## Hand-overs", "## Code",
+                        "## Data and assets", "## What to check", "## Not verified by the analysis"):
+            self.assertIn(heading, feature)
+        self.assertIn("`Cover image`", (out / "wiki" / "terms.md").read_text(encoding="utf-8"))
+        viewer = (out / "index.html").read_text(encoding="utf-8")
+        self.assertIn("'USERS.md', 'Users'", viewer)
+        self.assertIn("Bring forward", viewer)
+        self.assertIn('"users": ["author", "editor", "anyone"]', viewer)
+        notes_text = (self.root / "HANDOFF.notes.md").read_text(encoding="utf-8")
+        self.assertIn("## User: author", notes_text)
+        self.assertNotIn("## User: anyone", notes_text)
+        # what the owner writes about a user type reaches that user type's pages
+        (self.root / "HANDOFF.notes.md").write_text(notes_text.replace(
+            "## User: author\nTODO", "## User: author\nAbout thirty reporters.\nTODO"), encoding="utf-8")
+        self.assertEqual(main([str(self.root), "--date", "2026-01-01"]), 0)
+        self.assertIn("About thirty reporters.", (out / "wiki" / "users" / "author.md").read_text(encoding="utf-8"))
+        self.assertIn("About thirty reporters.", (out / "USERS.md").read_text(encoding="utf-8"))
+
+    def test_trace_command(self):
+        import contextlib
+        import io
+        buf = io.StringIO()
+        with contextlib.redirect_stdout(buf):
+            self.assertEqual(main(["trace", str(self.root), "review", "queue", "--user", "editor"]), 0)
+            self.assertEqual(main(["trace", str(self.root), "--feature", "publish"]), 0)
+            self.assertEqual(main(["trace", str(self.root), "--impact", "db.py:49", "--json"]), 0)
+            self.assertEqual(main(["trace", str(self.root), "--asset", "cover"]), 0)
+            self.assertEqual(main(["trace", str(self.root), "--user", "author"]), 0)
+            self.assertEqual(main(["trace", str(self.root)]), 0)
+        text = buf.getvalue()
+        self.assertIn('1. "Review queue"  ->  GET /review', text)
+        self.assertIn("hands over to (inferred):", text)
+        self.assertIn('"feature": "POST /desk/<int:article_id>/submit"', text)
+        self.assertEqual(main(["trace", str(self.root), "--feature", "no-such-feature"]), 2)
+
+    def test_mcp_server_gives_an_agent_the_whole_project(self):
+        import subprocess
+        msgs = [{"jsonrpc": "2.0", "id": 1, "method": "initialize", "params": {"protocolVersion": "2025-06-18", "capabilities": {},
+                                                                                "clientInfo": {"name": "test", "version": "0"}}},
+                {"jsonrpc": "2.0", "method": "notifications/initialized"},
+                {"jsonrpc": "2.0", "id": 2, "method": "resources/list"},
+                {"jsonrpc": "2.0", "id": 3, "method": "resources/read", "params": {"uri": "handoff://page/USERS.md"}}]
+        calls = [("handoff_overview", {}),
+                 ("handoff_users", {}),
+                 ("handoff_users", {"user": "editor"}),
+                 ("handoff_request", {"text": "검토 대기열에 안 보여요", "user": "editor"}),
+                 ("handoff_feature", {"id": "POST /desk/<int:article_id>/submit"}),
+                 ("handoff_asset", {"name": "cover"}),
+                 ("handoff_impact", {"path": "storage.py", "symbol": "save_upload"}),
+                 ("handoff_page", {}),
+                 ("handoff_page", {"name": "wiki/users/author.md"}),
+                 ("handoff_entity", {"id": "user:editor"}),
+                 ("handoff_search", {"query": "cover", "type": "Asset"}),
+                 ("handoff_write_note", {"heading": "User: editor", "text": "Two people at the news desk."}),
+                 ("handoff_feature", {"id": "nothing like this"}),
+                 ("handoff_users", {"user": "nobody"})]
+        msgs += [{"jsonrpc": "2.0", "id": 10 + i, "method": "tools/call", "params": {"name": n, "arguments": a}}
+                 for i, (n, a) in enumerate(calls)]
+        r = subprocess.run([sys.executable, "-m", "handoff247", "mcp", str(self.root)], cwd=ROOT, capture_output=True,
+                           input="\n".join(json.dumps(m) for m in msgs) + "\n", text=True, encoding="utf-8", timeout=180)
+        replies = {m["id"]: m for m in map(json.loads, r.stdout.splitlines())}
+        self.assertEqual(len(replies), 3 + len(calls), r.stderr[-2000:])
+        self.assertIn("handoff_overview", replies[1]["result"]["instructions"])
+        self.assertIn("not access levels", replies[1]["result"]["instructions"])
+        uris = {x["uri"] for x in replies[2]["result"]["resources"]}
+        self.assertIn("handoff://page/USERS.md", uris)
+        self.assertIn("## Flows by user type", replies[3]["result"]["contents"][0]["text"])
+        text = lambda i: replies[10 + i]["result"]["content"][0]["text"]        # noqa: E731
+        err = lambda i: replies[10 + i]["result"]["isError"]                     # noqa: E731
+        overview = json.loads(text(0))
+        self.assertEqual([u["user_type"] for u in overview["who_uses_it"]], ["author", "editor", "anyone"])
+        self.assertIn("NEWSROOM_COVER_REQUIRED", overview["settings"])
+        self.assertIn("handoff_request", json.dumps(overview["where_to_go_next"]))
+        self.assertEqual(len(json.loads(text(1))["user_types"]), 3)
+        self.assertEqual(json.loads(text(2))["user_type"], "editor")
+        self.assertEqual(json.loads(text(3))["candidates"][0]["feature"], "GET /review")
+        card = json.loads(text(4))
+        self.assertEqual(card["hands_over_to"][0]["to_user_types"], ["editor"])
+        self.assertTrue(card["check"])
+        self.assertEqual(json.loads(text(5))["assets"][0]["linked_data"][0]["column"], "cover")
+        self.assertEqual(json.loads(text(6))["user_types_affected"], ["author"])
+        self.assertIn("USERS.md", json.loads(text(7))["pages"])
+        self.assertIn("## What this user type sees and does", text(8))
+        self.assertIn('"note_heading": "User: editor"', text(9))
+        self.assertIn("asset:upload:cover", text(10))
+        self.assertFalse(err(11))
+        self.assertTrue(err(12))
+        self.assertTrue(err(13))
+        self.assertIn("Two people at the news desk.", (self.root / "HANDOFF.notes.md").read_text(encoding="utf-8"))
 
 
 if __name__ == "__main__":

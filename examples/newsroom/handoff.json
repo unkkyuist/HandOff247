@@ -1,0 +1,5644 @@
+{
+ "generator": "HandOff247",
+ "version": "0.6.0",
+ "generated": "2026-11-14",
+ "project": {
+  "name": "Newsroom",
+  "git": {
+   "head": "3cdb94f",
+   "head_full": "3cdb94fd05499d90188ad972e4bc3ec57e5b1579",
+   "branch": "main",
+   "remote": "https://github.com/unkkyuist/HandOff247.git",
+   "commits": [],
+   "uncommitted": 1,
+   "subdir": "tests/fixtures/newsroom"
+  }
+ },
+ "notes": {
+  "Project": "A small publishing application that exists only as a test fixture for HandOff247 (`tests/fixtures/newsroom`). Authors write articles and upload a cover image, editors review and publish them, and readers see the published articles on the front page. It is not deployed anywhere; the notes below are example text.",
+  "Topic: Known issues and risks": "Publishing refuses an article without a cover image while `NEWSROOM_COVER_REQUIRED` is `1` (the default). Editors usually report this as \"the Publish button does nothing\"; the message is shown on the review page.",
+  "User: author": "Reporters. They mostly ask why an article they sent is not on the front page yet: it is waiting in the editors' queue, or an editor sent it back with a note.",
+  "User: editor": "The news desk. They mostly ask about articles that will not publish and about cover images that do not show."
+ },
+ "files": [
+  {
+   "path": "README.md",
+   "lang": "markdown",
+   "category": "docs",
+   "lines": 12,
+   "size": 403,
+   "summary": "A small publishing application used as a test fixture: authors write articles and upload a cover image, editors review and publish them, and readers see the published articles on the front page.",
+   "summary_source": "first paragraph",
+   "symbols": [
+    {
+     "name": "Newsroom",
+     "kind": "h1",
+     "line": 1,
+     "doc": "",
+     "parent": "",
+     "public": true,
+     "end_line": 0
+    }
+   ],
+   "imports": [],
+   "tags": [],
+   "skipped": "",
+   "translated": []
+  },
+  {
+   "path": "app.py",
+   "lang": "python",
+   "category": "code",
+   "lines": 130,
+   "size": 4162,
+   "summary": "Newsroom: authors write articles, editors review and publish them, readers see the result.",
+   "summary_source": "module docstring",
+   "symbols": [
+    {
+     "name": "home",
+     "kind": "function",
+     "line": 18,
+     "doc": "Front page: the published articles.",
+     "parent": "",
+     "public": true,
+     "end_line": 20
+    },
+    {
+     "name": "article",
+     "kind": "function",
+     "line": 24,
+     "doc": "",
+     "parent": "",
+     "public": true,
+     "end_line": 28
+    },
+    {
+     "name": "uploaded",
+     "kind": "function",
+     "line": 32,
+     "doc": "",
+     "parent": "",
+     "public": true,
+     "end_line": 33
+    },
+    {
+     "name": "published_list",
+     "kind": "function",
+     "line": 37,
+     "doc": "",
+     "parent": "",
+     "public": true,
+     "end_line": 38
+    },
+    {
+     "name": "login",
+     "kind": "function",
+     "line": 42,
+     "doc": "",
+     "parent": "",
+     "public": true,
+     "end_line": 50
+    },
+    {
+     "name": "desk",
+     "kind": "function",
+     "line": 57,
+     "doc": "",
+     "parent": "",
+     "public": true,
+     "end_line": 58
+    },
+    {
+     "name": "new_article",
+     "kind": "function",
+     "line": 63,
+     "doc": "",
+     "parent": "",
+     "public": true,
+     "end_line": 70
+    },
+    {
+     "name": "submit",
+     "kind": "function",
+     "line": 75,
+     "doc": "",
+     "parent": "",
+     "public": true,
+     "end_line": 82
+    },
+    {
+     "name": "review_queue",
+     "kind": "function",
+     "line": 89,
+     "doc": "",
+     "parent": "",
+     "public": true,
+     "end_line": 90
+    },
+    {
+     "name": "review_detail",
+     "kind": "function",
+     "line": 95,
+     "doc": "",
+     "parent": "",
+     "public": true,
+     "end_line": 96
+    },
+    {
+     "name": "publish",
+     "kind": "function",
+     "line": 101,
+     "doc": "",
+     "parent": "",
+     "public": true,
+     "end_line": 111
+    },
+    {
+     "name": "send_back",
+     "kind": "function",
+     "line": 116,
+     "doc": "",
+     "parent": "",
+     "public": true,
+     "end_line": 118
+    },
+    {
+     "name": "preview",
+     "kind": "function",
+     "line": 125,
+     "doc": "",
+     "parent": "",
+     "public": true,
+     "end_line": 126
+    }
+   ],
+   "imports": [
+    [
+     "os",
+     2
+    ],
+    [
+     "flask",
+     4
+    ],
+    [
+     "db",
+     6
+    ],
+    [
+     "storage",
+     7
+    ],
+    [
+     "auth",
+     8
+    ]
+   ],
+   "tags": [
+    "entry"
+   ],
+   "skipped": "",
+   "translated": []
+  },
+  {
+   "path": "auth.py",
+   "lang": "python",
+   "category": "code",
+   "lines": 26,
+   "size": 721,
+   "summary": "Who is signed in, and the role check used by the routes.",
+   "summary_source": "module docstring",
+   "symbols": [
+    {
+     "name": "current_user",
+     "kind": "function",
+     "line": 9,
+     "doc": "",
+     "parent": "",
+     "public": true,
+     "end_line": 11
+    },
+    {
+     "name": "require_role",
+     "kind": "function",
+     "line": 14,
+     "doc": "Let the request through only when the signed-in user has one of the roles.",
+     "parent": "",
+     "public": true,
+     "end_line": 26
+    }
+   ],
+   "imports": [
+    [
+     "functools",
+     2
+    ],
+    [
+     "flask",
+     4
+    ],
+    [
+     "db",
+     6
+    ]
+   ],
+   "tags": [],
+   "skipped": "",
+   "translated": []
+  },
+  {
+   "path": "db.py",
+   "lang": "python",
+   "category": "code",
+   "lines": 65,
+   "size": 1919,
+   "summary": "SQLite access.",
+   "summary_source": "module docstring",
+   "symbols": [
+    {
+     "name": "connect",
+     "kind": "function",
+     "line": 8,
+     "doc": "",
+     "parent": "",
+     "public": true,
+     "end_line": 11
+    },
+    {
+     "name": "query",
+     "kind": "function",
+     "line": 14,
+     "doc": "",
+     "parent": "",
+     "public": true,
+     "end_line": 16
+    },
+    {
+     "name": "execute",
+     "kind": "function",
+     "line": 19,
+     "doc": "",
+     "parent": "",
+     "public": true,
+     "end_line": 21
+    },
+    {
+     "name": "get_user",
+     "kind": "function",
+     "line": 24,
+     "doc": "",
+     "parent": "",
+     "public": true,
+     "end_line": 26
+    },
+    {
+     "name": "find_user",
+     "kind": "function",
+     "line": 29,
+     "doc": "",
+     "parent": "",
+     "public": true,
+     "end_line": 31
+    },
+    {
+     "name": "get_article",
+     "kind": "function",
+     "line": 34,
+     "doc": "",
+     "parent": "",
+     "public": true,
+     "end_line": 36
+    },
+    {
+     "name": "articles_of",
+     "kind": "function",
+     "line": 39,
+     "doc": "",
+     "parent": "",
+     "public": true,
+     "end_line": 40
+    },
+    {
+     "name": "create_article",
+     "kind": "function",
+     "line": 43,
+     "doc": "",
+     "parent": "",
+     "public": true,
+     "end_line": 45
+    },
+    {
+     "name": "send_for_review",
+     "kind": "function",
+     "line": 48,
+     "doc": "",
+     "parent": "",
+     "public": true,
+     "end_line": 49
+    },
+    {
+     "name": "waiting_for_review",
+     "kind": "function",
+     "line": 52,
+     "doc": "",
+     "parent": "",
+     "public": true,
+     "end_line": 53
+    },
+    {
+     "name": "publish_article",
+     "kind": "function",
+     "line": 56,
+     "doc": "",
+     "parent": "",
+     "public": true,
+     "end_line": 57
+    },
+    {
+     "name": "return_to_author",
+     "kind": "function",
+     "line": 60,
+     "doc": "",
+     "parent": "",
+     "public": true,
+     "end_line": 61
+    },
+    {
+     "name": "published_articles",
+     "kind": "function",
+     "line": 64,
+     "doc": "",
+     "parent": "",
+     "public": true,
+     "end_line": 65
+    }
+   ],
+   "imports": [
+    [
+     "os",
+     2
+    ],
+    [
+     "sqlite3",
+     3
+    ]
+   ],
+   "tags": [],
+   "skipped": "",
+   "translated": []
+  },
+  {
+   "path": "locales/en.json",
+   "lang": "json",
+   "category": "config",
+   "lines": 8,
+   "size": 92,
+   "summary": "keys: nav, review",
+   "summary_source": "json keys",
+   "symbols": [],
+   "imports": [],
+   "tags": [],
+   "skipped": "",
+   "translated": []
+  },
+  {
+   "path": "locales/ko.json",
+   "lang": "json",
+   "category": "config",
+   "lines": 8,
+   "size": 95,
+   "summary": "keys: nav, review",
+   "summary_source": "json keys",
+   "symbols": [],
+   "imports": [],
+   "tags": [],
+   "skipped": "",
+   "translated": []
+  },
+  {
+   "path": "requirements.txt",
+   "lang": "requirements",
+   "category": "config",
+   "lines": 1,
+   "size": 11,
+   "summary": "",
+   "summary_source": "",
+   "symbols": [],
+   "imports": [],
+   "tags": [],
+   "skipped": "",
+   "translated": []
+  },
+  {
+   "path": "schema.sql",
+   "lang": "other",
+   "category": "other",
+   "lines": 16,
+   "size": 345,
+   "summary": "",
+   "summary_source": "",
+   "symbols": [],
+   "imports": [],
+   "tags": [],
+   "skipped": "",
+   "translated": []
+  },
+  {
+   "path": "static/logo.svg",
+   "lang": "binary",
+   "category": "asset",
+   "lines": 0,
+   "size": 163,
+   "summary": "",
+   "summary_source": "",
+   "symbols": [],
+   "imports": [],
+   "tags": [],
+   "skipped": "binary",
+   "translated": []
+  },
+  {
+   "path": "static/old-banner.png",
+   "lang": "binary",
+   "category": "asset",
+   "lines": 0,
+   "size": 70,
+   "summary": "",
+   "summary_source": "",
+   "symbols": [],
+   "imports": [],
+   "tags": [],
+   "skipped": "binary",
+   "translated": []
+  },
+  {
+   "path": "static/paper.png",
+   "lang": "binary",
+   "category": "asset",
+   "lines": 0,
+   "size": 70,
+   "summary": "",
+   "summary_source": "",
+   "symbols": [],
+   "imports": [],
+   "tags": [],
+   "skipped": "binary",
+   "translated": []
+  },
+  {
+   "path": "static/site.css",
+   "lang": "css",
+   "category": "web",
+   "lines": 4,
+   "size": 165,
+   "summary": "Newsroom styles.",
+   "summary_source": "file comment",
+   "symbols": [],
+   "imports": [],
+   "tags": [],
+   "skipped": "",
+   "translated": []
+  },
+  {
+   "path": "storage.py",
+   "lang": "python",
+   "category": "code",
+   "lines": 27,
+   "size": 861,
+   "summary": "Files on disk: cover images that authors upload and the list that publishing writes.",
+   "summary_source": "module docstring",
+   "symbols": [
+    {
+     "name": "safe_name",
+     "kind": "function",
+     "line": 10,
+     "doc": "",
+     "parent": "",
+     "public": true,
+     "end_line": 11
+    },
+    {
+     "name": "save_upload",
+     "kind": "function",
+     "line": 14,
+     "doc": "Store an uploaded file and return the name it was stored under.",
+     "parent": "",
+     "public": true,
+     "end_line": 18
+    },
+    {
+     "name": "write_published_list",
+     "kind": "function",
+     "line": 21,
+     "doc": "Rewrite the CSV of published articles that readers can download.",
+     "parent": "",
+     "public": true,
+     "end_line": 27
+    }
+   ],
+   "imports": [
+    [
+     "csv",
+     2
+    ],
+    [
+     "os",
+     3
+    ],
+    [
+     "re",
+     4
+    ]
+   ],
+   "tags": [],
+   "skipped": "",
+   "translated": []
+  },
+  {
+   "path": "templates/article.html",
+   "lang": "html",
+   "category": "web",
+   "lines": 12,
+   "size": 398,
+   "summary": "",
+   "summary_source": "",
+   "symbols": [],
+   "imports": [],
+   "tags": [],
+   "skipped": "",
+   "translated": []
+  },
+  {
+   "path": "templates/base.html",
+   "lang": "html",
+   "category": "web",
+   "lines": 29,
+   "size": 892,
+   "summary": "{% block title %}Newsroom{% endblock %}",
+   "summary_source": "<title>",
+   "symbols": [],
+   "imports": [
+    [
+     "{{ url_for(",
+     6
+    ]
+   ],
+   "tags": [],
+   "skipped": "",
+   "translated": []
+  },
+  {
+   "path": "templates/desk.html",
+   "lang": "html",
+   "category": "web",
+   "lines": 23,
+   "size": 688,
+   "summary": "",
+   "summary_source": "",
+   "symbols": [],
+   "imports": [],
+   "tags": [],
+   "skipped": "",
+   "translated": []
+  },
+  {
+   "path": "templates/edit.html",
+   "lang": "html",
+   "category": "web",
+   "lines": 14,
+   "size": 485,
+   "summary": "",
+   "summary_source": "",
+   "symbols": [],
+   "imports": [],
+   "tags": [],
+   "skipped": "",
+   "translated": []
+  },
+  {
+   "path": "templates/home.html",
+   "lang": "html",
+   "category": "web",
+   "lines": 14,
+   "size": 402,
+   "summary": "",
+   "summary_source": "",
+   "symbols": [],
+   "imports": [],
+   "tags": [],
+   "skipped": "",
+   "translated": []
+  },
+  {
+   "path": "templates/login.html",
+   "lang": "html",
+   "category": "web",
+   "lines": 10,
+   "size": 308,
+   "summary": "",
+   "summary_source": "",
+   "symbols": [],
+   "imports": [],
+   "tags": [],
+   "skipped": "",
+   "translated": []
+  },
+  {
+   "path": "templates/review.html",
+   "lang": "html",
+   "category": "web",
+   "lines": 10,
+   "size": 255,
+   "summary": "",
+   "summary_source": "",
+   "symbols": [],
+   "imports": [],
+   "tags": [],
+   "skipped": "",
+   "translated": []
+  },
+  {
+   "path": "templates/review_detail.html",
+   "lang": "html",
+   "category": "web",
+   "lines": 17,
+   "size": 706,
+   "summary": "",
+   "summary_source": "",
+   "symbols": [],
+   "imports": [],
+   "tags": [],
+   "skipped": "",
+   "translated": []
+  }
+ ],
+ "edges": [
+  {
+   "src": "app.py",
+   "dst": "auth.py",
+   "kind": "imports",
+   "line": 8,
+   "count": 1,
+   "label": ""
+  },
+  {
+   "src": "app.py",
+   "dst": "db.py",
+   "kind": "imports",
+   "line": 6,
+   "count": 1,
+   "label": ""
+  },
+  {
+   "src": "app.py",
+   "dst": "storage.py",
+   "kind": "imports",
+   "line": 7,
+   "count": 1,
+   "label": ""
+  },
+  {
+   "src": "app.py",
+   "dst": "templates/article.html",
+   "kind": "refers",
+   "line": 28,
+   "count": 2,
+   "label": ""
+  },
+  {
+   "src": "app.py",
+   "dst": "templates/desk.html",
+   "kind": "refers",
+   "line": 58,
+   "count": 1,
+   "label": ""
+  },
+  {
+   "src": "app.py",
+   "dst": "templates/edit.html",
+   "kind": "refers",
+   "line": 70,
+   "count": 1,
+   "label": ""
+  },
+  {
+   "src": "app.py",
+   "dst": "templates/home.html",
+   "kind": "refers",
+   "line": 20,
+   "count": 1,
+   "label": ""
+  },
+  {
+   "src": "app.py",
+   "dst": "templates/login.html",
+   "kind": "refers",
+   "line": 50,
+   "count": 1,
+   "label": ""
+  },
+  {
+   "src": "app.py",
+   "dst": "templates/review.html",
+   "kind": "refers",
+   "line": 90,
+   "count": 1,
+   "label": ""
+  },
+  {
+   "src": "app.py",
+   "dst": "templates/review_detail.html",
+   "kind": "refers",
+   "line": 96,
+   "count": 1,
+   "label": ""
+  },
+  {
+   "src": "auth.py",
+   "dst": "db.py",
+   "kind": "imports",
+   "line": 6,
+   "count": 1,
+   "label": ""
+  }
+ ],
+ "links": {
+  "types": {},
+  "entries": [
+   {
+    "file": "app.py",
+    "line": 129,
+    "style": "__main__ guard"
+   }
+  ],
+  "modes": [],
+  "tables": [],
+  "routes": [
+   {
+    "verb": "GET",
+    "path": "/",
+    "file": "app.py",
+    "line": 18,
+    "forwards_to": "",
+    "modes": [],
+    "handler": "home"
+   },
+   {
+    "verb": "GET",
+    "path": "/articles/<int:article_id>",
+    "file": "app.py",
+    "line": 24,
+    "forwards_to": "",
+    "modes": [],
+    "handler": "article"
+   },
+   {
+    "verb": "GET",
+    "path": "/uploads/<path:name>",
+    "file": "app.py",
+    "line": 32,
+    "forwards_to": "",
+    "modes": [],
+    "handler": "uploaded"
+   },
+   {
+    "verb": "GET",
+    "path": "/published.csv",
+    "file": "app.py",
+    "line": 37,
+    "forwards_to": "",
+    "modes": [],
+    "handler": "published_list"
+   },
+   {
+    "verb": "GET,POST",
+    "path": "/login",
+    "file": "app.py",
+    "line": 42,
+    "forwards_to": "",
+    "modes": [],
+    "handler": "login"
+   },
+   {
+    "verb": "GET",
+    "path": "/desk",
+    "file": "app.py",
+    "line": 57,
+    "forwards_to": "",
+    "modes": [],
+    "handler": "desk"
+   },
+   {
+    "verb": "GET,POST",
+    "path": "/desk/new",
+    "file": "app.py",
+    "line": 63,
+    "forwards_to": "",
+    "modes": [],
+    "handler": "new_article"
+   },
+   {
+    "verb": "POST",
+    "path": "/desk/<int:article_id>/submit",
+    "file": "app.py",
+    "line": 75,
+    "forwards_to": "",
+    "modes": [],
+    "handler": "submit"
+   },
+   {
+    "verb": "GET",
+    "path": "/review",
+    "file": "app.py",
+    "line": 89,
+    "forwards_to": "",
+    "modes": [],
+    "handler": "review_queue"
+   },
+   {
+    "verb": "GET",
+    "path": "/review/<int:article_id>",
+    "file": "app.py",
+    "line": 95,
+    "forwards_to": "",
+    "modes": [],
+    "handler": "review_detail"
+   },
+   {
+    "verb": "POST",
+    "path": "/review/<int:article_id>/publish",
+    "file": "app.py",
+    "line": 101,
+    "forwards_to": "",
+    "modes": [],
+    "handler": "publish"
+   },
+   {
+    "verb": "POST",
+    "path": "/review/<int:article_id>/return",
+    "file": "app.py",
+    "line": 116,
+    "forwards_to": "",
+    "modes": [],
+    "handler": "send_back"
+   },
+   {
+    "verb": "GET",
+    "path": "/preview/<int:article_id>",
+    "file": "app.py",
+    "line": 125,
+    "forwards_to": "",
+    "modes": [],
+    "handler": "preview"
+   }
+  ],
+  "static": [],
+  "mcp_tools": [],
+  "mcp_clients": [],
+  "consumers": [],
+  "cli_usage": [],
+  "launches": [],
+  "env": {
+   "NEWSROOM_COVER_REQUIRED": {
+    "reads": [
+     {
+      "file": "app.py",
+      "line": 12,
+      "default": "1"
+     }
+    ],
+    "writes": [],
+    "system": false
+   },
+   "NEWSROOM_DB": {
+    "reads": [
+     {
+      "file": "db.py",
+      "line": 5,
+      "default": "newsroom.db"
+     }
+    ],
+    "writes": [],
+    "system": false
+   },
+   "NEWSROOM_EXPORTS": {
+    "reads": [
+     {
+      "file": "storage.py",
+      "line": 7,
+      "default": "exports"
+     }
+    ],
+    "writes": [],
+    "system": false
+   },
+   "NEWSROOM_PORT": {
+    "reads": [
+     {
+      "file": "app.py",
+      "line": 130,
+      "default": "5080"
+     }
+    ],
+    "writes": [],
+    "system": false
+   },
+   "NEWSROOM_SECRET": {
+    "reads": [
+     {
+      "file": "app.py",
+      "line": 11,
+      "default": "dev"
+     }
+    ],
+    "writes": [],
+    "system": false
+   },
+   "NEWSROOM_UPLOADS": {
+    "reads": [
+     {
+      "file": "storage.py",
+      "line": 6,
+      "default": "uploads"
+     }
+    ],
+    "writes": [],
+    "system": false
+   }
+  },
+  "ports": [
+   {
+    "port": 5080,
+    "file": "app.py",
+    "line": 130,
+    "source": "NEWSROOM_PORT default"
+   }
+  ],
+  "runtime_paths": [
+   {
+    "file": "storage.py",
+    "line": 23,
+    "parts": [
+     "published.csv"
+    ]
+   }
+  ],
+  "packages": [
+   {
+    "file": "requirements.txt",
+    "line": 1,
+    "name": "flask",
+    "version": ">=3.0",
+    "ecosystem": "pypi",
+    "dev": false
+   },
+   {
+    "file": "app.py",
+    "line": 0,
+    "name": "flask",
+    "version": "",
+    "ecosystem": "import",
+    "dev": false,
+    "used_in": [
+     "app.py",
+     "auth.py"
+    ]
+   }
+  ],
+  "hubs": [],
+  "build_targets": [],
+  "subcommands": [],
+  "script_params": [],
+  "launchers": {},
+  "journeys": {
+   "user_types": [
+    {
+     "id": "author",
+     "name": "author",
+     "kind": "role",
+     "evidence": [
+      {
+       "file": "app.py",
+       "line": 56,
+       "text": "@require_role('author')"
+      },
+      {
+       "file": "app.py",
+       "line": 62,
+       "text": "@require_role('author')"
+      },
+      {
+       "file": "app.py",
+       "line": 74,
+       "text": "@require_role('author')"
+      },
+      {
+       "file": "app.py",
+       "line": 124,
+       "text": "@require_role('author', 'editor')"
+      },
+      {
+       "file": "templates/base.html",
+       "line": 13,
+       "text": "{% if user and user.role == 'author' %}"
+      }
+     ],
+     "features": [
+      "GET /desk",
+      "GET,POST /desk/new",
+      "POST /desk/<int:article_id>/submit",
+      "GET /preview/<int:article_id>"
+     ],
+     "screens": [
+      "templates/desk.html",
+      "templates/edit.html",
+      "templates/article.html"
+     ]
+    },
+    {
+     "id": "editor",
+     "name": "editor",
+     "kind": "role",
+     "evidence": [
+      {
+       "file": "app.py",
+       "line": 88,
+       "text": "@require_role('editor')"
+      },
+      {
+       "file": "app.py",
+       "line": 94,
+       "text": "@require_role('editor')"
+      },
+      {
+       "file": "app.py",
+       "line": 100,
+       "text": "@require_role('editor')"
+      },
+      {
+       "file": "app.py",
+       "line": 115,
+       "text": "@require_role('editor')"
+      },
+      {
+       "file": "app.py",
+       "line": 124,
+       "text": "@require_role('author', 'editor')"
+      },
+      {
+       "file": "templates/base.html",
+       "line": 16,
+       "text": "{% if user and user.role == 'editor' %}"
+      }
+     ],
+     "features": [
+      "GET /review",
+      "GET /review/<int:article_id>",
+      "POST /review/<int:article_id>/publish",
+      "POST /review/<int:article_id>/return",
+      "GET /preview/<int:article_id>"
+     ],
+     "screens": [
+      "templates/review.html",
+      "templates/review_detail.html",
+      "templates/article.html"
+     ]
+    },
+    {
+     "id": "anyone",
+     "name": "anyone",
+     "kind": "anyone",
+     "evidence": [],
+     "features": [
+      "GET /",
+      "GET /articles/<int:article_id>",
+      "GET /uploads/<path:name>",
+      "GET /published.csv",
+      "GET,POST /login"
+     ],
+     "screens": [
+      "templates/home.html",
+      "templates/article.html",
+      "templates/login.html"
+     ]
+    }
+   ],
+   "screens": [
+    {
+     "id": "templates/article.html",
+     "file": "templates/article.html",
+     "title": "",
+     "extends": "templates/base.html",
+     "includes": [],
+     "extended_by": [],
+     "included_by": [],
+     "routes": [
+      "GET /articles/<int:article_id>",
+      "GET /preview/<int:article_id>"
+     ],
+     "roles": [
+      "author",
+      "editor"
+     ],
+     "open": true,
+     "signed_in": false,
+     "terms": [],
+     "assets": [
+      "upload:cover"
+     ],
+     "calls": [],
+     "kind": "page"
+    },
+    {
+     "id": "templates/base.html",
+     "file": "templates/base.html",
+     "title": "Newsroom",
+     "extends": "",
+     "includes": [],
+     "extended_by": [
+      "templates/article.html",
+      "templates/desk.html",
+      "templates/edit.html",
+      "templates/home.html",
+      "templates/login.html",
+      "templates/review.html",
+      "templates/review_detail.html"
+     ],
+     "included_by": [],
+     "routes": [],
+     "roles": [],
+     "open": false,
+     "signed_in": false,
+     "terms": [
+      "templates/base.html:5:0",
+      "templates/base.html:12:1",
+      "templates/base.html:14:2",
+      "templates/base.html:17:3",
+      "templates/base.html:20:4"
+     ],
+     "assets": [
+      "static/logo.svg",
+      "static/paper.png"
+     ],
+     "calls": [],
+     "kind": "layout"
+    },
+    {
+     "id": "templates/desk.html",
+     "file": "templates/desk.html",
+     "title": "My desk",
+     "extends": "templates/base.html",
+     "includes": [],
+     "extended_by": [],
+     "included_by": [],
+     "routes": [
+      "GET /desk"
+     ],
+     "roles": [
+      "author"
+     ],
+     "open": false,
+     "signed_in": false,
+     "terms": [
+      "templates/desk.html:4:0",
+      "templates/desk.html:5:1",
+      "templates/desk.html:7:2",
+      "templates/desk.html:7:3",
+      "templates/desk.html:7:4",
+      "templates/desk.html:10:5",
+      "templates/desk.html:16:6"
+     ],
+     "assets": [],
+     "calls": [],
+     "kind": "page"
+    },
+    {
+     "id": "templates/edit.html",
+     "file": "templates/edit.html",
+     "title": "New article",
+     "extends": "templates/base.html",
+     "includes": [],
+     "extended_by": [],
+     "included_by": [],
+     "routes": [
+      "GET,POST /desk/new"
+     ],
+     "roles": [
+      "author"
+     ],
+     "open": false,
+     "signed_in": false,
+     "terms": [
+      "templates/edit.html:4:0",
+      "templates/edit.html:6:1",
+      "templates/edit.html:8:2",
+      "templates/edit.html:10:3",
+      "templates/edit.html:12:4"
+     ],
+     "assets": [],
+     "calls": [],
+     "kind": "page"
+    },
+    {
+     "id": "templates/home.html",
+     "file": "templates/home.html",
+     "title": "Latest articles",
+     "extends": "templates/base.html",
+     "includes": [],
+     "extended_by": [],
+     "included_by": [],
+     "routes": [
+      "GET /"
+     ],
+     "roles": [],
+     "open": true,
+     "signed_in": false,
+     "terms": [
+      "templates/home.html:4:0",
+      "templates/home.html:10:1",
+      "templates/home.html:13:2"
+     ],
+     "assets": [
+      "upload:cover",
+      "generated:published.csv"
+     ],
+     "calls": [],
+     "kind": "page"
+    },
+    {
+     "id": "templates/login.html",
+     "file": "templates/login.html",
+     "title": "Sign in",
+     "extends": "templates/base.html",
+     "includes": [],
+     "extended_by": [],
+     "included_by": [],
+     "routes": [
+      "GET,POST /login"
+     ],
+     "roles": [],
+     "open": true,
+     "signed_in": false,
+     "terms": [
+      "templates/login.html:4:0",
+      "templates/login.html:6:1",
+      "templates/login.html:8:2"
+     ],
+     "assets": [],
+     "calls": [],
+     "kind": "page"
+    },
+    {
+     "id": "templates/review.html",
+     "file": "templates/review.html",
+     "title": "Review queue",
+     "extends": "templates/base.html",
+     "includes": [],
+     "extended_by": [],
+     "included_by": [],
+     "routes": [
+      "GET /review"
+     ],
+     "roles": [
+      "editor"
+     ],
+     "open": false,
+     "signed_in": false,
+     "terms": [
+      "templates/review.html:4:0",
+      "templates/review.html:7:1"
+     ],
+     "assets": [],
+     "calls": [],
+     "kind": "page"
+    },
+    {
+     "id": "templates/review_detail.html",
+     "file": "templates/review_detail.html",
+     "title": "",
+     "extends": "templates/base.html",
+     "includes": [],
+     "extended_by": [],
+     "included_by": [],
+     "routes": [
+      "GET /review/<int:article_id>"
+     ],
+     "roles": [
+      "editor"
+     ],
+     "open": false,
+     "signed_in": false,
+     "terms": [
+      "templates/review_detail.html:8:0",
+      "templates/review_detail.html:10:1",
+      "templates/review_detail.html:13:2",
+      "templates/review_detail.html:15:3"
+     ],
+     "assets": [
+      "upload:cover"
+     ],
+     "calls": [],
+     "kind": "page"
+    }
+   ],
+   "terms": [
+    {
+     "id": "templates/base.html:5:0",
+     "text": "Newsroom",
+     "kind": "title",
+     "screen": "templates/base.html",
+     "file": "templates/base.html",
+     "line": 5,
+     "conditions": [],
+     "condition_lines": [],
+     "roles": [],
+     "leads_to": [],
+     "method": ""
+    },
+    {
+     "id": "templates/base.html:12:1",
+     "text": "Front page",
+     "kind": "link",
+     "screen": "templates/base.html",
+     "file": "templates/base.html",
+     "line": 12,
+     "conditions": [],
+     "condition_lines": [],
+     "roles": [],
+     "leads_to": [
+      "GET /"
+     ],
+     "method": "GET"
+    },
+    {
+     "id": "templates/base.html:14:2",
+     "text": "My desk",
+     "kind": "link",
+     "screen": "templates/base.html",
+     "file": "templates/base.html",
+     "line": 14,
+     "conditions": [
+      "user and user.role == 'author'"
+     ],
+     "condition_lines": [
+      13
+     ],
+     "roles": [
+      "author"
+     ],
+     "leads_to": [
+      "GET /desk"
+     ],
+     "method": "GET"
+    },
+    {
+     "id": "templates/base.html:17:3",
+     "text": "Review queue",
+     "kind": "link",
+     "screen": "templates/base.html",
+     "file": "templates/base.html",
+     "line": 17,
+     "conditions": [
+      "user and user.role == 'editor'"
+     ],
+     "condition_lines": [
+      16
+     ],
+     "roles": [
+      "editor"
+     ],
+     "leads_to": [
+      "GET /review"
+     ],
+     "method": "GET",
+     "i18n": {
+      "key": "nav.review",
+      "lang": "en",
+      "file": "locales/en.json",
+      "line": 3
+     },
+     "other_texts": [
+      {
+       "lang": "ko",
+       "text": "검토 대기열",
+       "file": "locales/ko.json",
+       "line": 3
+      }
+     ]
+    },
+    {
+     "id": "templates/base.html:20:4",
+     "text": "Sign in",
+     "kind": "link",
+     "screen": "templates/base.html",
+     "file": "templates/base.html",
+     "line": 20,
+     "conditions": [
+      "not user"
+     ],
+     "condition_lines": [
+      19
+     ],
+     "roles": [],
+     "leads_to": [
+      "GET,POST /login"
+     ],
+     "method": "GET"
+    },
+    {
+     "id": "templates/desk.html:4:0",
+     "text": "My desk",
+     "kind": "heading",
+     "screen": "templates/desk.html",
+     "file": "templates/desk.html",
+     "line": 4,
+     "conditions": [],
+     "condition_lines": [],
+     "roles": [],
+     "leads_to": [],
+     "method": ""
+    },
+    {
+     "id": "templates/desk.html:5:1",
+     "text": "New article",
+     "kind": "link",
+     "screen": "templates/desk.html",
+     "file": "templates/desk.html",
+     "line": 5,
+     "conditions": [],
+     "condition_lines": [],
+     "roles": [],
+     "leads_to": [
+      "GET,POST /desk/new"
+     ],
+     "method": "GET"
+    },
+    {
+     "id": "templates/desk.html:7:2",
+     "text": "Headline",
+     "kind": "column",
+     "screen": "templates/desk.html",
+     "file": "templates/desk.html",
+     "line": 7,
+     "conditions": [],
+     "condition_lines": [],
+     "roles": [],
+     "leads_to": [],
+     "method": ""
+    },
+    {
+     "id": "templates/desk.html:7:3",
+     "text": "State",
+     "kind": "column",
+     "screen": "templates/desk.html",
+     "file": "templates/desk.html",
+     "line": 7,
+     "conditions": [],
+     "condition_lines": [],
+     "roles": [],
+     "leads_to": [],
+     "method": ""
+    },
+    {
+     "id": "templates/desk.html:7:4",
+     "text": "Editor's note",
+     "kind": "column",
+     "screen": "templates/desk.html",
+     "file": "templates/desk.html",
+     "line": 7,
+     "conditions": [],
+     "condition_lines": [],
+     "roles": [],
+     "leads_to": [],
+     "method": ""
+    },
+    {
+     "id": "templates/desk.html:10:5",
+     "text": "",
+     "kind": "link",
+     "screen": "templates/desk.html",
+     "file": "templates/desk.html",
+     "line": 10,
+     "conditions": [],
+     "condition_lines": [],
+     "roles": [],
+     "leads_to": [
+      "GET /preview/<int:article_id>"
+     ],
+     "method": "GET",
+     "dynamic": true
+    },
+    {
+     "id": "templates/desk.html:16:6",
+     "text": "Send for review",
+     "kind": "button",
+     "screen": "templates/desk.html",
+     "file": "templates/desk.html",
+     "line": 16,
+     "conditions": [
+      "a.status == 'draft'"
+     ],
+     "condition_lines": [
+      14
+     ],
+     "roles": [],
+     "leads_to": [
+      "POST /desk/<int:article_id>/submit"
+     ],
+     "method": "POST",
+     "form_line": 15
+    },
+    {
+     "id": "templates/edit.html:4:0",
+     "text": "New article",
+     "kind": "heading",
+     "screen": "templates/edit.html",
+     "file": "templates/edit.html",
+     "line": 4,
+     "conditions": [],
+     "condition_lines": [],
+     "roles": [],
+     "leads_to": [],
+     "method": ""
+    },
+    {
+     "id": "templates/edit.html:6:1",
+     "text": "Headline",
+     "kind": "field",
+     "screen": "templates/edit.html",
+     "file": "templates/edit.html",
+     "line": 6,
+     "conditions": [],
+     "condition_lines": [],
+     "roles": [],
+     "leads_to": [
+      "GET,POST /desk/new"
+     ],
+     "method": "POST",
+     "field": "title",
+     "field_type": "text",
+     "form_line": 5,
+     "read_at": [
+      {
+       "feature": "GET,POST /desk/new",
+       "file": "app.py",
+       "line": 67,
+       "source": "form"
+      }
+     ]
+    },
+    {
+     "id": "templates/edit.html:8:2",
+     "text": "Text",
+     "kind": "field",
+     "screen": "templates/edit.html",
+     "file": "templates/edit.html",
+     "line": 8,
+     "conditions": [],
+     "condition_lines": [],
+     "roles": [],
+     "leads_to": [
+      "GET,POST /desk/new"
+     ],
+     "method": "POST",
+     "field": "body",
+     "field_type": "textarea",
+     "form_line": 5,
+     "read_at": [
+      {
+       "feature": "GET,POST /desk/new",
+       "file": "app.py",
+       "line": 67,
+       "source": "form"
+      }
+     ]
+    },
+    {
+     "id": "templates/edit.html:10:3",
+     "text": "Cover image",
+     "kind": "field",
+     "screen": "templates/edit.html",
+     "file": "templates/edit.html",
+     "line": 10,
+     "conditions": [],
+     "condition_lines": [],
+     "roles": [],
+     "leads_to": [
+      "GET,POST /desk/new"
+     ],
+     "method": "POST",
+     "field": "cover",
+     "field_type": "file",
+     "form_line": 5,
+     "read_at": [
+      {
+       "feature": "GET,POST /desk/new",
+       "file": "app.py",
+       "line": 65,
+       "source": "file"
+      }
+     ]
+    },
+    {
+     "id": "templates/edit.html:12:4",
+     "text": "Save draft",
+     "kind": "button",
+     "screen": "templates/edit.html",
+     "file": "templates/edit.html",
+     "line": 12,
+     "conditions": [],
+     "condition_lines": [],
+     "roles": [],
+     "leads_to": [
+      "GET,POST /desk/new"
+     ],
+     "method": "POST",
+     "form_line": 5
+    },
+    {
+     "id": "templates/home.html:4:0",
+     "text": "Latest articles",
+     "kind": "heading",
+     "screen": "templates/home.html",
+     "file": "templates/home.html",
+     "line": 4,
+     "conditions": [],
+     "condition_lines": [],
+     "roles": [],
+     "leads_to": [],
+     "method": ""
+    },
+    {
+     "id": "templates/home.html:10:1",
+     "text": "",
+     "kind": "link",
+     "screen": "templates/home.html",
+     "file": "templates/home.html",
+     "line": 10,
+     "conditions": [],
+     "condition_lines": [],
+     "roles": [],
+     "leads_to": [
+      "GET /articles/<int:article_id>"
+     ],
+     "method": "GET",
+     "dynamic": true
+    },
+    {
+     "id": "templates/home.html:13:2",
+     "text": "Download the list",
+     "kind": "link",
+     "screen": "templates/home.html",
+     "file": "templates/home.html",
+     "line": 13,
+     "conditions": [],
+     "condition_lines": [],
+     "roles": [],
+     "leads_to": [
+      "GET /published.csv"
+     ],
+     "method": "GET"
+    },
+    {
+     "id": "templates/login.html:4:0",
+     "text": "Sign in",
+     "kind": "heading",
+     "screen": "templates/login.html",
+     "file": "templates/login.html",
+     "line": 4,
+     "conditions": [],
+     "condition_lines": [],
+     "roles": [],
+     "leads_to": [],
+     "method": ""
+    },
+    {
+     "id": "templates/login.html:6:1",
+     "text": "Work e-mail",
+     "kind": "field",
+     "screen": "templates/login.html",
+     "file": "templates/login.html",
+     "line": 6,
+     "conditions": [],
+     "condition_lines": [],
+     "roles": [],
+     "leads_to": [
+      "GET,POST /login"
+     ],
+     "method": "POST",
+     "field": "email",
+     "field_type": "email",
+     "form_line": 5,
+     "read_at": [
+      {
+       "feature": "GET,POST /login",
+       "file": "app.py",
+       "line": 44,
+       "source": "form"
+      }
+     ]
+    },
+    {
+     "id": "templates/login.html:8:2",
+     "text": "Continue",
+     "kind": "button",
+     "screen": "templates/login.html",
+     "file": "templates/login.html",
+     "line": 8,
+     "conditions": [],
+     "condition_lines": [],
+     "roles": [],
+     "leads_to": [
+      "GET,POST /login"
+     ],
+     "method": "POST",
+     "form_line": 5
+    },
+    {
+     "id": "templates/review.html:4:0",
+     "text": "Review queue",
+     "kind": "heading",
+     "screen": "templates/review.html",
+     "file": "templates/review.html",
+     "line": 4,
+     "conditions": [],
+     "condition_lines": [],
+     "roles": [],
+     "leads_to": [],
+     "method": "",
+     "i18n": {
+      "key": "nav.review",
+      "lang": "en",
+      "file": "locales/en.json",
+      "line": 3
+     },
+     "other_texts": [
+      {
+       "lang": "ko",
+       "text": "검토 대기열",
+       "file": "locales/ko.json",
+       "line": 3
+      }
+     ]
+    },
+    {
+     "id": "templates/review.html:7:1",
+     "text": "",
+     "kind": "link",
+     "screen": "templates/review.html",
+     "file": "templates/review.html",
+     "line": 7,
+     "conditions": [],
+     "condition_lines": [],
+     "roles": [],
+     "leads_to": [
+      "GET /review/<int:article_id>"
+     ],
+     "method": "GET",
+     "dynamic": true
+    },
+    {
+     "id": "templates/review_detail.html:8:0",
+     "text": "Open the preview",
+     "kind": "link",
+     "screen": "templates/review_detail.html",
+     "file": "templates/review_detail.html",
+     "line": 8,
+     "conditions": [],
+     "condition_lines": [],
+     "roles": [],
+     "leads_to": [
+      "GET /preview/<int:article_id>"
+     ],
+     "method": "GET"
+    },
+    {
+     "id": "templates/review_detail.html:10:1",
+     "text": "Publish",
+     "kind": "button",
+     "screen": "templates/review_detail.html",
+     "file": "templates/review_detail.html",
+     "line": 10,
+     "conditions": [],
+     "condition_lines": [],
+     "roles": [],
+     "leads_to": [
+      "POST /review/<int:article_id>/publish"
+     ],
+     "method": "POST",
+     "i18n": {
+      "key": "review.publish",
+      "lang": "en",
+      "file": "locales/en.json",
+      "line": 6
+     },
+     "other_texts": [
+      {
+       "lang": "ko",
+       "text": "게시",
+       "file": "locales/ko.json",
+       "line": 6
+      }
+     ],
+     "form_line": 9
+    },
+    {
+     "id": "templates/review_detail.html:13:2",
+     "text": "Reason for the author",
+     "kind": "field",
+     "screen": "templates/review_detail.html",
+     "file": "templates/review_detail.html",
+     "line": 13,
+     "conditions": [],
+     "condition_lines": [],
+     "roles": [],
+     "leads_to": [
+      "POST /review/<int:article_id>/return"
+     ],
+     "method": "POST",
+     "field": "reason",
+     "field_type": "textarea",
+     "form_line": 12,
+     "read_at": [
+      {
+       "feature": "POST /review/<int:article_id>/return",
+       "file": "app.py",
+       "line": 117,
+       "source": "form"
+      }
+     ]
+    },
+    {
+     "id": "templates/review_detail.html:15:3",
+     "text": "Send back",
+     "kind": "button",
+     "screen": "templates/review_detail.html",
+     "file": "templates/review_detail.html",
+     "line": 15,
+     "conditions": [],
+     "condition_lines": [],
+     "roles": [],
+     "leads_to": [
+      "POST /review/<int:article_id>/return"
+     ],
+     "method": "POST",
+     "form_line": 12
+    },
+    {
+     "id": "app.py:46:m0",
+     "text": "Unknown e-mail address",
+     "kind": "message",
+     "screen": "",
+     "file": "app.py",
+     "line": 46,
+     "conditions": [],
+     "roles": [],
+     "leads_to": [],
+     "method": "",
+     "feature": "GET,POST /login",
+     "how": "flash"
+    },
+    {
+     "id": "app.py:68:m0",
+     "text": "Draft saved",
+     "kind": "message",
+     "screen": "",
+     "file": "app.py",
+     "line": 68,
+     "conditions": [],
+     "roles": [],
+     "leads_to": [],
+     "method": "",
+     "feature": "GET,POST /desk/new",
+     "how": "flash"
+    },
+    {
+     "id": "app.py:81:m0",
+     "text": "Sent to the editors",
+     "kind": "message",
+     "screen": "",
+     "file": "app.py",
+     "line": 81,
+     "conditions": [],
+     "roles": [],
+     "leads_to": [],
+     "method": "",
+     "feature": "POST /desk/<int:article_id>/submit",
+     "how": "flash"
+    },
+    {
+     "id": "app.py:78:m1",
+     "text": "Only a draft can be sent for review",
+     "kind": "message",
+     "screen": "",
+     "file": "app.py",
+     "line": 78,
+     "conditions": [],
+     "roles": [],
+     "leads_to": [],
+     "method": "",
+     "feature": "POST /desk/<int:article_id>/submit",
+     "how": "flash"
+    },
+    {
+     "id": "app.py:104:m0",
+     "text": "Only an article in review can be published",
+     "kind": "message",
+     "screen": "",
+     "file": "app.py",
+     "line": 104,
+     "conditions": [],
+     "roles": [],
+     "leads_to": [],
+     "method": "",
+     "feature": "POST /review/<int:article_id>/publish",
+     "how": "flash"
+    },
+    {
+     "id": "app.py:107:m1",
+     "text": "Add a cover image before publishing",
+     "kind": "message",
+     "screen": "",
+     "file": "app.py",
+     "line": 107,
+     "conditions": [],
+     "roles": [],
+     "leads_to": [],
+     "method": "",
+     "feature": "POST /review/<int:article_id>/publish",
+     "how": "flash"
+    }
+   ],
+   "features": [
+    {
+     "id": "GET /",
+     "verb": "GET",
+     "path": "/",
+     "file": "app.py",
+     "line": 18,
+     "handler": "home",
+     "roles": [],
+     "permissions": [],
+     "signed_in": false,
+     "access_evidence": [],
+     "unread_decorators": [],
+     "analysed": true,
+     "renders": [
+      {
+       "file": "app.py",
+       "line": 20,
+       "via": "",
+       "seq": 200000,
+       "template": "home.html",
+       "screen": "templates/home.html"
+      }
+     ],
+     "redirects": [],
+     "fields": [],
+     "sql": [
+      {
+       "file": "db.py",
+       "line": 65,
+       "via": "db.published_articles",
+       "seq": 200002,
+       "verb": "SELECT",
+       "reads": [
+        "articles"
+       ],
+       "writes": [],
+       "sets": [],
+       "filters": [
+        {
+         "table": "articles",
+         "column": "status",
+         "value": "published"
+        }
+       ],
+       "param_columns": [],
+       "creates": [],
+       "text": "SELECT id, title, cover FROM articles WHERE status = 'published' ORDER BY published_at DESC"
+      }
+     ],
+     "files": [],
+     "settings": [
+      {
+       "file": "db.py",
+       "line": 9,
+       "via": "db.published_articles → query → connect",
+       "seq": 200005,
+       "name": "NEWSROOM_DB",
+       "variable": "DB_PATH",
+       "defined_file": "db.py",
+       "defined_line": 5
+      }
+     ],
+     "external": [],
+     "background": [],
+     "branches": [],
+     "messages": [],
+     "calls": [
+      {
+       "file": "app.py",
+       "line": 20,
+       "via": "",
+       "seq": 200001,
+       "func": "published_articles",
+       "label": "db.published_articles",
+       "def_file": "db.py",
+       "def_line": 64,
+       "end_line": 65
+      },
+      {
+       "file": "db.py",
+       "line": 65,
+       "via": "db.published_articles",
+       "seq": 200003,
+       "func": "query",
+       "label": "query",
+       "def_file": "db.py",
+       "def_line": 14,
+       "end_line": 16
+      },
+      {
+       "file": "db.py",
+       "line": 15,
+       "via": "db.published_articles → query",
+       "seq": 200004,
+       "func": "connect",
+       "label": "connect",
+       "def_file": "db.py",
+       "def_line": 8,
+       "end_line": 11
+      }
+     ],
+     "dynamic": [],
+     "end_line": 20
+    },
+    {
+     "id": "GET /articles/<int:article_id>",
+     "verb": "GET",
+     "path": "/articles/<int:article_id>",
+     "file": "app.py",
+     "line": 24,
+     "handler": "article",
+     "roles": [],
+     "permissions": [],
+     "signed_in": false,
+     "access_evidence": [],
+     "unread_decorators": [],
+     "analysed": true,
+     "renders": [
+      {
+       "file": "app.py",
+       "line": 28,
+       "via": "",
+       "seq": 280006,
+       "template": "article.html",
+       "screen": "templates/article.html"
+      }
+     ],
+     "redirects": [],
+     "fields": [],
+     "sql": [
+      {
+       "file": "db.py",
+       "line": 35,
+       "via": "db.get_article",
+       "seq": 250002,
+       "verb": "SELECT",
+       "reads": [
+        "articles"
+       ],
+       "writes": [],
+       "sets": [],
+       "filters": [],
+       "param_columns": [],
+       "creates": [],
+       "text": "SELECT * FROM articles WHERE id = ?"
+      }
+     ],
+     "files": [],
+     "settings": [
+      {
+       "file": "db.py",
+       "line": 9,
+       "via": "db.get_article → query → connect",
+       "seq": 250005,
+       "name": "NEWSROOM_DB",
+       "variable": "DB_PATH",
+       "defined_file": "db.py",
+       "defined_line": 5
+      }
+     ],
+     "external": [],
+     "background": [],
+     "branches": [
+      {
+       "file": "app.py",
+       "line": 26,
+       "via": "",
+       "seq": 260000,
+       "test": "row is None or row['status'] != 'published'",
+       "outcome": "stops with abort(404)"
+      }
+     ],
+     "messages": [],
+     "calls": [
+      {
+       "file": "app.py",
+       "line": 25,
+       "via": "",
+       "seq": 250001,
+       "func": "get_article",
+       "label": "db.get_article",
+       "def_file": "db.py",
+       "def_line": 34,
+       "end_line": 36
+      },
+      {
+       "file": "db.py",
+       "line": 35,
+       "via": "db.get_article",
+       "seq": 250003,
+       "func": "query",
+       "label": "query",
+       "def_file": "db.py",
+       "def_line": 14,
+       "end_line": 16
+      },
+      {
+       "file": "db.py",
+       "line": 15,
+       "via": "db.get_article → query",
+       "seq": 250004,
+       "func": "connect",
+       "label": "connect",
+       "def_file": "db.py",
+       "def_line": 8,
+       "end_line": 11
+      }
+     ],
+     "dynamic": [],
+     "end_line": 28
+    },
+    {
+     "id": "GET /uploads/<path:name>",
+     "verb": "GET",
+     "path": "/uploads/<path:name>",
+     "file": "app.py",
+     "line": 32,
+     "handler": "uploaded",
+     "roles": [],
+     "permissions": [],
+     "signed_in": false,
+     "access_evidence": [],
+     "unread_decorators": [],
+     "analysed": true,
+     "renders": [],
+     "redirects": [],
+     "fields": [],
+     "sql": [],
+     "files": [
+      {
+       "file": "app.py",
+       "line": 33,
+       "via": "",
+       "seq": 330000,
+       "op": "serve",
+       "upload": "",
+       "expr": "send_from_directory(storage.UPLOAD_DIR, name)",
+       "dir": "storage.py:UPLOAD_DIR",
+       "dir_name": "UPLOAD_DIR",
+       "dir_env": "NEWSROOM_UPLOADS"
+      }
+     ],
+     "settings": [
+      {
+       "file": "app.py",
+       "line": 33,
+       "via": "",
+       "seq": 330001,
+       "name": "NEWSROOM_UPLOADS",
+       "variable": "UPLOAD_DIR",
+       "defined_file": "storage.py",
+       "defined_line": 6
+      }
+     ],
+     "external": [],
+     "background": [],
+     "branches": [],
+     "messages": [],
+     "calls": [],
+     "dynamic": [],
+     "end_line": 33
+    },
+    {
+     "id": "GET /published.csv",
+     "verb": "GET",
+     "path": "/published.csv",
+     "file": "app.py",
+     "line": 37,
+     "handler": "published_list",
+     "roles": [],
+     "permissions": [],
+     "signed_in": false,
+     "access_evidence": [],
+     "unread_decorators": [],
+     "analysed": true,
+     "renders": [],
+     "redirects": [],
+     "fields": [],
+     "sql": [],
+     "files": [
+      {
+       "file": "app.py",
+       "line": 38,
+       "via": "",
+       "seq": 380000,
+       "op": "serve",
+       "upload": "",
+       "expr": "send_from_directory(storage.EXPORT_DIR, 'published.csv')",
+       "dir": "storage.py:EXPORT_DIR",
+       "dir_name": "EXPORT_DIR",
+       "dir_env": "NEWSROOM_EXPORTS",
+       "name": "published.csv"
+      }
+     ],
+     "settings": [
+      {
+       "file": "app.py",
+       "line": 38,
+       "via": "",
+       "seq": 380001,
+       "name": "NEWSROOM_EXPORTS",
+       "variable": "EXPORT_DIR",
+       "defined_file": "storage.py",
+       "defined_line": 7
+      }
+     ],
+     "external": [],
+     "background": [],
+     "branches": [],
+     "messages": [],
+     "calls": [],
+     "dynamic": [],
+     "end_line": 38
+    },
+    {
+     "id": "GET,POST /login",
+     "verb": "GET,POST",
+     "path": "/login",
+     "file": "app.py",
+     "line": 42,
+     "handler": "login",
+     "roles": [],
+     "permissions": [],
+     "signed_in": false,
+     "access_evidence": [],
+     "unread_decorators": [],
+     "analysed": true,
+     "renders": [
+      {
+       "file": "app.py",
+       "line": 50,
+       "via": "",
+       "seq": 500002,
+       "template": "login.html",
+       "screen": "templates/login.html"
+      }
+     ],
+     "redirects": [
+      {
+       "file": "app.py",
+       "line": 49,
+       "via": "",
+       "seq": 490008,
+       "when": [
+        "request.method == 'POST'"
+       ],
+       "endpoint": "home",
+       "to": [
+        "GET /"
+       ]
+      },
+      {
+       "file": "app.py",
+       "line": 47,
+       "via": "",
+       "seq": 470011,
+       "when": [
+        "request.method == 'POST'",
+        "user is None"
+       ],
+       "endpoint": "login",
+       "to": [
+        "GET,POST /login"
+       ]
+      }
+     ],
+     "fields": [
+      {
+       "file": "app.py",
+       "line": 44,
+       "via": "",
+       "seq": 440009,
+       "when": [
+        "request.method == 'POST'"
+       ],
+       "source": "form",
+       "name": "email"
+      }
+     ],
+     "sql": [
+      {
+       "file": "db.py",
+       "line": 30,
+       "via": "db.find_user",
+       "seq": 440004,
+       "when": [
+        "request.method == 'POST'"
+       ],
+       "verb": "SELECT",
+       "reads": [
+        "users"
+       ],
+       "writes": [],
+       "sets": [],
+       "filters": [],
+       "param_columns": [],
+       "creates": [],
+       "text": "SELECT id, email, role FROM users WHERE email = ?"
+      }
+     ],
+     "files": [],
+     "settings": [
+      {
+       "file": "db.py",
+       "line": 9,
+       "via": "db.find_user → query → connect",
+       "seq": 440007,
+       "when": [
+        "request.method == 'POST'"
+       ],
+       "name": "NEWSROOM_DB",
+       "variable": "DB_PATH",
+       "defined_file": "db.py",
+       "defined_line": 5
+      }
+     ],
+     "external": [],
+     "background": [],
+     "branches": [
+      {
+       "file": "app.py",
+       "line": 43,
+       "via": "",
+       "seq": 430000,
+       "test": "request.method == 'POST'",
+       "outcome": "redirects to `home`"
+      },
+      {
+       "file": "app.py",
+       "line": 45,
+       "via": "",
+       "seq": 450001,
+       "when": [
+        "request.method == 'POST'"
+       ],
+       "test": "user is None",
+       "outcome": "shows the message \"Unknown e-mail address\"; redirects to `login`"
+      }
+     ],
+     "messages": [
+      {
+       "file": "app.py",
+       "line": 46,
+       "via": "",
+       "seq": 460010,
+       "when": [
+        "request.method == 'POST'",
+        "user is None"
+       ],
+       "text": "Unknown e-mail address",
+       "how": "flash"
+      }
+     ],
+     "calls": [
+      {
+       "file": "app.py",
+       "line": 44,
+       "via": "",
+       "seq": 440003,
+       "when": [
+        "request.method == 'POST'"
+       ],
+       "func": "find_user",
+       "label": "db.find_user",
+       "def_file": "db.py",
+       "def_line": 29,
+       "end_line": 31
+      },
+      {
+       "file": "db.py",
+       "line": 30,
+       "via": "db.find_user",
+       "seq": 440005,
+       "when": [
+        "request.method == 'POST'"
+       ],
+       "func": "query",
+       "label": "query",
+       "def_file": "db.py",
+       "def_line": 14,
+       "end_line": 16
+      },
+      {
+       "file": "db.py",
+       "line": 15,
+       "via": "db.find_user → query",
+       "seq": 440006,
+       "when": [
+        "request.method == 'POST'"
+       ],
+       "func": "connect",
+       "label": "connect",
+       "def_file": "db.py",
+       "def_line": 8,
+       "end_line": 11
+      }
+     ],
+     "dynamic": [],
+     "end_line": 50
+    },
+    {
+     "id": "GET /desk",
+     "verb": "GET",
+     "path": "/desk",
+     "file": "app.py",
+     "line": 57,
+     "handler": "desk",
+     "roles": [
+      "author"
+     ],
+     "permissions": [],
+     "signed_in": false,
+     "access_evidence": [
+      {
+       "file": "app.py",
+       "line": 56,
+       "text": "@require_role('author')"
+      }
+     ],
+     "unread_decorators": [],
+     "analysed": true,
+     "renders": [
+      {
+       "file": "app.py",
+       "line": 58,
+       "via": "",
+       "seq": 580009,
+       "template": "desk.html",
+       "screen": "templates/desk.html"
+      }
+     ],
+     "redirects": [
+      {
+       "file": "auth.py",
+       "line": 21,
+       "via": "require_role",
+       "seq": 560008,
+       "when": [
+        "user is None"
+       ],
+       "endpoint": "login",
+       "to": [
+        "GET,POST /login"
+       ]
+      }
+     ],
+     "fields": [],
+     "sql": [
+      {
+       "file": "db.py",
+       "line": 25,
+       "via": "require_role → current_user → db.get_user",
+       "seq": 560005,
+       "when": [
+        "user_id"
+       ],
+       "verb": "SELECT",
+       "reads": [
+        "users"
+       ],
+       "writes": [],
+       "sets": [],
+       "filters": [],
+       "param_columns": [],
+       "creates": [],
+       "text": "SELECT id, email, role FROM users WHERE id = ?"
+      },
+      {
+       "file": "db.py",
+       "line": 40,
+       "via": "db.articles_of",
+       "seq": 580011,
+       "verb": "SELECT",
+       "reads": [
+        "articles"
+       ],
+       "writes": [],
+       "sets": [],
+       "filters": [],
+       "param_columns": [],
+       "creates": [],
+       "text": "SELECT id, title, status, review_note FROM articles WHERE author_id = ? ORDER BY id DESC"
+      }
+     ],
+     "files": [],
+     "settings": [],
+     "external": [],
+     "background": [],
+     "branches": [
+      {
+       "file": "auth.py",
+       "line": 20,
+       "via": "require_role",
+       "seq": 560001,
+       "test": "user is None",
+       "outcome": "redirects to `login`"
+      },
+      {
+       "file": "auth.py",
+       "line": 22,
+       "via": "require_role",
+       "seq": 560002,
+       "test": "user['role'] not in roles",
+       "outcome": "stops with abort(403)"
+      }
+     ],
+     "messages": [],
+     "calls": [
+      {
+       "file": "app.py",
+       "line": 56,
+       "via": "",
+       "seq": 560000,
+       "func": "require_role",
+       "label": "require_role",
+       "def_file": "auth.py",
+       "def_line": 14,
+       "end_line": 26
+      },
+      {
+       "file": "auth.py",
+       "line": 19,
+       "via": "require_role",
+       "seq": 560003,
+       "func": "current_user",
+       "label": "current_user",
+       "def_file": "auth.py",
+       "def_line": 9,
+       "end_line": 11
+      },
+      {
+       "file": "auth.py",
+       "line": 11,
+       "via": "require_role → current_user",
+       "seq": 560004,
+       "when": [
+        "user_id"
+       ],
+       "func": "get_user",
+       "label": "db.get_user",
+       "def_file": "db.py",
+       "def_line": 24,
+       "end_line": 26
+      },
+      {
+       "file": "db.py",
+       "line": 25,
+       "via": "require_role → current_user → db.get_user",
+       "seq": 560006,
+       "when": [
+        "user_id"
+       ],
+       "func": "query",
+       "label": "query",
+       "def_file": "db.py",
+       "def_line": 14,
+       "end_line": 16
+      },
+      {
+       "file": "db.py",
+       "line": 15,
+       "via": "require_role → current_user → db.get_user → query",
+       "seq": 560007,
+       "when": [
+        "user_id"
+       ],
+       "func": "connect",
+       "label": "connect",
+       "def_file": "db.py",
+       "def_line": 8,
+       "end_line": 11
+      },
+      {
+       "file": "app.py",
+       "line": 58,
+       "via": "",
+       "seq": 580010,
+       "func": "articles_of",
+       "label": "db.articles_of",
+       "def_file": "db.py",
+       "def_line": 39,
+       "end_line": 40
+      },
+      {
+       "file": "db.py",
+       "line": 40,
+       "via": "db.articles_of",
+       "seq": 580012,
+       "func": "query",
+       "label": "query",
+       "def_file": "db.py",
+       "def_line": 14,
+       "end_line": 16
+      },
+      {
+       "file": "app.py",
+       "line": 58,
+       "via": "",
+       "seq": 580013,
+       "func": "current_user",
+       "label": "current_user",
+       "def_file": "auth.py",
+       "def_line": 9,
+       "end_line": 11
+      }
+     ],
+     "dynamic": [],
+     "end_line": 58
+    },
+    {
+     "id": "GET,POST /desk/new",
+     "verb": "GET,POST",
+     "path": "/desk/new",
+     "file": "app.py",
+     "line": 63,
+     "handler": "new_article",
+     "roles": [
+      "author"
+     ],
+     "permissions": [],
+     "signed_in": false,
+     "access_evidence": [
+      {
+       "file": "app.py",
+       "line": 62,
+       "text": "@require_role('author')"
+      }
+     ],
+     "unread_decorators": [],
+     "analysed": true,
+     "renders": [
+      {
+       "file": "app.py",
+       "line": 70,
+       "via": "",
+       "seq": 700010,
+       "template": "edit.html",
+       "screen": "templates/edit.html"
+      }
+     ],
+     "redirects": [
+      {
+       "file": "auth.py",
+       "line": 21,
+       "via": "require_role",
+       "seq": 620009,
+       "when": [
+        "user is None"
+       ],
+       "endpoint": "login",
+       "to": [
+        "GET,POST /login"
+       ]
+      },
+      {
+       "file": "app.py",
+       "line": 69,
+       "via": "",
+       "seq": 690018,
+       "when": [
+        "request.method == 'POST'"
+       ],
+       "endpoint": "desk",
+       "to": [
+        "GET /desk"
+       ]
+      }
+     ],
+     "fields": [
+      {
+       "file": "app.py",
+       "line": 65,
+       "via": "",
+       "seq": 650011,
+       "when": [
+        "request.method == 'POST'"
+       ],
+       "source": "file",
+       "name": "cover"
+      },
+      {
+       "file": "app.py",
+       "line": 67,
+       "via": "",
+       "seq": 670023,
+       "when": [
+        "request.method == 'POST'"
+       ],
+       "source": "form",
+       "name": "title"
+      },
+      {
+       "file": "app.py",
+       "line": 67,
+       "via": "",
+       "seq": 670024,
+       "when": [
+        "request.method == 'POST'"
+       ],
+       "source": "form",
+       "name": "body"
+      }
+     ],
+     "sql": [
+      {
+       "file": "db.py",
+       "line": 25,
+       "via": "require_role → current_user → db.get_user",
+       "seq": 620006,
+       "when": [
+        "user_id"
+       ],
+       "verb": "SELECT",
+       "reads": [
+        "users"
+       ],
+       "writes": [],
+       "sets": [],
+       "filters": [],
+       "param_columns": [],
+       "creates": [],
+       "text": "SELECT id, email, role FROM users WHERE id = ?"
+      },
+      {
+       "file": "db.py",
+       "line": 44,
+       "via": "db.create_article",
+       "seq": 670013,
+       "when": [
+        "request.method == 'POST'"
+       ],
+       "verb": "INSERT",
+       "reads": [],
+       "writes": [
+        "articles"
+       ],
+       "sets": [
+        {
+         "table": "articles",
+         "column": "status",
+         "value": "draft"
+        }
+       ],
+       "filters": [],
+       "param_columns": [
+        {
+         "table": "articles",
+         "column": "author_id",
+         "variable": "author_id"
+        },
+        {
+         "table": "articles",
+         "column": "title",
+         "variable": "title"
+        },
+        {
+         "table": "articles",
+         "column": "body",
+         "variable": "body"
+        },
+        {
+         "table": "articles",
+         "column": "cover",
+         "variable": "cover",
+         "upload": "cover"
+        }
+       ],
+       "creates": [],
+       "text": "INSERT INTO articles (author_id, title, body, cover, status) VALUES (?, ?, ?, ?, 'draft')"
+      }
+     ],
+     "files": [
+      {
+       "file": "storage.py",
+       "line": 17,
+       "via": "storage.save_upload",
+       "seq": 660021,
+       "when": [
+        "request.method == 'POST'",
+        "cover"
+       ],
+       "op": "store",
+       "upload": "cover",
+       "expr": "os.path.join(UPLOAD_DIR, name)",
+       "dir": "storage.py:UPLOAD_DIR",
+       "dir_name": "UPLOAD_DIR",
+       "dir_env": "NEWSROOM_UPLOADS"
+      }
+     ],
+     "settings": [
+      {
+       "file": "db.py",
+       "line": 9,
+       "via": "db.create_article → execute → connect",
+       "seq": 670016,
+       "when": [
+        "request.method == 'POST'"
+       ],
+       "name": "NEWSROOM_DB",
+       "variable": "DB_PATH",
+       "defined_file": "db.py",
+       "defined_line": 5
+      },
+      {
+       "file": "storage.py",
+       "line": 17,
+       "via": "storage.save_upload",
+       "seq": 660022,
+       "when": [
+        "request.method == 'POST'",
+        "cover"
+       ],
+       "name": "NEWSROOM_UPLOADS",
+       "variable": "UPLOAD_DIR",
+       "defined_file": "storage.py",
+       "defined_line": 6
+      }
+     ],
+     "external": [],
+     "background": [],
+     "branches": [
+      {
+       "file": "app.py",
+       "line": 64,
+       "via": "",
+       "seq": 640000,
+       "test": "request.method == 'POST'",
+       "outcome": "shows the message \"Draft saved\""
+      },
+      {
+       "file": "auth.py",
+       "line": 20,
+       "via": "require_role",
+       "seq": 620002,
+       "test": "user is None",
+       "outcome": "redirects to `login`"
+      },
+      {
+       "file": "auth.py",
+       "line": 22,
+       "via": "require_role",
+       "seq": 620003,
+       "test": "user['role'] not in roles",
+       "outcome": "stops with abort(403)"
+      }
+     ],
+     "messages": [
+      {
+       "file": "app.py",
+       "line": 68,
+       "via": "",
+       "seq": 680017,
+       "when": [
+        "request.method == 'POST'"
+       ],
+       "text": "Draft saved",
+       "how": "flash"
+      }
+     ],
+     "calls": [
+      {
+       "file": "app.py",
+       "line": 62,
+       "via": "",
+       "seq": 620001,
+       "func": "require_role",
+       "label": "require_role",
+       "def_file": "auth.py",
+       "def_line": 14,
+       "end_line": 26
+      },
+      {
+       "file": "auth.py",
+       "line": 19,
+       "via": "require_role",
+       "seq": 620004,
+       "func": "current_user",
+       "label": "current_user",
+       "def_file": "auth.py",
+       "def_line": 9,
+       "end_line": 11
+      },
+      {
+       "file": "auth.py",
+       "line": 11,
+       "via": "require_role → current_user",
+       "seq": 620005,
+       "when": [
+        "user_id"
+       ],
+       "func": "get_user",
+       "label": "db.get_user",
+       "def_file": "db.py",
+       "def_line": 24,
+       "end_line": 26
+      },
+      {
+       "file": "db.py",
+       "line": 25,
+       "via": "require_role → current_user → db.get_user",
+       "seq": 620007,
+       "when": [
+        "user_id"
+       ],
+       "func": "query",
+       "label": "query",
+       "def_file": "db.py",
+       "def_line": 14,
+       "end_line": 16
+      },
+      {
+       "file": "db.py",
+       "line": 15,
+       "via": "require_role → current_user → db.get_user → query",
+       "seq": 620008,
+       "when": [
+        "user_id"
+       ],
+       "func": "connect",
+       "label": "connect",
+       "def_file": "db.py",
+       "def_line": 8,
+       "end_line": 11
+      },
+      {
+       "file": "app.py",
+       "line": 67,
+       "via": "",
+       "seq": 670012,
+       "when": [
+        "request.method == 'POST'"
+       ],
+       "func": "create_article",
+       "label": "db.create_article",
+       "def_file": "db.py",
+       "def_line": 43,
+       "end_line": 45
+      },
+      {
+       "file": "db.py",
+       "line": 44,
+       "via": "db.create_article",
+       "seq": 670014,
+       "when": [
+        "request.method == 'POST'"
+       ],
+       "func": "execute",
+       "label": "execute",
+       "def_file": "db.py",
+       "def_line": 19,
+       "end_line": 21
+      },
+      {
+       "file": "db.py",
+       "line": 20,
+       "via": "db.create_article → execute",
+       "seq": 670015,
+       "when": [
+        "request.method == 'POST'"
+       ],
+       "func": "connect",
+       "label": "connect",
+       "def_file": "db.py",
+       "def_line": 8,
+       "end_line": 11
+      },
+      {
+       "file": "app.py",
+       "line": 66,
+       "via": "",
+       "seq": 660019,
+       "when": [
+        "request.method == 'POST'",
+        "cover"
+       ],
+       "func": "save_upload",
+       "label": "storage.save_upload",
+       "def_file": "storage.py",
+       "def_line": 14,
+       "end_line": 18
+      },
+      {
+       "file": "storage.py",
+       "line": 16,
+       "via": "storage.save_upload",
+       "seq": 660020,
+       "when": [
+        "request.method == 'POST'",
+        "cover"
+       ],
+       "func": "safe_name",
+       "label": "safe_name",
+       "def_file": "storage.py",
+       "def_line": 10,
+       "end_line": 11
+      },
+      {
+       "file": "app.py",
+       "line": 67,
+       "via": "",
+       "seq": 670025,
+       "when": [
+        "request.method == 'POST'"
+       ],
+       "func": "current_user",
+       "label": "current_user",
+       "def_file": "auth.py",
+       "def_line": 9,
+       "end_line": 11
+      }
+     ],
+     "dynamic": [],
+     "end_line": 70
+    },
+    {
+     "id": "POST /desk/<int:article_id>/submit",
+     "verb": "POST",
+     "path": "/desk/<int:article_id>/submit",
+     "file": "app.py",
+     "line": 75,
+     "handler": "submit",
+     "roles": [
+      "author"
+     ],
+     "permissions": [],
+     "signed_in": false,
+     "access_evidence": [
+      {
+       "file": "app.py",
+       "line": 74,
+       "text": "@require_role('author')"
+      }
+     ],
+     "unread_decorators": [],
+     "analysed": true,
+     "renders": [],
+     "redirects": [
+      {
+       "file": "auth.py",
+       "line": 21,
+       "via": "require_role",
+       "seq": 740009,
+       "when": [
+        "user is None"
+       ],
+       "endpoint": "login",
+       "to": [
+        "GET,POST /login"
+       ]
+      },
+      {
+       "file": "app.py",
+       "line": 82,
+       "via": "",
+       "seq": 820019,
+       "endpoint": "desk",
+       "to": [
+        "GET /desk"
+       ]
+      },
+      {
+       "file": "app.py",
+       "line": 79,
+       "via": "",
+       "seq": 790021,
+       "when": [
+        "row['status'] != 'draft'"
+       ],
+       "endpoint": "desk",
+       "to": [
+        "GET /desk"
+       ]
+      }
+     ],
+     "fields": [],
+     "sql": [
+      {
+       "file": "db.py",
+       "line": 25,
+       "via": "require_role → current_user → db.get_user",
+       "seq": 740006,
+       "when": [
+        "user_id"
+       ],
+       "verb": "SELECT",
+       "reads": [
+        "users"
+       ],
+       "writes": [],
+       "sets": [],
+       "filters": [],
+       "param_columns": [],
+       "creates": [],
+       "text": "SELECT id, email, role FROM users WHERE id = ?"
+      },
+      {
+       "file": "db.py",
+       "line": 35,
+       "via": "db.get_article",
+       "seq": 760011,
+       "verb": "SELECT",
+       "reads": [
+        "articles"
+       ],
+       "writes": [],
+       "sets": [],
+       "filters": [],
+       "param_columns": [],
+       "creates": [],
+       "text": "SELECT * FROM articles WHERE id = ?"
+      },
+      {
+       "file": "db.py",
+       "line": 49,
+       "via": "db.send_for_review",
+       "seq": 800014,
+       "verb": "UPDATE",
+       "reads": [],
+       "writes": [
+        "articles"
+       ],
+       "sets": [
+        {
+         "table": "articles",
+         "column": "status",
+         "value": "in_review"
+        }
+       ],
+       "filters": [],
+       "param_columns": [],
+       "creates": [],
+       "text": "UPDATE articles SET status = 'in_review' WHERE id = ?"
+      }
+     ],
+     "files": [],
+     "settings": [
+      {
+       "file": "db.py",
+       "line": 9,
+       "via": "db.send_for_review → execute → connect",
+       "seq": 800017,
+       "name": "NEWSROOM_DB",
+       "variable": "DB_PATH",
+       "defined_file": "db.py",
+       "defined_line": 5
+      }
+     ],
+     "external": [],
+     "background": [],
+     "branches": [
+      {
+       "file": "app.py",
+       "line": 77,
+       "via": "",
+       "seq": 770000,
+       "test": "row['status'] != 'draft'",
+       "outcome": "shows the message \"Only a draft can be sent for review\"; redirects to `desk`"
+      },
+      {
+       "file": "auth.py",
+       "line": 20,
+       "via": "require_role",
+       "seq": 740002,
+       "test": "user is None",
+       "outcome": "redirects to `login`"
+      },
+      {
+       "file": "auth.py",
+       "line": 22,
+       "via": "require_role",
+       "seq": 740003,
+       "test": "user['role'] not in roles",
+       "outcome": "stops with abort(403)"
+      }
+     ],
+     "messages": [
+      {
+       "file": "app.py",
+       "line": 81,
+       "via": "",
+       "seq": 810018,
+       "text": "Sent to the editors",
+       "how": "flash"
+      },
+      {
+       "file": "app.py",
+       "line": 78,
+       "via": "",
+       "seq": 780020,
+       "when": [
+        "row['status'] != 'draft'"
+       ],
+       "text": "Only a draft can be sent for review",
+       "how": "flash"
+      }
+     ],
+     "calls": [
+      {
+       "file": "app.py",
+       "line": 74,
+       "via": "",
+       "seq": 740001,
+       "func": "require_role",
+       "label": "require_role",
+       "def_file": "auth.py",
+       "def_line": 14,
+       "end_line": 26
+      },
+      {
+       "file": "auth.py",
+       "line": 19,
+       "via": "require_role",
+       "seq": 740004,
+       "func": "current_user",
+       "label": "current_user",
+       "def_file": "auth.py",
+       "def_line": 9,
+       "end_line": 11
+      },
+      {
+       "file": "auth.py",
+       "line": 11,
+       "via": "require_role → current_user",
+       "seq": 740005,
+       "when": [
+        "user_id"
+       ],
+       "func": "get_user",
+       "label": "db.get_user",
+       "def_file": "db.py",
+       "def_line": 24,
+       "end_line": 26
+      },
+      {
+       "file": "db.py",
+       "line": 25,
+       "via": "require_role → current_user → db.get_user",
+       "seq": 740007,
+       "when": [
+        "user_id"
+       ],
+       "func": "query",
+       "label": "query",
+       "def_file": "db.py",
+       "def_line": 14,
+       "end_line": 16
+      },
+      {
+       "file": "db.py",
+       "line": 15,
+       "via": "require_role → current_user → db.get_user → query",
+       "seq": 740008,
+       "when": [
+        "user_id"
+       ],
+       "func": "connect",
+       "label": "connect",
+       "def_file": "db.py",
+       "def_line": 8,
+       "end_line": 11
+      },
+      {
+       "file": "app.py",
+       "line": 76,
+       "via": "",
+       "seq": 760010,
+       "func": "get_article",
+       "label": "db.get_article",
+       "def_file": "db.py",
+       "def_line": 34,
+       "end_line": 36
+      },
+      {
+       "file": "db.py",
+       "line": 35,
+       "via": "db.get_article",
+       "seq": 760012,
+       "func": "query",
+       "label": "query",
+       "def_file": "db.py",
+       "def_line": 14,
+       "end_line": 16
+      },
+      {
+       "file": "app.py",
+       "line": 80,
+       "via": "",
+       "seq": 800013,
+       "func": "send_for_review",
+       "label": "db.send_for_review",
+       "def_file": "db.py",
+       "def_line": 48,
+       "end_line": 49
+      },
+      {
+       "file": "db.py",
+       "line": 49,
+       "via": "db.send_for_review",
+       "seq": 800015,
+       "func": "execute",
+       "label": "execute",
+       "def_file": "db.py",
+       "def_line": 19,
+       "end_line": 21
+      },
+      {
+       "file": "db.py",
+       "line": 20,
+       "via": "db.send_for_review → execute",
+       "seq": 800016,
+       "func": "connect",
+       "label": "connect",
+       "def_file": "db.py",
+       "def_line": 8,
+       "end_line": 11
+      }
+     ],
+     "dynamic": [],
+     "end_line": 82
+    },
+    {
+     "id": "GET /review",
+     "verb": "GET",
+     "path": "/review",
+     "file": "app.py",
+     "line": 89,
+     "handler": "review_queue",
+     "roles": [
+      "editor"
+     ],
+     "permissions": [],
+     "signed_in": false,
+     "access_evidence": [
+      {
+       "file": "app.py",
+       "line": 88,
+       "text": "@require_role('editor')"
+      }
+     ],
+     "unread_decorators": [],
+     "analysed": true,
+     "renders": [
+      {
+       "file": "app.py",
+       "line": 90,
+       "via": "",
+       "seq": 900009,
+       "template": "review.html",
+       "screen": "templates/review.html"
+      }
+     ],
+     "redirects": [
+      {
+       "file": "auth.py",
+       "line": 21,
+       "via": "require_role",
+       "seq": 880008,
+       "when": [
+        "user is None"
+       ],
+       "endpoint": "login",
+       "to": [
+        "GET,POST /login"
+       ]
+      }
+     ],
+     "fields": [],
+     "sql": [
+      {
+       "file": "db.py",
+       "line": 25,
+       "via": "require_role → current_user → db.get_user",
+       "seq": 880005,
+       "when": [
+        "user_id"
+       ],
+       "verb": "SELECT",
+       "reads": [
+        "users"
+       ],
+       "writes": [],
+       "sets": [],
+       "filters": [],
+       "param_columns": [],
+       "creates": [],
+       "text": "SELECT id, email, role FROM users WHERE id = ?"
+      },
+      {
+       "file": "db.py",
+       "line": 53,
+       "via": "db.waiting_for_review",
+       "seq": 900011,
+       "verb": "SELECT",
+       "reads": [
+        "articles"
+       ],
+       "writes": [],
+       "sets": [],
+       "filters": [
+        {
+         "table": "articles",
+         "column": "status",
+         "value": "in_review"
+        }
+       ],
+       "param_columns": [],
+       "creates": [],
+       "text": "SELECT id, title, cover FROM articles WHERE status = 'in_review' ORDER BY id"
+      }
+     ],
+     "files": [],
+     "settings": [],
+     "external": [],
+     "background": [],
+     "branches": [
+      {
+       "file": "auth.py",
+       "line": 20,
+       "via": "require_role",
+       "seq": 880001,
+       "test": "user is None",
+       "outcome": "redirects to `login`"
+      },
+      {
+       "file": "auth.py",
+       "line": 22,
+       "via": "require_role",
+       "seq": 880002,
+       "test": "user['role'] not in roles",
+       "outcome": "stops with abort(403)"
+      }
+     ],
+     "messages": [],
+     "calls": [
+      {
+       "file": "app.py",
+       "line": 88,
+       "via": "",
+       "seq": 880000,
+       "func": "require_role",
+       "label": "require_role",
+       "def_file": "auth.py",
+       "def_line": 14,
+       "end_line": 26
+      },
+      {
+       "file": "auth.py",
+       "line": 19,
+       "via": "require_role",
+       "seq": 880003,
+       "func": "current_user",
+       "label": "current_user",
+       "def_file": "auth.py",
+       "def_line": 9,
+       "end_line": 11
+      },
+      {
+       "file": "auth.py",
+       "line": 11,
+       "via": "require_role → current_user",
+       "seq": 880004,
+       "when": [
+        "user_id"
+       ],
+       "func": "get_user",
+       "label": "db.get_user",
+       "def_file": "db.py",
+       "def_line": 24,
+       "end_line": 26
+      },
+      {
+       "file": "db.py",
+       "line": 25,
+       "via": "require_role → current_user → db.get_user",
+       "seq": 880006,
+       "when": [
+        "user_id"
+       ],
+       "func": "query",
+       "label": "query",
+       "def_file": "db.py",
+       "def_line": 14,
+       "end_line": 16
+      },
+      {
+       "file": "db.py",
+       "line": 15,
+       "via": "require_role → current_user → db.get_user → query",
+       "seq": 880007,
+       "when": [
+        "user_id"
+       ],
+       "func": "connect",
+       "label": "connect",
+       "def_file": "db.py",
+       "def_line": 8,
+       "end_line": 11
+      },
+      {
+       "file": "app.py",
+       "line": 90,
+       "via": "",
+       "seq": 900010,
+       "func": "waiting_for_review",
+       "label": "db.waiting_for_review",
+       "def_file": "db.py",
+       "def_line": 52,
+       "end_line": 53
+      },
+      {
+       "file": "db.py",
+       "line": 53,
+       "via": "db.waiting_for_review",
+       "seq": 900012,
+       "func": "query",
+       "label": "query",
+       "def_file": "db.py",
+       "def_line": 14,
+       "end_line": 16
+      }
+     ],
+     "dynamic": [],
+     "end_line": 90
+    },
+    {
+     "id": "GET /review/<int:article_id>",
+     "verb": "GET",
+     "path": "/review/<int:article_id>",
+     "file": "app.py",
+     "line": 95,
+     "handler": "review_detail",
+     "roles": [
+      "editor"
+     ],
+     "permissions": [],
+     "signed_in": false,
+     "access_evidence": [
+      {
+       "file": "app.py",
+       "line": 94,
+       "text": "@require_role('editor')"
+      }
+     ],
+     "unread_decorators": [],
+     "analysed": true,
+     "renders": [
+      {
+       "file": "app.py",
+       "line": 96,
+       "via": "",
+       "seq": 960009,
+       "template": "review_detail.html",
+       "screen": "templates/review_detail.html"
+      }
+     ],
+     "redirects": [
+      {
+       "file": "auth.py",
+       "line": 21,
+       "via": "require_role",
+       "seq": 940008,
+       "when": [
+        "user is None"
+       ],
+       "endpoint": "login",
+       "to": [
+        "GET,POST /login"
+       ]
+      }
+     ],
+     "fields": [],
+     "sql": [
+      {
+       "file": "db.py",
+       "line": 25,
+       "via": "require_role → current_user → db.get_user",
+       "seq": 940005,
+       "when": [
+        "user_id"
+       ],
+       "verb": "SELECT",
+       "reads": [
+        "users"
+       ],
+       "writes": [],
+       "sets": [],
+       "filters": [],
+       "param_columns": [],
+       "creates": [],
+       "text": "SELECT id, email, role FROM users WHERE id = ?"
+      },
+      {
+       "file": "db.py",
+       "line": 35,
+       "via": "db.get_article",
+       "seq": 960011,
+       "verb": "SELECT",
+       "reads": [
+        "articles"
+       ],
+       "writes": [],
+       "sets": [],
+       "filters": [],
+       "param_columns": [],
+       "creates": [],
+       "text": "SELECT * FROM articles WHERE id = ?"
+      }
+     ],
+     "files": [],
+     "settings": [],
+     "external": [],
+     "background": [],
+     "branches": [
+      {
+       "file": "auth.py",
+       "line": 20,
+       "via": "require_role",
+       "seq": 940001,
+       "test": "user is None",
+       "outcome": "redirects to `login`"
+      },
+      {
+       "file": "auth.py",
+       "line": 22,
+       "via": "require_role",
+       "seq": 940002,
+       "test": "user['role'] not in roles",
+       "outcome": "stops with abort(403)"
+      }
+     ],
+     "messages": [],
+     "calls": [
+      {
+       "file": "app.py",
+       "line": 94,
+       "via": "",
+       "seq": 940000,
+       "func": "require_role",
+       "label": "require_role",
+       "def_file": "auth.py",
+       "def_line": 14,
+       "end_line": 26
+      },
+      {
+       "file": "auth.py",
+       "line": 19,
+       "via": "require_role",
+       "seq": 940003,
+       "func": "current_user",
+       "label": "current_user",
+       "def_file": "auth.py",
+       "def_line": 9,
+       "end_line": 11
+      },
+      {
+       "file": "auth.py",
+       "line": 11,
+       "via": "require_role → current_user",
+       "seq": 940004,
+       "when": [
+        "user_id"
+       ],
+       "func": "get_user",
+       "label": "db.get_user",
+       "def_file": "db.py",
+       "def_line": 24,
+       "end_line": 26
+      },
+      {
+       "file": "db.py",
+       "line": 25,
+       "via": "require_role → current_user → db.get_user",
+       "seq": 940006,
+       "when": [
+        "user_id"
+       ],
+       "func": "query",
+       "label": "query",
+       "def_file": "db.py",
+       "def_line": 14,
+       "end_line": 16
+      },
+      {
+       "file": "db.py",
+       "line": 15,
+       "via": "require_role → current_user → db.get_user → query",
+       "seq": 940007,
+       "when": [
+        "user_id"
+       ],
+       "func": "connect",
+       "label": "connect",
+       "def_file": "db.py",
+       "def_line": 8,
+       "end_line": 11
+      },
+      {
+       "file": "app.py",
+       "line": 96,
+       "via": "",
+       "seq": 960010,
+       "func": "get_article",
+       "label": "db.get_article",
+       "def_file": "db.py",
+       "def_line": 34,
+       "end_line": 36
+      },
+      {
+       "file": "db.py",
+       "line": 35,
+       "via": "db.get_article",
+       "seq": 960012,
+       "func": "query",
+       "label": "query",
+       "def_file": "db.py",
+       "def_line": 14,
+       "end_line": 16
+      }
+     ],
+     "dynamic": [],
+     "end_line": 96
+    },
+    {
+     "id": "POST /review/<int:article_id>/publish",
+     "verb": "POST",
+     "path": "/review/<int:article_id>/publish",
+     "file": "app.py",
+     "line": 101,
+     "handler": "publish",
+     "roles": [
+      "editor"
+     ],
+     "permissions": [],
+     "signed_in": false,
+     "access_evidence": [
+      {
+       "file": "app.py",
+       "line": 100,
+       "text": "@require_role('editor')"
+      }
+     ],
+     "unread_decorators": [],
+     "analysed": true,
+     "renders": [],
+     "redirects": [
+      {
+       "file": "auth.py",
+       "line": 21,
+       "via": "require_role",
+       "seq": 1000010,
+       "when": [
+        "user is None"
+       ],
+       "endpoint": "login",
+       "to": [
+        "GET,POST /login"
+       ]
+      },
+      {
+       "file": "app.py",
+       "line": 111,
+       "via": "",
+       "seq": 1110022,
+       "endpoint": "review_queue",
+       "to": [
+        "GET /review"
+       ]
+      },
+      {
+       "file": "app.py",
+       "line": 105,
+       "via": "",
+       "seq": 1050024,
+       "when": [
+        "row['status'] != 'in_review'"
+       ],
+       "endpoint": "review_queue",
+       "to": [
+        "GET /review"
+       ]
+      },
+      {
+       "file": "app.py",
+       "line": 108,
+       "via": "",
+       "seq": 1080026,
+       "when": [
+        "COVER_REQUIRED == '1' and (not row['cover'])"
+       ],
+       "endpoint": "review_detail",
+       "to": [
+        "GET /review/<int:article_id>"
+       ]
+      }
+     ],
+     "fields": [],
+     "sql": [
+      {
+       "file": "db.py",
+       "line": 25,
+       "via": "require_role → current_user → db.get_user",
+       "seq": 1000007,
+       "when": [
+        "user_id"
+       ],
+       "verb": "SELECT",
+       "reads": [
+        "users"
+       ],
+       "writes": [],
+       "sets": [],
+       "filters": [],
+       "param_columns": [],
+       "creates": [],
+       "text": "SELECT id, email, role FROM users WHERE id = ?"
+      },
+      {
+       "file": "db.py",
+       "line": 35,
+       "via": "db.get_article",
+       "seq": 1020012,
+       "verb": "SELECT",
+       "reads": [
+        "articles"
+       ],
+       "writes": [],
+       "sets": [],
+       "filters": [],
+       "param_columns": [],
+       "creates": [],
+       "text": "SELECT * FROM articles WHERE id = ?"
+      },
+      {
+       "file": "db.py",
+       "line": 57,
+       "via": "db.publish_article",
+       "seq": 1090015,
+       "verb": "UPDATE",
+       "reads": [],
+       "writes": [
+        "articles"
+       ],
+       "sets": [
+        {
+         "table": "articles",
+         "column": "status",
+         "value": "published"
+        }
+       ],
+       "filters": [],
+       "param_columns": [],
+       "creates": [],
+       "text": "UPDATE articles SET status = ?, published_at = CURRENT_TIMESTAMP WHERE id = ?"
+      },
+      {
+       "file": "db.py",
+       "line": 65,
+       "via": "db.published_articles",
+       "seq": 1100028,
+       "verb": "SELECT",
+       "reads": [
+        "articles"
+       ],
+       "writes": [],
+       "sets": [],
+       "filters": [
+        {
+         "table": "articles",
+         "column": "status",
+         "value": "published"
+        }
+       ],
+       "param_columns": [],
+       "creates": [],
+       "text": "SELECT id, title, cover FROM articles WHERE status = 'published' ORDER BY published_at DESC"
+      }
+     ],
+     "files": [
+      {
+       "file": "storage.py",
+       "line": 23,
+       "via": "storage.write_published_list",
+       "seq": 1100020,
+       "op": "write",
+       "upload": "",
+       "expr": "os.path.join(EXPORT_DIR, 'published.csv')",
+       "dir": "storage.py:EXPORT_DIR",
+       "dir_name": "EXPORT_DIR",
+       "dir_env": "NEWSROOM_EXPORTS",
+       "name": "published.csv"
+      }
+     ],
+     "settings": [
+      {
+       "file": "db.py",
+       "line": 9,
+       "via": "db.publish_article → execute → connect",
+       "seq": 1090018,
+       "name": "NEWSROOM_DB",
+       "variable": "DB_PATH",
+       "defined_file": "db.py",
+       "defined_line": 5
+      },
+      {
+       "file": "storage.py",
+       "line": 23,
+       "via": "storage.write_published_list",
+       "seq": 1100021,
+       "name": "NEWSROOM_EXPORTS",
+       "variable": "EXPORT_DIR",
+       "defined_file": "storage.py",
+       "defined_line": 7
+      },
+      {
+       "file": "app.py",
+       "line": 106,
+       "via": "",
+       "seq": 1060030,
+       "name": "NEWSROOM_COVER_REQUIRED",
+       "variable": "COVER_REQUIRED",
+       "defined_file": "app.py",
+       "defined_line": 12
+      }
+     ],
+     "external": [],
+     "background": [],
+     "branches": [
+      {
+       "file": "app.py",
+       "line": 103,
+       "via": "",
+       "seq": 1030000,
+       "test": "row['status'] != 'in_review'",
+       "outcome": "shows the message \"Only an article in review can be published\"; redirects to `review_queue`"
+      },
+      {
+       "file": "app.py",
+       "line": 106,
+       "via": "",
+       "seq": 1060001,
+       "test": "COVER_REQUIRED == '1' and (not row['cover'])",
+       "outcome": "shows the message \"Add a cover image before publishing\"; redirects to `review_detail`"
+      },
+      {
+       "file": "auth.py",
+       "line": 20,
+       "via": "require_role",
+       "seq": 1000003,
+       "test": "user is None",
+       "outcome": "redirects to `login`"
+      },
+      {
+       "file": "auth.py",
+       "line": 22,
+       "via": "require_role",
+       "seq": 1000004,
+       "test": "user['role'] not in roles",
+       "outcome": "stops with abort(403)"
+      }
+     ],
+     "messages": [
+      {
+       "file": "app.py",
+       "line": 104,
+       "via": "",
+       "seq": 1040023,
+       "when": [
+        "row['status'] != 'in_review'"
+       ],
+       "text": "Only an article in review can be published",
+       "how": "flash"
+      },
+      {
+       "file": "app.py",
+       "line": 107,
+       "via": "",
+       "seq": 1070025,
+       "when": [
+        "COVER_REQUIRED == '1' and (not row['cover'])"
+       ],
+       "text": "Add a cover image before publishing",
+       "how": "flash"
+      }
+     ],
+     "calls": [
+      {
+       "file": "app.py",
+       "line": 100,
+       "via": "",
+       "seq": 1000002,
+       "func": "require_role",
+       "label": "require_role",
+       "def_file": "auth.py",
+       "def_line": 14,
+       "end_line": 26
+      },
+      {
+       "file": "auth.py",
+       "line": 19,
+       "via": "require_role",
+       "seq": 1000005,
+       "func": "current_user",
+       "label": "current_user",
+       "def_file": "auth.py",
+       "def_line": 9,
+       "end_line": 11
+      },
+      {
+       "file": "auth.py",
+       "line": 11,
+       "via": "require_role → current_user",
+       "seq": 1000006,
+       "when": [
+        "user_id"
+       ],
+       "func": "get_user",
+       "label": "db.get_user",
+       "def_file": "db.py",
+       "def_line": 24,
+       "end_line": 26
+      },
+      {
+       "file": "db.py",
+       "line": 25,
+       "via": "require_role → current_user → db.get_user",
+       "seq": 1000008,
+       "when": [
+        "user_id"
+       ],
+       "func": "query",
+       "label": "query",
+       "def_file": "db.py",
+       "def_line": 14,
+       "end_line": 16
+      },
+      {
+       "file": "db.py",
+       "line": 15,
+       "via": "require_role → current_user → db.get_user → query",
+       "seq": 1000009,
+       "when": [
+        "user_id"
+       ],
+       "func": "connect",
+       "label": "connect",
+       "def_file": "db.py",
+       "def_line": 8,
+       "end_line": 11
+      },
+      {
+       "file": "app.py",
+       "line": 102,
+       "via": "",
+       "seq": 1020011,
+       "func": "get_article",
+       "label": "db.get_article",
+       "def_file": "db.py",
+       "def_line": 34,
+       "end_line": 36
+      },
+      {
+       "file": "db.py",
+       "line": 35,
+       "via": "db.get_article",
+       "seq": 1020013,
+       "func": "query",
+       "label": "query",
+       "def_file": "db.py",
+       "def_line": 14,
+       "end_line": 16
+      },
+      {
+       "file": "app.py",
+       "line": 109,
+       "via": "",
+       "seq": 1090014,
+       "func": "publish_article",
+       "label": "db.publish_article",
+       "def_file": "db.py",
+       "def_line": 56,
+       "end_line": 57
+      },
+      {
+       "file": "db.py",
+       "line": 57,
+       "via": "db.publish_article",
+       "seq": 1090016,
+       "func": "execute",
+       "label": "execute",
+       "def_file": "db.py",
+       "def_line": 19,
+       "end_line": 21
+      },
+      {
+       "file": "db.py",
+       "line": 20,
+       "via": "db.publish_article → execute",
+       "seq": 1090017,
+       "func": "connect",
+       "label": "connect",
+       "def_file": "db.py",
+       "def_line": 8,
+       "end_line": 11
+      },
+      {
+       "file": "app.py",
+       "line": 110,
+       "via": "",
+       "seq": 1100019,
+       "func": "write_published_list",
+       "label": "storage.write_published_list",
+       "def_file": "storage.py",
+       "def_line": 21,
+       "end_line": 27
+      },
+      {
+       "file": "app.py",
+       "line": 110,
+       "via": "",
+       "seq": 1100027,
+       "func": "published_articles",
+       "label": "db.published_articles",
+       "def_file": "db.py",
+       "def_line": 64,
+       "end_line": 65
+      },
+      {
+       "file": "db.py",
+       "line": 65,
+       "via": "db.published_articles",
+       "seq": 1100029,
+       "func": "query",
+       "label": "query",
+       "def_file": "db.py",
+       "def_line": 14,
+       "end_line": 16
+      }
+     ],
+     "dynamic": [],
+     "end_line": 111
+    },
+    {
+     "id": "POST /review/<int:article_id>/return",
+     "verb": "POST",
+     "path": "/review/<int:article_id>/return",
+     "file": "app.py",
+     "line": 116,
+     "handler": "send_back",
+     "roles": [
+      "editor"
+     ],
+     "permissions": [],
+     "signed_in": false,
+     "access_evidence": [
+      {
+       "file": "app.py",
+       "line": 115,
+       "text": "@require_role('editor')"
+      }
+     ],
+     "unread_decorators": [],
+     "analysed": true,
+     "renders": [],
+     "redirects": [
+      {
+       "file": "auth.py",
+       "line": 21,
+       "via": "require_role",
+       "seq": 1150008,
+       "when": [
+        "user is None"
+       ],
+       "endpoint": "login",
+       "to": [
+        "GET,POST /login"
+       ]
+      },
+      {
+       "file": "app.py",
+       "line": 118,
+       "via": "",
+       "seq": 1180014,
+       "endpoint": "review_queue",
+       "to": [
+        "GET /review"
+       ]
+      }
+     ],
+     "fields": [
+      {
+       "file": "app.py",
+       "line": 117,
+       "via": "",
+       "seq": 1170015,
+       "source": "form",
+       "name": "reason"
+      }
+     ],
+     "sql": [
+      {
+       "file": "db.py",
+       "line": 25,
+       "via": "require_role → current_user → db.get_user",
+       "seq": 1150005,
+       "when": [
+        "user_id"
+       ],
+       "verb": "SELECT",
+       "reads": [
+        "users"
+       ],
+       "writes": [],
+       "sets": [],
+       "filters": [],
+       "param_columns": [],
+       "creates": [],
+       "text": "SELECT id, email, role FROM users WHERE id = ?"
+      },
+      {
+       "file": "db.py",
+       "line": 61,
+       "via": "db.return_to_author",
+       "seq": 1170010,
+       "verb": "UPDATE",
+       "reads": [],
+       "writes": [
+        "articles"
+       ],
+       "sets": [
+        {
+         "table": "articles",
+         "column": "status",
+         "value": "draft"
+        }
+       ],
+       "filters": [],
+       "param_columns": [
+        {
+         "table": "articles",
+         "column": "review_note",
+         "variable": "reason"
+        }
+       ],
+       "creates": [],
+       "text": "UPDATE articles SET status = 'draft', review_note = ? WHERE id = ?"
+      }
+     ],
+     "files": [],
+     "settings": [
+      {
+       "file": "db.py",
+       "line": 9,
+       "via": "db.return_to_author → execute → connect",
+       "seq": 1170013,
+       "name": "NEWSROOM_DB",
+       "variable": "DB_PATH",
+       "defined_file": "db.py",
+       "defined_line": 5
+      }
+     ],
+     "external": [],
+     "background": [],
+     "branches": [
+      {
+       "file": "auth.py",
+       "line": 20,
+       "via": "require_role",
+       "seq": 1150001,
+       "test": "user is None",
+       "outcome": "redirects to `login`"
+      },
+      {
+       "file": "auth.py",
+       "line": 22,
+       "via": "require_role",
+       "seq": 1150002,
+       "test": "user['role'] not in roles",
+       "outcome": "stops with abort(403)"
+      }
+     ],
+     "messages": [],
+     "calls": [
+      {
+       "file": "app.py",
+       "line": 115,
+       "via": "",
+       "seq": 1150000,
+       "func": "require_role",
+       "label": "require_role",
+       "def_file": "auth.py",
+       "def_line": 14,
+       "end_line": 26
+      },
+      {
+       "file": "auth.py",
+       "line": 19,
+       "via": "require_role",
+       "seq": 1150003,
+       "func": "current_user",
+       "label": "current_user",
+       "def_file": "auth.py",
+       "def_line": 9,
+       "end_line": 11
+      },
+      {
+       "file": "auth.py",
+       "line": 11,
+       "via": "require_role → current_user",
+       "seq": 1150004,
+       "when": [
+        "user_id"
+       ],
+       "func": "get_user",
+       "label": "db.get_user",
+       "def_file": "db.py",
+       "def_line": 24,
+       "end_line": 26
+      },
+      {
+       "file": "db.py",
+       "line": 25,
+       "via": "require_role → current_user → db.get_user",
+       "seq": 1150006,
+       "when": [
+        "user_id"
+       ],
+       "func": "query",
+       "label": "query",
+       "def_file": "db.py",
+       "def_line": 14,
+       "end_line": 16
+      },
+      {
+       "file": "db.py",
+       "line": 15,
+       "via": "require_role → current_user → db.get_user → query",
+       "seq": 1150007,
+       "when": [
+        "user_id"
+       ],
+       "func": "connect",
+       "label": "connect",
+       "def_file": "db.py",
+       "def_line": 8,
+       "end_line": 11
+      },
+      {
+       "file": "app.py",
+       "line": 117,
+       "via": "",
+       "seq": 1170009,
+       "func": "return_to_author",
+       "label": "db.return_to_author",
+       "def_file": "db.py",
+       "def_line": 60,
+       "end_line": 61
+      },
+      {
+       "file": "db.py",
+       "line": 61,
+       "via": "db.return_to_author",
+       "seq": 1170011,
+       "func": "execute",
+       "label": "execute",
+       "def_file": "db.py",
+       "def_line": 19,
+       "end_line": 21
+      },
+      {
+       "file": "db.py",
+       "line": 20,
+       "via": "db.return_to_author → execute",
+       "seq": 1170012,
+       "func": "connect",
+       "label": "connect",
+       "def_file": "db.py",
+       "def_line": 8,
+       "end_line": 11
+      }
+     ],
+     "dynamic": [],
+     "end_line": 118
+    },
+    {
+     "id": "GET /preview/<int:article_id>",
+     "verb": "GET",
+     "path": "/preview/<int:article_id>",
+     "file": "app.py",
+     "line": 125,
+     "handler": "preview",
+     "roles": [
+      "author",
+      "editor"
+     ],
+     "permissions": [],
+     "signed_in": false,
+     "access_evidence": [
+      {
+       "file": "app.py",
+       "line": 124,
+       "text": "@require_role('author', 'editor')"
+      }
+     ],
+     "unread_decorators": [],
+     "analysed": true,
+     "renders": [
+      {
+       "file": "app.py",
+       "line": 126,
+       "via": "",
+       "seq": 1260009,
+       "template": "article.html",
+       "screen": "templates/article.html"
+      }
+     ],
+     "redirects": [
+      {
+       "file": "auth.py",
+       "line": 21,
+       "via": "require_role",
+       "seq": 1240008,
+       "when": [
+        "user is None"
+       ],
+       "endpoint": "login",
+       "to": [
+        "GET,POST /login"
+       ]
+      }
+     ],
+     "fields": [],
+     "sql": [
+      {
+       "file": "db.py",
+       "line": 25,
+       "via": "require_role → current_user → db.get_user",
+       "seq": 1240005,
+       "when": [
+        "user_id"
+       ],
+       "verb": "SELECT",
+       "reads": [
+        "users"
+       ],
+       "writes": [],
+       "sets": [],
+       "filters": [],
+       "param_columns": [],
+       "creates": [],
+       "text": "SELECT id, email, role FROM users WHERE id = ?"
+      },
+      {
+       "file": "db.py",
+       "line": 35,
+       "via": "db.get_article",
+       "seq": 1260011,
+       "verb": "SELECT",
+       "reads": [
+        "articles"
+       ],
+       "writes": [],
+       "sets": [],
+       "filters": [],
+       "param_columns": [],
+       "creates": [],
+       "text": "SELECT * FROM articles WHERE id = ?"
+      }
+     ],
+     "files": [],
+     "settings": [],
+     "external": [],
+     "background": [],
+     "branches": [
+      {
+       "file": "auth.py",
+       "line": 20,
+       "via": "require_role",
+       "seq": 1240001,
+       "test": "user is None",
+       "outcome": "redirects to `login`"
+      },
+      {
+       "file": "auth.py",
+       "line": 22,
+       "via": "require_role",
+       "seq": 1240002,
+       "test": "user['role'] not in roles",
+       "outcome": "stops with abort(403)"
+      }
+     ],
+     "messages": [],
+     "calls": [
+      {
+       "file": "app.py",
+       "line": 124,
+       "via": "",
+       "seq": 1240000,
+       "func": "require_role",
+       "label": "require_role",
+       "def_file": "auth.py",
+       "def_line": 14,
+       "end_line": 26
+      },
+      {
+       "file": "auth.py",
+       "line": 19,
+       "via": "require_role",
+       "seq": 1240003,
+       "func": "current_user",
+       "label": "current_user",
+       "def_file": "auth.py",
+       "def_line": 9,
+       "end_line": 11
+      },
+      {
+       "file": "auth.py",
+       "line": 11,
+       "via": "require_role → current_user",
+       "seq": 1240004,
+       "when": [
+        "user_id"
+       ],
+       "func": "get_user",
+       "label": "db.get_user",
+       "def_file": "db.py",
+       "def_line": 24,
+       "end_line": 26
+      },
+      {
+       "file": "db.py",
+       "line": 25,
+       "via": "require_role → current_user → db.get_user",
+       "seq": 1240006,
+       "when": [
+        "user_id"
+       ],
+       "func": "query",
+       "label": "query",
+       "def_file": "db.py",
+       "def_line": 14,
+       "end_line": 16
+      },
+      {
+       "file": "db.py",
+       "line": 15,
+       "via": "require_role → current_user → db.get_user → query",
+       "seq": 1240007,
+       "when": [
+        "user_id"
+       ],
+       "func": "connect",
+       "label": "connect",
+       "def_file": "db.py",
+       "def_line": 8,
+       "end_line": 11
+      },
+      {
+       "file": "app.py",
+       "line": 126,
+       "via": "",
+       "seq": 1260010,
+       "func": "get_article",
+       "label": "db.get_article",
+       "def_file": "db.py",
+       "def_line": 34,
+       "end_line": 36
+      },
+      {
+       "file": "db.py",
+       "line": 35,
+       "via": "db.get_article",
+       "seq": 1260012,
+       "func": "query",
+       "label": "query",
+       "def_file": "db.py",
+       "def_line": 14,
+       "end_line": 16
+      }
+     ],
+     "dynamic": [],
+     "end_line": 126
+    }
+   ],
+   "data": [
+    {
+     "id": "articles",
+     "defined": [
+      {
+       "file": "schema.sql",
+       "line": 7
+      }
+     ],
+     "columns": [
+      "id",
+      "author_id",
+      "title",
+      "body",
+      "cover",
+      "status",
+      "review_note",
+      "published_at"
+     ],
+     "readers": [
+      {
+       "feature": "GET /",
+       "file": "db.py",
+       "line": 65,
+       "via": "db.published_articles"
+      },
+      {
+       "feature": "GET /articles/<int:article_id>",
+       "file": "db.py",
+       "line": 35,
+       "via": "db.get_article"
+      },
+      {
+       "feature": "GET /desk",
+       "file": "db.py",
+       "line": 40,
+       "via": "db.articles_of"
+      },
+      {
+       "feature": "POST /desk/<int:article_id>/submit",
+       "file": "db.py",
+       "line": 35,
+       "via": "db.get_article"
+      },
+      {
+       "feature": "GET /review",
+       "file": "db.py",
+       "line": 53,
+       "via": "db.waiting_for_review"
+      },
+      {
+       "feature": "GET /review/<int:article_id>",
+       "file": "db.py",
+       "line": 35,
+       "via": "db.get_article"
+      },
+      {
+       "feature": "POST /review/<int:article_id>/publish",
+       "file": "db.py",
+       "line": 35,
+       "via": "db.get_article"
+      },
+      {
+       "feature": "POST /review/<int:article_id>/publish",
+       "file": "db.py",
+       "line": 65,
+       "via": "db.published_articles"
+      },
+      {
+       "feature": "GET /preview/<int:article_id>",
+       "file": "db.py",
+       "line": 35,
+       "via": "db.get_article"
+      }
+     ],
+     "writers": [
+      {
+       "feature": "GET,POST /desk/new",
+       "file": "db.py",
+       "line": 44,
+       "via": "db.create_article",
+       "verb": "INSERT"
+      },
+      {
+       "feature": "POST /desk/<int:article_id>/submit",
+       "file": "db.py",
+       "line": 49,
+       "via": "db.send_for_review",
+       "verb": "UPDATE"
+      },
+      {
+       "feature": "POST /review/<int:article_id>/publish",
+       "file": "db.py",
+       "line": 57,
+       "via": "db.publish_article",
+       "verb": "UPDATE"
+      },
+      {
+       "feature": "POST /review/<int:article_id>/return",
+       "file": "db.py",
+       "line": 61,
+       "via": "db.return_to_author",
+       "verb": "UPDATE"
+      }
+     ],
+     "states": [
+      {
+       "table": "articles",
+       "column": "status",
+       "value": "published",
+       "set_by": [
+        {
+         "feature": "POST /review/<int:article_id>/publish",
+         "file": "db.py",
+         "line": 57,
+         "via": "db.publish_article"
+        }
+       ],
+       "read_by": [
+        {
+         "feature": "GET /",
+         "file": "db.py",
+         "line": 65,
+         "via": "db.published_articles"
+        },
+        {
+         "feature": "POST /review/<int:article_id>/publish",
+         "file": "db.py",
+         "line": 65,
+         "via": "db.published_articles"
+        }
+       ],
+       "tested_in": [
+        {
+         "where": "handler",
+         "feature": "GET /articles/<int:article_id>",
+         "condition": "row is None or row['status'] != 'published'",
+         "outcome": "stops with abort(404)",
+         "file": "app.py",
+         "line": 26
+        }
+       ]
+      },
+      {
+       "table": "articles",
+       "column": "status",
+       "value": "draft",
+       "set_by": [
+        {
+         "feature": "GET,POST /desk/new",
+         "file": "db.py",
+         "line": 44,
+         "via": "db.create_article"
+        },
+        {
+         "feature": "POST /review/<int:article_id>/return",
+         "file": "db.py",
+         "line": 61,
+         "via": "db.return_to_author"
+        }
+       ],
+       "read_by": [],
+       "tested_in": [
+        {
+         "where": "template",
+         "screen": "templates/desk.html",
+         "term": "templates/desk.html:16:6",
+         "text": "Send for review",
+         "condition": "a.status == 'draft'",
+         "file": "templates/desk.html",
+         "line": 16
+        },
+        {
+         "where": "handler",
+         "feature": "POST /desk/<int:article_id>/submit",
+         "condition": "row['status'] != 'draft'",
+         "outcome": "shows the message \"Only a draft can be sent for review\"; redirects to `desk`",
+         "file": "app.py",
+         "line": 77
+        }
+       ]
+      },
+      {
+       "table": "articles",
+       "column": "status",
+       "value": "in_review",
+       "set_by": [
+        {
+         "feature": "POST /desk/<int:article_id>/submit",
+         "file": "db.py",
+         "line": 49,
+         "via": "db.send_for_review"
+        }
+       ],
+       "read_by": [
+        {
+         "feature": "GET /review",
+         "file": "db.py",
+         "line": 53,
+         "via": "db.waiting_for_review"
+        }
+       ],
+       "tested_in": [
+        {
+         "where": "handler",
+         "feature": "POST /review/<int:article_id>/publish",
+         "condition": "row['status'] != 'in_review'",
+         "outcome": "shows the message \"Only an article in review can be published\"; redirects to `review_queue`",
+         "file": "app.py",
+         "line": 103
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "id": "users",
+     "defined": [
+      {
+       "file": "schema.sql",
+       "line": 1
+      }
+     ],
+     "columns": [
+      "id",
+      "email",
+      "role"
+     ],
+     "readers": [
+      {
+       "feature": "GET,POST /login",
+       "file": "db.py",
+       "line": 30,
+       "via": "db.find_user"
+      },
+      {
+       "feature": "GET /desk",
+       "file": "db.py",
+       "line": 25,
+       "via": "require_role → current_user → db.get_user"
+      },
+      {
+       "feature": "GET,POST /desk/new",
+       "file": "db.py",
+       "line": 25,
+       "via": "require_role → current_user → db.get_user"
+      },
+      {
+       "feature": "POST /desk/<int:article_id>/submit",
+       "file": "db.py",
+       "line": 25,
+       "via": "require_role → current_user → db.get_user"
+      },
+      {
+       "feature": "GET /review",
+       "file": "db.py",
+       "line": 25,
+       "via": "require_role → current_user → db.get_user"
+      },
+      {
+       "feature": "GET /review/<int:article_id>",
+       "file": "db.py",
+       "line": 25,
+       "via": "require_role → current_user → db.get_user"
+      },
+      {
+       "feature": "POST /review/<int:article_id>/publish",
+       "file": "db.py",
+       "line": 25,
+       "via": "require_role → current_user → db.get_user"
+      },
+      {
+       "feature": "POST /review/<int:article_id>/return",
+       "file": "db.py",
+       "line": 25,
+       "via": "require_role → current_user → db.get_user"
+      },
+      {
+       "feature": "GET /preview/<int:article_id>",
+       "file": "db.py",
+       "line": 25,
+       "via": "require_role → current_user → db.get_user"
+      }
+     ],
+     "writers": [],
+     "states": []
+    }
+   ],
+   "assets": [
+    {
+     "id": "upload:cover",
+     "kind": "uploaded",
+     "name": "uploaded file `cover`",
+     "used_in": [
+      {
+       "file": "templates/article.html",
+       "line": 9,
+       "how": "<img>",
+       "conditions": [
+        "article.cover"
+       ]
+      },
+      {
+       "file": "templates/home.html",
+       "line": 8,
+       "how": "<img>",
+       "conditions": [
+        "a.cover"
+       ]
+      },
+      {
+       "file": "templates/review_detail.html",
+       "line": 6,
+       "how": "<img>",
+       "conditions": [
+        "article.cover"
+       ]
+      }
+     ],
+     "screens": [
+      "templates/article.html",
+      "templates/home.html",
+      "templates/review_detail.html"
+     ],
+     "registered_by": [
+      {
+       "feature": "GET,POST /desk/new",
+       "file": "app.py",
+       "line": 65,
+       "via": ""
+      }
+     ],
+     "stored_by": [
+      {
+       "feature": "GET,POST /desk/new",
+       "file": "storage.py",
+       "line": 17,
+       "via": "storage.save_upload",
+       "expr": "os.path.join(UPLOAD_DIR, name)",
+       "dir": "storage.py:UPLOAD_DIR",
+       "dir_name": "UPLOAD_DIR",
+       "dir_env": "NEWSROOM_UPLOADS"
+      }
+     ],
+     "written_by": [],
+     "served_by": [
+      {
+       "feature": "GET /uploads/<path:name>",
+       "file": "app.py",
+       "line": 33,
+       "via": "",
+       "exact_file": false
+      }
+     ],
+     "deleted_by": [],
+     "columns": [
+      {
+       "table": "articles",
+       "column": "cover",
+       "feature": "GET,POST /desk/new",
+       "file": "db.py",
+       "line": 44,
+       "via": "db.create_article"
+      }
+     ],
+     "unknown": [],
+     "field": "cover",
+     "picked_with": [
+      {
+       "term": "templates/edit.html:10:3",
+       "text": "Cover image",
+       "file": "templates/edit.html",
+       "line": 10
+      }
+     ]
+    },
+    {
+     "id": "generated:published.csv",
+     "kind": "generated",
+     "name": "generated file `published.csv`",
+     "used_in": [
+      {
+       "file": "templates/home.html",
+       "line": 13,
+       "how": "link \"Download the list\""
+      }
+     ],
+     "screens": [
+      "templates/home.html"
+     ],
+     "registered_by": [],
+     "stored_by": [],
+     "written_by": [
+      {
+       "feature": "POST /review/<int:article_id>/publish",
+       "file": "storage.py",
+       "line": 23,
+       "via": "storage.write_published_list",
+       "expr": "os.path.join(EXPORT_DIR, 'published.csv')",
+       "dir_name": "EXPORT_DIR",
+       "dir_env": "NEWSROOM_EXPORTS"
+      }
+     ],
+     "served_by": [
+      {
+       "feature": "GET /published.csv",
+       "file": "app.py",
+       "line": 38,
+       "via": "",
+       "exact_file": true
+      }
+     ],
+     "deleted_by": [],
+     "columns": [],
+     "unknown": []
+    },
+    {
+     "id": "static/logo.svg",
+     "kind": "static",
+     "name": "static/logo.svg",
+     "used_in": [
+      {
+       "file": "templates/base.html",
+       "line": 10,
+       "how": "<img>"
+      }
+     ],
+     "screens": [
+      "templates/base.html",
+      "templates/review_detail.html",
+      "templates/review.html",
+      "templates/login.html",
+      "templates/home.html",
+      "templates/edit.html",
+      "templates/desk.html",
+      "templates/article.html"
+     ],
+     "registered_by": [],
+     "stored_by": [],
+     "written_by": [],
+     "served_by": [],
+     "deleted_by": [],
+     "columns": [],
+     "unknown": [],
+     "file": "static/logo.svg",
+     "through_layout": [
+      {
+       "screen": "templates/review_detail.html",
+       "layout": "templates/base.html"
+      },
+      {
+       "screen": "templates/review.html",
+       "layout": "templates/base.html"
+      },
+      {
+       "screen": "templates/login.html",
+       "layout": "templates/base.html"
+      },
+      {
+       "screen": "templates/home.html",
+       "layout": "templates/base.html"
+      },
+      {
+       "screen": "templates/edit.html",
+       "layout": "templates/base.html"
+      },
+      {
+       "screen": "templates/desk.html",
+       "layout": "templates/base.html"
+      },
+      {
+       "screen": "templates/article.html",
+       "layout": "templates/base.html"
+      }
+     ]
+    },
+    {
+     "id": "static/old-banner.png",
+     "kind": "static",
+     "name": "static/old-banner.png",
+     "used_in": [],
+     "screens": [],
+     "registered_by": [],
+     "stored_by": [],
+     "written_by": [],
+     "served_by": [],
+     "deleted_by": [],
+     "columns": [],
+     "unknown": [
+      "no reference was found; a path built at run time would not be seen"
+     ],
+     "file": "static/old-banner.png"
+    },
+    {
+     "id": "static/paper.png",
+     "kind": "static",
+     "name": "static/paper.png",
+     "used_in": [
+      {
+       "file": "static/site.css",
+       "line": 2,
+       "how": "url() in a stylesheet"
+      }
+     ],
+     "screens": [
+      "templates/base.html",
+      "templates/review_detail.html",
+      "templates/review.html",
+      "templates/login.html",
+      "templates/home.html",
+      "templates/edit.html",
+      "templates/desk.html",
+      "templates/article.html"
+     ],
+     "registered_by": [],
+     "stored_by": [],
+     "written_by": [],
+     "served_by": [],
+     "deleted_by": [],
+     "columns": [],
+     "unknown": [],
+     "file": "static/paper.png",
+     "through_layout": [
+      {
+       "screen": "templates/review_detail.html",
+       "layout": "templates/base.html"
+      },
+      {
+       "screen": "templates/review.html",
+       "layout": "templates/base.html"
+      },
+      {
+       "screen": "templates/login.html",
+       "layout": "templates/base.html"
+      },
+      {
+       "screen": "templates/home.html",
+       "layout": "templates/base.html"
+      },
+      {
+       "screen": "templates/edit.html",
+       "layout": "templates/base.html"
+      },
+      {
+       "screen": "templates/desk.html",
+       "layout": "templates/base.html"
+      },
+      {
+       "screen": "templates/article.html",
+       "layout": "templates/base.html"
+      }
+     ]
+    }
+   ],
+   "handoffs": [
+    {
+     "from": "POST /review/<int:article_id>/publish",
+     "to": "GET /",
+     "state": [
+      "articles",
+      "status",
+      "published"
+     ],
+     "set_at": {
+      "file": "db.py",
+      "line": 57,
+      "via": "db.publish_article"
+     },
+     "read_at": {
+      "file": "db.py",
+      "line": 65,
+      "via": "db.published_articles"
+     },
+     "kind": "query",
+     "inferred": "one statement sets this value and the other filters on it; that the same rows are meant was not verified"
+    },
+    {
+     "from": "POST /desk/<int:article_id>/submit",
+     "to": "GET /review",
+     "state": [
+      "articles",
+      "status",
+      "in_review"
+     ],
+     "set_at": {
+      "file": "db.py",
+      "line": 49,
+      "via": "db.send_for_review"
+     },
+     "read_at": {
+      "file": "db.py",
+      "line": 53,
+      "via": "db.waiting_for_review"
+     },
+     "kind": "query",
+     "inferred": "one statement sets this value and the other filters on it; that the same rows are meant was not verified"
+    }
+   ],
+   "functions": [
+    {
+     "id": "auth.py:current_user",
+     "name": "current_user",
+     "file": "auth.py",
+     "line": 9,
+     "end_line": 11,
+     "features": [
+      "GET /desk",
+      "GET,POST /desk/new",
+      "POST /desk/<int:article_id>/submit",
+      "GET /review",
+      "GET /review/<int:article_id>",
+      "POST /review/<int:article_id>/publish",
+      "POST /review/<int:article_id>/return",
+      "GET /preview/<int:article_id>"
+     ]
+    },
+    {
+     "id": "auth.py:require_role",
+     "name": "require_role",
+     "file": "auth.py",
+     "line": 14,
+     "end_line": 26,
+     "features": [
+      "GET /desk",
+      "GET,POST /desk/new",
+      "POST /desk/<int:article_id>/submit",
+      "GET /review",
+      "GET /review/<int:article_id>",
+      "POST /review/<int:article_id>/publish",
+      "POST /review/<int:article_id>/return",
+      "GET /preview/<int:article_id>"
+     ]
+    },
+    {
+     "id": "db.py:articles_of",
+     "name": "articles_of",
+     "file": "db.py",
+     "line": 39,
+     "end_line": 40,
+     "features": [
+      "GET /desk"
+     ]
+    },
+    {
+     "id": "db.py:connect",
+     "name": "connect",
+     "file": "db.py",
+     "line": 8,
+     "end_line": 11,
+     "features": [
+      "GET /",
+      "GET /articles/<int:article_id>",
+      "GET,POST /login",
+      "GET /desk",
+      "GET,POST /desk/new",
+      "POST /desk/<int:article_id>/submit",
+      "GET /review",
+      "GET /review/<int:article_id>",
+      "POST /review/<int:article_id>/publish",
+      "POST /review/<int:article_id>/return",
+      "GET /preview/<int:article_id>"
+     ]
+    },
+    {
+     "id": "db.py:create_article",
+     "name": "create_article",
+     "file": "db.py",
+     "line": 43,
+     "end_line": 45,
+     "features": [
+      "GET,POST /desk/new"
+     ]
+    },
+    {
+     "id": "db.py:execute",
+     "name": "execute",
+     "file": "db.py",
+     "line": 19,
+     "end_line": 21,
+     "features": [
+      "GET,POST /desk/new",
+      "POST /desk/<int:article_id>/submit",
+      "POST /review/<int:article_id>/publish",
+      "POST /review/<int:article_id>/return"
+     ]
+    },
+    {
+     "id": "db.py:find_user",
+     "name": "find_user",
+     "file": "db.py",
+     "line": 29,
+     "end_line": 31,
+     "features": [
+      "GET,POST /login"
+     ]
+    },
+    {
+     "id": "db.py:get_article",
+     "name": "get_article",
+     "file": "db.py",
+     "line": 34,
+     "end_line": 36,
+     "features": [
+      "GET /articles/<int:article_id>",
+      "POST /desk/<int:article_id>/submit",
+      "GET /review/<int:article_id>",
+      "POST /review/<int:article_id>/publish",
+      "GET /preview/<int:article_id>"
+     ]
+    },
+    {
+     "id": "db.py:get_user",
+     "name": "get_user",
+     "file": "db.py",
+     "line": 24,
+     "end_line": 26,
+     "features": [
+      "GET /desk",
+      "GET,POST /desk/new",
+      "POST /desk/<int:article_id>/submit",
+      "GET /review",
+      "GET /review/<int:article_id>",
+      "POST /review/<int:article_id>/publish",
+      "POST /review/<int:article_id>/return",
+      "GET /preview/<int:article_id>"
+     ]
+    },
+    {
+     "id": "db.py:publish_article",
+     "name": "publish_article",
+     "file": "db.py",
+     "line": 56,
+     "end_line": 57,
+     "features": [
+      "POST /review/<int:article_id>/publish"
+     ]
+    },
+    {
+     "id": "db.py:published_articles",
+     "name": "published_articles",
+     "file": "db.py",
+     "line": 64,
+     "end_line": 65,
+     "features": [
+      "GET /",
+      "POST /review/<int:article_id>/publish"
+     ]
+    },
+    {
+     "id": "db.py:query",
+     "name": "query",
+     "file": "db.py",
+     "line": 14,
+     "end_line": 16,
+     "features": [
+      "GET /",
+      "GET /articles/<int:article_id>",
+      "GET,POST /login",
+      "GET /desk",
+      "GET,POST /desk/new",
+      "POST /desk/<int:article_id>/submit",
+      "GET /review",
+      "GET /review/<int:article_id>",
+      "POST /review/<int:article_id>/publish",
+      "POST /review/<int:article_id>/return",
+      "GET /preview/<int:article_id>"
+     ]
+    },
+    {
+     "id": "db.py:return_to_author",
+     "name": "return_to_author",
+     "file": "db.py",
+     "line": 60,
+     "end_line": 61,
+     "features": [
+      "POST /review/<int:article_id>/return"
+     ]
+    },
+    {
+     "id": "db.py:send_for_review",
+     "name": "send_for_review",
+     "file": "db.py",
+     "line": 48,
+     "end_line": 49,
+     "features": [
+      "POST /desk/<int:article_id>/submit"
+     ]
+    },
+    {
+     "id": "db.py:waiting_for_review",
+     "name": "waiting_for_review",
+     "file": "db.py",
+     "line": 52,
+     "end_line": 53,
+     "features": [
+      "GET /review"
+     ]
+    },
+    {
+     "id": "storage.py:safe_name",
+     "name": "safe_name",
+     "file": "storage.py",
+     "line": 10,
+     "end_line": 11,
+     "features": [
+      "GET,POST /desk/new"
+     ]
+    },
+    {
+     "id": "storage.py:save_upload",
+     "name": "save_upload",
+     "file": "storage.py",
+     "line": 14,
+     "end_line": 18,
+     "features": [
+      "GET,POST /desk/new"
+     ]
+    },
+    {
+     "id": "storage.py:write_published_list",
+     "name": "write_published_list",
+     "file": "storage.py",
+     "line": 21,
+     "end_line": 27,
+     "features": [
+      "POST /review/<int:article_id>/publish"
+     ]
+    }
+   ],
+   "gaps": [],
+   "chains": {
+    "templates/article.html": [
+     "templates/article.html",
+     "templates/base.html"
+    ],
+    "templates/base.html": [
+     "templates/base.html"
+    ],
+    "templates/desk.html": [
+     "templates/desk.html",
+     "templates/base.html"
+    ],
+    "templates/edit.html": [
+     "templates/edit.html",
+     "templates/base.html"
+    ],
+    "templates/home.html": [
+     "templates/home.html",
+     "templates/base.html"
+    ],
+    "templates/login.html": [
+     "templates/login.html",
+     "templates/base.html"
+    ],
+    "templates/review.html": [
+     "templates/review.html",
+     "templates/base.html"
+    ],
+    "templates/review_detail.html": [
+     "templates/review_detail.html",
+     "templates/base.html"
+    ]
+   }
+  },
+  "leaving": {
+   "machine_paths": [],
+   "hosts": [],
+   "todos": [],
+   "secrets": [],
+   "schedules": [],
+   "git": {
+    "repo": true,
+    "branch": "main",
+    "subdir": "tests/fixtures/newsroom",
+    "has_commits": true,
+    "remotes": [
+     "origin"
+    ],
+    "uncommitted": 1,
+    "uncommitted_files": [
+     {
+      "state": "??",
+      "path": "tests/fixtures/newsroom/"
+     }
+    ],
+    "unpushed": [],
+    "stashes": 0,
+    "shallow": false,
+    "authors": [],
+    "commits": 0
+   },
+   "local_only": [],
+   "prerequisites": [],
+   "commands": [],
+   "secret_env": [
+    "NEWSROOM_SECRET"
+   ],
+   "has": {
+    "readme": "README.md",
+    "license": "",
+    "tests": 0,
+    "ci": []
+   }
+  },
+  "model_summaries": {},
+  "translations": [],
+  "untranslated": [],
+  "readiness": [
+   {
+    "key": "readme",
+    "label": "The project has a README",
+    "state": "ok",
+    "detail": "README.md"
+   },
+   {
+    "key": "start",
+    "label": "How to start it can be found in the files",
+    "state": "ok",
+    "detail": "launch scripts, an entry point or run modes were found"
+   },
+   {
+    "key": "tests",
+    "label": "There are tests",
+    "state": "todo",
+    "detail": "no test files found"
+   },
+   {
+    "key": "license",
+    "label": "A license file says who may use the code",
+    "state": "todo",
+    "detail": "no LICENSE file"
+   },
+   {
+    "key": "git",
+    "label": "The folder is in Git with a remote",
+    "state": "ok",
+    "detail": "origin"
+   },
+   {
+    "key": "committed",
+    "label": "Everything is committed",
+    "state": "todo",
+    "detail": "1 uncommitted change(s)"
+   },
+   {
+    "key": "pushed",
+    "label": "Everything is pushed",
+    "state": "ok",
+    "detail": "every local commit is on a remote"
+   },
+   {
+    "key": "local",
+    "label": "Nothing the program needs exists only on this computer",
+    "state": "ok",
+    "detail": "no ignored settings or data files"
+   },
+   {
+    "key": "paths",
+    "label": "No personal folder paths are written into code",
+    "state": "ok",
+    "detail": "none found"
+   },
+   {
+    "key": "secrets",
+    "label": "No secret-looking values are stored in files",
+    "state": "ok",
+    "detail": "no key or token patterns matched"
+   },
+   {
+    "key": "project",
+    "label": "The notes say what the project is",
+    "state": "ok",
+    "detail": ""
+   },
+   {
+    "key": "topics",
+    "label": "The handover questions are answered",
+    "state": "todo",
+    "detail": "1/8 answered: missing Successor checklist, Credentials and accounts, Open work and next steps, Deploy and release, Routine operations, Data and backups, People and contacts"
+   },
+   {
+    "key": "files",
+    "label": "The most important files have notes",
+    "state": "ok",
+    "detail": "all have notes"
+   }
+  ]
+ }
+}

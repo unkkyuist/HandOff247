@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block title %}{{ article.title }}{% endblock %}
+{% block content %}
+{% if article.status != 'published' %}
+<p class="banner">Preview: not published yet</p>
+{% endif %}
+<h1>{{ article.title }}</h1>
+{% if article.cover %}
+<img class="cover" src="{{ url_for('uploaded', name=article.cover) }}" alt="">
+{% endif %}
+<div class="body">{{ article.body }}</div>
+{% endblock %}

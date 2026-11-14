@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>{% block title %}Newsroom{% endblock %}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='site.css') }}">
+</head>
+<body>
+<header>
+  <a href="{{ url_for('home') }}"><img src="{{ url_for('static', filename='logo.svg') }}" alt="Newsroom"></a>
+  <nav>
+    <a href="{{ url_for('home') }}">Front page</a>
+    {% if user and user.role == 'author' %}
+    <a href="{{ url_for('desk') }}">My desk</a>
+    {% endif %}
+    {% if user and user.role == 'editor' %}
+    <a href="{{ url_for('review_queue') }}">{{ t('nav.review') }}</a>
+    {% endif %}
+    {% if not user %}
+    <a href="{{ url_for('login') }}">Sign in</a>
+    {% endif %}
+  </nav>
+</header>
+{% for message in get_flashed_messages() %}
+<p class="flash">{{ message }}</p>
+{% endfor %}
+<main>{% block content %}{% endblock %}</main>
+</body>
+</html>

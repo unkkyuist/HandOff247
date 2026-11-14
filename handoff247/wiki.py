@@ -11,6 +11,8 @@ Layout, all inside the pack:
     wiki/files/…        one page per file      wiki/areas/…       one per top-level folder
     wiki/modes/…        one per run mode       wiki/operations/…  one per operation
     wiki/tools/…        one per MCP tool       wiki/*.md          one list page per small class
+    wiki/users/…        one per user type      wiki/features/…    one per route, the whole feature in one place
+    wiki/screens/…      one per screen         wiki/assets/…, wiki/data/…  one per asset and data table
 
 The pages are generated: they are rewritten on every run. What a person or an assistant
 learns goes into the notes file, and the next run carries it into the pages.
@@ -26,18 +28,23 @@ from collections import defaultdict
 from . import __version__
 from .labels import t
 from .notes import TOPICS
+from . import render_users
+from .explore import Explorer
 from .render_md import LANG_NAMES, Linker
 
 MARK = "generator: HandOff247"
-OWN_PAGE = {"Area": "areas", "File": "files", "Mode": "modes", "Operation": "operations", "McpTool": "tools"}
-LIST_PAGE = {"Table": "operations.md", "Route": "routes.md", "Subcommand": "subcommands.md", "EnvVar": "environment.md",
-             "Port": "ports.md", "Package": "packages.md", "Host": "hosts.md", "Command": "commands.md", "Person": "people.md"}
-NOTE_KEY = {"File": "File: ", "Area": "Area: ", "Mode": "Mode: ", "Operation": "Op: "}
+OWN_PAGE = {"Area": "areas", "File": "files", "Mode": "modes", "Operation": "operations", "McpTool": "tools",
+            "UserType": "users", "Route": "features", "Screen": "screens", "Asset": "assets", "Data": "data"}
+LIST_PAGE = {"Table": "operations.md", "Subcommand": "subcommands.md", "EnvVar": "environment.md",
+             "Port": "ports.md", "Package": "packages.md", "Host": "hosts.md", "Command": "commands.md", "Person": "people.md",
+             "Term": "terms.md", "State": "states.md", "Function": "functions.md"}
+NOTE_KEY = {"File": "File: ", "Area": "Area: ", "Mode": "Mode: ", "Operation": "Op: ", "UserType": "User: "}
 ATTR_LABELS = {"language": "Language", "category": "Kind of file", "lines": "Lines", "not_parsed": "Not parsed",
                "files": "Files", "default": "Default mode", "transports": "Transports", "reads_stdin": "Reads standard input",
                "handler": "Handler", "expression": "Expression in the table", "routes": "Reachable through",
                "method": "Method", "name_from": "Name comes from", "development_only": "Development only",
-               "kind": "Kind", "default_value": "Default value"}
+               "kind": "Kind", "default_value": "Default value", "shown_when": "Shown when", "field": "Field in the code",
+               "other_languages": "In other languages", "seen_by": "Seen by", "not_verified": "Not verified"}
 RESERVED = {"con", "prn", "aux", "nul", *(f"com{i}" for i in range(1, 10)), *(f"lpt{i}" for i in range(1, 10))}
 MAX_LIST = 60
 
@@ -101,6 +108,13 @@ class Wiki:
         self.files = {f.path: f for f in project.files}
         self.linkers = {d: Linker(linker.mode, linker.base, "../" * d + linker.rel_prefix) for d in (1, 2)}
         self.project = self.by_class["Project"][0]
+        self.ex = Explorer(project, notes)
+        self.pages = {e["id"]: e["page"] for e in onto["entities"] if e.get("page")}
+
+    def ctx(self, page: str) -> render_users.Ctx:
+        """The user-context sections, with links that work from ``page``."""
+        return render_users.Ctx(self.ex, lambda file, line=0, text=None: self.src(page, file, line, text),
+                                lambda target: self.href(page, target), {k: v for k, v in self.pages.items() if v != page})
 
     # ------------------------------------------------------------ helpers
     def href(self, page: str, target: str) -> str:
@@ -182,7 +196,23 @@ class Wiki:
     def entity_page(self, e: dict) -> str:
         page = e["page"]
         s = self.front(_code(e["name"]), e)
-        s += self.body(page, e)
+        own = {"UserType": ("sees", "openTo"), "Route": ("displays", "runsCode"), "Screen": ("displays",)}.get(e["type"], ())
+        s += self.body(page, e, own)                # what the section below tells is not listed twice
+        key = e["id"].split(":", 1)[1]
+        if e["type"] == "UserType" and key in self.ex.users_by_name:
+            s += ["## What this user type sees and does", ""] + render_users.user_section(self.ctx(page), key, "##")
+            others = [u for u in self.ex.users_by_name if u != key]
+            if others:
+                s += ["## Other user types", "", "Nothing here is hidden from you; follow a hand-over or open another user type: "
+                      + ", ".join(self.ref(page, "user:" + u) for u in others) + ".", ""]
+        elif e["type"] == "Route" and key in self.ex.features:
+            s += render_users.feature_card(self.ctx(page), key)
+        elif e["type"] == "Screen" and key in self.ex.screens:
+            s += render_users.screen_section(self.ctx(page), key)
+        elif e["type"] == "Asset" and key in self.ex.assets:
+            s += ["## Where it comes from and where it shows", ""] + render_users.asset_section(self.ctx(page), key)
+        elif e["type"] == "Data" and key in self.ex.data:
+            s += ["## Who reads and writes it", ""] + render_users.data_section(self.ctx(page), key)
         if e["type"] == "File":
             f = self.files.get(e["name"])
             if f and f.summary and f.summary != e.get("summary"):
@@ -204,6 +234,17 @@ class Wiki:
         page = "wiki/" + LIST_PAGE[cls]
         s = self.front(c["plural"])
         s += [c["description"], "", f"{len(self.by_class[cls])} found. [Back to the index](index.md)", ""]
+        if cls == "Term":                           # hundreds of short entries read better as one table
+            s += ["| Text | Kind | Where | Shown when | Leads to |", "|---|---|---|---|---|"]
+            for e in sorted(self.by_class[cls], key=lambda e: (e["name"].lower(), e["id"])):
+                attrs = e.get("attrs", {})
+                text = _code(e["name"]) + "".join(" / " + _code(o) for o in attrs.get("other_languages", []))
+                leads = ", ".join(self.ref(page, r["o"]) for r in self.out[e["id"]] if r["p"] == "leadsTo")
+                where = " ".join(self.ref(page, r["s"]) for r in self.inn[e["id"]] if r["p"] == "displays")
+                row = [text, attrs.get("kind", ""), f"{where} {self.src(page, e.get('file', ''), e.get('line', 0))}".strip(),
+                       _code(attrs["shown_when"]) if attrs.get("shown_when") else "", leads]
+                s.append("| " + " | ".join(str(x).replace("|", "\\|") for x in row) + " |")
+            return "\n".join(s).rstrip("\n") + "\n"
         for e in self.by_class[cls]:
             s += [f"## {_code(e['name'])}", ""]
             s += self.body(page, e)
@@ -265,6 +306,7 @@ class Wiki:
               "## Start here", "",
               f"- [Overview](overview.md) — {self.project.get('summary') or 'the project and what was found in it'}",
               "- [Notes from the previous owner](notes.md) — what could not be read from the code",
+              "- [Who uses it](../USERS.md) — user types, their screens, hand-overs, the words on the screens, assets",
               "- [AGENTS.md](AGENTS.md) — how to read this wiki and where to write what you learn",
               "- [ontology.json](../ontology.json) — the same content as data", ""]
 
@@ -276,6 +318,11 @@ class Wiki:
             for e in items:
                 s.append(f"- {self.ref(page, e['id'])}" + self.line_summary(e))
             s.append("")
+        catalog("UserType")
+        catalog("Route", "Features")
+        catalog("Screen")
+        catalog("Asset")
+        catalog("Data")
         catalog("Area")
         catalog("Mode")
         catalog("McpTool")
@@ -322,6 +369,21 @@ class Wiki:
               "5. Something that is not in the wiki was not found. That does not mean it does not exist: code built from "
               "runtime strings, reflection or dependency-injection containers is not followed. Say that you do not know.",
               "6. [notes.md](notes.md) is the only human-written page. \"Not answered\" there is a question for a person.", "",
+              "## Helping someone who uses the application", "",
+              "The user types in this wiki (`users/`) are the kinds of user the analysed application tells apart. They are "
+              "not access levels of the wiki: read every flow you need, whoever it belongs to. Five ways in:", "",
+              "- **From a user type:** `users/<name>.md` lists the screens, what each control does and who picks the work up next.",
+              "- **From words on a screen:** [terms.md](terms.md) has every link, button, field label, heading and message, "
+              "with the feature it leads to. The word a user says and the name in the code often differ; the page gives both.",
+              "- **From an asset or a table:** `assets/` and `data/` say who provides it, what stores it and where it shows.",
+              "- **From code:** a file page lists the features that run it under *runs for*; a feature page lists its code.",
+              "- **From a request:** find the feature through the words, then read its page in `features/`: started from, "
+              "what the code does, branches, hand-overs, what to check, not verified.", "",
+              "Two rules when you answer. The same word can be on several screens: name the screen and the user type, and "
+              "if two candidates fit, show both instead of picking one. And a condition in the code is not a diagnosis: "
+              "\"the article is only listed when status is in_review\" is what the code does, not proof of why this "
+              "user's article is missing. Say what to check (*What to check* on the feature page) unless you have the "
+              "live data or a log.", "",
               "## Classes", "", "| Class | Meaning |", "|---|---|"]
         s += [f"| {c['label']} | {c['description']} |" for c in self.o["schema"]["classes"]]
         s += ["", "## Relations", "", "| Relation | Read backwards | Meaning |", "|---|---|---|"]
@@ -331,7 +393,8 @@ class Wiki:
               f"`{self.notes_label}`, under the heading of the thing it is about:", "",
               "- `## Project` — what the project is and its status",
               "- `## Topic: <name>` — the handover questions listed in [notes.md](notes.md)",
-              "- `## Area: <folder>`, `## File: <path>`, `## Mode: <name>`, `## Op: <operation>` — one thing each", "",
+              "- `## Area: <folder>`, `## File: <path>`, `## Mode: <name>`, `## Op: <operation>` — one thing each",
+              "- `## User: <user type>` — who these users are in real life and what they usually ask for", "",
               "Write plain sentences, say only what you verified in the source, and never paste a password or token; "
               "say where it is kept. Then run `python -m handoff247 <project folder>` again: the note appears on the "
               "matching wiki page, in the handoff pages and in the viewer.", "",
@@ -340,9 +403,10 @@ class Wiki:
               "- `../ontology.json` — entities (`id`, `type`, `name`, `summary`, `page`) and relations (`s`, `p`, `o`, `file`, `line`)",
               "- `../index.html` — viewer with a graph of the same ontology", "",
               "## Working through MCP", "",
-              "`python -m handoff247 mcp` is an MCP server over the same data: search and read entities, read source "
-              "lines, list what is still undocumented, and write notes under the right heading (marked as written by an "
-              "agent). It is the supported way for an assistant to add to this wiki.", ""]
+              "`python -m handoff247 mcp` is an MCP server over the same data: a briefing of the whole project, the flows "
+              "of each user type, a search from a user's own words, one feature in full, assets, the effect of a code "
+              "change, entities, source lines, what is still undocumented, and notes written under the right heading "
+              "(marked as written by an agent). It is the supported way for an assistant to add to this wiki.", ""]
         return "\n".join(s).rstrip("\n") + "\n"
 
     def llms_txt(self) -> str:
@@ -359,6 +423,7 @@ class Wiki:
               "- [Notes from the previous owner](wiki/notes.md): what could not be read from the code", "",
               "## Handoff pages", "",
               "- [Handover checklist](HANDOVER.md): unfinished work, what exists only on one computer, accounts, tools to install",
+              "- [Who uses it](USERS.md): user types, their screens, what each control does, hand-overs, words on the screens, assets",
               "- [Running](RUNNING.md): how to start, run modes, environment variables, ports",
               "- [Connections](CONNECTIONS.md): which tool calls which, and over what",
               "- [Code map](CODEMAP.md): folders, shared foundations, dependencies", "",

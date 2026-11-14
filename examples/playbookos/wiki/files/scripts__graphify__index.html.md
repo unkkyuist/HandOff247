@@ -19,6 +19,10 @@ source: "scripts/graphify/index.html"
 - **Lines:** 32
 - **Source:** [scripts/graphify/index.html](https://github.com/unkkyuist/PlayBookOS/blob/7153e47ec28a0b1933c24404db08a43a468b6c14/scripts/graphify/index.html)
 
+**defines** →
+
+- [`scripts/graphify/index.html`](../screens/scripts__graphify__index.html.md) · [scripts/graphify/index.html:1](https://github.com/unkkyuist/PlayBookOS/blob/7153e47ec28a0b1933c24404db08a43a468b6c14/scripts/graphify/index.html#L1)
+
 **mentions** →
 
 - [`github.com`](../hosts.md) · [scripts/graphify/index.html:19](https://github.com/unkkyuist/PlayBookOS/blob/7153e47ec28a0b1933c24404db08a43a468b6c14/scripts/graphify/index.html#L19)

@@ -35,6 +35,19 @@ CLASSES = [
     ("Command", "Command-line tool", "Command-line tools", "outside", "square",
      "A well-known program the project's scripts start; it has to be installed."),
     ("Person", "Person", "People", "outside", "diamond", "An author in the Git history."),
+    # the application as its users meet it (journeys.py)
+    ("UserType", "User type", "User types", "structure", "triangle",
+     "A kind of user the analysed application tells apart, found from role checks. Not an access level of this pack."),
+    ("Screen", "Screen", "Screens", "interface", "square", "A template or page a user sees."),
+    ("Term", "Screen term", "Screen terms", "interface", "circle",
+     "Words a user reads: a link, button, field label, heading, or a message the code shows."),
+    ("Function", "Function", "Functions", "type", "square",
+     "Project code that a feature runs. Modelled once, however many features use it."),
+    ("Data", "Data table", "Data tables", "file", "square", "A table named in an SQL statement."),
+    ("State", "State", "States", "file", "diamond",
+     "A column value that statements set or filter on, such as status = 'published'."),
+    ("Asset", "Asset", "Assets", "file", "triangle",
+     "A file users see or provide: shipped with the project, uploaded, generated, or kept in external storage."),
 ]
 
 # (id, label, label read from the other end, description)
@@ -63,6 +76,27 @@ RELATIONS = [
     ("dependsOn", "depends on", "is a dependency of", "The file declares or imports the package."),
     ("starts", "starts", "is started by", "The file starts the command-line tool."),
     ("authored", "has commits in", "has commits by", "Author in the Git history of the project."),
+    # the application as its users meet it; a route is a feature
+    ("openTo", "is open to", "may use", "Role check on the route, or none found (anyone)."),
+    ("sees", "sees", "is seen by", "A route this user type may use shows the screen."),
+    ("shows", "shows", "is shown by", "The route renders the screen."),
+    ("builtOn", "is built on", "is part of", "The template extends or includes the other one."),
+    ("displays", "displays", "is displayed on", "The words are on the screen, or the route shows the message."),
+    ("leadsTo", "leads to", "is started from", "The link, button or form of the term targets the route; a script of the screen calls it."),
+    ("redirectsTo", "redirects to", "is reached by redirect from", "The handler redirects to the other route."),
+    ("runsCode", "runs", "runs for", "The handler calls the function, directly or through other functions."),
+    ("readsData", "reads", "is read by", "An SQL statement of the feature reads the table."),
+    ("writesData", "writes", "is written by", "An SQL statement of the feature inserts, updates or deletes rows."),
+    ("hasState", "has the state", "is a state of", "A literal column value found in a statement."),
+    ("setsState", "sets", "is set by", "A statement of the feature sets the column to this value."),
+    ("listsState", "lists only", "is the filter of", "A statement of the feature filters on this value."),
+    ("testedBy", "is tested by", "tests", "A template condition or a handler branch names the same column and value."),
+    ("handsOverTo", "hands over to", "receives from", "One feature sets a state that the other filters on."),
+    ("showsAsset", "shows", "appears on", "The screen references the file."),
+    ("provides", "provides", "is provided by", "The feature receives the upload or writes the generated file."),
+    ("delivers", "delivers", "is delivered by", "The route sends the file to the browser."),
+    ("keptIn", "has its name kept in", "keeps the name of", "The stored file name is written to a column of the table."),
+    ("wordedIn", "takes its text from", "words", "The text of the term comes from a locale file."),
 ]
 SKIP_EDGES = {"calls-op", "dispatches"}        # the same facts are told through operations
 
@@ -114,6 +148,124 @@ class _Builder:
         if inferred:
             r["inferred"] = inferred
         self.relations[(s, p, o)] = r
+
+
+def _journeys(b: _Builder, project: Project, notes, fid) -> None:
+    """User types, screens, terms, data, states, assets and shared functions, with the
+    relations between them and to the routes and files that already exist."""
+    from .explore import Explorer
+    ex = Explorer(project, notes)
+    j = ex.j
+    if not j["user_types"] and not j["screens"]:
+        return
+
+    def rid(feature: str) -> str:
+        return "route:" + feature
+
+    def state_id(table: str, column: str, value: str) -> str:
+        return f"state:{table}.{column}={value}"
+
+    for u in j["user_types"]:
+        told = "no role check was found on the routes it uses" if u["kind"] == "anyone" else \
+            (f"told apart in {len(u['evidence'])} place(s)" if u["evidence"] else "")
+        ev = u["evidence"][0] if u["evidence"] else {}
+        b.ent("user:" + u["name"], "UserType", u["name"], first_line(notes.get(f"User: {u['name']}")) or told,
+              ev.get("file", ""), ev.get("line", 0), kind=u["kind"])
+    for s in j["screens"]:
+        b.ent("screen:" + s["id"], "Screen", s["id"], s["title"], s["file"], 1, kind=s["kind"])
+        b.rel(fid(s["file"]), "defines", "screen:" + s["id"], s["file"], 1)
+    for s in j["screens"]:
+        if s["extends"]:
+            b.rel("screen:" + s["id"], "builtOn", "screen:" + s["extends"], s["file"], 1, "extends")
+        for inc in s["includes"]:
+            b.rel("screen:" + s["id"], "builtOn", "screen:" + inc["screen"], s["file"], inc["line"], "includes")
+        for c in s["calls"]:
+            b.rel("screen:" + s["id"], "leadsTo", rid(c["feature"]), c["file"], c["line"], "script call")
+    for f in j["features"]:
+        for owner in ex.who(f["id"]):
+            ev = f["access_evidence"][0] if f["access_evidence"] else {"file": f["file"], "line": f["line"], "text": ""}
+            b.rel(rid(f["id"]), "openTo", "user:" + owner, ev["file"], ev["line"], ev.get("text", "") or "no role check found")
+        for rn in f["renders"]:
+            if rn.get("screen"):
+                b.rel(rid(f["id"]), "shows", "screen:" + rn["screen"], rn["file"], rn["line"])
+                for owner in ex.who(f["id"]):
+                    b.rel("user:" + owner, "sees", "screen:" + rn["screen"], rn["file"], rn["line"], f["id"])
+        for rd in f["redirects"]:
+            for target in rd.get("to", []):
+                b.rel(rid(f["id"]), "redirectsTo", rid(target), rd["file"], rd["line"], " and ".join(rd.get("when", [])))
+    for u in j["user_types"]:                               # pages no route renders
+        for sid in u["screens"]:
+            b.rel("user:" + u["name"], "sees", "screen:" + sid, sid, 1, "no route found; served as a file")
+    for fn in j["functions"]:
+        b.ent("func:" + fn["id"], "Function", fn["name"], f"run by {len(fn['features'])} feature(s)", fn["file"], fn["line"])
+        b.rel(fid(fn["file"]), "defines", "func:" + fn["id"], fn["file"], fn["line"])
+    for f in j["features"]:
+        for c in f["calls"]:
+            b.rel(rid(f["id"]), "runsCode", f"func:{c['def_file']}:{c['func']}", c["file"], c["line"], c["via"])
+    for t in j["terms"]:
+        if not t["text"]:
+            continue
+        tid = "term:" + t["id"]
+        summary = t["kind"] + (f" on {t['screen']}" if t["screen"] else f", shown by {t.get('feature', '')}")
+        b.ent(tid, "Term", t["text"], summary, t["file"], t["line"], kind=t["kind"],
+              shown_when=" and ".join(t["conditions"]), field=t.get("field", ""),
+              other_languages=[o["text"] for o in t.get("other_texts", [])])
+        if t["screen"]:
+            b.rel("screen:" + t["screen"], "displays", tid, t["file"], t["line"])
+        elif t.get("feature"):
+            b.rel(rid(t["feature"]), "displays", tid, t["file"], t["line"], t.get("how", ""))
+        for target in t["leads_to"]:
+            b.rel(tid, "leadsTo", rid(target), t["file"], t["line"], t["method"])
+        if t.get("i18n"):
+            b.rel(tid, "wordedIn", fid(t["i18n"]["file"]), t["i18n"]["file"], t["i18n"]["line"], t["i18n"]["key"])
+    for d in j["data"]:
+        where = d["defined"][0] if d["defined"] else {}
+        b.ent("data:" + d["id"], "Data", d["id"], ", ".join(d["columns"][:12]), where.get("file", ""), where.get("line", 0))
+        if where:
+            b.rel(fid(where["file"]), "defines", "data:" + d["id"], where["file"], where["line"])
+        for r in d["readers"]:
+            b.rel(rid(r["feature"]), "readsData", "data:" + d["id"], r["file"], r["line"], r["via"])
+        for r in d["writers"]:
+            b.rel(rid(r["feature"]), "writesData", "data:" + d["id"], r["file"], r["line"], r["via"])
+        for st in d["states"]:
+            first = (st["set_by"] or st["read_by"])[0]
+            sid = b.ent(state_id(d["id"], st["column"], st["value"]), "State", f"{d['id']}.{st['column']} = '{st['value']}'",
+                        f"set by {len(st['set_by'])}, listed by {len(st['read_by'])} feature(s)", first["file"], first["line"])
+            b.rel("data:" + d["id"], "hasState", sid, first["file"], first["line"])
+            for r in st["set_by"]:
+                b.rel(rid(r["feature"]), "setsState", sid, r["file"], r["line"], r["via"])
+            for r in st["read_by"]:
+                b.rel(rid(r["feature"]), "listsState", sid, r["file"], r["line"], r["via"])
+            for x in st["tested_in"]:
+                target = "screen:" + x["screen"] if x["where"] == "template" else rid(x["feature"])
+                b.rel(sid, "testedBy", target, x["file"], x["line"], x["condition"],
+                      "the condition names the same column and value; not traced to the same rows")
+    for h in j["handoffs"]:
+        b.rel(rid(h["from"]), "handsOverTo", rid(h["to"]), h["read_at"]["file"], h["read_at"]["line"],
+              f"{h['state'][0]}.{h['state'][1]} = '{h['state'][2]}'", h["inferred"])
+    for a in j["assets"]:
+        first = next((x for key in ("registered_by", "written_by", "used_in") for x in a[key]), {})
+        gone = sorted({u for sid in a["screens"] for u in ex.who_sees(sid)})
+        b.ent("asset:" + a["id"], "Asset", a["id"], a["kind"] + (f"; appears on {len(a['screens'])} screen(s)" if a["screens"]
+                                                                  else "; no use found"),
+              a.get("file", "") or first.get("file", ""), first.get("line", 0) if not a.get("file") else 0,
+              kind=a["kind"], seen_by=gone, not_verified=a["unknown"])
+        for sid in a["screens"]:
+            use = next((u for u in a["used_in"] if u["file"] == sid), None) or (a["used_in"][0] if a["used_in"] else None)
+            if use:
+                through = next((x["layout"] for x in a.get("through_layout", []) if x["screen"] == sid), "")
+                b.rel("screen:" + sid, "showsAsset", "asset:" + a["id"], use["file"], use["line"],
+                      f"through the layout {through}" if through else use["how"])
+        for key in ("registered_by", "written_by", "stored_by"):
+            for r in a[key]:
+                b.rel(rid(r["feature"]), "provides", "asset:" + a["id"], r["file"], r["line"],
+                      {"registered_by": "receives it", "written_by": "writes it", "stored_by": "stores it"}[key],
+                      r.get("inferred", ""))
+        for r in a["served_by"]:
+            b.rel(rid(r["feature"]), "delivers", "asset:" + a["id"], r["file"], r["line"],
+                  "" if r.get("exact_file") else "serves any file of the folder")
+        for col in a["columns"]:
+            b.rel("asset:" + a["id"], "keptIn", "data:" + col["table"], col["file"], col["line"], f"column {col['column']}")
 
 
 def build(project: Project, notes) -> dict:
@@ -264,6 +416,8 @@ def build(project: Project, notes) -> dict:
     for a in lv.get("git", {}).get("authors", []):
         eid = b.ent("person:" + a["name"], "Person", a["name"], f"{a['commits']} commit(s), {a['first']} to {a['last']}")
         b.rel(eid, "authored", pid)
+
+    _journeys(b, project, notes, fid)
 
     order = {c[0]: i for i, c in enumerate(CLASSES)}
     entities = sorted(b.entities.values(), key=lambda e: (order[e["type"]], e["name"].lower(), e["id"]))

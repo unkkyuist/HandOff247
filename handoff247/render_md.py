@@ -72,6 +72,7 @@ class Pages:
         self.notes_label = notes_label
         self.date = date
         self.files = {f.path: f for f in project.files}
+        self.entity_pages: dict[str, str] = {}      # ontology id -> wiki page, set by build.write_pack
         self.out_edges = defaultdict(list)
         self.in_edges = defaultdict(list)
         for e in project.edges:
@@ -166,7 +167,9 @@ class Pages:
                    (t("metric_modes"), len({m["name"] for m in L["modes"]})),
                    (t("metric_ops"), sum(len(tb["ops"]) for tb in L["tables"])),
                    (t("metric_routes"), len(L["routes"])), (t("metric_tools"), len(L["mcp_tools"])),
-                   (t("metric_env"), len([k for k, v in L["env"].items() if not v["system"]]))]
+                   (t("metric_env"), len([k for k, v in L["env"].items() if not v["system"]])),
+                   (t("metric_users"), len(L.get("journeys", {}).get("user_types", []))),
+                   (t("metric_screens"), len(L.get("journeys", {}).get("screens", [])))]
         metrics = [m for m in metrics if str(m[1]) not in ("0",)]
         s.append(f"## {t('at_a_glance')}\n")
         s.append(table([m[0] for m in metrics], [[m[1] for m in metrics]]))
@@ -195,6 +198,7 @@ class Pages:
             s.append(f"\n## {t('areas_map')}\n\n" + mermaid_block(self.d["areas"], "areas", t))
         s.append(f"\n## {t('pages')}\n")
         s.append(f"- [HANDOVER.md](HANDOVER.md) — {t('page_handover')}")
+        s.append(f"- [USERS.md](USERS.md) — {t('page_users')}")
         s.append(f"- [RUNNING.md](RUNNING.md) — {t('page_running')}")
         s.append(f"- [CONNECTIONS.md](CONNECTIONS.md) — {t('page_connections')}")
         s.append(f"- [CODEMAP.md](CODEMAP.md) — {t('page_codemap')}")
@@ -239,6 +243,11 @@ class Pages:
                 s.append(f"\n{t('uncommitted', n=g['uncommitted'])}")
             s.append("")
         return "\n".join(s) + "\n"
+
+    # ------------------------------------------------------------ USERS
+    def users(self) -> str:
+        from .render_users import users_page
+        return users_page(self, self.entity_pages)
 
     # ------------------------------------------------------------ HANDOVER
     def ready(self) -> list[dict]:

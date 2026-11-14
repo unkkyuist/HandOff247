@@ -1,0 +1,44 @@
+flowchart LR
+  subgraph g1["seen by author, editor, anyone"]
+    n2["article.html"]:::iface
+  end
+  subgraph g3["seen by author"]
+    n4["My desk<br/>desk.html"]:::iface
+    n5["New article<br/>edit.html"]:::iface
+  end
+  subgraph g6["seen by anyone"]
+    n7["Latest articles<br/>home.html"]:::iface
+    n8["Sign in<br/>login.html"]:::iface
+  end
+  subgraph g9["seen by editor"]
+    n10["Review queue<br/>review.html"]:::iface
+    n11["review#95;detail.html"]:::iface
+  end
+  n12[("articles.status = 'in#95;review'")]:::data
+  n4 -->|"Send for review"| n12
+  n13[("articles.status = 'draft'")]:::data
+  n5 -->|"Save draft"| n13
+  n14[("articles.status = 'published'")]:::data
+  n11 -->|"Publish"| n14
+  n11 -->|"Send back"| n13
+  n14 -.->|"listed on"| n7
+  n13 -.->|"tested on"| n4
+  n12 -.->|"listed on"| n10
+  n15[/"uploaded file cover"/]:::data
+  n5 -->|"Cover image"| n15
+  n15 -->|"shown on"| n2
+  n15 -->|"shown on"| n7
+  n15 -->|"shown on"| n11
+  n16[/"generated file published.csv"/]:::data
+  n11 -->|"Publish"| n16
+  n16 -->|"shown on"| n7
+  classDef entry fill:#fde68a,stroke:#b45309,color:#1f2937
+  classDef launcher fill:#e0e7ff,stroke:#4338ca,color:#1f2937
+  classDef mode fill:#dcfce7,stroke:#15803d,color:#1f2937
+  classDef iface fill:#cffafe,stroke:#0e7490,color:#1f2937
+  classDef table fill:#fce7f3,stroke:#be185d,color:#1f2937
+  classDef hub fill:#f3f4f6,stroke:#6b7280,color:#1f2937,stroke-dasharray:4 3
+  classDef data fill:#fef3c7,stroke:#92400e,color:#1f2937
+  classDef ext fill:#ffffff,stroke:#9ca3af,color:#374151,stroke-dasharray:2 2
+  classDef test fill:#ede9fe,stroke:#6d28d9,color:#1f2937
+  classDef file fill:#ffffff,stroke:#64748b,color:#1f2937

@@ -24,7 +24,7 @@ def _notes_path(args) -> Path:
     return Path(args.notes) if args.notes else Path(args.project) / DEFAULT_NAME
 
 
-COMMANDS = ("go", "build", "notes", "check", "mcp")
+COMMANDS = ("go", "build", "notes", "check", "mcp", "trace")
 
 
 def _summary_args(p: argparse.ArgumentParser) -> None:
@@ -83,7 +83,10 @@ def _go(args) -> int:
         summaries(project, notes, summarize.cache_path(notes_path), args)
         info = write_pack(project, out, notes, "auto", "", date, DEFAULT_NAME)
         print(f"HandOff247 {__version__}: {info['files']} files, {len(info['diagrams'])} diagrams "
-              f"({', '.join(info['diagrams']) or 'none'}), 6 pages")
+              f"({', '.join(info['diagrams']) or 'none'}), 7 pages")
+        if info["user_types"] or info["screens"]:
+            print(f"users: {info['user_types']} user type(s), {info['screens']} screen(s), {info['features']} feature(s) "
+                  f"(USERS.md, Users tab; ask with `handoff247 trace`)")
         print(f"ontology: {info['entities']} things, {info['relations']} relations (ontology.json, Graph tab); "
               f"wiki: {info['wiki_pages']} pages (wiki/, llms.txt)")
         print(f"notes: {notes_path} ({'created' if not existing else f'{added} heading(s) added'})")
@@ -100,6 +103,45 @@ def _go(args) -> int:
     if args.open:
         import webbrowser
         webbrowser.open(index.resolve().as_uri())
+    return 0
+
+
+def _trace(args) -> int:
+    """Answer a successor's question from the command line: the same answers the MCP tools give."""
+    import json
+
+    from .explore import Explorer, format_feature, format_find
+    root = Path(args.project)
+    if not root.is_dir():
+        print(f"error: {root} is not a folder", file=sys.stderr)
+        return 2
+    project = analyze_project(root, None, args.exclude)
+    notes = load(Path(args.notes) if args.notes else root / DEFAULT_NAME)
+    translate.apply(project, notes.translations())
+    ex = Explorer(project, notes)
+    try:
+        if args.feature:
+            data, text = ex.feature(args.feature), None
+            text = format_feature(data)
+        elif args.asset:
+            data, text = ex.asset(args.asset), None
+        elif args.impact:
+            path, _, line = args.impact.partition(":")
+            if len(path) == 1 and line:                 # C:\x\y.py:12 -> keep the drive letter with the path
+                rest, _, line = line.rpartition(":") if ":" in line else (line, "", "")
+                path = path + ":" + rest
+            data, text = ex.impact(path, int(line) if line.isdigit() else 0, args.symbol or ""), None
+        elif args.words:
+            data = ex.find(" ".join(args.words), args.user or "", args.limit)
+            text = format_find(data)
+        elif args.user:
+            data, text = ex.user_flow(args.user), None
+        else:
+            data, text = ex.users(), None
+    except KeyError as e:
+        print(f"error: {e.args[0]}", file=sys.stderr)
+        return 2
+    print(json.dumps(data, ensure_ascii=False, indent=1) if args.json or text is None else text)
     return 0
 
 
@@ -143,9 +185,24 @@ def main(argv: list[str] | None = None) -> int:
     m = sub.add_parser("mcp", help="run an MCP server (stdio) so an AI agent can read the ontology and source "
                        "and write notes; add it to Codex or Claude Code as a command")
     m.add_argument("project", nargs="?", default="", help="default project folder for the tools (optional)")
+    tr = sub.add_parser("trace", help="answer a question about the application from a user's side: start from a user's "
+                        "words, a user type, a feature, an asset or a code file (no pack is written)")
+    tr.add_argument("project", help="project folder to analyze")
+    tr.add_argument("words", nargs="*", help="what the user said, or the words they see on the screen")
+    tr.add_argument("--user", help="the requester's user type; alone, it prints that user type's whole flow")
+    tr.add_argument("--feature", metavar="ID", help="everything about one feature: a route id, handler name or path")
+    tr.add_argument("--asset", metavar="NAME", help="an asset (file, upload field, generated file) or a table name")
+    tr.add_argument("--impact", metavar="PATH[:LINE]", help="which features, screens and user types a file or line reaches")
+    tr.add_argument("--symbol", help="with --impact: a function name in that file")
+    tr.add_argument("--limit", type=int, default=8, help="maximum candidates for a request (default 8)")
+    tr.add_argument("--json", action="store_true", help="print the full answer as JSON")
+    tr.add_argument("--notes", help=f"notes file (default: <project>/{DEFAULT_NAME})")
+    tr.add_argument("--exclude", action="append", default=[], metavar="GLOB", help="skip matching paths (repeatable)")
     args = ap.parse_args(argv)
     if args.cmd == "go":
         return _go(args)
+    if args.cmd == "trace":
+        return _trace(args)
     if args.cmd == "mcp":
         from . import mcp
         return mcp.serve(args.project or None)

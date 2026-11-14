@@ -1,0 +1,4 @@
+/* Newsroom styles. */
+body { font-family: Georgia, serif; background: url("paper.png"); }
+.flash { background: #fff7d6; padding: 8px; }
+.cover { max-width: 100%; }

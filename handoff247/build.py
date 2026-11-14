@@ -13,7 +13,7 @@ from .notes import TRANSLATIONS, Notes
 from .render_html import render as render_html
 from .render_md import Pages, make_linker
 
-PAGE_FILES = ("README.md", "HANDOVER.md", "RUNNING.md", "CONNECTIONS.md", "CODEMAP.md", "FILES.md")
+PAGE_FILES = ("README.md", "HANDOVER.md", "USERS.md", "RUNNING.md", "CONNECTIONS.md", "CODEMAP.md", "FILES.md")
 
 
 def to_json(project: Project, notes: Notes, date: str) -> dict:
@@ -41,8 +41,12 @@ def write_pack(project: Project, out_dir: Path, notes: Notes, links: str = "auto
     linker = make_linker(links, project, out_dir, link_base)
     pages = Pages(project, diagrams, notes, linker, notes_label, date)
     project.links["readiness"] = pages.ready()
-    content = {"README.md": pages.readme(), "HANDOVER.md": pages.handover(), "RUNNING.md": pages.running(),
-               "CONNECTIONS.md": pages.connections(), "CODEMAP.md": pages.codemap(), "FILES.md": pages.file_cards()}
+    onto = ontology.build(project, notes)
+    wiki.assign_pages(onto)
+    pages.entity_pages = {e["id"]: e["page"] for e in onto["entities"] if e.get("page")}
+    content = {"README.md": pages.readme(), "HANDOVER.md": pages.handover(), "USERS.md": pages.users(),
+               "RUNNING.md": pages.running(), "CONNECTIONS.md": pages.connections(), "CODEMAP.md": pages.codemap(),
+               "FILES.md": pages.file_cards()}
     for name, text in content.items():
         (out_dir / name).write_text(text, encoding="utf-8", newline="\n")
     ddir = out_dir / "diagrams"
@@ -54,8 +58,6 @@ def write_pack(project: Project, out_dir: Path, notes: Notes, links: str = "auto
         (ddir / f"{name}.mmd").write_text(fl.render(), encoding="utf-8", newline="\n")
     data = to_json(project, notes, date)
     (out_dir / "handoff.json").write_text(json.dumps(data, ensure_ascii=False, indent=1), encoding="utf-8", newline="\n")
-    onto = ontology.build(project, notes)
-    wiki.assign_pages(onto)
     (out_dir / "ontology.json").write_text(json.dumps({**onto, "generated": date}, ensure_ascii=False, indent=1),
                                            encoding="utf-8", newline="\n")
     wiki_pages = wiki.Wiki(project, onto, notes, linker, notes_label, date).render()
@@ -66,7 +68,9 @@ def write_pack(project: Project, out_dir: Path, notes: Notes, links: str = "auto
     return {"out": str(out_dir), "pages": list(content), "diagrams": list(diagrams), "files": len(project.files),
             "edges": len(project.edges), "links": linker.mode, "readiness": project.links["readiness"],
             "gaps": pages.undocumented(), "entities": len(onto["entities"]), "relations": len(onto["relations"]),
-            "wiki_pages": sum(1 for k in wiki_pages if k.startswith("wiki/")), **tr}
+            "wiki_pages": sum(1 for k in wiki_pages if k.startswith("wiki/")),
+            "user_types": len(project.links["journeys"]["user_types"]), "screens": len(project.links["journeys"]["screens"]),
+            "features": len(project.links["journeys"]["features"]), **tr}
 
 
 def write_wiki(out_dir: Path, pages: dict[str, str]) -> None:

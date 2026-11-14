@@ -1,0 +1,4109 @@
+{
+ "generator": "HandOff247",
+ "kind": "ontology",
+ "version": "0.6.0",
+ "project": "Newsroom",
+ "schema": {
+  "classes": [
+   {
+    "id": "Project",
+    "label": "Project",
+    "plural": "Project",
+    "group": "structure",
+    "shape": "diamond",
+    "description": "The thing being handed over."
+   },
+   {
+    "id": "Area",
+    "label": "Area",
+    "plural": "Areas",
+    "group": "structure",
+    "shape": "square",
+    "description": "A top-level folder of the project."
+   },
+   {
+    "id": "File",
+    "label": "File",
+    "plural": "Files",
+    "group": "file",
+    "shape": "circle",
+    "description": "A file of the project (images and other assets are left out)."
+   },
+   {
+    "id": "Type",
+    "label": "Type",
+    "plural": "Types",
+    "group": "type",
+    "shape": "circle",
+    "description": "A class, record, struct, interface or enum defined in a file."
+   },
+   {
+    "id": "Mode",
+    "label": "Run mode",
+    "plural": "Run modes",
+    "group": "run",
+    "shape": "diamond",
+    "description": "A way to start the program, picked by its first argument."
+   },
+   {
+    "id": "Subcommand",
+    "label": "Sub-command",
+    "plural": "Sub-commands",
+    "group": "run",
+    "shape": "square",
+    "description": "A sub-command of a command-line parser."
+   },
+   {
+    "id": "Table",
+    "label": "Dispatch table",
+    "plural": "Dispatch tables",
+    "group": "operation",
+    "shape": "square",
+    "description": "A switch or mapping that turns an operation name into the code that handles it."
+   },
+   {
+    "id": "Operation",
+    "label": "Operation",
+    "plural": "Operations",
+    "group": "operation",
+    "shape": "circle",
+    "description": "One named operation of a dispatch table."
+   },
+   {
+    "id": "Route",
+    "label": "HTTP route",
+    "plural": "HTTP routes",
+    "group": "interface",
+    "shape": "triangle",
+    "description": "An HTTP endpoint the program serves."
+   },
+   {
+    "id": "McpTool",
+    "label": "MCP tool",
+    "plural": "MCP tools",
+    "group": "interface",
+    "shape": "diamond",
+    "description": "A tool the program offers to AI clients over MCP."
+   },
+   {
+    "id": "EnvVar",
+    "label": "Environment variable",
+    "plural": "Environment variables",
+    "group": "config",
+    "shape": "circle",
+    "description": "An environment variable the code reads or sets (operating-system variables are left out)."
+   },
+   {
+    "id": "Port",
+    "label": "Port",
+    "plural": "Ports",
+    "group": "config",
+    "shape": "square",
+    "description": "A network port number found in an address or a port setting."
+   },
+   {
+    "id": "Package",
+    "label": "Package",
+    "plural": "Packages",
+    "group": "outside",
+    "shape": "circle",
+    "description": "A third-party package the project declares or imports."
+   },
+   {
+    "id": "Host",
+    "label": "External host",
+    "plural": "External hosts",
+    "group": "outside",
+    "shape": "triangle",
+    "description": "A host name found in a URL."
+   },
+   {
+    "id": "Command",
+    "label": "Command-line tool",
+    "plural": "Command-line tools",
+    "group": "outside",
+    "shape": "square",
+    "description": "A well-known program the project's scripts start; it has to be installed."
+   },
+   {
+    "id": "Person",
+    "label": "Person",
+    "plural": "People",
+    "group": "outside",
+    "shape": "diamond",
+    "description": "An author in the Git history."
+   },
+   {
+    "id": "UserType",
+    "label": "User type",
+    "plural": "User types",
+    "group": "structure",
+    "shape": "triangle",
+    "description": "A kind of user the analysed application tells apart, found from role checks. Not an access level of this pack."
+   },
+   {
+    "id": "Screen",
+    "label": "Screen",
+    "plural": "Screens",
+    "group": "interface",
+    "shape": "square",
+    "description": "A template or page a user sees."
+   },
+   {
+    "id": "Term",
+    "label": "Screen term",
+    "plural": "Screen terms",
+    "group": "interface",
+    "shape": "circle",
+    "description": "Words a user reads: a link, button, field label, heading, or a message the code shows."
+   },
+   {
+    "id": "Function",
+    "label": "Function",
+    "plural": "Functions",
+    "group": "type",
+    "shape": "square",
+    "description": "Project code that a feature runs. Modelled once, however many features use it."
+   },
+   {
+    "id": "Data",
+    "label": "Data table",
+    "plural": "Data tables",
+    "group": "file",
+    "shape": "square",
+    "description": "A table named in an SQL statement."
+   },
+   {
+    "id": "State",
+    "label": "State",
+    "plural": "States",
+    "group": "file",
+    "shape": "diamond",
+    "description": "A column value that statements set or filter on, such as status = 'published'."
+   },
+   {
+    "id": "Asset",
+    "label": "Asset",
+    "plural": "Assets",
+    "group": "file",
+    "shape": "triangle",
+    "description": "A file users see or provide: shipped with the project, uploaded, generated, or kept in external storage."
+   }
+  ],
+  "relations": [
+   {
+    "id": "contains",
+    "label": "contains",
+    "inverse": "is part of",
+    "description": "Project → area → file."
+   },
+   {
+    "id": "defines",
+    "label": "defines",
+    "inverse": "is defined in",
+    "description": "The file holds the definition."
+   },
+   {
+    "id": "imports",
+    "label": "imports",
+    "inverse": "is imported by",
+    "description": "Import or include statement."
+   },
+   {
+    "id": "uses",
+    "label": "uses",
+    "inverse": "is used by",
+    "description": "The code names a type defined in the other file; a run mode uses a type."
+   },
+   {
+    "id": "injects",
+    "label": "takes as a dependency",
+    "inverse": "is a dependency of",
+    "description": "Constructor parameter of that type."
+   },
+   {
+    "id": "extends",
+    "label": "extends",
+    "inverse": "is extended by",
+    "description": "Base class or implemented interface."
+   },
+   {
+    "id": "loads",
+    "label": "loads",
+    "inverse": "is loaded by",
+    "description": "A page loads a script or stylesheet."
+   },
+   {
+    "id": "runs",
+    "label": "runs",
+    "inverse": "is run by",
+    "description": "A script or configuration starts the other file."
+   },
+   {
+    "id": "refers",
+    "label": "refers to",
+    "inverse": "is referred to by",
+    "description": "A string in the file is the other file's path."
+   },
+   {
+    "id": "references",
+    "label": "references",
+    "inverse": "is referenced by",
+    "description": "Project reference in a build file."
+   },
+   {
+    "id": "documents",
+    "label": "documents",
+    "inverse": "is documented in",
+    "description": "A document links to the file or shows the operation in an example."
+   },
+   {
+    "id": "serves",
+    "label": "serves",
+    "inverse": "is served by",
+    "description": "A run mode passes requests to the dispatch table."
+   },
+   {
+    "id": "exposes",
+    "label": "exposes",
+    "inverse": "is exposed by",
+    "description": "A run mode registers the HTTP route."
+   },
+   {
+    "id": "hasOperation",
+    "label": "has operation",
+    "inverse": "is an operation of",
+    "description": "Key of the dispatch table."
+   },
+   {
+    "id": "handledBy",
+    "label": "is handled by",
+    "inverse": "handles",
+    "description": "The file that holds the handler the table calls."
+   },
+   {
+    "id": "calls",
+    "label": "calls",
+    "inverse": "is called from",
+    "description": "The file asks for the operation by name (over HTTP, a process or in-process)."
+   },
+   {
+    "id": "invokes",
+    "label": "invokes",
+    "inverse": "is invoked by",
+    "description": "An MCP tool runs the operation."
+   },
+   {
+    "id": "forwardsTo",
+    "label": "forwards to",
+    "inverse": "receives from",
+    "description": "An HTTP route hands the request to the dispatch table."
+   },
+   {
+    "id": "reads",
+    "label": "reads",
+    "inverse": "is read by",
+    "description": "The file reads the environment variable."
+   },
+   {
+    "id": "sets",
+    "label": "sets",
+    "inverse": "is set by",
+    "description": "The file sets the environment variable."
+   },
+   {
+    "id": "mentions",
+    "label": "mentions",
+    "inverse": "is mentioned in",
+    "description": "The host or port appears in the file."
+   },
+   {
+    "id": "dependsOn",
+    "label": "depends on",
+    "inverse": "is a dependency of",
+    "description": "The file declares or imports the package."
+   },
+   {
+    "id": "starts",
+    "label": "starts",
+    "inverse": "is started by",
+    "description": "The file starts the command-line tool."
+   },
+   {
+    "id": "authored",
+    "label": "has commits in",
+    "inverse": "has commits by",
+    "description": "Author in the Git history of the project."
+   },
+   {
+    "id": "openTo",
+    "label": "is open to",
+    "inverse": "may use",
+    "description": "Role check on the route, or none found (anyone)."
+   },
+   {
+    "id": "sees",
+    "label": "sees",
+    "inverse": "is seen by",
+    "description": "A route this user type may use shows the screen."
+   },
+   {
+    "id": "shows",
+    "label": "shows",
+    "inverse": "is shown by",
+    "description": "The route renders the screen."
+   },
+   {
+    "id": "builtOn",
+    "label": "is built on",
+    "inverse": "is part of",
+    "description": "The template extends or includes the other one."
+   },
+   {
+    "id": "displays",
+    "label": "displays",
+    "inverse": "is displayed on",
+    "description": "The words are on the screen, or the route shows the message."
+   },
+   {
+    "id": "leadsTo",
+    "label": "leads to",
+    "inverse": "is started from",
+    "description": "The link, button or form of the term targets the route; a script of the screen calls it."
+   },
+   {
+    "id": "redirectsTo",
+    "label": "redirects to",
+    "inverse": "is reached by redirect from",
+    "description": "The handler redirects to the other route."
+   },
+   {
+    "id": "runsCode",
+    "label": "runs",
+    "inverse": "runs for",
+    "description": "The handler calls the function, directly or through other functions."
+   },
+   {
+    "id": "readsData",
+    "label": "reads",
+    "inverse": "is read by",
+    "description": "An SQL statement of the feature reads the table."
+   },
+   {
+    "id": "writesData",
+    "label": "writes",
+    "inverse": "is written by",
+    "description": "An SQL statement of the feature inserts, updates or deletes rows."
+   },
+   {
+    "id": "hasState",
+    "label": "has the state",
+    "inverse": "is a state of",
+    "description": "A literal column value found in a statement."
+   },
+   {
+    "id": "setsState",
+    "label": "sets",
+    "inverse": "is set by",
+    "description": "A statement of the feature sets the column to this value."
+   },
+   {
+    "id": "listsState",
+    "label": "lists only",
+    "inverse": "is the filter of",
+    "description": "A statement of the feature filters on this value."
+   },
+   {
+    "id": "testedBy",
+    "label": "is tested by",
+    "inverse": "tests",
+    "description": "A template condition or a handler branch names the same column and value."
+   },
+   {
+    "id": "handsOverTo",
+    "label": "hands over to",
+    "inverse": "receives from",
+    "description": "One feature sets a state that the other filters on."
+   },
+   {
+    "id": "showsAsset",
+    "label": "shows",
+    "inverse": "appears on",
+    "description": "The screen references the file."
+   },
+   {
+    "id": "provides",
+    "label": "provides",
+    "inverse": "is provided by",
+    "description": "The feature receives the upload or writes the generated file."
+   },
+   {
+    "id": "delivers",
+    "label": "delivers",
+    "inverse": "is delivered by",
+    "description": "The route sends the file to the browser."
+   },
+   {
+    "id": "keptIn",
+    "label": "has its name kept in",
+    "inverse": "keeps the name of",
+    "description": "The stored file name is written to a column of the table."
+   },
+   {
+    "id": "wordedIn",
+    "label": "takes its text from",
+    "inverse": "words",
+    "description": "The text of the term comes from a locale file."
+   }
+  ]
+ },
+ "counts": {
+  "Project": 1,
+  "Area": 3,
+  "File": 18,
+  "Route": 13,
+  "EnvVar": 6,
+  "Port": 1,
+  "Package": 1,
+  "UserType": 3,
+  "Screen": 8,
+  "Term": 32,
+  "Function": 18,
+  "Data": 2,
+  "State": 3,
+  "Asset": 5
+ },
+ "entities": [
+  {
+   "id": "project:Newsroom",
+   "type": "Project",
+   "name": "Newsroom",
+   "summary": "A small publishing application that exists only as a test fixture for HandOff247 (`tests/fixtures/newsroom`). Authors write articles and upload a cover image, editors review and publish them, and readers see the publish…",
+   "page": "wiki/overview.md"
+  },
+  {
+   "id": "area:locales",
+   "type": "Area",
+   "name": "locales",
+   "attrs": {
+    "files": 2
+   },
+   "page": "wiki/areas/locales.md"
+  },
+  {
+   "id": "area:static",
+   "type": "Area",
+   "name": "static",
+   "attrs": {
+    "files": 1
+   },
+   "page": "wiki/areas/static.md"
+  },
+  {
+   "id": "area:templates",
+   "type": "Area",
+   "name": "templates",
+   "attrs": {
+    "files": 8
+   },
+   "page": "wiki/areas/templates.md"
+  },
+  {
+   "id": "file:app.py",
+   "type": "File",
+   "name": "app.py",
+   "summary": "Newsroom: authors write articles, editors review and publish them, readers see the result.",
+   "file": "app.py",
+   "attrs": {
+    "language": "python",
+    "category": "code",
+    "lines": 130
+   },
+   "page": "wiki/files/app.py.md"
+  },
+  {
+   "id": "file:auth.py",
+   "type": "File",
+   "name": "auth.py",
+   "summary": "Who is signed in, and the role check used by the routes.",
+   "file": "auth.py",
+   "attrs": {
+    "language": "python",
+    "category": "code",
+    "lines": 26
+   },
+   "page": "wiki/files/auth.py.md"
+  },
+  {
+   "id": "file:db.py",
+   "type": "File",
+   "name": "db.py",
+   "summary": "SQLite access.",
+   "file": "db.py",
+   "attrs": {
+    "language": "python",
+    "category": "code",
+    "lines": 65
+   },
+   "page": "wiki/files/db.py.md"
+  },
+  {
+   "id": "file:locales/en.json",
+   "type": "File",
+   "name": "locales/en.json",
+   "summary": "keys: nav, review",
+   "file": "locales/en.json",
+   "attrs": {
+    "language": "json",
+    "category": "config",
+    "lines": 8
+   },
+   "page": "wiki/files/locales__en.json.md"
+  },
+  {
+   "id": "file:locales/ko.json",
+   "type": "File",
+   "name": "locales/ko.json",
+   "summary": "keys: nav, review",
+   "file": "locales/ko.json",
+   "attrs": {
+    "language": "json",
+    "category": "config",
+    "lines": 8
+   },
+   "page": "wiki/files/locales__ko.json.md"
+  },
+  {
+   "id": "file:README.md",
+   "type": "File",
+   "name": "README.md",
+   "summary": "A small publishing application used as a test fixture: authors write articles and upload a cover image, editors review and publish them, and readers see the published articles on the front page.",
+   "file": "README.md",
+   "attrs": {
+    "language": "markdown",
+    "category": "docs",
+    "lines": 12
+   },
+   "page": "wiki/files/README.md.md"
+  },
+  {
+   "id": "file:requirements.txt",
+   "type": "File",
+   "name": "requirements.txt",
+   "file": "requirements.txt",
+   "attrs": {
+    "language": "requirements",
+    "category": "config",
+    "lines": 1
+   },
+   "page": "wiki/files/requirements.txt.md"
+  },
+  {
+   "id": "file:schema.sql",
+   "type": "File",
+   "name": "schema.sql",
+   "file": "schema.sql",
+   "attrs": {
+    "language": "other",
+    "category": "other",
+    "lines": 16
+   },
+   "page": "wiki/files/schema.sql.md"
+  },
+  {
+   "id": "file:static/site.css",
+   "type": "File",
+   "name": "static/site.css",
+   "summary": "Newsroom styles.",
+   "file": "static/site.css",
+   "attrs": {
+    "language": "css",
+    "category": "web",
+    "lines": 4
+   },
+   "page": "wiki/files/static__site.css.md"
+  },
+  {
+   "id": "file:storage.py",
+   "type": "File",
+   "name": "storage.py",
+   "summary": "Files on disk: cover images that authors upload and the list that publishing writes.",
+   "file": "storage.py",
+   "attrs": {
+    "language": "python",
+    "category": "code",
+    "lines": 27
+   },
+   "page": "wiki/files/storage.py.md"
+  },
+  {
+   "id": "file:templates/article.html",
+   "type": "File",
+   "name": "templates/article.html",
+   "file": "templates/article.html",
+   "attrs": {
+    "language": "html",
+    "category": "web",
+    "lines": 12
+   },
+   "page": "wiki/files/templates__article.html.md"
+  },
+  {
+   "id": "file:templates/base.html",
+   "type": "File",
+   "name": "templates/base.html",
+   "summary": "{% block title %}Newsroom{% endblock %}",
+   "file": "templates/base.html",
+   "attrs": {
+    "language": "html",
+    "category": "web",
+    "lines": 29
+   },
+   "page": "wiki/files/templates__base.html.md"
+  },
+  {
+   "id": "file:templates/desk.html",
+   "type": "File",
+   "name": "templates/desk.html",
+   "file": "templates/desk.html",
+   "attrs": {
+    "language": "html",
+    "category": "web",
+    "lines": 23
+   },
+   "page": "wiki/files/templates__desk.html.md"
+  },
+  {
+   "id": "file:templates/edit.html",
+   "type": "File",
+   "name": "templates/edit.html",
+   "file": "templates/edit.html",
+   "attrs": {
+    "language": "html",
+    "category": "web",
+    "lines": 14
+   },
+   "page": "wiki/files/templates__edit.html.md"
+  },
+  {
+   "id": "file:templates/home.html",
+   "type": "File",
+   "name": "templates/home.html",
+   "file": "templates/home.html",
+   "attrs": {
+    "language": "html",
+    "category": "web",
+    "lines": 14
+   },
+   "page": "wiki/files/templates__home.html.md"
+  },
+  {
+   "id": "file:templates/login.html",
+   "type": "File",
+   "name": "templates/login.html",
+   "file": "templates/login.html",
+   "attrs": {
+    "language": "html",
+    "category": "web",
+    "lines": 10
+   },
+   "page": "wiki/files/templates__login.html.md"
+  },
+  {
+   "id": "file:templates/review.html",
+   "type": "File",
+   "name": "templates/review.html",
+   "file": "templates/review.html",
+   "attrs": {
+    "language": "html",
+    "category": "web",
+    "lines": 10
+   },
+   "page": "wiki/files/templates__review.html.md"
+  },
+  {
+   "id": "file:templates/review_detail.html",
+   "type": "File",
+   "name": "templates/review_detail.html",
+   "file": "templates/review_detail.html",
+   "attrs": {
+    "language": "html",
+    "category": "web",
+    "lines": 17
+   },
+   "page": "wiki/files/templates__review_detail.html.md"
+  },
+  {
+   "id": "route:GET /",
+   "type": "Route",
+   "name": "GET /",
+   "summary": "handler `home`",
+   "file": "app.py",
+   "line": 18,
+   "page": "wiki/features/GET-__.md"
+  },
+  {
+   "id": "route:GET /articles/<int:article_id>",
+   "type": "Route",
+   "name": "GET /articles/<int:article_id>",
+   "summary": "handler `article`",
+   "file": "app.py",
+   "line": 24,
+   "page": "wiki/features/GET-__articles__-int-article_id.md"
+  },
+  {
+   "id": "route:GET /desk",
+   "type": "Route",
+   "name": "GET /desk",
+   "summary": "handler `desk`",
+   "file": "app.py",
+   "line": 57,
+   "page": "wiki/features/GET-__desk.md"
+  },
+  {
+   "id": "route:GET /preview/<int:article_id>",
+   "type": "Route",
+   "name": "GET /preview/<int:article_id>",
+   "summary": "handler `preview`",
+   "file": "app.py",
+   "line": 125,
+   "page": "wiki/features/GET-__preview__-int-article_id.md"
+  },
+  {
+   "id": "route:GET /published.csv",
+   "type": "Route",
+   "name": "GET /published.csv",
+   "summary": "handler `published_list`",
+   "file": "app.py",
+   "line": 37,
+   "page": "wiki/features/GET-__published.csv.md"
+  },
+  {
+   "id": "route:GET /review",
+   "type": "Route",
+   "name": "GET /review",
+   "summary": "handler `review_queue`",
+   "file": "app.py",
+   "line": 89,
+   "page": "wiki/features/GET-__review.md"
+  },
+  {
+   "id": "route:GET /review/<int:article_id>",
+   "type": "Route",
+   "name": "GET /review/<int:article_id>",
+   "summary": "handler `review_detail`",
+   "file": "app.py",
+   "line": 95,
+   "page": "wiki/features/GET-__review__-int-article_id.md"
+  },
+  {
+   "id": "route:GET /uploads/<path:name>",
+   "type": "Route",
+   "name": "GET /uploads/<path:name>",
+   "summary": "handler `uploaded`",
+   "file": "app.py",
+   "line": 32,
+   "page": "wiki/features/GET-__uploads__-path-name.md"
+  },
+  {
+   "id": "route:GET,POST /desk/new",
+   "type": "Route",
+   "name": "GET,POST /desk/new",
+   "summary": "handler `new_article`",
+   "file": "app.py",
+   "line": 63,
+   "page": "wiki/features/GET-POST-__desk__new.md"
+  },
+  {
+   "id": "route:GET,POST /login",
+   "type": "Route",
+   "name": "GET,POST /login",
+   "summary": "handler `login`",
+   "file": "app.py",
+   "line": 42,
+   "page": "wiki/features/GET-POST-__login.md"
+  },
+  {
+   "id": "route:POST /desk/<int:article_id>/submit",
+   "type": "Route",
+   "name": "POST /desk/<int:article_id>/submit",
+   "summary": "handler `submit`",
+   "file": "app.py",
+   "line": 75,
+   "page": "wiki/features/POST-__desk__-int-article_id-__submit.md"
+  },
+  {
+   "id": "route:POST /review/<int:article_id>/publish",
+   "type": "Route",
+   "name": "POST /review/<int:article_id>/publish",
+   "summary": "handler `publish`",
+   "file": "app.py",
+   "line": 101,
+   "page": "wiki/features/POST-__review__-int-article_id-__publish.md"
+  },
+  {
+   "id": "route:POST /review/<int:article_id>/return",
+   "type": "Route",
+   "name": "POST /review/<int:article_id>/return",
+   "summary": "handler `send_back`",
+   "file": "app.py",
+   "line": 116,
+   "page": "wiki/features/POST-__review__-int-article_id-__return.md"
+  },
+  {
+   "id": "env:NEWSROOM_COVER_REQUIRED",
+   "type": "EnvVar",
+   "name": "NEWSROOM_COVER_REQUIRED",
+   "attrs": {
+    "default_value": "1"
+   },
+   "page": "wiki/environment.md"
+  },
+  {
+   "id": "env:NEWSROOM_DB",
+   "type": "EnvVar",
+   "name": "NEWSROOM_DB",
+   "attrs": {
+    "default_value": "newsroom.db"
+   },
+   "page": "wiki/environment.md"
+  },
+  {
+   "id": "env:NEWSROOM_EXPORTS",
+   "type": "EnvVar",
+   "name": "NEWSROOM_EXPORTS",
+   "attrs": {
+    "default_value": "exports"
+   },
+   "page": "wiki/environment.md"
+  },
+  {
+   "id": "env:NEWSROOM_PORT",
+   "type": "EnvVar",
+   "name": "NEWSROOM_PORT",
+   "attrs": {
+    "default_value": "5080"
+   },
+   "page": "wiki/environment.md"
+  },
+  {
+   "id": "env:NEWSROOM_SECRET",
+   "type": "EnvVar",
+   "name": "NEWSROOM_SECRET",
+   "summary": "the name suggests a secret; the value is not in the pack",
+   "page": "wiki/environment.md"
+  },
+  {
+   "id": "env:NEWSROOM_UPLOADS",
+   "type": "EnvVar",
+   "name": "NEWSROOM_UPLOADS",
+   "attrs": {
+    "default_value": "uploads"
+   },
+   "page": "wiki/environment.md"
+  },
+  {
+   "id": "port:5080",
+   "type": "Port",
+   "name": "5080",
+   "summary": "NEWSROOM_PORT default",
+   "page": "wiki/ports.md"
+  },
+  {
+   "id": "pkg:flask",
+   "type": "Package",
+   "name": "flask",
+   "summary": "pypi >=3.0",
+   "page": "wiki/packages.md"
+  },
+  {
+   "id": "user:anyone",
+   "type": "UserType",
+   "name": "anyone",
+   "summary": "no role check was found on the routes it uses",
+   "attrs": {
+    "kind": "anyone"
+   },
+   "page": "wiki/users/anyone.md"
+  },
+  {
+   "id": "user:author",
+   "type": "UserType",
+   "name": "author",
+   "summary": "Reporters. They mostly ask why an article they sent is not on the front page yet: it is waiting in the editors' queue, or an editor sent it back with a note.",
+   "file": "app.py",
+   "line": 56,
+   "attrs": {
+    "kind": "role"
+   },
+   "page": "wiki/users/author.md"
+  },
+  {
+   "id": "user:editor",
+   "type": "UserType",
+   "name": "editor",
+   "summary": "The news desk. They mostly ask about articles that will not publish and about cover images that do not show.",
+   "file": "app.py",
+   "line": 88,
+   "attrs": {
+    "kind": "role"
+   },
+   "page": "wiki/users/editor.md"
+  },
+  {
+   "id": "screen:templates/article.html",
+   "type": "Screen",
+   "name": "templates/article.html",
+   "file": "templates/article.html",
+   "line": 1,
+   "attrs": {
+    "kind": "page"
+   },
+   "page": "wiki/screens/templates__article.html.md"
+  },
+  {
+   "id": "screen:templates/base.html",
+   "type": "Screen",
+   "name": "templates/base.html",
+   "summary": "Newsroom",
+   "file": "templates/base.html",
+   "line": 1,
+   "attrs": {
+    "kind": "layout"
+   },
+   "page": "wiki/screens/templates__base.html.md"
+  },
+  {
+   "id": "screen:templates/desk.html",
+   "type": "Screen",
+   "name": "templates/desk.html",
+   "summary": "My desk",
+   "file": "templates/desk.html",
+   "line": 1,
+   "attrs": {
+    "kind": "page"
+   },
+   "page": "wiki/screens/templates__desk.html.md"
+  },
+  {
+   "id": "screen:templates/edit.html",
+   "type": "Screen",
+   "name": "templates/edit.html",
+   "summary": "New article",
+   "file": "templates/edit.html",
+   "line": 1,
+   "attrs": {
+    "kind": "page"
+   },
+   "page": "wiki/screens/templates__edit.html.md"
+  },
+  {
+   "id": "screen:templates/home.html",
+   "type": "Screen",
+   "name": "templates/home.html",
+   "summary": "Latest articles",
+   "file": "templates/home.html",
+   "line": 1,
+   "attrs": {
+    "kind": "page"
+   },
+   "page": "wiki/screens/templates__home.html.md"
+  },
+  {
+   "id": "screen:templates/login.html",
+   "type": "Screen",
+   "name": "templates/login.html",
+   "summary": "Sign in",
+   "file": "templates/login.html",
+   "line": 1,
+   "attrs": {
+    "kind": "page"
+   },
+   "page": "wiki/screens/templates__login.html.md"
+  },
+  {
+   "id": "screen:templates/review.html",
+   "type": "Screen",
+   "name": "templates/review.html",
+   "summary": "Review queue",
+   "file": "templates/review.html",
+   "line": 1,
+   "attrs": {
+    "kind": "page"
+   },
+   "page": "wiki/screens/templates__review.html.md"
+  },
+  {
+   "id": "screen:templates/review_detail.html",
+   "type": "Screen",
+   "name": "templates/review_detail.html",
+   "file": "templates/review_detail.html",
+   "line": 1,
+   "attrs": {
+    "kind": "page"
+   },
+   "page": "wiki/screens/templates__review_detail.html.md"
+  },
+  {
+   "id": "term:app.py:107:m1",
+   "type": "Term",
+   "name": "Add a cover image before publishing",
+   "summary": "message, shown by POST /review/<int:article_id>/publish",
+   "file": "app.py",
+   "line": 107,
+   "attrs": {
+    "kind": "message"
+   },
+   "page": "wiki/terms.md"
+  },
+  {
+   "id": "term:templates/login.html:8:2",
+   "type": "Term",
+   "name": "Continue",
+   "summary": "button on templates/login.html",
+   "file": "templates/login.html",
+   "line": 8,
+   "attrs": {
+    "kind": "button"
+   },
+   "page": "wiki/terms.md"
+  },
+  {
+   "id": "term:templates/edit.html:10:3",
+   "type": "Term",
+   "name": "Cover image",
+   "summary": "field on templates/edit.html",
+   "file": "templates/edit.html",
+   "line": 10,
+   "attrs": {
+    "kind": "field",
+    "field": "cover"
+   },
+   "page": "wiki/terms.md"
+  },
+  {
+   "id": "term:templates/home.html:13:2",
+   "type": "Term",
+   "name": "Download the list",
+   "summary": "link on templates/home.html",
+   "file": "templates/home.html",
+   "line": 13,
+   "attrs": {
+    "kind": "link"
+   },
+   "page": "wiki/terms.md"
+  },
+  {
+   "id": "term:app.py:68:m0",
+   "type": "Term",
+   "name": "Draft saved",
+   "summary": "message, shown by GET,POST /desk/new",
+   "file": "app.py",
+   "line": 68,
+   "attrs": {
+    "kind": "message"
+   },
+   "page": "wiki/terms.md"
+  },
+  {
+   "id": "term:templates/desk.html:7:4",
+   "type": "Term",
+   "name": "Editor's note",
+   "summary": "column on templates/desk.html",
+   "file": "templates/desk.html",
+   "line": 7,
+   "attrs": {
+    "kind": "column"
+   },
+   "page": "wiki/terms.md"
+  },
+  {
+   "id": "term:templates/base.html:12:1",
+   "type": "Term",
+   "name": "Front page",
+   "summary": "link on templates/base.html",
+   "file": "templates/base.html",
+   "line": 12,
+   "attrs": {
+    "kind": "link"
+   },
+   "page": "wiki/terms.md"
+  },
+  {
+   "id": "term:templates/desk.html:7:2",
+   "type": "Term",
+   "name": "Headline",
+   "summary": "column on templates/desk.html",
+   "file": "templates/desk.html",
+   "line": 7,
+   "attrs": {
+    "kind": "column"
+   },
+   "page": "wiki/terms.md"
+  },
+  {
+   "id": "term:templates/edit.html:6:1",
+   "type": "Term",
+   "name": "Headline",
+   "summary": "field on templates/edit.html",
+   "file": "templates/edit.html",
+   "line": 6,
+   "attrs": {
+    "kind": "field",
+    "field": "title"
+   },
+   "page": "wiki/terms.md"
+  },
+  {
+   "id": "term:templates/home.html:4:0",
+   "type": "Term",
+   "name": "Latest articles",
+   "summary": "heading on templates/home.html",
+   "file": "templates/home.html",
+   "line": 4,
+   "attrs": {
+    "kind": "heading"
+   },
+   "page": "wiki/terms.md"
+  },
+  {
+   "id": "term:templates/base.html:14:2",
+   "type": "Term",
+   "name": "My desk",
+   "summary": "link on templates/base.html",
+   "file": "templates/base.html",
+   "line": 14,
+   "attrs": {
+    "kind": "link",
+    "shown_when": "user and user.role == 'author'"
+   },
+   "page": "wiki/terms.md"
+  },
+  {
+   "id": "term:templates/desk.html:4:0",
+   "type": "Term",
+   "name": "My desk",
+   "summary": "heading on templates/desk.html",
+   "file": "templates/desk.html",
+   "line": 4,
+   "attrs": {
+    "kind": "heading"
+   },
+   "page": "wiki/terms.md"
+  },
+  {
+   "id": "term:templates/desk.html:5:1",
+   "type": "Term",
+   "name": "New article",
+   "summary": "link on templates/desk.html",
+   "file": "templates/desk.html",
+   "line": 5,
+   "attrs": {
+    "kind": "link"
+   },
+   "page": "wiki/terms.md"
+  },
+  {
+   "id": "term:templates/edit.html:4:0",
+   "type": "Term",
+   "name": "New article",
+   "summary": "heading on templates/edit.html",
+   "file": "templates/edit.html",
+   "line": 4,
+   "attrs": {
+    "kind": "heading"
+   },
+   "page": "wiki/terms.md"
+  },
+  {
+   "id": "term:templates/base.html:5:0",
+   "type": "Term",
+   "name": "Newsroom",
+   "summary": "title on templates/base.html",
+   "file": "templates/base.html",
+   "line": 5,
+   "attrs": {
+    "kind": "title"
+   },
+   "page": "wiki/terms.md"
+  },
+  {
+   "id": "term:app.py:78:m1",
+   "type": "Term",
+   "name": "Only a draft can be sent for review",
+   "summary": "message, shown by POST /desk/<int:article_id>/submit",
+   "file": "app.py",
+   "line": 78,
+   "attrs": {
+    "kind": "message"
+   },
+   "page": "wiki/terms.md"
+  },
+  {
+   "id": "term:app.py:104:m0",
+   "type": "Term",
+   "name": "Only an article in review can be published",
+   "summary": "message, shown by POST /review/<int:article_id>/publish",
+   "file": "app.py",
+   "line": 104,
+   "attrs": {
+    "kind": "message"
+   },
+   "page": "wiki/terms.md"
+  },
+  {
+   "id": "term:templates/review_detail.html:8:0",
+   "type": "Term",
+   "name": "Open the preview",
+   "summary": "link on templates/review_detail.html",
+   "file": "templates/review_detail.html",
+   "line": 8,
+   "attrs": {
+    "kind": "link"
+   },
+   "page": "wiki/terms.md"
+  },
+  {
+   "id": "term:templates/review_detail.html:10:1",
+   "type": "Term",
+   "name": "Publish",
+   "summary": "button on templates/review_detail.html",
+   "file": "templates/review_detail.html",
+   "line": 10,
+   "attrs": {
+    "kind": "button",
+    "other_languages": [
+     "게시"
+    ]
+   },
+   "page": "wiki/terms.md"
+  },
+  {
+   "id": "term:templates/review_detail.html:13:2",
+   "type": "Term",
+   "name": "Reason for the author",
+   "summary": "field on templates/review_detail.html",
+   "file": "templates/review_detail.html",
+   "line": 13,
+   "attrs": {
+    "kind": "field",
+    "field": "reason"
+   },
+   "page": "wiki/terms.md"
+  },
+  {
+   "id": "term:templates/base.html:17:3",
+   "type": "Term",
+   "name": "Review queue",
+   "summary": "link on templates/base.html",
+   "file": "templates/base.html",
+   "line": 17,
+   "attrs": {
+    "kind": "link",
+    "shown_when": "user and user.role == 'editor'",
+    "other_languages": [
+     "검토 대기열"
+    ]
+   },
+   "page": "wiki/terms.md"
+  },
+  {
+   "id": "term:templates/review.html:4:0",
+   "type": "Term",
+   "name": "Review queue",
+   "summary": "heading on templates/review.html",
+   "file": "templates/review.html",
+   "line": 4,
+   "attrs": {
+    "kind": "heading",
+    "other_languages": [
+     "검토 대기열"
+    ]
+   },
+   "page": "wiki/terms.md"
+  },
+  {
+   "id": "term:templates/edit.html:12:4",
+   "type": "Term",
+   "name": "Save draft",
+   "summary": "button on templates/edit.html",
+   "file": "templates/edit.html",
+   "line": 12,
+   "attrs": {
+    "kind": "button"
+   },
+   "page": "wiki/terms.md"
+  },
+  {
+   "id": "term:templates/review_detail.html:15:3",
+   "type": "Term",
+   "name": "Send back",
+   "summary": "button on templates/review_detail.html",
+   "file": "templates/review_detail.html",
+   "line": 15,
+   "attrs": {
+    "kind": "button"
+   },
+   "page": "wiki/terms.md"
+  },
+  {
+   "id": "term:templates/desk.html:16:6",
+   "type": "Term",
+   "name": "Send for review",
+   "summary": "button on templates/desk.html",
+   "file": "templates/desk.html",
+   "line": 16,
+   "attrs": {
+    "kind": "button",
+    "shown_when": "a.status == 'draft'"
+   },
+   "page": "wiki/terms.md"
+  },
+  {
+   "id": "term:app.py:81:m0",
+   "type": "Term",
+   "name": "Sent to the editors",
+   "summary": "message, shown by POST /desk/<int:article_id>/submit",
+   "file": "app.py",
+   "line": 81,
+   "attrs": {
+    "kind": "message"
+   },
+   "page": "wiki/terms.md"
+  },
+  {
+   "id": "term:templates/base.html:20:4",
+   "type": "Term",
+   "name": "Sign in",
+   "summary": "link on templates/base.html",
+   "file": "templates/base.html",
+   "line": 20,
+   "attrs": {
+    "kind": "link",
+    "shown_when": "not user"
+   },
+   "page": "wiki/terms.md"
+  },
+  {
+   "id": "term:templates/login.html:4:0",
+   "type": "Term",
+   "name": "Sign in",
+   "summary": "heading on templates/login.html",
+   "file": "templates/login.html",
+   "line": 4,
+   "attrs": {
+    "kind": "heading"
+   },
+   "page": "wiki/terms.md"
+  },
+  {
+   "id": "term:templates/desk.html:7:3",
+   "type": "Term",
+   "name": "State",
+   "summary": "column on templates/desk.html",
+   "file": "templates/desk.html",
+   "line": 7,
+   "attrs": {
+    "kind": "column"
+   },
+   "page": "wiki/terms.md"
+  },
+  {
+   "id": "term:templates/edit.html:8:2",
+   "type": "Term",
+   "name": "Text",
+   "summary": "field on templates/edit.html",
+   "file": "templates/edit.html",
+   "line": 8,
+   "attrs": {
+    "kind": "field",
+    "field": "body"
+   },
+   "page": "wiki/terms.md"
+  },
+  {
+   "id": "term:app.py:46:m0",
+   "type": "Term",
+   "name": "Unknown e-mail address",
+   "summary": "message, shown by GET,POST /login",
+   "file": "app.py",
+   "line": 46,
+   "attrs": {
+    "kind": "message"
+   },
+   "page": "wiki/terms.md"
+  },
+  {
+   "id": "term:templates/login.html:6:1",
+   "type": "Term",
+   "name": "Work e-mail",
+   "summary": "field on templates/login.html",
+   "file": "templates/login.html",
+   "line": 6,
+   "attrs": {
+    "kind": "field",
+    "field": "email"
+   },
+   "page": "wiki/terms.md"
+  },
+  {
+   "id": "func:db.py:articles_of",
+   "type": "Function",
+   "name": "articles_of",
+   "summary": "run by 1 feature(s)",
+   "file": "db.py",
+   "line": 39,
+   "page": "wiki/functions.md"
+  },
+  {
+   "id": "func:db.py:connect",
+   "type": "Function",
+   "name": "connect",
+   "summary": "run by 11 feature(s)",
+   "file": "db.py",
+   "line": 8,
+   "page": "wiki/functions.md"
+  },
+  {
+   "id": "func:db.py:create_article",
+   "type": "Function",
+   "name": "create_article",
+   "summary": "run by 1 feature(s)",
+   "file": "db.py",
+   "line": 43,
+   "page": "wiki/functions.md"
+  },
+  {
+   "id": "func:auth.py:current_user",
+   "type": "Function",
+   "name": "current_user",
+   "summary": "run by 8 feature(s)",
+   "file": "auth.py",
+   "line": 9,
+   "page": "wiki/functions.md"
+  },
+  {
+   "id": "func:db.py:execute",
+   "type": "Function",
+   "name": "execute",
+   "summary": "run by 4 feature(s)",
+   "file": "db.py",
+   "line": 19,
+   "page": "wiki/functions.md"
+  },
+  {
+   "id": "func:db.py:find_user",
+   "type": "Function",
+   "name": "find_user",
+   "summary": "run by 1 feature(s)",
+   "file": "db.py",
+   "line": 29,
+   "page": "wiki/functions.md"
+  },
+  {
+   "id": "func:db.py:get_article",
+   "type": "Function",
+   "name": "get_article",
+   "summary": "run by 5 feature(s)",
+   "file": "db.py",
+   "line": 34,
+   "page": "wiki/functions.md"
+  },
+  {
+   "id": "func:db.py:get_user",
+   "type": "Function",
+   "name": "get_user",
+   "summary": "run by 8 feature(s)",
+   "file": "db.py",
+   "line": 24,
+   "page": "wiki/functions.md"
+  },
+  {
+   "id": "func:db.py:publish_article",
+   "type": "Function",
+   "name": "publish_article",
+   "summary": "run by 1 feature(s)",
+   "file": "db.py",
+   "line": 56,
+   "page": "wiki/functions.md"
+  },
+  {
+   "id": "func:db.py:published_articles",
+   "type": "Function",
+   "name": "published_articles",
+   "summary": "run by 2 feature(s)",
+   "file": "db.py",
+   "line": 64,
+   "page": "wiki/functions.md"
+  },
+  {
+   "id": "func:db.py:query",
+   "type": "Function",
+   "name": "query",
+   "summary": "run by 11 feature(s)",
+   "file": "db.py",
+   "line": 14,
+   "page": "wiki/functions.md"
+  },
+  {
+   "id": "func:auth.py:require_role",
+   "type": "Function",
+   "name": "require_role",
+   "summary": "run by 8 feature(s)",
+   "file": "auth.py",
+   "line": 14,
+   "page": "wiki/functions.md"
+  },
+  {
+   "id": "func:db.py:return_to_author",
+   "type": "Function",
+   "name": "return_to_author",
+   "summary": "run by 1 feature(s)",
+   "file": "db.py",
+   "line": 60,
+   "page": "wiki/functions.md"
+  },
+  {
+   "id": "func:storage.py:safe_name",
+   "type": "Function",
+   "name": "safe_name",
+   "summary": "run by 1 feature(s)",
+   "file": "storage.py",
+   "line": 10,
+   "page": "wiki/functions.md"
+  },
+  {
+   "id": "func:storage.py:save_upload",
+   "type": "Function",
+   "name": "save_upload",
+   "summary": "run by 1 feature(s)",
+   "file": "storage.py",
+   "line": 14,
+   "page": "wiki/functions.md"
+  },
+  {
+   "id": "func:db.py:send_for_review",
+   "type": "Function",
+   "name": "send_for_review",
+   "summary": "run by 1 feature(s)",
+   "file": "db.py",
+   "line": 48,
+   "page": "wiki/functions.md"
+  },
+  {
+   "id": "func:db.py:waiting_for_review",
+   "type": "Function",
+   "name": "waiting_for_review",
+   "summary": "run by 1 feature(s)",
+   "file": "db.py",
+   "line": 52,
+   "page": "wiki/functions.md"
+  },
+  {
+   "id": "func:storage.py:write_published_list",
+   "type": "Function",
+   "name": "write_published_list",
+   "summary": "run by 1 feature(s)",
+   "file": "storage.py",
+   "line": 21,
+   "page": "wiki/functions.md"
+  },
+  {
+   "id": "data:articles",
+   "type": "Data",
+   "name": "articles",
+   "summary": "id, author_id, title, body, cover, status, review_note, published_at",
+   "file": "schema.sql",
+   "line": 7,
+   "page": "wiki/data/articles.md"
+  },
+  {
+   "id": "data:users",
+   "type": "Data",
+   "name": "users",
+   "summary": "id, email, role",
+   "file": "schema.sql",
+   "line": 1,
+   "page": "wiki/data/users.md"
+  },
+  {
+   "id": "state:articles.status=draft",
+   "type": "State",
+   "name": "articles.status = 'draft'",
+   "summary": "set by 2, listed by 0 feature(s)",
+   "file": "db.py",
+   "line": 44,
+   "page": "wiki/states.md"
+  },
+  {
+   "id": "state:articles.status=in_review",
+   "type": "State",
+   "name": "articles.status = 'in_review'",
+   "summary": "set by 1, listed by 1 feature(s)",
+   "file": "db.py",
+   "line": 49,
+   "page": "wiki/states.md"
+  },
+  {
+   "id": "state:articles.status=published",
+   "type": "State",
+   "name": "articles.status = 'published'",
+   "summary": "set by 1, listed by 2 feature(s)",
+   "file": "db.py",
+   "line": 57,
+   "page": "wiki/states.md"
+  },
+  {
+   "id": "asset:generated:published.csv",
+   "type": "Asset",
+   "name": "generated:published.csv",
+   "summary": "generated; appears on 1 screen(s)",
+   "file": "storage.py",
+   "line": 23,
+   "attrs": {
+    "kind": "generated",
+    "seen_by": [
+     "anyone"
+    ]
+   },
+   "page": "wiki/assets/generated-published.csv.md"
+  },
+  {
+   "id": "asset:static/logo.svg",
+   "type": "Asset",
+   "name": "static/logo.svg",
+   "summary": "static; appears on 8 screen(s)",
+   "file": "static/logo.svg",
+   "attrs": {
+    "kind": "static",
+    "seen_by": [
+     "anyone",
+     "author",
+     "editor"
+    ]
+   },
+   "page": "wiki/assets/static__logo.svg.md"
+  },
+  {
+   "id": "asset:static/old-banner.png",
+   "type": "Asset",
+   "name": "static/old-banner.png",
+   "summary": "static; no use found",
+   "file": "static/old-banner.png",
+   "attrs": {
+    "kind": "static",
+    "not_verified": [
+     "no reference was found; a path built at run time would not be seen"
+    ]
+   },
+   "page": "wiki/assets/static__old-banner.png.md"
+  },
+  {
+   "id": "asset:static/paper.png",
+   "type": "Asset",
+   "name": "static/paper.png",
+   "summary": "static; appears on 8 screen(s)",
+   "file": "static/paper.png",
+   "attrs": {
+    "kind": "static",
+    "seen_by": [
+     "anyone",
+     "author",
+     "editor"
+    ]
+   },
+   "page": "wiki/assets/static__paper.png.md"
+  },
+  {
+   "id": "asset:upload:cover",
+   "type": "Asset",
+   "name": "upload:cover",
+   "summary": "uploaded; appears on 3 screen(s)",
+   "file": "app.py",
+   "line": 65,
+   "attrs": {
+    "kind": "uploaded",
+    "seen_by": [
+     "anyone",
+     "author",
+     "editor"
+    ]
+   },
+   "page": "wiki/assets/upload-cover.md"
+  }
+ ],
+ "relations": [
+  {
+   "s": "area:locales",
+   "p": "contains",
+   "o": "file:locales/en.json"
+  },
+  {
+   "s": "area:locales",
+   "p": "contains",
+   "o": "file:locales/ko.json"
+  },
+  {
+   "s": "area:static",
+   "p": "contains",
+   "o": "file:static/site.css"
+  },
+  {
+   "s": "area:templates",
+   "p": "contains",
+   "o": "file:templates/article.html"
+  },
+  {
+   "s": "area:templates",
+   "p": "contains",
+   "o": "file:templates/base.html"
+  },
+  {
+   "s": "area:templates",
+   "p": "contains",
+   "o": "file:templates/desk.html"
+  },
+  {
+   "s": "area:templates",
+   "p": "contains",
+   "o": "file:templates/edit.html"
+  },
+  {
+   "s": "area:templates",
+   "p": "contains",
+   "o": "file:templates/home.html"
+  },
+  {
+   "s": "area:templates",
+   "p": "contains",
+   "o": "file:templates/login.html"
+  },
+  {
+   "s": "area:templates",
+   "p": "contains",
+   "o": "file:templates/review.html"
+  },
+  {
+   "s": "area:templates",
+   "p": "contains",
+   "o": "file:templates/review_detail.html"
+  },
+  {
+   "s": "asset:upload:cover",
+   "p": "keptIn",
+   "o": "data:articles",
+   "file": "db.py",
+   "line": 44,
+   "label": "column cover"
+  },
+  {
+   "s": "data:articles",
+   "p": "hasState",
+   "o": "state:articles.status=draft",
+   "file": "db.py",
+   "line": 44
+  },
+  {
+   "s": "data:articles",
+   "p": "hasState",
+   "o": "state:articles.status=in_review",
+   "file": "db.py",
+   "line": 49
+  },
+  {
+   "s": "data:articles",
+   "p": "hasState",
+   "o": "state:articles.status=published",
+   "file": "db.py",
+   "line": 57
+  },
+  {
+   "s": "file:app.py",
+   "p": "defines",
+   "o": "route:GET /",
+   "file": "app.py",
+   "line": 18
+  },
+  {
+   "s": "file:app.py",
+   "p": "defines",
+   "o": "route:GET /articles/<int:article_id>",
+   "file": "app.py",
+   "line": 24
+  },
+  {
+   "s": "file:app.py",
+   "p": "defines",
+   "o": "route:GET /desk",
+   "file": "app.py",
+   "line": 57
+  },
+  {
+   "s": "file:app.py",
+   "p": "defines",
+   "o": "route:GET /preview/<int:article_id>",
+   "file": "app.py",
+   "line": 125
+  },
+  {
+   "s": "file:app.py",
+   "p": "defines",
+   "o": "route:GET /published.csv",
+   "file": "app.py",
+   "line": 37
+  },
+  {
+   "s": "file:app.py",
+   "p": "defines",
+   "o": "route:GET /review",
+   "file": "app.py",
+   "line": 89
+  },
+  {
+   "s": "file:app.py",
+   "p": "defines",
+   "o": "route:GET /review/<int:article_id>",
+   "file": "app.py",
+   "line": 95
+  },
+  {
+   "s": "file:app.py",
+   "p": "defines",
+   "o": "route:GET /uploads/<path:name>",
+   "file": "app.py",
+   "line": 32
+  },
+  {
+   "s": "file:app.py",
+   "p": "defines",
+   "o": "route:GET,POST /desk/new",
+   "file": "app.py",
+   "line": 63
+  },
+  {
+   "s": "file:app.py",
+   "p": "defines",
+   "o": "route:GET,POST /login",
+   "file": "app.py",
+   "line": 42
+  },
+  {
+   "s": "file:app.py",
+   "p": "defines",
+   "o": "route:POST /desk/<int:article_id>/submit",
+   "file": "app.py",
+   "line": 75
+  },
+  {
+   "s": "file:app.py",
+   "p": "defines",
+   "o": "route:POST /review/<int:article_id>/publish",
+   "file": "app.py",
+   "line": 101
+  },
+  {
+   "s": "file:app.py",
+   "p": "defines",
+   "o": "route:POST /review/<int:article_id>/return",
+   "file": "app.py",
+   "line": 116
+  },
+  {
+   "s": "file:app.py",
+   "p": "dependsOn",
+   "o": "pkg:flask",
+   "file": "app.py",
+   "label": "imported"
+  },
+  {
+   "s": "file:app.py",
+   "p": "imports",
+   "o": "file:auth.py",
+   "file": "app.py",
+   "line": 8
+  },
+  {
+   "s": "file:app.py",
+   "p": "imports",
+   "o": "file:db.py",
+   "file": "app.py",
+   "line": 6
+  },
+  {
+   "s": "file:app.py",
+   "p": "imports",
+   "o": "file:storage.py",
+   "file": "app.py",
+   "line": 7
+  },
+  {
+   "s": "file:app.py",
+   "p": "mentions",
+   "o": "port:5080",
+   "file": "app.py",
+   "line": 130,
+   "label": "NEWSROOM_PORT default"
+  },
+  {
+   "s": "file:app.py",
+   "p": "reads",
+   "o": "env:NEWSROOM_COVER_REQUIRED",
+   "file": "app.py",
+   "line": 12
+  },
+  {
+   "s": "file:app.py",
+   "p": "reads",
+   "o": "env:NEWSROOM_PORT",
+   "file": "app.py",
+   "line": 130
+  },
+  {
+   "s": "file:app.py",
+   "p": "reads",
+   "o": "env:NEWSROOM_SECRET",
+   "file": "app.py",
+   "line": 11
+  },
+  {
+   "s": "file:app.py",
+   "p": "refers",
+   "o": "file:templates/article.html",
+   "file": "app.py",
+   "line": 28
+  },
+  {
+   "s": "file:app.py",
+   "p": "refers",
+   "o": "file:templates/desk.html",
+   "file": "app.py",
+   "line": 58
+  },
+  {
+   "s": "file:app.py",
+   "p": "refers",
+   "o": "file:templates/edit.html",
+   "file": "app.py",
+   "line": 70
+  },
+  {
+   "s": "file:app.py",
+   "p": "refers",
+   "o": "file:templates/home.html",
+   "file": "app.py",
+   "line": 20
+  },
+  {
+   "s": "file:app.py",
+   "p": "refers",
+   "o": "file:templates/login.html",
+   "file": "app.py",
+   "line": 50
+  },
+  {
+   "s": "file:app.py",
+   "p": "refers",
+   "o": "file:templates/review.html",
+   "file": "app.py",
+   "line": 90
+  },
+  {
+   "s": "file:app.py",
+   "p": "refers",
+   "o": "file:templates/review_detail.html",
+   "file": "app.py",
+   "line": 96
+  },
+  {
+   "s": "file:auth.py",
+   "p": "defines",
+   "o": "func:auth.py:current_user",
+   "file": "auth.py",
+   "line": 9
+  },
+  {
+   "s": "file:auth.py",
+   "p": "defines",
+   "o": "func:auth.py:require_role",
+   "file": "auth.py",
+   "line": 14
+  },
+  {
+   "s": "file:auth.py",
+   "p": "dependsOn",
+   "o": "pkg:flask",
+   "file": "auth.py",
+   "label": "imported"
+  },
+  {
+   "s": "file:auth.py",
+   "p": "imports",
+   "o": "file:db.py",
+   "file": "auth.py",
+   "line": 6
+  },
+  {
+   "s": "file:db.py",
+   "p": "defines",
+   "o": "func:db.py:articles_of",
+   "file": "db.py",
+   "line": 39
+  },
+  {
+   "s": "file:db.py",
+   "p": "defines",
+   "o": "func:db.py:connect",
+   "file": "db.py",
+   "line": 8
+  },
+  {
+   "s": "file:db.py",
+   "p": "defines",
+   "o": "func:db.py:create_article",
+   "file": "db.py",
+   "line": 43
+  },
+  {
+   "s": "file:db.py",
+   "p": "defines",
+   "o": "func:db.py:execute",
+   "file": "db.py",
+   "line": 19
+  },
+  {
+   "s": "file:db.py",
+   "p": "defines",
+   "o": "func:db.py:find_user",
+   "file": "db.py",
+   "line": 29
+  },
+  {
+   "s": "file:db.py",
+   "p": "defines",
+   "o": "func:db.py:get_article",
+   "file": "db.py",
+   "line": 34
+  },
+  {
+   "s": "file:db.py",
+   "p": "defines",
+   "o": "func:db.py:get_user",
+   "file": "db.py",
+   "line": 24
+  },
+  {
+   "s": "file:db.py",
+   "p": "defines",
+   "o": "func:db.py:publish_article",
+   "file": "db.py",
+   "line": 56
+  },
+  {
+   "s": "file:db.py",
+   "p": "defines",
+   "o": "func:db.py:published_articles",
+   "file": "db.py",
+   "line": 64
+  },
+  {
+   "s": "file:db.py",
+   "p": "defines",
+   "o": "func:db.py:query",
+   "file": "db.py",
+   "line": 14
+  },
+  {
+   "s": "file:db.py",
+   "p": "defines",
+   "o": "func:db.py:return_to_author",
+   "file": "db.py",
+   "line": 60
+  },
+  {
+   "s": "file:db.py",
+   "p": "defines",
+   "o": "func:db.py:send_for_review",
+   "file": "db.py",
+   "line": 48
+  },
+  {
+   "s": "file:db.py",
+   "p": "defines",
+   "o": "func:db.py:waiting_for_review",
+   "file": "db.py",
+   "line": 52
+  },
+  {
+   "s": "file:db.py",
+   "p": "reads",
+   "o": "env:NEWSROOM_DB",
+   "file": "db.py",
+   "line": 5
+  },
+  {
+   "s": "file:requirements.txt",
+   "p": "dependsOn",
+   "o": "pkg:flask",
+   "file": "requirements.txt",
+   "line": 1,
+   "label": "declared"
+  },
+  {
+   "s": "file:schema.sql",
+   "p": "defines",
+   "o": "data:articles",
+   "file": "schema.sql",
+   "line": 7
+  },
+  {
+   "s": "file:schema.sql",
+   "p": "defines",
+   "o": "data:users",
+   "file": "schema.sql",
+   "line": 1
+  },
+  {
+   "s": "file:storage.py",
+   "p": "defines",
+   "o": "func:storage.py:safe_name",
+   "file": "storage.py",
+   "line": 10
+  },
+  {
+   "s": "file:storage.py",
+   "p": "defines",
+   "o": "func:storage.py:save_upload",
+   "file": "storage.py",
+   "line": 14
+  },
+  {
+   "s": "file:storage.py",
+   "p": "defines",
+   "o": "func:storage.py:write_published_list",
+   "file": "storage.py",
+   "line": 21
+  },
+  {
+   "s": "file:storage.py",
+   "p": "reads",
+   "o": "env:NEWSROOM_EXPORTS",
+   "file": "storage.py",
+   "line": 7
+  },
+  {
+   "s": "file:storage.py",
+   "p": "reads",
+   "o": "env:NEWSROOM_UPLOADS",
+   "file": "storage.py",
+   "line": 6
+  },
+  {
+   "s": "file:templates/article.html",
+   "p": "defines",
+   "o": "screen:templates/article.html",
+   "file": "templates/article.html",
+   "line": 1
+  },
+  {
+   "s": "file:templates/base.html",
+   "p": "defines",
+   "o": "screen:templates/base.html",
+   "file": "templates/base.html",
+   "line": 1
+  },
+  {
+   "s": "file:templates/desk.html",
+   "p": "defines",
+   "o": "screen:templates/desk.html",
+   "file": "templates/desk.html",
+   "line": 1
+  },
+  {
+   "s": "file:templates/edit.html",
+   "p": "defines",
+   "o": "screen:templates/edit.html",
+   "file": "templates/edit.html",
+   "line": 1
+  },
+  {
+   "s": "file:templates/home.html",
+   "p": "defines",
+   "o": "screen:templates/home.html",
+   "file": "templates/home.html",
+   "line": 1
+  },
+  {
+   "s": "file:templates/login.html",
+   "p": "defines",
+   "o": "screen:templates/login.html",
+   "file": "templates/login.html",
+   "line": 1
+  },
+  {
+   "s": "file:templates/review.html",
+   "p": "defines",
+   "o": "screen:templates/review.html",
+   "file": "templates/review.html",
+   "line": 1
+  },
+  {
+   "s": "file:templates/review_detail.html",
+   "p": "defines",
+   "o": "screen:templates/review_detail.html",
+   "file": "templates/review_detail.html",
+   "line": 1
+  },
+  {
+   "s": "project:Newsroom",
+   "p": "contains",
+   "o": "area:locales"
+  },
+  {
+   "s": "project:Newsroom",
+   "p": "contains",
+   "o": "area:static"
+  },
+  {
+   "s": "project:Newsroom",
+   "p": "contains",
+   "o": "area:templates"
+  },
+  {
+   "s": "project:Newsroom",
+   "p": "contains",
+   "o": "file:README.md"
+  },
+  {
+   "s": "project:Newsroom",
+   "p": "contains",
+   "o": "file:app.py"
+  },
+  {
+   "s": "project:Newsroom",
+   "p": "contains",
+   "o": "file:auth.py"
+  },
+  {
+   "s": "project:Newsroom",
+   "p": "contains",
+   "o": "file:db.py"
+  },
+  {
+   "s": "project:Newsroom",
+   "p": "contains",
+   "o": "file:requirements.txt"
+  },
+  {
+   "s": "project:Newsroom",
+   "p": "contains",
+   "o": "file:schema.sql"
+  },
+  {
+   "s": "project:Newsroom",
+   "p": "contains",
+   "o": "file:storage.py"
+  },
+  {
+   "s": "route:GET /",
+   "p": "listsState",
+   "o": "state:articles.status=published",
+   "file": "db.py",
+   "line": 65,
+   "label": "db.published_articles"
+  },
+  {
+   "s": "route:GET /",
+   "p": "openTo",
+   "o": "user:anyone",
+   "file": "app.py",
+   "line": 18,
+   "label": "no role check found"
+  },
+  {
+   "s": "route:GET /",
+   "p": "readsData",
+   "o": "data:articles",
+   "file": "db.py",
+   "line": 65,
+   "label": "db.published_articles"
+  },
+  {
+   "s": "route:GET /",
+   "p": "runsCode",
+   "o": "func:db.py:connect",
+   "file": "db.py",
+   "line": 15,
+   "label": "db.published_articles → query"
+  },
+  {
+   "s": "route:GET /",
+   "p": "runsCode",
+   "o": "func:db.py:published_articles",
+   "file": "app.py",
+   "line": 20
+  },
+  {
+   "s": "route:GET /",
+   "p": "runsCode",
+   "o": "func:db.py:query",
+   "file": "db.py",
+   "line": 65,
+   "label": "db.published_articles"
+  },
+  {
+   "s": "route:GET /",
+   "p": "shows",
+   "o": "screen:templates/home.html",
+   "file": "app.py",
+   "line": 20
+  },
+  {
+   "s": "route:GET /articles/<int:article_id>",
+   "p": "openTo",
+   "o": "user:anyone",
+   "file": "app.py",
+   "line": 24,
+   "label": "no role check found"
+  },
+  {
+   "s": "route:GET /articles/<int:article_id>",
+   "p": "readsData",
+   "o": "data:articles",
+   "file": "db.py",
+   "line": 35,
+   "label": "db.get_article"
+  },
+  {
+   "s": "route:GET /articles/<int:article_id>",
+   "p": "runsCode",
+   "o": "func:db.py:connect",
+   "file": "db.py",
+   "line": 15,
+   "label": "db.get_article → query"
+  },
+  {
+   "s": "route:GET /articles/<int:article_id>",
+   "p": "runsCode",
+   "o": "func:db.py:get_article",
+   "file": "app.py",
+   "line": 25
+  },
+  {
+   "s": "route:GET /articles/<int:article_id>",
+   "p": "runsCode",
+   "o": "func:db.py:query",
+   "file": "db.py",
+   "line": 35,
+   "label": "db.get_article"
+  },
+  {
+   "s": "route:GET /articles/<int:article_id>",
+   "p": "shows",
+   "o": "screen:templates/article.html",
+   "file": "app.py",
+   "line": 28
+  },
+  {
+   "s": "route:GET /desk",
+   "p": "openTo",
+   "o": "user:author",
+   "file": "app.py",
+   "line": 56,
+   "label": "@require_role('author')"
+  },
+  {
+   "s": "route:GET /desk",
+   "p": "readsData",
+   "o": "data:articles",
+   "file": "db.py",
+   "line": 40,
+   "label": "db.articles_of"
+  },
+  {
+   "s": "route:GET /desk",
+   "p": "readsData",
+   "o": "data:users",
+   "file": "db.py",
+   "line": 25,
+   "label": "require_role → current_user → db.get_user"
+  },
+  {
+   "s": "route:GET /desk",
+   "p": "redirectsTo",
+   "o": "route:GET,POST /login",
+   "file": "auth.py",
+   "line": 21,
+   "label": "user is None"
+  },
+  {
+   "s": "route:GET /desk",
+   "p": "runsCode",
+   "o": "func:auth.py:current_user",
+   "file": "auth.py",
+   "line": 19,
+   "label": "require_role",
+   "count": 2
+  },
+  {
+   "s": "route:GET /desk",
+   "p": "runsCode",
+   "o": "func:auth.py:require_role",
+   "file": "app.py",
+   "line": 56
+  },
+  {
+   "s": "route:GET /desk",
+   "p": "runsCode",
+   "o": "func:db.py:articles_of",
+   "file": "app.py",
+   "line": 58
+  },
+  {
+   "s": "route:GET /desk",
+   "p": "runsCode",
+   "o": "func:db.py:connect",
+   "file": "db.py",
+   "line": 15,
+   "label": "require_role → current_user → db.get_user → query"
+  },
+  {
+   "s": "route:GET /desk",
+   "p": "runsCode",
+   "o": "func:db.py:get_user",
+   "file": "auth.py",
+   "line": 11,
+   "label": "require_role → current_user"
+  },
+  {
+   "s": "route:GET /desk",
+   "p": "runsCode",
+   "o": "func:db.py:query",
+   "file": "db.py",
+   "line": 25,
+   "label": "require_role → current_user → db.get_user",
+   "count": 2
+  },
+  {
+   "s": "route:GET /desk",
+   "p": "shows",
+   "o": "screen:templates/desk.html",
+   "file": "app.py",
+   "line": 58
+  },
+  {
+   "s": "route:GET /preview/<int:article_id>",
+   "p": "openTo",
+   "o": "user:author",
+   "file": "app.py",
+   "line": 124,
+   "label": "@require_role('author', 'editor')"
+  },
+  {
+   "s": "route:GET /preview/<int:article_id>",
+   "p": "openTo",
+   "o": "user:editor",
+   "file": "app.py",
+   "line": 124,
+   "label": "@require_role('author', 'editor')"
+  },
+  {
+   "s": "route:GET /preview/<int:article_id>",
+   "p": "readsData",
+   "o": "data:articles",
+   "file": "db.py",
+   "line": 35,
+   "label": "db.get_article"
+  },
+  {
+   "s": "route:GET /preview/<int:article_id>",
+   "p": "readsData",
+   "o": "data:users",
+   "file": "db.py",
+   "line": 25,
+   "label": "require_role → current_user → db.get_user"
+  },
+  {
+   "s": "route:GET /preview/<int:article_id>",
+   "p": "redirectsTo",
+   "o": "route:GET,POST /login",
+   "file": "auth.py",
+   "line": 21,
+   "label": "user is None"
+  },
+  {
+   "s": "route:GET /preview/<int:article_id>",
+   "p": "runsCode",
+   "o": "func:auth.py:current_user",
+   "file": "auth.py",
+   "line": 19,
+   "label": "require_role"
+  },
+  {
+   "s": "route:GET /preview/<int:article_id>",
+   "p": "runsCode",
+   "o": "func:auth.py:require_role",
+   "file": "app.py",
+   "line": 124
+  },
+  {
+   "s": "route:GET /preview/<int:article_id>",
+   "p": "runsCode",
+   "o": "func:db.py:connect",
+   "file": "db.py",
+   "line": 15,
+   "label": "require_role → current_user → db.get_user → query"
+  },
+  {
+   "s": "route:GET /preview/<int:article_id>",
+   "p": "runsCode",
+   "o": "func:db.py:get_article",
+   "file": "app.py",
+   "line": 126
+  },
+  {
+   "s": "route:GET /preview/<int:article_id>",
+   "p": "runsCode",
+   "o": "func:db.py:get_user",
+   "file": "auth.py",
+   "line": 11,
+   "label": "require_role → current_user"
+  },
+  {
+   "s": "route:GET /preview/<int:article_id>",
+   "p": "runsCode",
+   "o": "func:db.py:query",
+   "file": "db.py",
+   "line": 25,
+   "label": "require_role → current_user → db.get_user",
+   "count": 2
+  },
+  {
+   "s": "route:GET /preview/<int:article_id>",
+   "p": "shows",
+   "o": "screen:templates/article.html",
+   "file": "app.py",
+   "line": 126
+  },
+  {
+   "s": "route:GET /published.csv",
+   "p": "delivers",
+   "o": "asset:generated:published.csv",
+   "file": "app.py",
+   "line": 38
+  },
+  {
+   "s": "route:GET /published.csv",
+   "p": "openTo",
+   "o": "user:anyone",
+   "file": "app.py",
+   "line": 37,
+   "label": "no role check found"
+  },
+  {
+   "s": "route:GET /review",
+   "p": "listsState",
+   "o": "state:articles.status=in_review",
+   "file": "db.py",
+   "line": 53,
+   "label": "db.waiting_for_review"
+  },
+  {
+   "s": "route:GET /review",
+   "p": "openTo",
+   "o": "user:editor",
+   "file": "app.py",
+   "line": 88,
+   "label": "@require_role('editor')"
+  },
+  {
+   "s": "route:GET /review",
+   "p": "readsData",
+   "o": "data:articles",
+   "file": "db.py",
+   "line": 53,
+   "label": "db.waiting_for_review"
+  },
+  {
+   "s": "route:GET /review",
+   "p": "readsData",
+   "o": "data:users",
+   "file": "db.py",
+   "line": 25,
+   "label": "require_role → current_user → db.get_user"
+  },
+  {
+   "s": "route:GET /review",
+   "p": "redirectsTo",
+   "o": "route:GET,POST /login",
+   "file": "auth.py",
+   "line": 21,
+   "label": "user is None"
+  },
+  {
+   "s": "route:GET /review",
+   "p": "runsCode",
+   "o": "func:auth.py:current_user",
+   "file": "auth.py",
+   "line": 19,
+   "label": "require_role"
+  },
+  {
+   "s": "route:GET /review",
+   "p": "runsCode",
+   "o": "func:auth.py:require_role",
+   "file": "app.py",
+   "line": 88
+  },
+  {
+   "s": "route:GET /review",
+   "p": "runsCode",
+   "o": "func:db.py:connect",
+   "file": "db.py",
+   "line": 15,
+   "label": "require_role → current_user → db.get_user → query"
+  },
+  {
+   "s": "route:GET /review",
+   "p": "runsCode",
+   "o": "func:db.py:get_user",
+   "file": "auth.py",
+   "line": 11,
+   "label": "require_role → current_user"
+  },
+  {
+   "s": "route:GET /review",
+   "p": "runsCode",
+   "o": "func:db.py:query",
+   "file": "db.py",
+   "line": 25,
+   "label": "require_role → current_user → db.get_user",
+   "count": 2
+  },
+  {
+   "s": "route:GET /review",
+   "p": "runsCode",
+   "o": "func:db.py:waiting_for_review",
+   "file": "app.py",
+   "line": 90
+  },
+  {
+   "s": "route:GET /review",
+   "p": "shows",
+   "o": "screen:templates/review.html",
+   "file": "app.py",
+   "line": 90
+  },
+  {
+   "s": "route:GET /review/<int:article_id>",
+   "p": "openTo",
+   "o": "user:editor",
+   "file": "app.py",
+   "line": 94,
+   "label": "@require_role('editor')"
+  },
+  {
+   "s": "route:GET /review/<int:article_id>",
+   "p": "readsData",
+   "o": "data:articles",
+   "file": "db.py",
+   "line": 35,
+   "label": "db.get_article"
+  },
+  {
+   "s": "route:GET /review/<int:article_id>",
+   "p": "readsData",
+   "o": "data:users",
+   "file": "db.py",
+   "line": 25,
+   "label": "require_role → current_user → db.get_user"
+  },
+  {
+   "s": "route:GET /review/<int:article_id>",
+   "p": "redirectsTo",
+   "o": "route:GET,POST /login",
+   "file": "auth.py",
+   "line": 21,
+   "label": "user is None"
+  },
+  {
+   "s": "route:GET /review/<int:article_id>",
+   "p": "runsCode",
+   "o": "func:auth.py:current_user",
+   "file": "auth.py",
+   "line": 19,
+   "label": "require_role"
+  },
+  {
+   "s": "route:GET /review/<int:article_id>",
+   "p": "runsCode",
+   "o": "func:auth.py:require_role",
+   "file": "app.py",
+   "line": 94
+  },
+  {
+   "s": "route:GET /review/<int:article_id>",
+   "p": "runsCode",
+   "o": "func:db.py:connect",
+   "file": "db.py",
+   "line": 15,
+   "label": "require_role → current_user → db.get_user → query"
+  },
+  {
+   "s": "route:GET /review/<int:article_id>",
+   "p": "runsCode",
+   "o": "func:db.py:get_article",
+   "file": "app.py",
+   "line": 96
+  },
+  {
+   "s": "route:GET /review/<int:article_id>",
+   "p": "runsCode",
+   "o": "func:db.py:get_user",
+   "file": "auth.py",
+   "line": 11,
+   "label": "require_role → current_user"
+  },
+  {
+   "s": "route:GET /review/<int:article_id>",
+   "p": "runsCode",
+   "o": "func:db.py:query",
+   "file": "db.py",
+   "line": 25,
+   "label": "require_role → current_user → db.get_user",
+   "count": 2
+  },
+  {
+   "s": "route:GET /review/<int:article_id>",
+   "p": "shows",
+   "o": "screen:templates/review_detail.html",
+   "file": "app.py",
+   "line": 96
+  },
+  {
+   "s": "route:GET /uploads/<path:name>",
+   "p": "delivers",
+   "o": "asset:upload:cover",
+   "file": "app.py",
+   "line": 33,
+   "label": "serves any file of the folder"
+  },
+  {
+   "s": "route:GET /uploads/<path:name>",
+   "p": "openTo",
+   "o": "user:anyone",
+   "file": "app.py",
+   "line": 32,
+   "label": "no role check found"
+  },
+  {
+   "s": "route:GET,POST /desk/new",
+   "p": "displays",
+   "o": "term:app.py:68:m0",
+   "file": "app.py",
+   "line": 68,
+   "label": "flash"
+  },
+  {
+   "s": "route:GET,POST /desk/new",
+   "p": "openTo",
+   "o": "user:author",
+   "file": "app.py",
+   "line": 62,
+   "label": "@require_role('author')"
+  },
+  {
+   "s": "route:GET,POST /desk/new",
+   "p": "provides",
+   "o": "asset:upload:cover",
+   "file": "app.py",
+   "line": 65,
+   "label": "receives it",
+   "count": 2
+  },
+  {
+   "s": "route:GET,POST /desk/new",
+   "p": "readsData",
+   "o": "data:users",
+   "file": "db.py",
+   "line": 25,
+   "label": "require_role → current_user → db.get_user"
+  },
+  {
+   "s": "route:GET,POST /desk/new",
+   "p": "redirectsTo",
+   "o": "route:GET /desk",
+   "file": "app.py",
+   "line": 69,
+   "label": "request.method == 'POST'"
+  },
+  {
+   "s": "route:GET,POST /desk/new",
+   "p": "redirectsTo",
+   "o": "route:GET,POST /login",
+   "file": "auth.py",
+   "line": 21,
+   "label": "user is None"
+  },
+  {
+   "s": "route:GET,POST /desk/new",
+   "p": "runsCode",
+   "o": "func:auth.py:current_user",
+   "file": "auth.py",
+   "line": 19,
+   "label": "require_role",
+   "count": 2
+  },
+  {
+   "s": "route:GET,POST /desk/new",
+   "p": "runsCode",
+   "o": "func:auth.py:require_role",
+   "file": "app.py",
+   "line": 62
+  },
+  {
+   "s": "route:GET,POST /desk/new",
+   "p": "runsCode",
+   "o": "func:db.py:connect",
+   "file": "db.py",
+   "line": 15,
+   "label": "require_role → current_user → db.get_user → query",
+   "count": 2
+  },
+  {
+   "s": "route:GET,POST /desk/new",
+   "p": "runsCode",
+   "o": "func:db.py:create_article",
+   "file": "app.py",
+   "line": 67
+  },
+  {
+   "s": "route:GET,POST /desk/new",
+   "p": "runsCode",
+   "o": "func:db.py:execute",
+   "file": "db.py",
+   "line": 44,
+   "label": "db.create_article"
+  },
+  {
+   "s": "route:GET,POST /desk/new",
+   "p": "runsCode",
+   "o": "func:db.py:get_user",
+   "file": "auth.py",
+   "line": 11,
+   "label": "require_role → current_user"
+  },
+  {
+   "s": "route:GET,POST /desk/new",
+   "p": "runsCode",
+   "o": "func:db.py:query",
+   "file": "db.py",
+   "line": 25,
+   "label": "require_role → current_user → db.get_user"
+  },
+  {
+   "s": "route:GET,POST /desk/new",
+   "p": "runsCode",
+   "o": "func:storage.py:safe_name",
+   "file": "storage.py",
+   "line": 16,
+   "label": "storage.save_upload"
+  },
+  {
+   "s": "route:GET,POST /desk/new",
+   "p": "runsCode",
+   "o": "func:storage.py:save_upload",
+   "file": "app.py",
+   "line": 66
+  },
+  {
+   "s": "route:GET,POST /desk/new",
+   "p": "setsState",
+   "o": "state:articles.status=draft",
+   "file": "db.py",
+   "line": 44,
+   "label": "db.create_article"
+  },
+  {
+   "s": "route:GET,POST /desk/new",
+   "p": "shows",
+   "o": "screen:templates/edit.html",
+   "file": "app.py",
+   "line": 70
+  },
+  {
+   "s": "route:GET,POST /desk/new",
+   "p": "writesData",
+   "o": "data:articles",
+   "file": "db.py",
+   "line": 44,
+   "label": "db.create_article"
+  },
+  {
+   "s": "route:GET,POST /login",
+   "p": "displays",
+   "o": "term:app.py:46:m0",
+   "file": "app.py",
+   "line": 46,
+   "label": "flash"
+  },
+  {
+   "s": "route:GET,POST /login",
+   "p": "openTo",
+   "o": "user:anyone",
+   "file": "app.py",
+   "line": 42,
+   "label": "no role check found"
+  },
+  {
+   "s": "route:GET,POST /login",
+   "p": "readsData",
+   "o": "data:users",
+   "file": "db.py",
+   "line": 30,
+   "label": "db.find_user"
+  },
+  {
+   "s": "route:GET,POST /login",
+   "p": "redirectsTo",
+   "o": "route:GET /",
+   "file": "app.py",
+   "line": 49,
+   "label": "request.method == 'POST'"
+  },
+  {
+   "s": "route:GET,POST /login",
+   "p": "runsCode",
+   "o": "func:db.py:connect",
+   "file": "db.py",
+   "line": 15,
+   "label": "db.find_user → query"
+  },
+  {
+   "s": "route:GET,POST /login",
+   "p": "runsCode",
+   "o": "func:db.py:find_user",
+   "file": "app.py",
+   "line": 44
+  },
+  {
+   "s": "route:GET,POST /login",
+   "p": "runsCode",
+   "o": "func:db.py:query",
+   "file": "db.py",
+   "line": 30,
+   "label": "db.find_user"
+  },
+  {
+   "s": "route:GET,POST /login",
+   "p": "shows",
+   "o": "screen:templates/login.html",
+   "file": "app.py",
+   "line": 50
+  },
+  {
+   "s": "route:POST /desk/<int:article_id>/submit",
+   "p": "displays",
+   "o": "term:app.py:78:m1",
+   "file": "app.py",
+   "line": 78,
+   "label": "flash"
+  },
+  {
+   "s": "route:POST /desk/<int:article_id>/submit",
+   "p": "displays",
+   "o": "term:app.py:81:m0",
+   "file": "app.py",
+   "line": 81,
+   "label": "flash"
+  },
+  {
+   "s": "route:POST /desk/<int:article_id>/submit",
+   "p": "handsOverTo",
+   "o": "route:GET /review",
+   "file": "db.py",
+   "line": 53,
+   "label": "articles.status = 'in_review'",
+   "inferred": "one statement sets this value and the other filters on it; that the same rows are meant was not verified"
+  },
+  {
+   "s": "route:POST /desk/<int:article_id>/submit",
+   "p": "openTo",
+   "o": "user:author",
+   "file": "app.py",
+   "line": 74,
+   "label": "@require_role('author')"
+  },
+  {
+   "s": "route:POST /desk/<int:article_id>/submit",
+   "p": "readsData",
+   "o": "data:articles",
+   "file": "db.py",
+   "line": 35,
+   "label": "db.get_article"
+  },
+  {
+   "s": "route:POST /desk/<int:article_id>/submit",
+   "p": "readsData",
+   "o": "data:users",
+   "file": "db.py",
+   "line": 25,
+   "label": "require_role → current_user → db.get_user"
+  },
+  {
+   "s": "route:POST /desk/<int:article_id>/submit",
+   "p": "redirectsTo",
+   "o": "route:GET /desk",
+   "file": "app.py",
+   "line": 82,
+   "count": 2
+  },
+  {
+   "s": "route:POST /desk/<int:article_id>/submit",
+   "p": "redirectsTo",
+   "o": "route:GET,POST /login",
+   "file": "auth.py",
+   "line": 21,
+   "label": "user is None"
+  },
+  {
+   "s": "route:POST /desk/<int:article_id>/submit",
+   "p": "runsCode",
+   "o": "func:auth.py:current_user",
+   "file": "auth.py",
+   "line": 19,
+   "label": "require_role"
+  },
+  {
+   "s": "route:POST /desk/<int:article_id>/submit",
+   "p": "runsCode",
+   "o": "func:auth.py:require_role",
+   "file": "app.py",
+   "line": 74
+  },
+  {
+   "s": "route:POST /desk/<int:article_id>/submit",
+   "p": "runsCode",
+   "o": "func:db.py:connect",
+   "file": "db.py",
+   "line": 15,
+   "label": "require_role → current_user → db.get_user → query",
+   "count": 2
+  },
+  {
+   "s": "route:POST /desk/<int:article_id>/submit",
+   "p": "runsCode",
+   "o": "func:db.py:execute",
+   "file": "db.py",
+   "line": 49,
+   "label": "db.send_for_review"
+  },
+  {
+   "s": "route:POST /desk/<int:article_id>/submit",
+   "p": "runsCode",
+   "o": "func:db.py:get_article",
+   "file": "app.py",
+   "line": 76
+  },
+  {
+   "s": "route:POST /desk/<int:article_id>/submit",
+   "p": "runsCode",
+   "o": "func:db.py:get_user",
+   "file": "auth.py",
+   "line": 11,
+   "label": "require_role → current_user"
+  },
+  {
+   "s": "route:POST /desk/<int:article_id>/submit",
+   "p": "runsCode",
+   "o": "func:db.py:query",
+   "file": "db.py",
+   "line": 25,
+   "label": "require_role → current_user → db.get_user",
+   "count": 2
+  },
+  {
+   "s": "route:POST /desk/<int:article_id>/submit",
+   "p": "runsCode",
+   "o": "func:db.py:send_for_review",
+   "file": "app.py",
+   "line": 80
+  },
+  {
+   "s": "route:POST /desk/<int:article_id>/submit",
+   "p": "setsState",
+   "o": "state:articles.status=in_review",
+   "file": "db.py",
+   "line": 49,
+   "label": "db.send_for_review"
+  },
+  {
+   "s": "route:POST /desk/<int:article_id>/submit",
+   "p": "writesData",
+   "o": "data:articles",
+   "file": "db.py",
+   "line": 49,
+   "label": "db.send_for_review"
+  },
+  {
+   "s": "route:POST /review/<int:article_id>/publish",
+   "p": "displays",
+   "o": "term:app.py:104:m0",
+   "file": "app.py",
+   "line": 104,
+   "label": "flash"
+  },
+  {
+   "s": "route:POST /review/<int:article_id>/publish",
+   "p": "displays",
+   "o": "term:app.py:107:m1",
+   "file": "app.py",
+   "line": 107,
+   "label": "flash"
+  },
+  {
+   "s": "route:POST /review/<int:article_id>/publish",
+   "p": "handsOverTo",
+   "o": "route:GET /",
+   "file": "db.py",
+   "line": 65,
+   "label": "articles.status = 'published'",
+   "inferred": "one statement sets this value and the other filters on it; that the same rows are meant was not verified"
+  },
+  {
+   "s": "route:POST /review/<int:article_id>/publish",
+   "p": "listsState",
+   "o": "state:articles.status=published",
+   "file": "db.py",
+   "line": 65,
+   "label": "db.published_articles"
+  },
+  {
+   "s": "route:POST /review/<int:article_id>/publish",
+   "p": "openTo",
+   "o": "user:editor",
+   "file": "app.py",
+   "line": 100,
+   "label": "@require_role('editor')"
+  },
+  {
+   "s": "route:POST /review/<int:article_id>/publish",
+   "p": "provides",
+   "o": "asset:generated:published.csv",
+   "file": "storage.py",
+   "line": 23,
+   "label": "writes it"
+  },
+  {
+   "s": "route:POST /review/<int:article_id>/publish",
+   "p": "readsData",
+   "o": "data:articles",
+   "file": "db.py",
+   "line": 35,
+   "label": "db.get_article",
+   "count": 2
+  },
+  {
+   "s": "route:POST /review/<int:article_id>/publish",
+   "p": "readsData",
+   "o": "data:users",
+   "file": "db.py",
+   "line": 25,
+   "label": "require_role → current_user → db.get_user"
+  },
+  {
+   "s": "route:POST /review/<int:article_id>/publish",
+   "p": "redirectsTo",
+   "o": "route:GET /review",
+   "file": "app.py",
+   "line": 111,
+   "count": 2
+  },
+  {
+   "s": "route:POST /review/<int:article_id>/publish",
+   "p": "redirectsTo",
+   "o": "route:GET /review/<int:article_id>",
+   "file": "app.py",
+   "line": 108,
+   "label": "COVER_REQUIRED == '1' and (not row['cover'])"
+  },
+  {
+   "s": "route:POST /review/<int:article_id>/publish",
+   "p": "redirectsTo",
+   "o": "route:GET,POST /login",
+   "file": "auth.py",
+   "line": 21,
+   "label": "user is None"
+  },
+  {
+   "s": "route:POST /review/<int:article_id>/publish",
+   "p": "runsCode",
+   "o": "func:auth.py:current_user",
+   "file": "auth.py",
+   "line": 19,
+   "label": "require_role"
+  },
+  {
+   "s": "route:POST /review/<int:article_id>/publish",
+   "p": "runsCode",
+   "o": "func:auth.py:require_role",
+   "file": "app.py",
+   "line": 100
+  },
+  {
+   "s": "route:POST /review/<int:article_id>/publish",
+   "p": "runsCode",
+   "o": "func:db.py:connect",
+   "file": "db.py",
+   "line": 15,
+   "label": "require_role → current_user → db.get_user → query",
+   "count": 2
+  },
+  {
+   "s": "route:POST /review/<int:article_id>/publish",
+   "p": "runsCode",
+   "o": "func:db.py:execute",
+   "file": "db.py",
+   "line": 57,
+   "label": "db.publish_article"
+  },
+  {
+   "s": "route:POST /review/<int:article_id>/publish",
+   "p": "runsCode",
+   "o": "func:db.py:get_article",
+   "file": "app.py",
+   "line": 102
+  },
+  {
+   "s": "route:POST /review/<int:article_id>/publish",
+   "p": "runsCode",
+   "o": "func:db.py:get_user",
+   "file": "auth.py",
+   "line": 11,
+   "label": "require_role → current_user"
+  },
+  {
+   "s": "route:POST /review/<int:article_id>/publish",
+   "p": "runsCode",
+   "o": "func:db.py:publish_article",
+   "file": "app.py",
+   "line": 109
+  },
+  {
+   "s": "route:POST /review/<int:article_id>/publish",
+   "p": "runsCode",
+   "o": "func:db.py:published_articles",
+   "file": "app.py",
+   "line": 110
+  },
+  {
+   "s": "route:POST /review/<int:article_id>/publish",
+   "p": "runsCode",
+   "o": "func:db.py:query",
+   "file": "db.py",
+   "line": 25,
+   "label": "require_role → current_user → db.get_user",
+   "count": 3
+  },
+  {
+   "s": "route:POST /review/<int:article_id>/publish",
+   "p": "runsCode",
+   "o": "func:storage.py:write_published_list",
+   "file": "app.py",
+   "line": 110
+  },
+  {
+   "s": "route:POST /review/<int:article_id>/publish",
+   "p": "setsState",
+   "o": "state:articles.status=published",
+   "file": "db.py",
+   "line": 57,
+   "label": "db.publish_article"
+  },
+  {
+   "s": "route:POST /review/<int:article_id>/publish",
+   "p": "writesData",
+   "o": "data:articles",
+   "file": "db.py",
+   "line": 57,
+   "label": "db.publish_article"
+  },
+  {
+   "s": "route:POST /review/<int:article_id>/return",
+   "p": "openTo",
+   "o": "user:editor",
+   "file": "app.py",
+   "line": 115,
+   "label": "@require_role('editor')"
+  },
+  {
+   "s": "route:POST /review/<int:article_id>/return",
+   "p": "readsData",
+   "o": "data:users",
+   "file": "db.py",
+   "line": 25,
+   "label": "require_role → current_user → db.get_user"
+  },
+  {
+   "s": "route:POST /review/<int:article_id>/return",
+   "p": "redirectsTo",
+   "o": "route:GET /review",
+   "file": "app.py",
+   "line": 118
+  },
+  {
+   "s": "route:POST /review/<int:article_id>/return",
+   "p": "redirectsTo",
+   "o": "route:GET,POST /login",
+   "file": "auth.py",
+   "line": 21,
+   "label": "user is None"
+  },
+  {
+   "s": "route:POST /review/<int:article_id>/return",
+   "p": "runsCode",
+   "o": "func:auth.py:current_user",
+   "file": "auth.py",
+   "line": 19,
+   "label": "require_role"
+  },
+  {
+   "s": "route:POST /review/<int:article_id>/return",
+   "p": "runsCode",
+   "o": "func:auth.py:require_role",
+   "file": "app.py",
+   "line": 115
+  },
+  {
+   "s": "route:POST /review/<int:article_id>/return",
+   "p": "runsCode",
+   "o": "func:db.py:connect",
+   "file": "db.py",
+   "line": 15,
+   "label": "require_role → current_user → db.get_user → query",
+   "count": 2
+  },
+  {
+   "s": "route:POST /review/<int:article_id>/return",
+   "p": "runsCode",
+   "o": "func:db.py:execute",
+   "file": "db.py",
+   "line": 61,
+   "label": "db.return_to_author"
+  },
+  {
+   "s": "route:POST /review/<int:article_id>/return",
+   "p": "runsCode",
+   "o": "func:db.py:get_user",
+   "file": "auth.py",
+   "line": 11,
+   "label": "require_role → current_user"
+  },
+  {
+   "s": "route:POST /review/<int:article_id>/return",
+   "p": "runsCode",
+   "o": "func:db.py:query",
+   "file": "db.py",
+   "line": 25,
+   "label": "require_role → current_user → db.get_user"
+  },
+  {
+   "s": "route:POST /review/<int:article_id>/return",
+   "p": "runsCode",
+   "o": "func:db.py:return_to_author",
+   "file": "app.py",
+   "line": 117
+  },
+  {
+   "s": "route:POST /review/<int:article_id>/return",
+   "p": "setsState",
+   "o": "state:articles.status=draft",
+   "file": "db.py",
+   "line": 61,
+   "label": "db.return_to_author"
+  },
+  {
+   "s": "route:POST /review/<int:article_id>/return",
+   "p": "writesData",
+   "o": "data:articles",
+   "file": "db.py",
+   "line": 61,
+   "label": "db.return_to_author"
+  },
+  {
+   "s": "screen:templates/article.html",
+   "p": "builtOn",
+   "o": "screen:templates/base.html",
+   "file": "templates/article.html",
+   "line": 1,
+   "label": "extends"
+  },
+  {
+   "s": "screen:templates/article.html",
+   "p": "showsAsset",
+   "o": "asset:static/logo.svg",
+   "file": "templates/base.html",
+   "line": 10,
+   "label": "through the layout templates/base.html"
+  },
+  {
+   "s": "screen:templates/article.html",
+   "p": "showsAsset",
+   "o": "asset:static/paper.png",
+   "file": "static/site.css",
+   "line": 2,
+   "label": "through the layout templates/base.html"
+  },
+  {
+   "s": "screen:templates/article.html",
+   "p": "showsAsset",
+   "o": "asset:upload:cover",
+   "file": "templates/article.html",
+   "line": 9,
+   "label": "<img>"
+  },
+  {
+   "s": "screen:templates/base.html",
+   "p": "displays",
+   "o": "term:templates/base.html:12:1",
+   "file": "templates/base.html",
+   "line": 12
+  },
+  {
+   "s": "screen:templates/base.html",
+   "p": "displays",
+   "o": "term:templates/base.html:14:2",
+   "file": "templates/base.html",
+   "line": 14
+  },
+  {
+   "s": "screen:templates/base.html",
+   "p": "displays",
+   "o": "term:templates/base.html:17:3",
+   "file": "templates/base.html",
+   "line": 17
+  },
+  {
+   "s": "screen:templates/base.html",
+   "p": "displays",
+   "o": "term:templates/base.html:20:4",
+   "file": "templates/base.html",
+   "line": 20
+  },
+  {
+   "s": "screen:templates/base.html",
+   "p": "displays",
+   "o": "term:templates/base.html:5:0",
+   "file": "templates/base.html",
+   "line": 5
+  },
+  {
+   "s": "screen:templates/base.html",
+   "p": "showsAsset",
+   "o": "asset:static/logo.svg",
+   "file": "templates/base.html",
+   "line": 10,
+   "label": "<img>"
+  },
+  {
+   "s": "screen:templates/base.html",
+   "p": "showsAsset",
+   "o": "asset:static/paper.png",
+   "file": "static/site.css",
+   "line": 2,
+   "label": "url() in a stylesheet"
+  },
+  {
+   "s": "screen:templates/desk.html",
+   "p": "builtOn",
+   "o": "screen:templates/base.html",
+   "file": "templates/desk.html",
+   "line": 1,
+   "label": "extends"
+  },
+  {
+   "s": "screen:templates/desk.html",
+   "p": "displays",
+   "o": "term:templates/desk.html:16:6",
+   "file": "templates/desk.html",
+   "line": 16
+  },
+  {
+   "s": "screen:templates/desk.html",
+   "p": "displays",
+   "o": "term:templates/desk.html:4:0",
+   "file": "templates/desk.html",
+   "line": 4
+  },
+  {
+   "s": "screen:templates/desk.html",
+   "p": "displays",
+   "o": "term:templates/desk.html:5:1",
+   "file": "templates/desk.html",
+   "line": 5
+  },
+  {
+   "s": "screen:templates/desk.html",
+   "p": "displays",
+   "o": "term:templates/desk.html:7:2",
+   "file": "templates/desk.html",
+   "line": 7
+  },
+  {
+   "s": "screen:templates/desk.html",
+   "p": "displays",
+   "o": "term:templates/desk.html:7:3",
+   "file": "templates/desk.html",
+   "line": 7
+  },
+  {
+   "s": "screen:templates/desk.html",
+   "p": "displays",
+   "o": "term:templates/desk.html:7:4",
+   "file": "templates/desk.html",
+   "line": 7
+  },
+  {
+   "s": "screen:templates/desk.html",
+   "p": "showsAsset",
+   "o": "asset:static/logo.svg",
+   "file": "templates/base.html",
+   "line": 10,
+   "label": "through the layout templates/base.html"
+  },
+  {
+   "s": "screen:templates/desk.html",
+   "p": "showsAsset",
+   "o": "asset:static/paper.png",
+   "file": "static/site.css",
+   "line": 2,
+   "label": "through the layout templates/base.html"
+  },
+  {
+   "s": "screen:templates/edit.html",
+   "p": "builtOn",
+   "o": "screen:templates/base.html",
+   "file": "templates/edit.html",
+   "line": 1,
+   "label": "extends"
+  },
+  {
+   "s": "screen:templates/edit.html",
+   "p": "displays",
+   "o": "term:templates/edit.html:10:3",
+   "file": "templates/edit.html",
+   "line": 10
+  },
+  {
+   "s": "screen:templates/edit.html",
+   "p": "displays",
+   "o": "term:templates/edit.html:12:4",
+   "file": "templates/edit.html",
+   "line": 12
+  },
+  {
+   "s": "screen:templates/edit.html",
+   "p": "displays",
+   "o": "term:templates/edit.html:4:0",
+   "file": "templates/edit.html",
+   "line": 4
+  },
+  {
+   "s": "screen:templates/edit.html",
+   "p": "displays",
+   "o": "term:templates/edit.html:6:1",
+   "file": "templates/edit.html",
+   "line": 6
+  },
+  {
+   "s": "screen:templates/edit.html",
+   "p": "displays",
+   "o": "term:templates/edit.html:8:2",
+   "file": "templates/edit.html",
+   "line": 8
+  },
+  {
+   "s": "screen:templates/edit.html",
+   "p": "showsAsset",
+   "o": "asset:static/logo.svg",
+   "file": "templates/base.html",
+   "line": 10,
+   "label": "through the layout templates/base.html"
+  },
+  {
+   "s": "screen:templates/edit.html",
+   "p": "showsAsset",
+   "o": "asset:static/paper.png",
+   "file": "static/site.css",
+   "line": 2,
+   "label": "through the layout templates/base.html"
+  },
+  {
+   "s": "screen:templates/home.html",
+   "p": "builtOn",
+   "o": "screen:templates/base.html",
+   "file": "templates/home.html",
+   "line": 1,
+   "label": "extends"
+  },
+  {
+   "s": "screen:templates/home.html",
+   "p": "displays",
+   "o": "term:templates/home.html:13:2",
+   "file": "templates/home.html",
+   "line": 13
+  },
+  {
+   "s": "screen:templates/home.html",
+   "p": "displays",
+   "o": "term:templates/home.html:4:0",
+   "file": "templates/home.html",
+   "line": 4
+  },
+  {
+   "s": "screen:templates/home.html",
+   "p": "showsAsset",
+   "o": "asset:generated:published.csv",
+   "file": "templates/home.html",
+   "line": 13,
+   "label": "link \"Download the list\""
+  },
+  {
+   "s": "screen:templates/home.html",
+   "p": "showsAsset",
+   "o": "asset:static/logo.svg",
+   "file": "templates/base.html",
+   "line": 10,
+   "label": "through the layout templates/base.html"
+  },
+  {
+   "s": "screen:templates/home.html",
+   "p": "showsAsset",
+   "o": "asset:static/paper.png",
+   "file": "static/site.css",
+   "line": 2,
+   "label": "through the layout templates/base.html"
+  },
+  {
+   "s": "screen:templates/home.html",
+   "p": "showsAsset",
+   "o": "asset:upload:cover",
+   "file": "templates/home.html",
+   "line": 8,
+   "label": "<img>"
+  },
+  {
+   "s": "screen:templates/login.html",
+   "p": "builtOn",
+   "o": "screen:templates/base.html",
+   "file": "templates/login.html",
+   "line": 1,
+   "label": "extends"
+  },
+  {
+   "s": "screen:templates/login.html",
+   "p": "displays",
+   "o": "term:templates/login.html:4:0",
+   "file": "templates/login.html",
+   "line": 4
+  },
+  {
+   "s": "screen:templates/login.html",
+   "p": "displays",
+   "o": "term:templates/login.html:6:1",
+   "file": "templates/login.html",
+   "line": 6
+  },
+  {
+   "s": "screen:templates/login.html",
+   "p": "displays",
+   "o": "term:templates/login.html:8:2",
+   "file": "templates/login.html",
+   "line": 8
+  },
+  {
+   "s": "screen:templates/login.html",
+   "p": "showsAsset",
+   "o": "asset:static/logo.svg",
+   "file": "templates/base.html",
+   "line": 10,
+   "label": "through the layout templates/base.html"
+  },
+  {
+   "s": "screen:templates/login.html",
+   "p": "showsAsset",
+   "o": "asset:static/paper.png",
+   "file": "static/site.css",
+   "line": 2,
+   "label": "through the layout templates/base.html"
+  },
+  {
+   "s": "screen:templates/review.html",
+   "p": "builtOn",
+   "o": "screen:templates/base.html",
+   "file": "templates/review.html",
+   "line": 1,
+   "label": "extends"
+  },
+  {
+   "s": "screen:templates/review.html",
+   "p": "displays",
+   "o": "term:templates/review.html:4:0",
+   "file": "templates/review.html",
+   "line": 4
+  },
+  {
+   "s": "screen:templates/review.html",
+   "p": "showsAsset",
+   "o": "asset:static/logo.svg",
+   "file": "templates/base.html",
+   "line": 10,
+   "label": "through the layout templates/base.html"
+  },
+  {
+   "s": "screen:templates/review.html",
+   "p": "showsAsset",
+   "o": "asset:static/paper.png",
+   "file": "static/site.css",
+   "line": 2,
+   "label": "through the layout templates/base.html"
+  },
+  {
+   "s": "screen:templates/review_detail.html",
+   "p": "builtOn",
+   "o": "screen:templates/base.html",
+   "file": "templates/review_detail.html",
+   "line": 1,
+   "label": "extends"
+  },
+  {
+   "s": "screen:templates/review_detail.html",
+   "p": "displays",
+   "o": "term:templates/review_detail.html:10:1",
+   "file": "templates/review_detail.html",
+   "line": 10
+  },
+  {
+   "s": "screen:templates/review_detail.html",
+   "p": "displays",
+   "o": "term:templates/review_detail.html:13:2",
+   "file": "templates/review_detail.html",
+   "line": 13
+  },
+  {
+   "s": "screen:templates/review_detail.html",
+   "p": "displays",
+   "o": "term:templates/review_detail.html:15:3",
+   "file": "templates/review_detail.html",
+   "line": 15
+  },
+  {
+   "s": "screen:templates/review_detail.html",
+   "p": "displays",
+   "o": "term:templates/review_detail.html:8:0",
+   "file": "templates/review_detail.html",
+   "line": 8
+  },
+  {
+   "s": "screen:templates/review_detail.html",
+   "p": "showsAsset",
+   "o": "asset:static/logo.svg",
+   "file": "templates/base.html",
+   "line": 10,
+   "label": "through the layout templates/base.html"
+  },
+  {
+   "s": "screen:templates/review_detail.html",
+   "p": "showsAsset",
+   "o": "asset:static/paper.png",
+   "file": "static/site.css",
+   "line": 2,
+   "label": "through the layout templates/base.html"
+  },
+  {
+   "s": "screen:templates/review_detail.html",
+   "p": "showsAsset",
+   "o": "asset:upload:cover",
+   "file": "templates/review_detail.html",
+   "line": 6,
+   "label": "<img>"
+  },
+  {
+   "s": "state:articles.status=draft",
+   "p": "testedBy",
+   "o": "route:POST /desk/<int:article_id>/submit",
+   "file": "app.py",
+   "line": 77,
+   "label": "row['status'] != 'draft'",
+   "inferred": "the condition names the same column and value; not traced to the same rows"
+  },
+  {
+   "s": "state:articles.status=draft",
+   "p": "testedBy",
+   "o": "screen:templates/desk.html",
+   "file": "templates/desk.html",
+   "line": 16,
+   "label": "a.status == 'draft'",
+   "inferred": "the condition names the same column and value; not traced to the same rows"
+  },
+  {
+   "s": "state:articles.status=in_review",
+   "p": "testedBy",
+   "o": "route:POST /review/<int:article_id>/publish",
+   "file": "app.py",
+   "line": 103,
+   "label": "row['status'] != 'in_review'",
+   "inferred": "the condition names the same column and value; not traced to the same rows"
+  },
+  {
+   "s": "state:articles.status=published",
+   "p": "testedBy",
+   "o": "route:GET /articles/<int:article_id>",
+   "file": "app.py",
+   "line": 26,
+   "label": "row is None or row['status'] != 'published'",
+   "inferred": "the condition names the same column and value; not traced to the same rows"
+  },
+  {
+   "s": "term:templates/base.html:12:1",
+   "p": "leadsTo",
+   "o": "route:GET /",
+   "file": "templates/base.html",
+   "line": 12,
+   "label": "GET"
+  },
+  {
+   "s": "term:templates/base.html:14:2",
+   "p": "leadsTo",
+   "o": "route:GET /desk",
+   "file": "templates/base.html",
+   "line": 14,
+   "label": "GET"
+  },
+  {
+   "s": "term:templates/base.html:17:3",
+   "p": "leadsTo",
+   "o": "route:GET /review",
+   "file": "templates/base.html",
+   "line": 17,
+   "label": "GET"
+  },
+  {
+   "s": "term:templates/base.html:17:3",
+   "p": "wordedIn",
+   "o": "file:locales/en.json",
+   "file": "locales/en.json",
+   "line": 3,
+   "label": "nav.review"
+  },
+  {
+   "s": "term:templates/base.html:20:4",
+   "p": "leadsTo",
+   "o": "route:GET,POST /login",
+   "file": "templates/base.html",
+   "line": 20,
+   "label": "GET"
+  },
+  {
+   "s": "term:templates/desk.html:16:6",
+   "p": "leadsTo",
+   "o": "route:POST /desk/<int:article_id>/submit",
+   "file": "templates/desk.html",
+   "line": 16,
+   "label": "POST"
+  },
+  {
+   "s": "term:templates/desk.html:5:1",
+   "p": "leadsTo",
+   "o": "route:GET,POST /desk/new",
+   "file": "templates/desk.html",
+   "line": 5,
+   "label": "GET"
+  },
+  {
+   "s": "term:templates/edit.html:10:3",
+   "p": "leadsTo",
+   "o": "route:GET,POST /desk/new",
+   "file": "templates/edit.html",
+   "line": 10,
+   "label": "POST"
+  },
+  {
+   "s": "term:templates/edit.html:12:4",
+   "p": "leadsTo",
+   "o": "route:GET,POST /desk/new",
+   "file": "templates/edit.html",
+   "line": 12,
+   "label": "POST"
+  },
+  {
+   "s": "term:templates/edit.html:6:1",
+   "p": "leadsTo",
+   "o": "route:GET,POST /desk/new",
+   "file": "templates/edit.html",
+   "line": 6,
+   "label": "POST"
+  },
+  {
+   "s": "term:templates/edit.html:8:2",
+   "p": "leadsTo",
+   "o": "route:GET,POST /desk/new",
+   "file": "templates/edit.html",
+   "line": 8,
+   "label": "POST"
+  },
+  {
+   "s": "term:templates/home.html:13:2",
+   "p": "leadsTo",
+   "o": "route:GET /published.csv",
+   "file": "templates/home.html",
+   "line": 13,
+   "label": "GET"
+  },
+  {
+   "s": "term:templates/login.html:6:1",
+   "p": "leadsTo",
+   "o": "route:GET,POST /login",
+   "file": "templates/login.html",
+   "line": 6,
+   "label": "POST"
+  },
+  {
+   "s": "term:templates/login.html:8:2",
+   "p": "leadsTo",
+   "o": "route:GET,POST /login",
+   "file": "templates/login.html",
+   "line": 8,
+   "label": "POST"
+  },
+  {
+   "s": "term:templates/review.html:4:0",
+   "p": "wordedIn",
+   "o": "file:locales/en.json",
+   "file": "locales/en.json",
+   "line": 3,
+   "label": "nav.review"
+  },
+  {
+   "s": "term:templates/review_detail.html:10:1",
+   "p": "leadsTo",
+   "o": "route:POST /review/<int:article_id>/publish",
+   "file": "templates/review_detail.html",
+   "line": 10,
+   "label": "POST"
+  },
+  {
+   "s": "term:templates/review_detail.html:10:1",
+   "p": "wordedIn",
+   "o": "file:locales/en.json",
+   "file": "locales/en.json",
+   "line": 6,
+   "label": "review.publish"
+  },
+  {
+   "s": "term:templates/review_detail.html:13:2",
+   "p": "leadsTo",
+   "o": "route:POST /review/<int:article_id>/return",
+   "file": "templates/review_detail.html",
+   "line": 13,
+   "label": "POST"
+  },
+  {
+   "s": "term:templates/review_detail.html:15:3",
+   "p": "leadsTo",
+   "o": "route:POST /review/<int:article_id>/return",
+   "file": "templates/review_detail.html",
+   "line": 15,
+   "label": "POST"
+  },
+  {
+   "s": "term:templates/review_detail.html:8:0",
+   "p": "leadsTo",
+   "o": "route:GET /preview/<int:article_id>",
+   "file": "templates/review_detail.html",
+   "line": 8,
+   "label": "GET"
+  },
+  {
+   "s": "user:anyone",
+   "p": "sees",
+   "o": "screen:templates/article.html",
+   "file": "app.py",
+   "line": 28,
+   "label": "GET /articles/<int:article_id>",
+   "count": 2
+  },
+  {
+   "s": "user:anyone",
+   "p": "sees",
+   "o": "screen:templates/home.html",
+   "file": "app.py",
+   "line": 20,
+   "label": "GET /",
+   "count": 2
+  },
+  {
+   "s": "user:anyone",
+   "p": "sees",
+   "o": "screen:templates/login.html",
+   "file": "app.py",
+   "line": 50,
+   "label": "GET,POST /login",
+   "count": 2
+  },
+  {
+   "s": "user:author",
+   "p": "sees",
+   "o": "screen:templates/article.html",
+   "file": "app.py",
+   "line": 126,
+   "label": "GET /preview/<int:article_id>",
+   "count": 2
+  },
+  {
+   "s": "user:author",
+   "p": "sees",
+   "o": "screen:templates/desk.html",
+   "file": "app.py",
+   "line": 58,
+   "label": "GET /desk",
+   "count": 2
+  },
+  {
+   "s": "user:author",
+   "p": "sees",
+   "o": "screen:templates/edit.html",
+   "file": "app.py",
+   "line": 70,
+   "label": "GET,POST /desk/new",
+   "count": 2
+  },
+  {
+   "s": "user:editor",
+   "p": "sees",
+   "o": "screen:templates/article.html",
+   "file": "app.py",
+   "line": 126,
+   "label": "GET /preview/<int:article_id>",
+   "count": 2
+  },
+  {
+   "s": "user:editor",
+   "p": "sees",
+   "o": "screen:templates/review.html",
+   "file": "app.py",
+   "line": 90,
+   "label": "GET /review",
+   "count": 2
+  },
+  {
+   "s": "user:editor",
+   "p": "sees",
+   "o": "screen:templates/review_detail.html",
+   "file": "app.py",
+   "line": 96,
+   "label": "GET /review/<int:article_id>",
+   "count": 2
+  }
+ ],
+ "generated": "2026-11-14"
+}

@@ -247,6 +247,40 @@ STRINGS: dict[str, str] = {
     "author": "Author",
     "last_commit": "Last commit",
     "first_commit": "First commit",
+    # the user-context view (USERS.md)
+    "title_users": "Who uses it and what they see",
+    "page_users": "Who uses it — user types, their screens, what each control does, hand-overs between user types, assets in context",
+    "users_legend": "The user types on this page are the kinds of user the analysed application tells apart. They are not access "
+                    "levels of this pack: every flow is open to you, and each one links to the flows of the other user types. "
+                    "Start from a user type, from the words on a screen, from an asset or table, or from a code file.",
+    "users_none": "No screens, role checks or routes with handlers were found, so there is nothing to show from a user's side. "
+                  "For a library or a command-line tool that is expected.",
+    "users_types": "User types",
+    "users_types_hint": "Found from role checks on routes and in templates. A route without one is listed under `anyone`.",
+    "users_diagram_hint": "Screens grouped by who sees them. An arrow into a state is an action that sets it; an arrow out of a "
+                          "state is a screen that lists or tests it. Dashed arrows are inferences.",
+    "users_flows": "Flows by user type",
+    "users_flows_hint": "Per screen: what is on it, when it is shown, where it leads, what the code then does, and who picks the "
+                        "work up next.",
+    "users_handoffs": "Hand-overs between features",
+    "users_handoffs_hint": "*Inferred.* One feature sets a column value and another feature's query filters on the same value. "
+                           "That the same rows are meant was not traced; read both lines before relying on it.",
+    "users_features": "Features",
+    "users_features_hint": "One per route. Each links to its own page: started from, what the code does, branches, hand-overs, "
+                           "data, assets, what to check, what was not verified.",
+    "users_terms": "Words on the screens",
+    "users_terms_hint": "Start here when someone describes a screen in their own words. The text is what the user reads; a text "
+                        "that comes from a locale file is listed with every language found.",
+    "users_data": "Data and states",
+    "users_assets": "Assets in context",
+    "users_assets_hint": "Where each asset comes from, what stores it, what data it is tied to, where it appears and who would notice a change.",
+    "users_shared": "Shared code",
+    "users_shared_hint": "Functions that more than one feature runs. Each is modelled once; a change reaches every user type listed.",
+    "users_gaps": "Not verified by the analysis",
+    "users_gaps_hint": "What could not be connected is listed instead of guessed.",
+    "todo_user": "TODO: Who these users are in real life, how many, and what they mostly ask for.",
+    "metric_users": "user types",
+    "metric_screens": "screens",
 }
 
 

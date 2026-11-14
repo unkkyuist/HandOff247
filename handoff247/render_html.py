@@ -79,6 +79,14 @@ article th{background:var(--chip);font-weight:600}
 #gcanvas{display:block;width:100%;height:min(72vh,760px);min-height:420px;touch-action:none;cursor:grab}
 #gtip{position:absolute;pointer-events:none;max-width:320px;background:var(--panel);color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:6px 10px;font-size:12.5px;line-height:1.45;box-shadow:var(--shadow);display:none;overflow-wrap:anywhere}
 #card button.act{margin:0 6px 6px 0}
+.ubar{display:flex;gap:6px;align-items:center;flex-wrap:wrap;margin:12px 0 4px;position:sticky;top:56px;z-index:3;background:var(--panel);padding:6px 0;border-bottom:1px solid var(--line)}
+.ubar span{font-size:13px;color:var(--muted)}
+.ubar button{border:1px solid var(--line);background:var(--panel);color:var(--ink);border-radius:999px;padding:3px 12px;font:inherit;font-size:13px;cursor:pointer}
+.ubar button[aria-pressed="true"]{background:var(--accent-soft);border-color:var(--accent);color:var(--accent)}
+article .ud{opacity:.42;transition:opacity .12s}
+article .ud:hover,article .ud:focus-within{opacity:1}
+article tr.uf td:first-child{box-shadow:inset 3px 0 0 var(--accent)}
+article h3.uf,article h4.uf{color:var(--accent)}
 @media (max-width:640px){article{padding:4px 14px 18px}header{gap:8px}nav{margin-left:0}input[type=search]{min-width:0;width:100%}}
 </style>
 </head>
@@ -96,7 +104,7 @@ article th{background:var(--chip);font-weight:600}
 <script src="__MERMAID__"></script>
 <script>
 const DATA = JSON.parse(document.getElementById('data').textContent);
-const TABS = [['README.md', 'Overview'], ['HANDOVER.md', 'Handover'], ['RUNNING.md', 'Running'], ['CONNECTIONS.md', 'Connections'],
+const TABS = [['README.md', 'Overview'], ['HANDOVER.md', 'Handover'], ['USERS.md', 'Users'], ['RUNNING.md', 'Running'], ['CONNECTIONS.md', 'Connections'],
   ['CODEMAP.md', 'Code map'], ['FILES.md', 'Files'], ['@graph', 'Graph'], ['wiki/index.md', 'Wiki'], ['@search', 'Search']];
 const filesByPath = Object.fromEntries(DATA.files.map(f => [f.path, f]));
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -134,6 +142,7 @@ async function show(id, anchor) {
   if (id === '@graph') { graphPage(); return; }
   page.innerHTML = md((DATA.pages[id] || '').replace(/^---\n[\s\S]*?\n---\n/, ''));
   wireLinks(page);
+  if (id === 'USERS.md') userBar(page);
   await drawDiagrams(page);
   if (anchor) document.getElementById(anchor)?.scrollIntoView(); else window.scrollTo(0, 0);
   try { history.replaceState(null, '', '#' + id); } catch (e) {}
@@ -152,6 +161,40 @@ function wireLinks(root) {
       a.onclick = e => { if (e.ctrlKey || e.metaKey) return; e.preventDefault(); openCard(path, lineOf(href)); };
     } else { a.target = '_blank'; a.rel = 'noopener'; }
   });
+}
+// Picking a user type brings its flow forward. Nothing is removed: the other flows stay on the
+// page, dimmed, and come back on hover, because a successor has to follow work across user types.
+let focusUser = '';
+function userBar(page) {
+  const users = DATA.users || []; if (users.length < 2) return;
+  const bar = document.createElement('div'); bar.className = 'ubar';
+  bar.innerHTML = '<span>Bring forward:</span>';
+  const mk = (name, label) => { const b = document.createElement('button'); b.type = 'button'; b.textContent = label;
+    b.setAttribute('aria-pressed', focusUser === name); b.onclick = () => { focusUser = name; markUser(page); bar.querySelectorAll('button').forEach(x => x.setAttribute('aria-pressed', x === b)); }; bar.append(b); };
+  mk('', 'All user types'); for (const u of users) mk(u, u);
+  const first = page.querySelector('h2'); (first || page.firstChild).before(bar);
+  markUser(page);
+}
+function markUser(page) {
+  const users = new Set(DATA.users || []);
+  page.querySelectorAll('.ud,.uf').forEach(el => el.classList.remove('ud', 'uf'));
+  if (!focusUser) return;
+  let state = '';                                   // '' outside a user section, 'f' inside the chosen one, 'd' inside another
+  for (const el of page.children) {
+    if (el.tagName === 'H2') { state = ''; continue; }
+    if (el.tagName === 'H3') {
+      const name = el.querySelector('code')?.textContent.trim();
+      state = users.has(name) ? (name === focusUser ? 'f' : 'd') : '';
+      if (state) el.classList.add(state === 'f' ? 'uf' : 'ud');
+      continue;
+    }
+    if (state === 'd') { el.classList.add('ud'); continue; }
+    if (el.tagName !== 'TABLE') continue;
+    for (const tr of el.querySelectorAll('tbody tr')) {
+      const named = [...tr.querySelectorAll('code')].map(c => c.textContent.trim()).filter(x => users.has(x));
+      if (named.includes(focusUser)) tr.classList.add('uf'); else if (named.length && state !== 'f') tr.classList.add('ud');
+    }
+  }
 }
 function lineOf(href) { const m = href.match(/#L(\d+)$/); return m ? +m[1] : 0; }
 function toProjectPath(href) {
@@ -482,9 +525,16 @@ function searchPage(q) {
     const hay = (f.path + ' ' + f.summary + ' ' + f.note + ' ' + (f.model ? f.model.summary : '') + ' ' + f.symbols.map(s => s.name + ' ' + s.doc).join(' ')).toLowerCase();
     return words.every(w => hay.includes(w));
   });
-  page.innerHTML = `<h1>Search</h1><p class="muted">${hits.length} / ${DATA.files.length}</p>` +
+  const terms = words.length ? (DATA.terms || []).filter(t => { const hay = (t.text + ' ' + t.alt.join(' ') + ' ' + t.field).toLowerCase(); return words.every(w => hay.includes(w)); }) : [];
+  const termHtml = terms.length ? `<h2>Words on the screens</h2><p class="muted">${terms.length} found. What a user reads, where it is, and the feature it leads to.</p>` +
+    terms.slice(0, 120).map((t, i) => `<div class="filehit" data-term="${i}"><strong>${esc(t.text)}</strong>${t.alt.map(a => ' / ' + esc(a)).join('')} <span class="chip">${esc(t.kind)}</span>${t.seen.map(u => `<span class="chip">${esc(u)}</span>`).join('')}<br><span class="muted">${esc(t.file)}:${t.line}${t.when ? ' · shown when ' + esc(t.when) : ''}${t.leads.length ? ' · leads to ' + esc(t.leads.map(l => l.id).join(', ')) : ''}</span></div>`).join('') + '<h2>Files</h2>' : '';
+  page.innerHTML = `<h1>Search</h1>` + termHtml + `<p class="muted">${hits.length} / ${DATA.files.length}</p>` +
     hits.slice(0, 300).map(f => `<div class="filehit" data-path="${esc(f.path)}"><strong>${esc(f.path)}</strong> <span class="chip">${esc(f.lang)}</span><br><span class="muted">${esc(f.note || f.summary || (f.model ? '(model) ' + f.model.summary : ''))}</span></div>`).join('');
-  page.querySelectorAll('.filehit').forEach(el => el.onclick = () => openCard(el.dataset.path));
+  page.querySelectorAll('.filehit[data-path]').forEach(el => el.onclick = () => openCard(el.dataset.path));
+  page.querySelectorAll('.filehit[data-term]').forEach(el => el.onclick = () => {
+    const t = terms[+el.dataset.term], lead = t.leads.find(l => l.page && DATA.pages[l.page]);
+    if (lead) show(lead.page); else openCard(t.file, t.line);
+  });
 }
 document.getElementById('q').addEventListener('input', e => searchPage(e.target.value));
 const start = decodeURIComponent(location.hash.slice(1));
@@ -522,6 +572,16 @@ def render(project, pages: dict[str, str], diagrams: dict, notes, date: str, lin
             "diagrams": {k: {"source": v.render(), "files": v.files} for k, v in diagrams.items()},
             "linkBase": linker.base if linker.mode == "url" else "",
             "relPrefix": linker.rel_prefix if linker.mode == "relative" else ""}
+    j = project.links.get("journeys") or {}
+    page_of = {e["id"]: e.get("page", "") for e in (onto or {}).get("entities", [])}
+    seen_by = {s["id"]: (s["roles"] + (["anyone"] if s["open"] else [])) for s in j.get("screens", [])}
+    data["users"] = [u["name"] for u in j.get("user_types", [])]
+    data["terms"] = [{"text": t["text"], "alt": [o["text"] for o in t.get("other_texts", [])], "kind": t["kind"],
+                      "file": t["file"], "line": t["line"], "field": t.get("field", ""), "when": " and ".join(t["conditions"]),
+                      "seen": t["roles"] or seen_by.get(t["screen"], []),
+                      "leads": [{"id": fid, "page": page_of.get("route:" + fid, "")}
+                                for fid in (t["leads_to"] or ([t["feature"]] if t.get("feature") else []))]}
+                     for t in j.get("terms", []) if t["text"]]
     if onto:
         keep = ("id", "type", "name", "summary", "page", "model_summary")
         data["ontology"] = {"classes": onto["schema"]["classes"], "relations": onto["schema"]["relations"],
@@ -532,6 +592,6 @@ def render(project, pages: dict[str, str], diagrams: dict, notes, date: str, lin
     page = (TEMPLATE.replace("__TITLE__", html.escape(title))
             .replace("__VERSION__", __version__)
             .replace("__DATE__", date)
-            .replace("__SEARCH__", "Find a file or symbol")
+            .replace("__SEARCH__", "Find a file, symbol or screen term")
             .replace("__MARKED__", MARKED).replace("__PURIFY__", PURIFY).replace("__MERMAID__", MERMAID))
     return page.replace("__DATA__", payload, 1)   # last, so project text can never hit a placeholder

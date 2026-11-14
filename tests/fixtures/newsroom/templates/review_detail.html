@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block title %}Review{% endblock %}
+{% block content %}
+<h1>{{ article.title }}</h1>
+{% if article.cover %}
+<img class="cover" src="{{ url_for('uploaded', name=article.cover) }}" alt="">
+{% endif %}
+<p><a href="{{ url_for('preview', article_id=article.id) }}">Open the preview</a></p>
+<form method="post" action="{{ url_for('publish', article_id=article.id) }}">
+  <button type="submit">{{ t('review.publish') }}</button>
+</form>
+<form method="post" action="{{ url_for('send_back', article_id=article.id) }}">
+  <label for="reason">Reason for the author</label>
+  <textarea id="reason" name="reason"></textarea>
+  <button type="submit">Send back</button>
+</form>
+{% endblock %}

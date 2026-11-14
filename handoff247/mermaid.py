@@ -466,10 +466,72 @@ def areas_map(project: Project) -> Flow:
     return fl
 
 
+def users_map(project: Project, max_screens: int = 40) -> Flow | None:
+    """Screens grouped by who sees them, joined through the states and files that pass work
+    from one user type to the next."""
+    from .explore import Explorer, applies
+    ex = Explorer(project)
+    j = ex.j
+    pages = [s for s in j["screens"] if s["routes"] or (s["kind"] == "page without a known route" and (s["terms"] or s["calls"]))]
+    if not pages:
+        return None
+    fl = Flow("LR")
+    groups: dict[tuple, list[dict]] = defaultdict(list)
+    for s in pages[:max_screens]:
+        groups[tuple(ex.who_sees(s["id"]))].append(s)
+    node: dict[str, str] = {}
+    for who, items in groups.items():
+        with fl.group("|".join(who), "seen by " + ", ".join(who)):
+            for s in items:
+                label = (s["title"] + "\n" if s["title"] else "") + display(s["id"], project)
+                node[s["id"]] = fl.node("screen:" + s["id"], label, "rect", "iface", s["id"])
+    if len(pages) > max_screens:
+        fl.node("more", f"… {len(pages) - max_screens} more screens", "rect", "hub")
+
+    def state_node(table: str, column: str, value: str) -> str:
+        return fl.node(f"state:{table}.{column}={value}", f"{table}.{column} = '{value}'", "db", "data")
+
+    for t in j["terms"]:
+        if t["kind"] not in ("link", "button") or t["screen"] not in node or not t["text"]:
+            continue
+        for fid in t["leads_to"]:
+            for q in ex.features[fid]["sql"]:
+                if not applies(q, t["method"]):
+                    continue
+                for st in q["sets"]:
+                    fl.edge(node[t["screen"]], state_node(st["table"], st["column"], st["value"]), t["text"])
+    for d in j["data"]:
+        for st in d["states"]:
+            if not st["set_by"]:
+                continue
+            for r in st["read_by"]:
+                for rn in ex.features[r["feature"]]["renders"]:
+                    if rn.get("screen") in node:
+                        fl.edge(state_node(d["id"], st["column"], st["value"]), node[rn["screen"]], "listed on", "-.->")
+            for x in st["tested_in"]:
+                if x["where"] == "template" and x["screen"] in node:
+                    fl.edge(state_node(d["id"], st["column"], st["value"]), node[x["screen"]], "tested on", "-.->")
+    for a in j["assets"]:
+        if a["kind"] not in ("uploaded", "generated"):
+            continue
+        an = fl.node("asset:" + a["id"], a["name"].replace("`", ""), "para", "data")
+        for p in a.get("picked_with", []):
+            if p["file"] in node:
+                fl.edge(node[p["file"]], an, p["text"])
+        for w in a["written_by"]:
+            for trig in ex.triggers(w["feature"]):
+                if trig["screen"] in node and trig["term"]:
+                    fl.edge(node[trig["screen"]], an, trig["term"])
+        for sid in a["screens"]:
+            if sid in node:
+                fl.edge(an, node[sid], "shown on")
+    return fl
+
+
 def all_diagrams(project: Project) -> dict[str, Flow]:
     out = {}
     for name, fn in (("system", system_map), ("startup", startup), ("operations", operations),
-                     ("code", code_map), ("areas", areas_map)):
+                     ("code", code_map), ("areas", areas_map), ("users", users_map)):
         fl = fn(project)
         if fl is not None and len(fl.lines) > 1:
             out[name] = fl

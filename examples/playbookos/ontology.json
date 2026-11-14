@@ -1,7 +1,7 @@
 {
  "generator": "HandOff247",
  "kind": "ontology",
- "version": "0.5.0",
+ "version": "0.6.0",
  "project": "PlayBookOS",
  "schema": {
   "classes": [
@@ -132,6 +132,62 @@
     "group": "outside",
     "shape": "diamond",
     "description": "An author in the Git history."
+   },
+   {
+    "id": "UserType",
+    "label": "User type",
+    "plural": "User types",
+    "group": "structure",
+    "shape": "triangle",
+    "description": "A kind of user the analysed application tells apart, found from role checks. Not an access level of this pack."
+   },
+   {
+    "id": "Screen",
+    "label": "Screen",
+    "plural": "Screens",
+    "group": "interface",
+    "shape": "square",
+    "description": "A template or page a user sees."
+   },
+   {
+    "id": "Term",
+    "label": "Screen term",
+    "plural": "Screen terms",
+    "group": "interface",
+    "shape": "circle",
+    "description": "Words a user reads: a link, button, field label, heading, or a message the code shows."
+   },
+   {
+    "id": "Function",
+    "label": "Function",
+    "plural": "Functions",
+    "group": "type",
+    "shape": "square",
+    "description": "Project code that a feature runs. Modelled once, however many features use it."
+   },
+   {
+    "id": "Data",
+    "label": "Data table",
+    "plural": "Data tables",
+    "group": "file",
+    "shape": "square",
+    "description": "A table named in an SQL statement."
+   },
+   {
+    "id": "State",
+    "label": "State",
+    "plural": "States",
+    "group": "file",
+    "shape": "diamond",
+    "description": "A column value that statements set or filter on, such as status = 'published'."
+   },
+   {
+    "id": "Asset",
+    "label": "Asset",
+    "plural": "Assets",
+    "group": "file",
+    "shape": "triangle",
+    "description": "A file users see or provide: shipped with the project, uploaded, generated, or kept in external storage."
    }
   ],
   "relations": [
@@ -278,6 +334,126 @@
     "label": "has commits in",
     "inverse": "has commits by",
     "description": "Author in the Git history of the project."
+   },
+   {
+    "id": "openTo",
+    "label": "is open to",
+    "inverse": "may use",
+    "description": "Role check on the route, or none found (anyone)."
+   },
+   {
+    "id": "sees",
+    "label": "sees",
+    "inverse": "is seen by",
+    "description": "A route this user type may use shows the screen."
+   },
+   {
+    "id": "shows",
+    "label": "shows",
+    "inverse": "is shown by",
+    "description": "The route renders the screen."
+   },
+   {
+    "id": "builtOn",
+    "label": "is built on",
+    "inverse": "is part of",
+    "description": "The template extends or includes the other one."
+   },
+   {
+    "id": "displays",
+    "label": "displays",
+    "inverse": "is displayed on",
+    "description": "The words are on the screen, or the route shows the message."
+   },
+   {
+    "id": "leadsTo",
+    "label": "leads to",
+    "inverse": "is started from",
+    "description": "The link, button or form of the term targets the route; a script of the screen calls it."
+   },
+   {
+    "id": "redirectsTo",
+    "label": "redirects to",
+    "inverse": "is reached by redirect from",
+    "description": "The handler redirects to the other route."
+   },
+   {
+    "id": "runsCode",
+    "label": "runs",
+    "inverse": "runs for",
+    "description": "The handler calls the function, directly or through other functions."
+   },
+   {
+    "id": "readsData",
+    "label": "reads",
+    "inverse": "is read by",
+    "description": "An SQL statement of the feature reads the table."
+   },
+   {
+    "id": "writesData",
+    "label": "writes",
+    "inverse": "is written by",
+    "description": "An SQL statement of the feature inserts, updates or deletes rows."
+   },
+   {
+    "id": "hasState",
+    "label": "has the state",
+    "inverse": "is a state of",
+    "description": "A literal column value found in a statement."
+   },
+   {
+    "id": "setsState",
+    "label": "sets",
+    "inverse": "is set by",
+    "description": "A statement of the feature sets the column to this value."
+   },
+   {
+    "id": "listsState",
+    "label": "lists only",
+    "inverse": "is the filter of",
+    "description": "A statement of the feature filters on this value."
+   },
+   {
+    "id": "testedBy",
+    "label": "is tested by",
+    "inverse": "tests",
+    "description": "A template condition or a handler branch names the same column and value."
+   },
+   {
+    "id": "handsOverTo",
+    "label": "hands over to",
+    "inverse": "receives from",
+    "description": "One feature sets a state that the other filters on."
+   },
+   {
+    "id": "showsAsset",
+    "label": "shows",
+    "inverse": "appears on",
+    "description": "The screen references the file."
+   },
+   {
+    "id": "provides",
+    "label": "provides",
+    "inverse": "is provided by",
+    "description": "The feature receives the upload or writes the generated file."
+   },
+   {
+    "id": "delivers",
+    "label": "delivers",
+    "inverse": "is delivered by",
+    "description": "The route sends the file to the browser."
+   },
+   {
+    "id": "keptIn",
+    "label": "has its name kept in",
+    "inverse": "keeps the name of",
+    "description": "The stored file name is written to a column of the table."
+   },
+   {
+    "id": "wordedIn",
+    "label": "takes its text from",
+    "inverse": "words",
+    "description": "The text of the term comes from a locale file."
    }
   ]
  },
@@ -296,7 +472,10 @@
   "Package": 3,
   "Host": 8,
   "Command": 3,
-  "Person": 1
+  "Person": 1,
+  "UserType": 1,
+  "Screen": 2,
+  "Term": 36
  },
  "entities": [
   {
@@ -3397,7 +3576,7 @@
    "name": "GET /health",
    "file": "Program.cs",
    "line": 108,
-   "page": "wiki/routes.md"
+   "page": "wiki/features/GET-__health.md"
   },
   {
    "id": "route:GET /session",
@@ -3405,7 +3584,7 @@
    "name": "GET /session",
    "file": "Program.cs",
    "line": 98,
-   "page": "wiki/routes.md"
+   "page": "wiki/features/GET-__session.md"
   },
   {
    "id": "route:MCP /mcp",
@@ -3413,7 +3592,7 @@
    "name": "MCP /mcp",
    "file": "Program.cs",
    "line": 109,
-   "page": "wiki/routes.md"
+   "page": "wiki/features/MCP-__mcp.md"
   },
   {
    "id": "route:POST /api/{operation}",
@@ -3421,7 +3600,7 @@
    "name": "POST /api/{operation}",
    "file": "Program.cs",
    "line": 100,
-   "page": "wiki/routes.md"
+   "page": "wiki/features/POST-__api__-operation.md"
   },
   {
    "id": "route:POST /auth/login",
@@ -3429,7 +3608,7 @@
    "name": "POST /auth/login",
    "file": "Program.cs",
    "line": 99,
-   "page": "wiki/routes.md"
+   "page": "wiki/features/POST-__auth__login.md"
   },
   {
    "id": "route:POST /media/{projectId}",
@@ -3437,7 +3616,7 @@
    "name": "POST /media/{projectId}",
    "file": "Program.cs",
    "line": 104,
-   "page": "wiki/routes.md"
+   "page": "wiki/features/POST-__media__-projectId.md"
   },
   {
    "id": "tool:adopt_harness",
@@ -4232,6 +4411,472 @@
    "name": "R B",
    "summary": "5 commit(s), 2026-10-07 to 2026-11-07",
    "page": "wiki/people.md"
+  },
+  {
+   "id": "user:anyone",
+   "type": "UserType",
+   "name": "anyone",
+   "summary": "no role check was found on the routes it uses",
+   "attrs": {
+    "kind": "anyone"
+   },
+   "page": "wiki/users/anyone.md"
+  },
+  {
+   "id": "screen:scripts/graphify/index.html",
+   "type": "Screen",
+   "name": "scripts/graphify/index.html",
+   "summary": "Graphify · PlayBook",
+   "file": "scripts/graphify/index.html",
+   "line": 1,
+   "attrs": {
+    "kind": "page without a known route"
+   },
+   "page": "wiki/screens/scripts__graphify__index.html.md"
+  },
+  {
+   "id": "screen:wwwroot/index.html",
+   "type": "Screen",
+   "name": "wwwroot/index.html",
+   "summary": "Project PlayBook",
+   "file": "wwwroot/index.html",
+   "line": 1,
+   "attrs": {
+    "kind": "page without a known route"
+   },
+   "page": "wiki/screens/wwwroot__index.html.md"
+  },
+  {
+   "id": "term:wwwroot/index.html:5:10",
+   "type": "Term",
+   "name": "English",
+   "summary": "choice on wwwroot/index.html",
+   "file": "wwwroot/index.html",
+   "line": 5,
+   "attrs": {
+    "kind": "choice"
+   },
+   "page": "wiki/terms.md"
+  },
+  {
+   "id": "term:scripts/graphify/index.html:4:0",
+   "type": "Term",
+   "name": "Graphify · PlayBook",
+   "summary": "title on scripts/graphify/index.html",
+   "file": "scripts/graphify/index.html",
+   "line": 4,
+   "attrs": {
+    "kind": "title"
+   },
+   "page": "wiki/terms.md"
+  },
+  {
+   "id": "term:scripts/graphify/index.html:8:1",
+   "type": "Term",
+   "name": "Graphify × PlayBook",
+   "summary": "heading on scripts/graphify/index.html",
+   "file": "scripts/graphify/index.html",
+   "line": 8,
+   "attrs": {
+    "kind": "heading"
+   },
+   "page": "wiki/terms.md"
+  },
+  {
+   "id": "term:scripts/graphify/index.html:19:10",
+   "type": "Term",
+   "name": "Graphify 공식 저장소 ↗",
+   "summary": "link on scripts/graphify/index.html",
+   "file": "scripts/graphify/index.html",
+   "line": 19,
+   "attrs": {
+    "kind": "link"
+   },
+   "page": "wiki/terms.md"
+  },
+  {
+   "id": "term:scripts/graphify/index.html:8:2",
+   "type": "Term",
+   "name": "PlayBook 열기 ↗",
+   "summary": "link on scripts/graphify/index.html",
+   "file": "scripts/graphify/index.html",
+   "line": 8,
+   "attrs": {
+    "kind": "link"
+   },
+   "page": "wiki/terms.md"
+  },
+  {
+   "id": "term:scripts/graphify/index.html:11:3",
+   "type": "Term",
+   "name": "PlayBook 프로젝트",
+   "summary": "field on scripts/graphify/index.html",
+   "file": "scripts/graphify/index.html",
+   "line": 11,
+   "attrs": {
+    "kind": "field"
+   },
+   "page": "wiki/terms.md"
+  },
+  {
+   "id": "term:wwwroot/index.html:4:1",
+   "type": "Term",
+   "name": "PPLAYBOOKPROJECT OPERATING SYSTEM",
+   "summary": "link on wwwroot/index.html",
+   "file": "wwwroot/index.html",
+   "line": 4,
+   "attrs": {
+    "kind": "link"
+   },
+   "page": "wiki/terms.md"
+  },
+  {
+   "id": "term:wwwroot/index.html:2:0",
+   "type": "Term",
+   "name": "Project PlayBook",
+   "summary": "title on wwwroot/index.html",
+   "file": "wwwroot/index.html",
+   "line": 2,
+   "attrs": {
+    "kind": "title"
+   },
+   "page": "wiki/terms.md"
+  },
+  {
+   "id": "term:wwwroot/index.html:7:15",
+   "type": "Term",
+   "name": "×",
+   "summary": "button on wwwroot/index.html",
+   "file": "wwwroot/index.html",
+   "line": 7,
+   "attrs": {
+    "kind": "button"
+   },
+   "page": "wiki/terms.md"
+  },
+  {
+   "id": "term:wwwroot/index.html:8:24",
+   "type": "Term",
+   "name": "×",
+   "summary": "button on wwwroot/index.html",
+   "file": "wwwroot/index.html",
+   "line": 8,
+   "attrs": {
+    "kind": "button"
+   },
+   "page": "wiki/terms.md"
+  },
+  {
+   "id": "term:wwwroot/index.html:4:3",
+   "type": "Term",
+   "name": "⌘ &nbsp; 도구 · 서버",
+   "summary": "button on wwwroot/index.html",
+   "file": "wwwroot/index.html",
+   "line": 4,
+   "attrs": {
+    "kind": "button"
+   },
+   "page": "wiki/terms.md"
+  },
+  {
+   "id": "term:wwwroot/index.html:4:5",
+   "type": "Term",
+   "name": "▣ &nbsp; 설치 · 폴더 선택",
+   "summary": "button on wwwroot/index.html",
+   "file": "wwwroot/index.html",
+   "line": 4,
+   "attrs": {
+    "kind": "button"
+   },
+   "page": "wiki/terms.md"
+  },
+  {
+   "id": "term:wwwroot/index.html:4:7",
+   "type": "Term",
+   "name": "▧ &nbsp; 공용 레퍼런스",
+   "summary": "button on wwwroot/index.html",
+   "file": "wwwroot/index.html",
+   "line": 4,
+   "attrs": {
+    "kind": "button"
+   },
+   "page": "wiki/terms.md"
+  },
+  {
+   "id": "term:wwwroot/index.html:4:4",
+   "type": "Term",
+   "name": "◇ &nbsp; 취향 · 개발 원칙",
+   "summary": "button on wwwroot/index.html",
+   "file": "wwwroot/index.html",
+   "line": 4,
+   "attrs": {
+    "kind": "button"
+   },
+   "page": "wiki/terms.md"
+  },
+  {
+   "id": "term:wwwroot/index.html:4:6",
+   "type": "Term",
+   "name": "◎ &nbsp; AI 에이전트",
+   "summary": "button on wwwroot/index.html",
+   "file": "wwwroot/index.html",
+   "line": 4,
+   "attrs": {
+    "kind": "button"
+   },
+   "page": "wiki/terms.md"
+  },
+  {
+   "id": "term:wwwroot/index.html:4:2",
+   "type": "Term",
+   "name": "◫ &nbsp; 전체 프로젝트",
+   "summary": "button on wwwroot/index.html",
+   "file": "wwwroot/index.html",
+   "line": 4,
+   "attrs": {
+    "kind": "button"
+   },
+   "page": "wiki/terms.md"
+  },
+  {
+   "id": "term:scripts/graphify/index.html:18:9",
+   "type": "Term",
+   "name": "검색",
+   "summary": "button on scripts/graphify/index.html",
+   "file": "scripts/graphify/index.html",
+   "line": 18,
+   "attrs": {
+    "kind": "button"
+   },
+   "page": "wiki/terms.md"
+  },
+  {
+   "id": "term:wwwroot/index.html:7:23",
+   "type": "Term",
+   "name": "기록 저장",
+   "summary": "button on wwwroot/index.html",
+   "file": "wwwroot/index.html",
+   "line": 7,
+   "attrs": {
+    "kind": "button"
+   },
+   "page": "wiki/terms.md"
+  },
+  {
+   "id": "term:wwwroot/index.html:5:12",
+   "type": "Term",
+   "name": "로그아웃",
+   "summary": "button on wwwroot/index.html",
+   "file": "wwwroot/index.html",
+   "line": 5,
+   "attrs": {
+    "kind": "button"
+   },
+   "page": "wiki/terms.md"
+  },
+  {
+   "id": "term:wwwroot/index.html:5:13",
+   "type": "Term",
+   "name": "백업",
+   "summary": "button on wwwroot/index.html",
+   "file": "wwwroot/index.html",
+   "line": 5,
+   "attrs": {
+    "kind": "button"
+   },
+   "page": "wiki/terms.md"
+  },
+  {
+   "id": "term:wwwroot/index.html:7:20",
+   "type": "Term",
+   "name": "변경 근거",
+   "summary": "field on wwwroot/index.html",
+   "file": "wwwroot/index.html",
+   "line": 7,
+   "attrs": {
+    "kind": "field"
+   },
+   "page": "wiki/terms.md"
+  },
+  {
+   "id": "term:scripts/graphify/index.html:12:7",
+   "type": "Term",
+   "name": "분석 보고서",
+   "summary": "link on scripts/graphify/index.html",
+   "file": "scripts/graphify/index.html",
+   "line": 12,
+   "attrs": {
+    "kind": "link"
+   },
+   "page": "wiki/terms.md"
+  },
+  {
+   "id": "term:wwwroot/index.html:7:17",
+   "type": "Term",
+   "name": "상태",
+   "summary": "field on wwwroot/index.html",
+   "file": "wwwroot/index.html",
+   "line": 7,
+   "attrs": {
+    "kind": "field"
+   },
+   "page": "wiki/terms.md"
+  },
+  {
+   "id": "term:wwwroot/index.html:7:14",
+   "type": "Term",
+   "name": "새 기록",
+   "summary": "heading on wwwroot/index.html",
+   "file": "wwwroot/index.html",
+   "line": 7,
+   "attrs": {
+    "kind": "heading"
+   },
+   "page": "wiki/terms.md"
+  },
+  {
+   "id": "term:wwwroot/index.html:5:11",
+   "type": "Term",
+   "name": "새로고침 ↻",
+   "summary": "button on wwwroot/index.html",
+   "file": "wwwroot/index.html",
+   "line": 5,
+   "attrs": {
+    "kind": "button"
+   },
+   "page": "wiki/terms.md"
+  },
+  {
+   "id": "term:scripts/graphify/index.html:12:6",
+   "type": "Term",
+   "name": "온톨로지 요약 연결 / 갱신",
+   "summary": "button on scripts/graphify/index.html",
+   "file": "scripts/graphify/index.html",
+   "line": 12,
+   "attrs": {
+    "kind": "button"
+   },
+   "page": "wiki/terms.md"
+  },
+  {
+   "id": "term:wwwroot/index.html:7:19",
+   "type": "Term",
+   "name": "작성자",
+   "summary": "field on wwwroot/index.html",
+   "file": "wwwroot/index.html",
+   "line": 7,
+   "attrs": {
+    "kind": "field"
+   },
+   "page": "wiki/terms.md"
+  },
+  {
+   "id": "term:scripts/graphify/index.html:12:5",
+   "type": "Term",
+   "name": "전체 그래프 열기 ↗",
+   "summary": "link on scripts/graphify/index.html",
+   "file": "scripts/graphify/index.html",
+   "line": 12,
+   "attrs": {
+    "kind": "link"
+   },
+   "page": "wiki/terms.md"
+  },
+  {
+   "id": "term:scripts/graphify/index.html:18:8",
+   "type": "Term",
+   "name": "전체 코드 그래프 검색",
+   "summary": "field on scripts/graphify/index.html",
+   "file": "scripts/graphify/index.html",
+   "line": 18,
+   "attrs": {
+    "kind": "field"
+   },
+   "page": "wiki/terms.md"
+  },
+  {
+   "id": "term:wwwroot/index.html:7:18",
+   "type": "Term",
+   "name": "제목",
+   "summary": "field on wwwroot/index.html",
+   "file": "wwwroot/index.html",
+   "line": 7,
+   "attrs": {
+    "kind": "field"
+   },
+   "page": "wiki/terms.md"
+  },
+  {
+   "id": "term:wwwroot/index.html:7:16",
+   "type": "Term",
+   "name": "종류",
+   "summary": "field on wwwroot/index.html",
+   "file": "wwwroot/index.html",
+   "line": 7,
+   "attrs": {
+    "kind": "field"
+   },
+   "page": "wiki/terms.md"
+  },
+  {
+   "id": "term:wwwroot/index.html:7:21",
+   "type": "Term",
+   "name": "추가 속성 JSON",
+   "summary": "heading on wwwroot/index.html",
+   "file": "wwwroot/index.html",
+   "line": 7,
+   "attrs": {
+    "kind": "heading"
+   },
+   "page": "wiki/terms.md"
+  },
+  {
+   "id": "term:wwwroot/index.html:7:22",
+   "type": "Term",
+   "name": "취소",
+   "summary": "button on wwwroot/index.html",
+   "file": "wwwroot/index.html",
+   "line": 7,
+   "attrs": {
+    "kind": "button"
+   },
+   "page": "wiki/terms.md"
+  },
+  {
+   "id": "term:scripts/graphify/index.html:12:4",
+   "type": "Term",
+   "name": "코드 그래프 생성 / 갱신",
+   "summary": "button on scripts/graphify/index.html",
+   "file": "scripts/graphify/index.html",
+   "line": 12,
+   "attrs": {
+    "kind": "button"
+   },
+   "page": "wiki/terms.md"
+  },
+  {
+   "id": "term:wwwroot/index.html:5:9",
+   "type": "Term",
+   "name": "한국어",
+   "summary": "choice on wwwroot/index.html",
+   "file": "wwwroot/index.html",
+   "line": 5,
+   "attrs": {
+    "kind": "choice"
+   },
+   "page": "wiki/terms.md"
+  },
+  {
+   "id": "term:wwwroot/index.html:4:8",
+   "type": "Term",
+   "name": "＋",
+   "summary": "button on wwwroot/index.html",
+   "file": "wwwroot/index.html",
+   "line": 4,
+   "attrs": {
+    "kind": "button"
+   },
+   "page": "wiki/terms.md"
   }
  ],
  "relations": [
@@ -7844,6 +8489,13 @@
   },
   {
    "s": "file:scripts/graphify/index.html",
+   "p": "defines",
+   "o": "screen:scripts/graphify/index.html",
+   "file": "scripts/graphify/index.html",
+   "line": 1
+  },
+  {
+   "s": "file:scripts/graphify/index.html",
    "p": "mentions",
    "o": "host:github.com",
    "file": "scripts/graphify/index.html",
@@ -9248,6 +9900,13 @@
   },
   {
    "s": "file:wwwroot/index.html",
+   "p": "defines",
+   "o": "screen:wwwroot/index.html",
+   "file": "wwwroot/index.html",
+   "line": 1
+  },
+  {
+   "s": "file:wwwroot/index.html",
    "p": "loads",
    "o": "file:wwwroot/app.js",
    "file": "wwwroot/index.html",
@@ -10630,11 +11289,343 @@
    "o": "file:playbook.sh"
   },
   {
+   "s": "route:GET /health",
+   "p": "openTo",
+   "o": "user:anyone",
+   "file": "Program.cs",
+   "line": 108,
+   "label": "no role check found"
+  },
+  {
+   "s": "route:GET /session",
+   "p": "openTo",
+   "o": "user:anyone",
+   "file": "Program.cs",
+   "line": 98,
+   "label": "no role check found"
+  },
+  {
+   "s": "route:MCP /mcp",
+   "p": "openTo",
+   "o": "user:anyone",
+   "file": "Program.cs",
+   "line": 109,
+   "label": "no role check found"
+  },
+  {
    "s": "route:POST /api/{operation}",
    "p": "forwardsTo",
    "o": "table:Operations.Execute",
    "file": "Program.cs",
    "line": 100
+  },
+  {
+   "s": "route:POST /api/{operation}",
+   "p": "openTo",
+   "o": "user:anyone",
+   "file": "Program.cs",
+   "line": 100,
+   "label": "no role check found"
+  },
+  {
+   "s": "route:POST /auth/login",
+   "p": "openTo",
+   "o": "user:anyone",
+   "file": "Program.cs",
+   "line": 99,
+   "label": "no role check found"
+  },
+  {
+   "s": "route:POST /media/{projectId}",
+   "p": "openTo",
+   "o": "user:anyone",
+   "file": "Program.cs",
+   "line": 104,
+   "label": "no role check found"
+  },
+  {
+   "s": "screen:scripts/graphify/index.html",
+   "p": "displays",
+   "o": "term:scripts/graphify/index.html:11:3",
+   "file": "scripts/graphify/index.html",
+   "line": 11
+  },
+  {
+   "s": "screen:scripts/graphify/index.html",
+   "p": "displays",
+   "o": "term:scripts/graphify/index.html:12:4",
+   "file": "scripts/graphify/index.html",
+   "line": 12
+  },
+  {
+   "s": "screen:scripts/graphify/index.html",
+   "p": "displays",
+   "o": "term:scripts/graphify/index.html:12:5",
+   "file": "scripts/graphify/index.html",
+   "line": 12
+  },
+  {
+   "s": "screen:scripts/graphify/index.html",
+   "p": "displays",
+   "o": "term:scripts/graphify/index.html:12:6",
+   "file": "scripts/graphify/index.html",
+   "line": 12
+  },
+  {
+   "s": "screen:scripts/graphify/index.html",
+   "p": "displays",
+   "o": "term:scripts/graphify/index.html:12:7",
+   "file": "scripts/graphify/index.html",
+   "line": 12
+  },
+  {
+   "s": "screen:scripts/graphify/index.html",
+   "p": "displays",
+   "o": "term:scripts/graphify/index.html:18:8",
+   "file": "scripts/graphify/index.html",
+   "line": 18
+  },
+  {
+   "s": "screen:scripts/graphify/index.html",
+   "p": "displays",
+   "o": "term:scripts/graphify/index.html:18:9",
+   "file": "scripts/graphify/index.html",
+   "line": 18
+  },
+  {
+   "s": "screen:scripts/graphify/index.html",
+   "p": "displays",
+   "o": "term:scripts/graphify/index.html:19:10",
+   "file": "scripts/graphify/index.html",
+   "line": 19
+  },
+  {
+   "s": "screen:scripts/graphify/index.html",
+   "p": "displays",
+   "o": "term:scripts/graphify/index.html:4:0",
+   "file": "scripts/graphify/index.html",
+   "line": 4
+  },
+  {
+   "s": "screen:scripts/graphify/index.html",
+   "p": "displays",
+   "o": "term:scripts/graphify/index.html:8:1",
+   "file": "scripts/graphify/index.html",
+   "line": 8
+  },
+  {
+   "s": "screen:scripts/graphify/index.html",
+   "p": "displays",
+   "o": "term:scripts/graphify/index.html:8:2",
+   "file": "scripts/graphify/index.html",
+   "line": 8
+  },
+  {
+   "s": "screen:wwwroot/index.html",
+   "p": "displays",
+   "o": "term:wwwroot/index.html:2:0",
+   "file": "wwwroot/index.html",
+   "line": 2
+  },
+  {
+   "s": "screen:wwwroot/index.html",
+   "p": "displays",
+   "o": "term:wwwroot/index.html:4:1",
+   "file": "wwwroot/index.html",
+   "line": 4
+  },
+  {
+   "s": "screen:wwwroot/index.html",
+   "p": "displays",
+   "o": "term:wwwroot/index.html:4:2",
+   "file": "wwwroot/index.html",
+   "line": 4
+  },
+  {
+   "s": "screen:wwwroot/index.html",
+   "p": "displays",
+   "o": "term:wwwroot/index.html:4:3",
+   "file": "wwwroot/index.html",
+   "line": 4
+  },
+  {
+   "s": "screen:wwwroot/index.html",
+   "p": "displays",
+   "o": "term:wwwroot/index.html:4:4",
+   "file": "wwwroot/index.html",
+   "line": 4
+  },
+  {
+   "s": "screen:wwwroot/index.html",
+   "p": "displays",
+   "o": "term:wwwroot/index.html:4:5",
+   "file": "wwwroot/index.html",
+   "line": 4
+  },
+  {
+   "s": "screen:wwwroot/index.html",
+   "p": "displays",
+   "o": "term:wwwroot/index.html:4:6",
+   "file": "wwwroot/index.html",
+   "line": 4
+  },
+  {
+   "s": "screen:wwwroot/index.html",
+   "p": "displays",
+   "o": "term:wwwroot/index.html:4:7",
+   "file": "wwwroot/index.html",
+   "line": 4
+  },
+  {
+   "s": "screen:wwwroot/index.html",
+   "p": "displays",
+   "o": "term:wwwroot/index.html:4:8",
+   "file": "wwwroot/index.html",
+   "line": 4
+  },
+  {
+   "s": "screen:wwwroot/index.html",
+   "p": "displays",
+   "o": "term:wwwroot/index.html:5:10",
+   "file": "wwwroot/index.html",
+   "line": 5
+  },
+  {
+   "s": "screen:wwwroot/index.html",
+   "p": "displays",
+   "o": "term:wwwroot/index.html:5:11",
+   "file": "wwwroot/index.html",
+   "line": 5
+  },
+  {
+   "s": "screen:wwwroot/index.html",
+   "p": "displays",
+   "o": "term:wwwroot/index.html:5:12",
+   "file": "wwwroot/index.html",
+   "line": 5
+  },
+  {
+   "s": "screen:wwwroot/index.html",
+   "p": "displays",
+   "o": "term:wwwroot/index.html:5:13",
+   "file": "wwwroot/index.html",
+   "line": 5
+  },
+  {
+   "s": "screen:wwwroot/index.html",
+   "p": "displays",
+   "o": "term:wwwroot/index.html:5:9",
+   "file": "wwwroot/index.html",
+   "line": 5
+  },
+  {
+   "s": "screen:wwwroot/index.html",
+   "p": "displays",
+   "o": "term:wwwroot/index.html:7:14",
+   "file": "wwwroot/index.html",
+   "line": 7
+  },
+  {
+   "s": "screen:wwwroot/index.html",
+   "p": "displays",
+   "o": "term:wwwroot/index.html:7:15",
+   "file": "wwwroot/index.html",
+   "line": 7
+  },
+  {
+   "s": "screen:wwwroot/index.html",
+   "p": "displays",
+   "o": "term:wwwroot/index.html:7:16",
+   "file": "wwwroot/index.html",
+   "line": 7
+  },
+  {
+   "s": "screen:wwwroot/index.html",
+   "p": "displays",
+   "o": "term:wwwroot/index.html:7:17",
+   "file": "wwwroot/index.html",
+   "line": 7
+  },
+  {
+   "s": "screen:wwwroot/index.html",
+   "p": "displays",
+   "o": "term:wwwroot/index.html:7:18",
+   "file": "wwwroot/index.html",
+   "line": 7
+  },
+  {
+   "s": "screen:wwwroot/index.html",
+   "p": "displays",
+   "o": "term:wwwroot/index.html:7:19",
+   "file": "wwwroot/index.html",
+   "line": 7
+  },
+  {
+   "s": "screen:wwwroot/index.html",
+   "p": "displays",
+   "o": "term:wwwroot/index.html:7:20",
+   "file": "wwwroot/index.html",
+   "line": 7
+  },
+  {
+   "s": "screen:wwwroot/index.html",
+   "p": "displays",
+   "o": "term:wwwroot/index.html:7:21",
+   "file": "wwwroot/index.html",
+   "line": 7
+  },
+  {
+   "s": "screen:wwwroot/index.html",
+   "p": "displays",
+   "o": "term:wwwroot/index.html:7:22",
+   "file": "wwwroot/index.html",
+   "line": 7
+  },
+  {
+   "s": "screen:wwwroot/index.html",
+   "p": "displays",
+   "o": "term:wwwroot/index.html:7:23",
+   "file": "wwwroot/index.html",
+   "line": 7
+  },
+  {
+   "s": "screen:wwwroot/index.html",
+   "p": "displays",
+   "o": "term:wwwroot/index.html:8:24",
+   "file": "wwwroot/index.html",
+   "line": 8
+  },
+  {
+   "s": "screen:wwwroot/index.html",
+   "p": "leadsTo",
+   "o": "route:GET /session",
+   "file": "wwwroot/app.js",
+   "line": 91,
+   "label": "script call"
+  },
+  {
+   "s": "screen:wwwroot/index.html",
+   "p": "leadsTo",
+   "o": "route:POST /api/{operation}",
+   "file": "wwwroot/app.js",
+   "line": 18,
+   "label": "script call"
+  },
+  {
+   "s": "screen:wwwroot/index.html",
+   "p": "leadsTo",
+   "o": "route:POST /auth/login",
+   "file": "wwwroot/workspace-ui.js",
+   "line": 148,
+   "label": "script call"
+  },
+  {
+   "s": "screen:wwwroot/index.html",
+   "p": "leadsTo",
+   "o": "route:POST /media/{projectId}",
+   "file": "wwwroot/media.js",
+   "line": 84,
+   "label": "script call"
   },
   {
    "s": "table:Operations.Execute",
@@ -11412,7 +12403,23 @@
    "o": "op:asset.verify",
    "file": "McpTools.cs",
    "line": 40
+  },
+  {
+   "s": "user:anyone",
+   "p": "sees",
+   "o": "screen:scripts/graphify/index.html",
+   "file": "scripts/graphify/index.html",
+   "line": 1,
+   "label": "no route found; served as a file"
+  },
+  {
+   "s": "user:anyone",
+   "p": "sees",
+   "o": "screen:wwwroot/index.html",
+   "file": "wwwroot/index.html",
+   "line": 1,
+   "label": "no route found; served as a file"
   }
  ],
- "generated": "2026-11-10"
+ "generated": "2026-11-14"
 }

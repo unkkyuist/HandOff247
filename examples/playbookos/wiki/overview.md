@@ -25,7 +25,7 @@ type: Project
 | Run modes | 6 | [index](index.md), under Run modes |
 | Dispatch tables | 1 | [operations.md](operations.md) |
 | Operations | 65 | [index](index.md), under Operations |
-| HTTP routes | 6 | [routes.md](routes.md) |
+| HTTP routes | 6 | [index](index.md), under HTTP routes |
 | MCP tools | 46 | [index](index.md), under MCP tools |
 | Environment variables | 8 | [environment.md](environment.md) |
 | Ports | 5 | [ports.md](ports.md) |
@@ -33,6 +33,9 @@ type: Project
 | External hosts | 8 | [hosts.md](hosts.md) |
 | Command-line tools | 3 | [commands.md](commands.md) |
 | People | 1 | [people.md](people.md) |
+| User types | 1 | [index](index.md), under User types |
+| Screens | 2 | [index](index.md), under Screens |
+| Screen terms | 36 | [terms.md](terms.md) |
 
 ## How it starts
 

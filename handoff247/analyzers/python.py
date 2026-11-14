@@ -141,7 +141,8 @@ def analyze(f: FileInfo, facts: list[Fact]) -> None:
                 target = deco.func if isinstance(deco, ast.Call) else deco
                 owner = _dotted(target.value) if isinstance(target, ast.Attribute) else ""
                 if dname in ROUTE_DECOS and isinstance(deco, ast.Call) and deco.args and _lit(deco.args[0]) is not None:
-                    verb = dname.upper() if dname != "route" else "ANY"
+                    # Flask, Quart, Bottle and Starlette all answer GET only when `route` names no methods
+                    verb = dname.upper() if dname != "route" else "GET"
                     for kw in deco.keywords:
                         if kw.arg == "methods" and isinstance(kw.value, (ast.List, ast.Tuple)):
                             verb = ",".join(_lit(e) or "?" for e in kw.value.elts)

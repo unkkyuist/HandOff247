@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block title %}My desk{% endblock %}
+{% block content %}
+<h1>My desk</h1>
+<p><a href="{{ url_for('new_article') }}">New article</a></p>
+<table>
+  <tr><th>Headline</th><th>State</th><th>Editor's note</th><th></th></tr>
+  {% for a in articles %}
+  <tr>
+    <td><a href="{{ url_for('preview', article_id=a.id) }}">{{ a.title }}</a></td>
+    <td>{{ a.status }}</td>
+    <td>{{ a.review_note }}</td>
+    <td>
+      {% if a.status == 'draft' %}
+      <form method="post" action="{{ url_for('submit', article_id=a.id) }}">
+        <button type="submit">Send for review</button>
+      </form>
+      {% endif %}
+    </td>
+  </tr>
+  {% endfor %}
+</table>
+{% endblock %}

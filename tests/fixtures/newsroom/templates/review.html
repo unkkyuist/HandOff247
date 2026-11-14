@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block title %}{{ t('nav.review') }}{% endblock %}
+{% block content %}
+<h1>{{ t('nav.review') }}</h1>
+<ul>
+  {% for a in articles %}
+  <li><a href="/review/{{ a.id }}">{{ a.title }}</a></li>
+  {% endfor %}
+</ul>
+{% endblock %}

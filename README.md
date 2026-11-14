@@ -24,12 +24,17 @@ your computer goes away.
 - **It looks at what a clone will not carry.** Uncommitted and unpushed work, files Git ignores that exist only on
   your computer, personal folder paths written into code, the external hosts and secret-named variables a successor
   needs accounts for, TODO comments, and the tools to install.
+- **It follows the application the way its users meet it.** Which kinds of user the code tells apart, what each of
+  them sees, what every menu entry, button and field does, where one user's work is picked up by the next, and where
+  an uploaded or generated file shows up. When a user says "the menu is not on my screen", you start from their words
+  and arrive at the screen, the condition, the handler and the data. See [The application from its users' side](#the-application-from-its-users-side).
 - **An ontology, a graph and a wiki for AI assistants.** Everything found is also written as typed entities and
   relations (`ontology.json`), drawn as an interactive graph in the viewer, and laid out as a wiki of small interlinked
   pages with an `llms.txt` entry point, so the next person's assistant can answer questions about the project.
-- **Bring your own AI, if you want.** `--summarize` asks the Codex CLI you are signed in to for short file
-  descriptions, labelled as model-written. `handoff247 mcp` is an MCP server an agent can use to read the project and
-  write the missing notes for you.
+- **Connect an AI agent and it knows the project.** `handoff247 mcp` is an MCP server: one call gives the agent a
+  briefing of the whole project, and from there it can follow any user's flow, trace a request to the code, read every
+  page and source line, and write the missing notes. `--summarize` asks the Codex CLI you are signed in to for short
+  file descriptions, labelled as model-written.
 - **English output, whatever language the code is commented in.** Comments and headings written in another language
   get an English version from a table in the notes file; the pack marks them as translated and keeps the originals.
 
@@ -38,6 +43,7 @@ your computer goes away.
 | Example | What it is |
 |---|---|
 | [examples/playbookos](examples/playbookos/README.md) | Pack for [PlayBookOS](https://github.com/unkkyuist/PlayBookOS) (C# + JS + Python + PowerShell, commented in Korean) |
+| [examples/newsroom](examples/newsroom/USERS.md) | Pack for a small web application with three kinds of user (the test fixture in `tests/fixtures/newsroom`): start at its [Who uses it](examples/newsroom/USERS.md) page |
 | [docs/handoff](docs/handoff/README.md) | HandOff247 documenting itself |
 
 GitHub renders the diagrams inline. For the interactive version, download a pack folder and open `index.html`
@@ -116,6 +122,7 @@ A folder is treated as a set of projects when it has no manifest of its own or h
 |---|---|
 | `README.md` | Start here: numbers at a glance, the **system map**, suggested reading order, successor checklist, risks, what is still undocumented, recent commits |
 | `HANDOVER.md` | **Handover checklist** (ready / to do per check), Git state, TODO comments, files only on this computer, absolute paths, external hosts, secret-named variables, tools to install, authors, with your answers next to each |
+| `USERS.md` | **Who uses it**: user types, the screens each of them sees, what every control leads to and what the code then does, hand-overs between user types, the words on the screens, data states, assets in context, shared code, and what was not verified |
 | `RUNNING.md` | **Startup chain** (who starts whom), run modes, launch commands, environment variables (who reads, who sets), ports, runtime paths, build targets, packages, tests |
 | `CONNECTIONS.md` | **Interface map**: every caller → HTTP / CLI process / MCP / in-process → dispatch table → handler; route, MCP tool, MCP client and operation tables |
 | `CODEMAP.md` | File dependency map grouped by folder, shared foundations, component table (summary, depends on, used by) |
@@ -123,7 +130,7 @@ A folder is treated as a set of projects when it has no manifest of its own or h
 | `diagrams/*.mmd` | Mermaid sources of every diagram (paste into anything that renders Mermaid) |
 | `handoff.json` | Everything above as data, for scripts and AI agents |
 | `ontology.json` | The **ontology**: every entity (file, type, run mode, operation, route, MCP tool, environment variable, package, host, …) and every relation between them, each with the file and line it was observed at |
-| `wiki/` | The **LLM wiki**: one small Markdown page per file, area, run mode, operation and MCP tool, list pages for the rest, an `index.md` catalog and `AGENTS.md` with the reading rules |
+| `wiki/` | The **LLM wiki**: one small Markdown page per file, area, run mode, operation, MCP tool, user type, feature (route), screen, asset and data table, list pages for the rest, an `index.md` catalog and `AGENTS.md` with the reading rules |
 | `llms.txt`, `llms-full.txt` | Entry point for AI assistants in the [llms.txt](https://llmstxt.org) convention, and the whole wiki in one file |
 | `index.html` | Single-file viewer with tabs, search, clickable diagrams, the **Graph** tab and the wiki |
 
@@ -137,22 +144,179 @@ flowchart LR
   E --> F["handoff pack"]
 ```
 
+## The application from its users' side
+
+The person who takes a project over gets asked things by the people who use it:
+
+- "That menu is not on my screen."
+- "I uploaded a file and it is not there in the next step."
+- "I sent a review request and the reviewer cannot find it."
+- "I changed it in the admin page and the public page still shows the old one."
+- "Please let user type B use this too."
+- "If I replace this image, what else changes?"
+
+None of these name a file. They name a screen, a word on it, and who the person is. HandOff247 connects those to the
+code, so you can explain how it works, tell someone how to use it, or change it.
+
+> **The user types are the application's, not yours.** "Author", "editor", "admin type A" are kinds of user the
+> analysed application tells apart. They are never access levels of the pack. You see every flow of every user type,
+> and each flow links to the others, because a request usually crosses from one user type to the next.
+
+### What it connects
+
+All of it is read from the code and templates. Nothing here is a fixed sequence that every program is assumed to
+follow; only what is found is connected.
+
+| Thing | Found from |
+|---|---|
+| User types | Role checks on routes (`@require_role("editor")`, `[Authorize(Roles = "…")]`, Express role middleware) and in templates (`{% if user.role == 'editor' %}`). A route with no check is listed under `anyone`, with the remark that a check in middleware would not be seen |
+| Screens | Templates and HTML pages, the route that renders each, the layout it extends |
+| Words on the screen | Links, buttons, field labels, headings, table columns, and messages the code shows. A text that comes from a locale file is listed in every language found, so a term is found by the word the user reads |
+| What a control does | The link target or form action matched to a route, then the handler followed into the functions it calls |
+| Conditions | The template condition a control sits in, the role check on the route, `if` branches in the handler, settings it reads |
+| Data | Tables in SQL statements, and the literal column values ("states") that statements set or filter on |
+| Hand-overs | One feature sets a state, another feature's query filters on it: `status = 'in_review'` is set by the author's "Send for review" and listed by the editor's review queue. Always marked *inferred* |
+| Assets | Static files, uploads, generated files and external-storage calls: who provides it, what stores it, the data column tied to it, the route that delivers it, the screens it appears on |
+| Shared code | A function that several features run exists once and lists all of them |
+
+The [Newsroom example](examples/newsroom/USERS.md) shows every one of these. Its source is about 400 lines in
+[`tests/fixtures/newsroom`](tests/fixtures/newsroom): authors write and upload a cover image, editors review and
+publish, anyone reads the front page.
+
+### Five ways in
+
+Each has a page in the pack, a tab in the viewer, a command, and an MCP tool. They read the same model, so they
+always agree.
+
+**A. Start from a user type** → screens → features → code. In the pack: `USERS.md`, section *Flows by user type*, and
+`wiki/users/<name>.md`. In the viewer: the **Users** tab; *Bring forward* highlights one user type and dims the rest
+without removing them.
+
+```bash
+python -m handoff247 trace /path/to/project                 # the user types and what each can do
+python -m handoff247 trace /path/to/project --user editor   # one user type's screens and controls, as JSON
+```
+
+**B. Start from words on a screen** → the control → the feature → code and data. In the pack: `USERS.md`, section
+*Words on the screens*, and `wiki/terms.md`. In the viewer: type the word in the search box. The label and the
+identifier are often different; both are shown (`"Headline"` on the screen is the form field `title`, read at
+`app.py:67`).
+
+```bash
+python -m handoff247 trace /path/to/project Headline
+```
+
+**C. Start from an asset or a table** → where it comes from → where it is used → whose flow it is part of.
+`wiki/assets/…` and `wiki/data/…`, or:
+
+```bash
+python -m handoff247 trace /path/to/project --asset cover      # an upload field, a file name or a path
+python -m handoff247 trace /path/to/project --asset articles   # a table: who writes, who reads, which states
+```
+
+For an upload this gives the form control it is picked with, the handler that receives it, the line that stores it,
+the column that keeps its name, the route that delivers it, the screens that show it, who sees those screens, and
+therefore who notices when it is replaced or deleted. An asset with no reference found is reported as *no reference
+found*, not as unused.
+
+**D. Start from code** → the features that run it → the screens and user types that reach.
+
+```bash
+python -m handoff247 trace /path/to/project --impact db.py:49
+python -m handoff247 trace /path/to/project --impact storage.py --symbol save_upload
+python -m handoff247 trace /path/to/project --impact templates/base.html
+```
+
+Works for a handler, a function, a single line, a template, a stylesheet or script, a locale file and an asset.
+
+**E. Start from what the user said** → candidate features → the normal flow → what to check.
+
+```bash
+python -m handoff247 trace /path/to/project "I sent it for review but the editor cannot find it" --user author
+```
+
+```text
+1. "Send for review"  ->  POST /desk/<int:article_id>/submit
+   who: author · code: app.py:75 submit
+   started from: templates/desk.html
+   matched button "Send for review" at templates/desk.html:16 (shown when a.status == 'draft')
+   matched message "Sent to the editors" at app.py:81
+   matched message "Only a draft can be sent for review" at app.py:78
+   then: editor at templates/review.html, because articles.status = 'in_review' (inferred)
+   then: editor at POST /review/<int:article_id>/publish, because articles.status = 'in_review' (inferred)
+
+2. "Review queue"  ->  GET /review  [other user type]
+   who: editor · code: app.py:89 review_queue
+   started from: templates/base.html
+   matched link "Review queue" at templates/base.html:17 (shown when user and user.role == 'editor')
+   matched heading "Review queue" at templates/review.html:4
+…
+```
+
+`--user` brings the requester's own features forward and marks the others `[other user type]`; it never removes
+them. When the same words are on several screens, every candidate is listed with what tells them apart. Nothing is
+picked because two names look alike. The request can be in any language the application's own texts are in: with a
+Korean locale file, `검토 대기열에 안 보여요` finds the review queue.
+
+Then open the candidate:
+
+```bash
+python -m handoff247 trace /path/to/project --feature "POST /review/<int:article_id>/publish"
+```
+
+### One feature in one place
+
+A feature is one route. Its page (`wiki/features/…`, linked from every table in `USERS.md`) and `trace --feature`
+hold everything needed to answer a request about it:
+
+| Section | Contents |
+|---|---|
+| Started from | The link, button or script call on which screen, the condition it is shown under, who sees it |
+| What the code does | Steps in the order of the handler, each with file and line and the call chain. A step under an `if` starts with *when* |
+| Branches | Every condition in the handler and in the functions it calls, with what happens then |
+| Hand-overs | Which user type picks the work up next, and from whom this feature receives it |
+| Code | The handler and each function it runs, and how many other features share that function |
+| Data and assets | Tables read and written, states set and filtered on, files stored, written or delivered |
+| What to check | Settings, state conditions and outside dependencies the outcome depends on |
+| Not verified | What the analysis could not see for this feature |
+
+### Reading the answers
+
+- **A condition in the code is not a diagnosis.** "The queue lists only rows with `status = 'in_review'`" is what
+  the code does. Whether that is why one user's article is missing needs the live data or a log. Without them the
+  answer is the list under *What to check* and the possible branches.
+- ***inferred*** marks a conclusion: a hand-over through a shared column value, a condition that names the same
+  column. Read both lines before you rely on it.
+- **Not verified** is part of every answer. A link that matches no route, a translation key with no text, a handler
+  in a language that is not followed, SQL built at run time: each is listed, not guessed.
+- Something that is not listed was not found. That is not the same as not existing.
+
+### What is followed
+
+Templates: Jinja, Django, Twig, Nunjucks and Handlebars conditions; any `.html` page. Handlers: Python, through
+`ast`, into the project functions they call, with SQL written as strings. For routes in JavaScript/TypeScript and C#
+the role check on the route is read and the handler is reported as not analysed. A page that no route renders
+(a single-page app) is listed with the API calls its scripts make.
+
 ## Ontology, graph and wiki
 
 The same facts are available in three more shapes, all written by the one command. None of them adds a guess: they
 are views of what the analysis observed.
 
-**Ontology** — [`ontology.json`](examples/playbookos/ontology.json). 16 classes (Project, Area, File, Type, Run mode,
+**Ontology** — [`ontology.json`](examples/playbookos/ontology.json). 23 classes (Project, Area, File, Type, Run mode,
 Sub-command, Dispatch table, Operation, HTTP route, MCP tool, Environment variable, Port, Package, External host,
-Command-line tool, Person) and 24 relations (`contains`, `defines`, `imports`, `uses`, `runs`, `hasOperation`,
-`handledBy`, `calls`, `invokes`, `forwardsTo`, `reads`, `sets`, `dependsOn`, …). A relation looks like this:
+Command-line tool, Person, User type, Screen, Screen term, Function, Data table, State, Asset) and 44 relations
+(`contains`, `defines`, `imports`, `uses`, `runs`, `hasOperation`, `handledBy`, `calls`, `invokes`, `forwardsTo`,
+`reads`, `sets`, `dependsOn`, `openTo`, `sees`, `shows`, `leadsTo`, `setsState`, `handsOverTo`, `showsAsset`, …).
+A relation looks like this:
 
 ```json
 {"s": "file:wwwroot/app.js", "p": "calls", "o": "op:asset.verify",
  "file": "wwwroot/app.js", "line": 77, "label": "api(), over HTTP"}
 ```
 
-A relation that rests on an inference carries `"inferred"` with the reason. For PlayBookOS: 289 entities, 985 relations.
+A relation that rests on an inference carries `"inferred"` with the reason. For PlayBookOS: 328 entities, 1,035
+relations. For the Newsroom example: 114 entities, 316 relations.
 
 **Graph** — the *Graph* tab of `index.html`. Every entity is a mark and every relation a line. Colour is the kind of
 thing, shape tells kinds of one colour apart, dashed lines are inferences. Click a mark to see its relations with
@@ -191,46 +355,111 @@ has no note yet. HandOff247 reads no API key and stores none.
 For PlayBookOS, 63 files took 9 requests and about 50 seconds; the result is in
 [examples/playbookos.summaries.json](examples/playbookos.summaries.json).
 
-## MCP server: let an AI agent finish the handoff
+## MCP server: connect an AI agent to the whole project
 
 ```bash
-python -m handoff247 mcp            # stdio MCP server; optional: a default project folder
+python -m handoff247 mcp /path/to/project     # stdio MCP server; the folder is the default project for every tool
 ```
 
-Register it with your agent and ask it to document the project. The agent gets six tools:
+Register this once with your agent. The agent then works with the project as someone who has read all of it: it
+gets a briefing in one call, follows any user's flow, traces a request from the user's words to the code, reads every
+page and source line, and writes the missing notes. The project is analysed in memory when the first tool is called,
+so no pack has to exist on disk, and nothing in the project is run.
 
-| Tool | What it does |
-|---|---|
-| `handoff_build` | Writes or refreshes the pack (and creates the notes file); returns the handover checklist |
-| `handoff_todo` | Every heading still without text: open handover questions (flagged *ask the user*), important files, run modes, folders, other files |
-| `handoff_search` | Finds entities of the ontology by name or summary |
-| `handoff_entity` | One entity with all its relations, each with file and line, and the notes heading it belongs under |
-| `handoff_source` | Numbered source lines of a project file (key-like lines replaced with `[removed]`) |
-| `handoff_write_note` | Writes a note under one heading of the notes file |
+### Set it up
 
-The writing tool is narrow on purpose: it accepts only headings HandOff247 knows, refuses to overwrite text already
-under a heading unless asked to replace it, refuses text that looks like a key, token or password, and ends every note
-with *Written by an AI agent through the HandOff247 MCP server on <date>; the owner has not confirmed it yet.* The
-other tools only read. The server's instructions tell the agent to ask you the questions code cannot answer
-(credentials, people, deployment) instead of guessing.
+HandOff247 has to be importable by the `python` your agent starts: either `pip install .` in the HandOff247 clone, or
+set `PYTHONPATH` to the clone as shown below.
 
-Codex (`~/.codex/config.toml`):
+**Claude Code** (run inside the project you want to work on):
+
+```bash
+claude mcp add handoff247 -- python -m handoff247 mcp .
+```
+
+Without installing:
+
+```bash
+claude mcp add handoff247 -e PYTHONPATH=/path/to/HandOff247 -- python -m handoff247 mcp .
+```
+
+**Claude Desktop** and other clients that use an `mcpServers` JSON file:
+
+```json
+{
+  "mcpServers": {
+    "handoff247": {
+      "command": "python",
+      "args": ["-m", "handoff247", "mcp", "C:/work/my-project"],
+      "env": { "PYTHONPATH": "C:/tools/HandOff247" }
+    }
+  }
+}
+```
+
+**Codex** (`~/.codex/config.toml`):
 
 ```toml
 [mcp_servers.handoff247]
 command = "python"
-args = ["-m", "handoff247", "mcp"]
+args = ["-m", "handoff247", "mcp", "/path/to/project"]
 env = { PYTHONPATH = "/path/to/HandOff247" }     # not needed after `pip install .`
 ```
 
-Claude Code:
+The project folder is optional. Start the server without one and pass `project` (an absolute path) to each tool
+instead; one server can then answer for several projects. Codex asks before it runs a tool that writes
+(`handoff_write_note`, `handoff_build`); approve it, or start `codex exec --approve-for-me` for unattended runs.
 
-```bash
-claude mcp add handoff247 -- python -m handoff247 mcp
-```
+### What the agent can do
 
-Codex asks before it runs a tool that writes (`handoff_write_note`, `handoff_build`); approve it, or start
-`codex exec --approve-for-me` for unattended runs.
+Thirteen tools. Eleven only read.
+
+| Tool | What it does |
+|---|---|
+| `handoff_overview` | **The first call.** What the project is (the previous owner's notes and the README), size and languages, how it starts, interfaces, settings, who uses it, data, assets, what is still unknown, and which tool to use for what |
+| `handoff_users` | The user types of the application with their screens and actions. With `user`: one user type's whole flow, control by control, and who picks the work up next |
+| `handoff_request` | Start from what a user said or from words on a screen. Returns candidate features with the matching control, its screen, the user types, the handler and the next user type. With `user`, the requester's own features come first and the others stay listed |
+| `handoff_feature` | One feature in full: started from, what the code does step by step, branches, hand-overs, code, data, assets, what to check, not verified |
+| `handoff_asset` | An image, upload field, generated file or table: where it comes from, what stores it, where it shows, who notices a change |
+| `handoff_impact` | A file, function or line: which features run it, on which screens, for which user types, and who is affected next |
+| `handoff_page` | Any page of the pack as text, rendered in memory: `README.md`, `USERS.md`, `RUNNING.md`, `wiki/AGENTS.md`, `wiki/users/<name>.md`, … Without a name it lists them |
+| `handoff_search` | Finds entities of the ontology by name or summary |
+| `handoff_entity` | One entity with all its relations, each with file and line, and the notes heading it belongs under |
+| `handoff_source` | Numbered source lines of a project file (key-like lines replaced with `[removed]`) |
+| `handoff_todo` | Every heading still without text: open handover questions (flagged *ask the user*), important files, run modes, folders, other files |
+| `handoff_write_note` | Writes a note under one heading of the notes file |
+| `handoff_build` | Writes or refreshes the pack on disk (and creates the notes file); returns the handover checklist |
+
+When the server was started with a project folder, the pages of the pack are also offered as MCP resources
+(`handoff://page/USERS.md`, …) for clients that attach context that way.
+
+### What to say to the agent
+
+Nothing special. The server's instructions tell it to start with `handoff_overview` and how to go on from there.
+For example:
+
+- "Read this project and tell me what it is, how to start it, and who uses it."
+- "An editor says the Publish button does nothing. What can cause that?" The agent calls `handoff_request`, opens the
+  feature with `handoff_feature`, and answers with the branches and settings to check, not with a guessed cause.
+- "The authors want to see the editor's note on their own page too. Where do I change that, and who else is affected?"
+  (`handoff_request`, `handoff_feature`, `handoff_impact`.)
+- "If I delete `static/old-banner.png`, does anything break?" (`handoff_asset`.)
+- "Write the missing notes for the files you can verify, and ask me the rest." (`handoff_todo`, `handoff_source`,
+  `handoff_write_note`, `handoff_build`.)
+
+### What the agent is told, and what it cannot do
+
+- The user types belong to the analysed application. They are not access levels of the tools; the agent may read
+  every flow.
+- What the tools return is what the code does and under which condition. Without live data or logs the agent gives
+  the points to check, not a cause.
+- *inferred* marks a conclusion, and `not_verified` in every answer lists what the analysis could not see.
+- Questions about people, accounts, credentials and deployment cannot be answered from code: the agent asks you.
+- The only thing it can change is the notes file. `handoff_write_note` accepts only headings HandOff247 knows
+  (`File:`, `Area:`, `Mode:`, `Op:`, `User:`, `Topic:`, `Project`), refuses to overwrite text already under a heading
+  unless asked to replace it, refuses text that looks like a key, token or password, and ends every note with
+  *Written by an AI agent through the HandOff247 MCP server on <date>; the owner has not confirmed it yet.*
+- It reads the files of the project folder and nothing else, and it does not run them.
 
 ## How "how the tools connect" is found
 
@@ -359,7 +588,13 @@ handoff247 build  [PROJECT] [-o OUT] [--notes FILE] [--name NAME]
 handoff247 notes  [PROJECT] [--notes FILE]
 handoff247 check  [PROJECT] [--notes FILE] [--min PERCENT]
 handoff247 mcp    [PROJECT]
+handoff247 trace  PROJECT [WORDS…] [--user TYPE] [--feature ID] [--asset NAME] [--impact PATH[:LINE] [--symbol NAME]]
+                  [--limit N] [--json] [--notes FILE] [--exclude GLOB]
 ```
+
+- `trace` prints an answer and writes nothing. With words it finds the features a request is about; `--user` alone
+  prints that user type's flow; no arguments at all prints the user types. `--json` gives the full answer, the same
+  one the MCP tool returns.
 
 - For a folder of projects, `--summarize` keeps the summaries in `handoff/notes/<project>.summaries.json`, so the
   projects themselves are still not written to.
@@ -372,6 +607,18 @@ handoff247 mcp    [PROJECT]
   `<folder>/handoff` for a folder of projects.
 
 ## Limits
+
+- The user-context view follows **Python handlers** (Flask-style route decorators) and **SQL written as strings**.
+  An ORM, Django URL patterns, and handlers in JavaScript, TypeScript or C# are not followed: those routes are listed
+  with the role check found on the route itself, and the page says the handler was not analysed.
+- A user type exists only where the code names a role. Access decided in middleware, in a base class, by the web
+  server or by data (a permissions table) is not seen; such routes appear under `anyone` with that remark.
+- A button of a single-page app that a script wires up has no target in the page. It is listed with *not determined*,
+  and the API calls of the page's scripts are listed separately.
+- Hand-overs are derived from column values written in the statements. A value that only exists at run time is not
+  seen, and that two statements mean the same rows is not traced.
+- Template conditions are read for Jinja, Django, Twig, Nunjucks and Handlebars. EJS, ERB and Razor pages are read
+  for their terms and links without their conditions.
 
 - Python is parsed with `ast`; the other languages use a comment/string-aware lexer plus patterns. Code that builds
   names at runtime (reflection, DI containers, string concatenation) is not followed.
@@ -390,10 +637,13 @@ handoff247 mcp    [PROJECT]
 ```bash
 python -m unittest discover -s tests
 python -m handoff247 build . -o docs/handoff        # HandOff247's own pack
+python -m handoff247 trace tests/fixtures/newsroom  # the user types of the test application
 ```
 
 `tests/fixtures/mini` is a small fake app wired like PlayBookOS; every connection type the tool claims to find has an
-assertion in `tests/test_handoff.py`. How the code is organised is in [docs/handoff](docs/handoff/README.md).
+assertion in `tests/test_handoff.py`. `tests/fixtures/newsroom` is a small web application with three kinds of user;
+`UserContextTests` follows one user's action through the code, the data and the upload it changes, the next user's
+follow-up and the public page, and checks the lines the analysis points at in the fixture's own files. How the code is organised is in [docs/handoff](docs/handoff/README.md).
 
 ## License
 

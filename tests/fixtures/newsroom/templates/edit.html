@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block title %}New article{% endblock %}
+{% block content %}
+<h1>New article</h1>
+<form method="post" action="/desk/new" enctype="multipart/form-data">
+  <label for="title">Headline</label>
+  <input id="title" name="title">
+  <label for="body">Text</label>
+  <textarea id="body" name="body"></textarea>
+  <label for="cover">Cover image</label>
+  <input id="cover" name="cover" type="file">
+  <button type="submit">Save draft</button>
+</form>
+{% endblock %}

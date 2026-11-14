@@ -91,4 +91,4 @@ A switch or mapping that turns an operation name into the code that handles it.
 
 **receives from** ←
 
-- [`POST /api/{operation}`](routes.md) · [Program.cs:100](https://github.com/unkkyuist/PlayBookOS/blob/7153e47ec28a0b1933c24404db08a43a468b6c14/Program.cs#L100)
+- [`POST /api/{operation}`](features/POST-__api__-operation.md) · [Program.cs:100](https://github.com/unkkyuist/PlayBookOS/blob/7153e47ec28a0b1933c24404db08a43a468b6c14/Program.cs#L100)

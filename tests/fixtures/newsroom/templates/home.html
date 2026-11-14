@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block title %}Front page{% endblock %}
+{% block content %}
+<h1>Latest articles</h1>
+{% for a in articles %}
+<article>
+  {% if a.cover %}
+  <img src="{{ url_for('uploaded', name=a.cover) }}" alt="">
+  {% endif %}
+  <a href="/articles/{{ a.id }}">{{ a.title }}</a>
+</article>
+{% endfor %}
+<p><a href="{{ url_for('published_list') }}">Download the list</a></p>
+{% endblock %}

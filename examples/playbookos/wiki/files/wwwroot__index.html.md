@@ -19,6 +19,10 @@ source: "wwwroot/index.html"
 - **Lines:** 9
 - **Source:** [wwwroot/index.html](https://github.com/unkkyuist/PlayBookOS/blob/7153e47ec28a0b1933c24404db08a43a468b6c14/wwwroot/index.html)
 
+**defines** →
+
+- [`wwwroot/index.html`](../screens/wwwroot__index.html.md) · [wwwroot/index.html:1](https://github.com/unkkyuist/PlayBookOS/blob/7153e47ec28a0b1933c24404db08a43a468b6c14/wwwroot/index.html#L1)
+
 **loads** →
 
 - [`wwwroot/app.js`](wwwroot__app.js.md) · [wwwroot/index.html:9](https://github.com/unkkyuist/PlayBookOS/blob/7153e47ec28a0b1933c24404db08a43a468b6c14/wwwroot/index.html#L9)
