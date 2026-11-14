@@ -1,7 +1,7 @@
 {
  "generator": "HandOff247",
  "kind": "ontology",
- "version": "0.5.0",
+ "version": "0.6.0",
  "project": "HandOff247",
  "schema": {
   "classes": [
@@ -132,6 +132,62 @@
     "group": "outside",
     "shape": "diamond",
     "description": "An author in the Git history."
+   },
+   {
+    "id": "UserType",
+    "label": "User type",
+    "plural": "User types",
+    "group": "structure",
+    "shape": "triangle",
+    "description": "A kind of user the analysed application tells apart, found from role checks. Not an access level of this pack."
+   },
+   {
+    "id": "Screen",
+    "label": "Screen",
+    "plural": "Screens",
+    "group": "interface",
+    "shape": "square",
+    "description": "A template or page a user sees."
+   },
+   {
+    "id": "Term",
+    "label": "Screen term",
+    "plural": "Screen terms",
+    "group": "interface",
+    "shape": "circle",
+    "description": "Words a user reads: a link, button, field label, heading, or a message the code shows."
+   },
+   {
+    "id": "Function",
+    "label": "Function",
+    "plural": "Functions",
+    "group": "type",
+    "shape": "square",
+    "description": "Project code that a feature runs. Modelled once, however many features use it."
+   },
+   {
+    "id": "Data",
+    "label": "Data table",
+    "plural": "Data tables",
+    "group": "file",
+    "shape": "square",
+    "description": "A table named in an SQL statement."
+   },
+   {
+    "id": "State",
+    "label": "State",
+    "plural": "States",
+    "group": "file",
+    "shape": "diamond",
+    "description": "A column value that statements set or filter on, such as status = 'published'."
+   },
+   {
+    "id": "Asset",
+    "label": "Asset",
+    "plural": "Assets",
+    "group": "file",
+    "shape": "triangle",
+    "description": "A file users see or provide: shipped with the project, uploaded, generated, or kept in external storage."
    }
   ],
   "relations": [
@@ -278,17 +334,137 @@
     "label": "has commits in",
     "inverse": "has commits by",
     "description": "Author in the Git history of the project."
+   },
+   {
+    "id": "openTo",
+    "label": "is open to",
+    "inverse": "may use",
+    "description": "Role check on the route, or none found (anyone)."
+   },
+   {
+    "id": "sees",
+    "label": "sees",
+    "inverse": "is seen by",
+    "description": "A route this user type may use shows the screen."
+   },
+   {
+    "id": "shows",
+    "label": "shows",
+    "inverse": "is shown by",
+    "description": "The route renders the screen."
+   },
+   {
+    "id": "builtOn",
+    "label": "is built on",
+    "inverse": "is part of",
+    "description": "The template extends or includes the other one."
+   },
+   {
+    "id": "displays",
+    "label": "displays",
+    "inverse": "is displayed on",
+    "description": "The words are on the screen, or the route shows the message."
+   },
+   {
+    "id": "leadsTo",
+    "label": "leads to",
+    "inverse": "is started from",
+    "description": "The link, button or form of the term targets the route; a script of the screen calls it."
+   },
+   {
+    "id": "redirectsTo",
+    "label": "redirects to",
+    "inverse": "is reached by redirect from",
+    "description": "The handler redirects to the other route."
+   },
+   {
+    "id": "runsCode",
+    "label": "runs",
+    "inverse": "runs for",
+    "description": "The handler calls the function, directly or through other functions."
+   },
+   {
+    "id": "readsData",
+    "label": "reads",
+    "inverse": "is read by",
+    "description": "An SQL statement of the feature reads the table."
+   },
+   {
+    "id": "writesData",
+    "label": "writes",
+    "inverse": "is written by",
+    "description": "An SQL statement of the feature inserts, updates or deletes rows."
+   },
+   {
+    "id": "hasState",
+    "label": "has the state",
+    "inverse": "is a state of",
+    "description": "A literal column value found in a statement."
+   },
+   {
+    "id": "setsState",
+    "label": "sets",
+    "inverse": "is set by",
+    "description": "A statement of the feature sets the column to this value."
+   },
+   {
+    "id": "listsState",
+    "label": "lists only",
+    "inverse": "is the filter of",
+    "description": "A statement of the feature filters on this value."
+   },
+   {
+    "id": "testedBy",
+    "label": "is tested by",
+    "inverse": "tests",
+    "description": "A template condition or a handler branch names the same column and value."
+   },
+   {
+    "id": "handsOverTo",
+    "label": "hands over to",
+    "inverse": "receives from",
+    "description": "One feature sets a state that the other filters on."
+   },
+   {
+    "id": "showsAsset",
+    "label": "shows",
+    "inverse": "appears on",
+    "description": "The screen references the file."
+   },
+   {
+    "id": "provides",
+    "label": "provides",
+    "inverse": "is provided by",
+    "description": "The feature receives the upload or writes the generated file."
+   },
+   {
+    "id": "delivers",
+    "label": "delivers",
+    "inverse": "is delivered by",
+    "description": "The route sends the file to the browser."
+   },
+   {
+    "id": "keptIn",
+    "label": "has its name kept in",
+    "inverse": "keeps the name of",
+    "description": "The stored file name is written to a column of the table."
+   },
+   {
+    "id": "wordedIn",
+    "label": "takes its text from",
+    "inverse": "words",
+    "description": "The text of the term comes from a locale file."
    }
   ]
  },
  "counts": {
   "Project": 1,
   "Area": 3,
-  "File": 36,
-  "Type": 19,
-  "Subcommand": 5,
-  "Table": 3,
-  "Operation": 24,
+  "File": 41,
+  "Type": 24,
+  "Subcommand": 6,
+  "Table": 4,
+  "Operation": 39,
   "Port": 1,
   "Host": 4,
   "Command": 2,
@@ -318,7 +494,7 @@
    "name": "handoff247",
    "summary": "The package. Data flows inventory → analyzers → connect → (mermaid, render_md, render_html) → build. pipeline.py wires the first three; cli.py and build.py the rest.",
    "attrs": {
-    "files": 27
+    "files": 32
    },
    "page": "wiki/areas/handoff247.md"
   },
@@ -326,7 +502,7 @@
    "id": "area:tests",
    "type": "Area",
    "name": "tests",
-   "summary": "`test_handoff.py` plus `fixtures/mini`, a small fake app (C# + JS + Python + PowerShell + batch) wired the same way as PlayBookOS: three modes, one dispatch switch, HTTP route, MCP tools, launch scripts. Every connectio…",
+   "summary": "`test_handoff.py` plus two fixtures. `fixtures/newsroom` is a small Flask application with three user types (author, editor, anyone) used by `UserContextTests`: one user type's action, the code, the data and upload it c…",
    "attrs": {
     "files": 1
    },
@@ -390,7 +566,7 @@
    "attrs": {
     "language": "markdown",
     "category": "docs",
-    "lines": 138
+    "lines": 155
    },
    "page": "wiki/files/HANDOFF.notes.md.md"
   },
@@ -468,7 +644,7 @@
    "attrs": {
     "language": "python",
     "category": "code",
-    "lines": 281
+    "lines": 282
    },
    "page": "wiki/files/handoff247__analyzers__python.py.md"
   },
@@ -502,12 +678,12 @@
    "id": "file:handoff247/build.py",
    "type": "File",
    "name": "handoff247/build.py",
-   "summary": "Writes the pack: six Markdown pages, `diagrams/*.mmd`, `handoff.json` (its first key `\"generator\": \"HandOff247\"` is how later runs recognise and skip an old pack), `ontology.json`, the wiki and `index.html`. `write_wiki…",
+   "summary": "Writes the pack: seven Markdown pages, `diagrams/*.mmd`, `handoff.json` (its first key `\"generator\": \"HandOff247\"` is how later runs recognise and skip an old pack), `ontology.json`, the wiki and `index.html`. `write_wi…",
    "file": "handoff247/build.py",
    "attrs": {
     "language": "python",
     "category": "code",
-    "lines": 91
+    "lines": 95
    },
    "page": "wiki/files/handoff247__build.py.md"
   },
@@ -515,12 +691,12 @@
    "id": "file:handoff247/cli.py",
    "type": "File",
    "name": "handoff247/cli.py",
-   "summary": "Four commands: `go`, `build`, `notes`, `check`. A first argument that is not a command is taken as a folder for `go`. `go` decides between one project and a folder of projects (`workspace.is_workspace`), then does notes…",
+   "summary": "Six commands: `go`, `build`, `notes`, `check`, `mcp`, `trace`. `trace` answers a question from the user's side (a request in words, a user type, a feature, an asset, a code file) without writing a pack. A first argument…",
    "file": "handoff247/cli.py",
    "attrs": {
     "language": "python",
     "category": "code",
-    "lines": 219
+    "lines": 276
    },
    "page": "wiki/files/handoff247__cli.py.md"
   },
@@ -538,6 +714,32 @@
    "page": "wiki/files/handoff247__connect.py.md"
   },
   {
+   "id": "file:handoff247/explore.py",
+   "type": "File",
+   "name": "handoff247/explore.py",
+   "summary": "`Explorer` answers a successor's questions from the journeys model: `users`/`user_flow` (from a user type), `find` (from words on a screen or a user's request), `asset` (from an asset or table), `impact` (from code), `f…",
+   "file": "handoff247/explore.py",
+   "attrs": {
+    "language": "python",
+    "category": "code",
+    "lines": 718
+   },
+   "page": "wiki/files/handoff247__explore.py.md"
+  },
+  {
+   "id": "file:handoff247/handlers.py",
+   "type": "File",
+   "name": "handoff247/handlers.py",
+   "summary": "What a route does. `PyIndex` follows a Python handler through `ast` into the project functions it calls (four levels deep) and records every effect with its file, line, call chain (`via`), the handler line that led ther…",
+   "file": "handoff247/handlers.py",
+   "attrs": {
+    "language": "python",
+    "category": "code",
+    "lines": 710
+   },
+   "page": "wiki/files/handoff247__handlers.py.md"
+  },
+  {
    "id": "file:handoff247/inventory.py",
    "type": "File",
    "name": "handoff247/inventory.py",
@@ -551,6 +753,19 @@
    "page": "wiki/files/handoff247__inventory.py.md"
   },
   {
+   "id": "file:handoff247/journeys.py",
+   "type": "File",
+   "name": "handoff247/journeys.py",
+   "summary": "Joins screens.py and handlers.py into `project.links[\"journeys\"]`: user types, screens, terms, features (one per route), data tables with states, assets, hand-overs, shared functions and gaps. `match_path` fits a path w…",
+   "file": "handoff247/journeys.py",
+   "attrs": {
+    "language": "python",
+    "category": "code",
+    "lines": 671
+   },
+   "page": "wiki/files/handoff247__journeys.py.md"
+  },
+  {
    "id": "file:handoff247/labels.py",
    "type": "File",
    "name": "handoff247/labels.py",
@@ -559,7 +774,7 @@
    "attrs": {
     "language": "python",
     "category": "code",
-    "lines": 255
+    "lines": 289
    },
    "page": "wiki/files/handoff247__labels.py.md"
   },
@@ -593,12 +808,12 @@
    "id": "file:handoff247/mcp.py",
    "type": "File",
    "name": "handoff247/mcp.py",
-   "summary": "The MCP server (`handoff247 mcp`): newline-delimited JSON-RPC on stdin/stdout, with `sys.stdout` pointed at stderr so stray prints cannot corrupt the protocol. Six tools; only `handoff_write_note` and `handoff_build` wr…",
+   "summary": "The MCP server (`handoff247 mcp`): newline-delimited JSON-RPC on stdin/stdout, with `sys.stdout` pointed at stderr so stray prints cannot corrupt the protocol. Thirteen tools; only `handoff_write_note` and `handoff_buil…",
    "file": "handoff247/mcp.py",
    "attrs": {
     "language": "python",
     "category": "code",
-    "lines": 311
+    "lines": 496
    },
    "page": "wiki/files/handoff247__mcp.py.md"
   },
@@ -606,12 +821,12 @@
    "id": "file:handoff247/mermaid.py",
    "type": "File",
    "name": "handoff247/mermaid.py",
-   "summary": "Builds the five diagrams. `system` collapses launch scripts into one node when there are more than three; `code` hides incoming arrows of shared foundations (hubs) so the rest stays readable.",
+   "summary": "Builds the six diagrams. `users_map` groups screens by who sees them and joins them through the states and files that pass work on. `system` collapses launch scripts into one node when there are more than three; `code`…",
    "file": "handoff247/mermaid.py",
    "attrs": {
     "language": "python",
     "category": "code",
-    "lines": 476
+    "lines": 538
    },
    "page": "wiki/files/handoff247__mermaid.py.md"
   },
@@ -637,7 +852,7 @@
    "attrs": {
     "language": "python",
     "category": "code",
-    "lines": 201
+    "lines": 206
    },
    "page": "wiki/files/handoff247__notes.py.md"
   },
@@ -650,7 +865,7 @@
    "attrs": {
     "language": "python",
     "category": "code",
-    "lines": 283
+    "lines": 437
    },
    "page": "wiki/files/handoff247__ontology.py.md"
   },
@@ -663,7 +878,7 @@
    "attrs": {
     "language": "python",
     "category": "code",
-    "lines": 21
+    "lines": 22
    },
    "page": "wiki/files/handoff247__pipeline.py.md"
   },
@@ -676,7 +891,7 @@
    "attrs": {
     "language": "python",
     "category": "code",
-    "lines": 537
+    "lines": 597
    },
    "page": "wiki/files/handoff247__render_html.py.md"
   },
@@ -684,14 +899,40 @@
    "id": "file:handoff247/render_md.py",
    "type": "File",
    "name": "handoff247/render_md.py",
-   "summary": "The six Markdown pages; `handover()` puts each of the leaver's answers next to what `leaving.py` found. `Linker` decides how file:line references are linked: relative when the pack is inside the project, GitHub blob URL…",
+   "summary": "The Markdown pages except USERS.md (render_users.py writes that one); `handover()` puts each of the leaver's answers next to what `leaving.py` found. `Linker` decides how file:line references are linked: relative when t…",
    "file": "handoff247/render_md.py",
    "attrs": {
     "language": "python",
     "category": "code",
-    "lines": 654
+    "lines": 663
    },
    "page": "wiki/files/handoff247__render_md.py.md"
+  },
+  {
+   "id": "file:handoff247/render_users.py",
+   "type": "File",
+   "name": "handoff247/render_users.py",
+   "summary": "Markdown for USERS.md and for the wiki pages of user types, features, screens, assets and data tables. `Ctx` holds how to link a source line and another page from where the text will live, so the same section renders in…",
+   "file": "handoff247/render_users.py",
+   "attrs": {
+    "language": "python",
+    "category": "code",
+    "lines": 469
+   },
+   "page": "wiki/files/handoff247__render_users.py.md"
+  },
+  {
+   "id": "file:handoff247/screens.py",
+   "type": "File",
+   "name": "handoff247/screens.py",
+   "summary": "Reads templates and HTML pages as text: the visible terms (links, buttons, field labels, headings), the link target or form each belongs to, the `{% if %}` conditions around it, the layout it extends, and the files it r…",
+   "file": "handoff247/screens.py",
+   "attrs": {
+    "language": "python",
+    "category": "code",
+    "lines": 439
+   },
+   "page": "wiki/files/handoff247__screens.py.md"
   },
   {
    "id": "file:handoff247/summarize.py",
@@ -728,7 +969,7 @@
    "attrs": {
     "language": "python",
     "category": "code",
-    "lines": 391
+    "lines": 456
    },
    "page": "wiki/files/handoff247__wiki.py.md"
   },
@@ -761,7 +1002,7 @@
    "id": "file:pyproject.toml",
    "type": "File",
    "name": "pyproject.toml",
-   "summary": "Turn a project folder into a handoff pack: diagrams, structure, comments, how the tools connect, an ontology graph and a wiki for AI assistants.",
+   "summary": "Turn a project folder into a handoff pack: diagrams, structure, how the tools connect, who uses the application and what they see, an ontology graph, a wiki and an MCP server for AI assistants.",
    "file": "pyproject.toml",
    "attrs": {
     "language": "toml",
@@ -779,7 +1020,7 @@
    "attrs": {
     "language": "markdown",
     "category": "docs",
-    "lines": 400
+    "lines": 650
    },
    "page": "wiki/files/README.md.md"
   },
@@ -792,7 +1033,7 @@
    "attrs": {
     "language": "python",
     "category": "test",
-    "lines": 542
+    "lines": 1061
    },
    "page": "wiki/files/tests__test_handoff.py.md"
   },
@@ -819,6 +1060,18 @@
    "page": "wiki/files/handoff247__lexer.py.md"
   },
   {
+   "id": "type:handoff247/render_users.py#Ctx",
+   "type": "Type",
+   "name": "Ctx",
+   "summary": "Where a page lives: how to link a source line and how to link another page from here.",
+   "file": "handoff247/render_users.py",
+   "line": 40,
+   "attrs": {
+    "kind": "class"
+   },
+   "page": "wiki/files/handoff247__render_users.py.md"
+  },
+  {
    "id": "type:handoff247/model.py#Edge",
    "type": "Type",
    "name": "Edge",
@@ -839,6 +1092,17 @@
     "kind": "class"
    },
    "page": "wiki/files/handoff247__summarize.py.md"
+  },
+  {
+   "id": "type:handoff247/explore.py#Explorer",
+   "type": "Type",
+   "name": "Explorer",
+   "file": "handoff247/explore.py",
+   "line": 72,
+   "attrs": {
+    "kind": "class"
+   },
+   "page": "wiki/files/handoff247__explore.py.md"
   },
   {
    "id": "type:handoff247/model.py#Fact",
@@ -920,6 +1184,18 @@
    "page": "wiki/files/handoff247__render_md.py.md"
   },
   {
+   "id": "type:handoff247/screens.py#Locales",
+   "type": "Type",
+   "name": "Locales",
+   "summary": "Translation resources: flat ``key -> text`` per language, with the line of each key.",
+   "file": "handoff247/screens.py",
+   "line": 87,
+   "attrs": {
+    "kind": "class"
+   },
+   "page": "wiki/files/handoff247__screens.py.md"
+  },
+  {
    "id": "type:handoff247/notes.py#Notes",
    "type": "Type",
    "name": "Notes",
@@ -964,11 +1240,23 @@
    "page": "wiki/files/handoff247__model.py.md"
   },
   {
+   "id": "type:handoff247/handlers.py#PyIndex",
+   "type": "Type",
+   "name": "PyIndex",
+   "summary": "Functions, imports and module-level settings of every Python file of the project.",
+   "file": "handoff247/handlers.py",
+   "line": 258,
+   "attrs": {
+    "kind": "class"
+   },
+   "page": "wiki/files/handoff247__handlers.py.md"
+  },
+  {
    "id": "type:handoff247/mcp.py#Server",
    "type": "Type",
    "name": "Server",
    "file": "handoff247/mcp.py",
-   "line": 86,
+   "line": 165,
    "attrs": {
     "kind": "class"
    },
@@ -990,18 +1278,30 @@
    "type": "Type",
    "name": "ToolError",
    "file": "handoff247/mcp.py",
-   "line": 82,
+   "line": 161,
    "attrs": {
     "kind": "class"
    },
    "page": "wiki/files/handoff247__mcp.py.md"
   },
   {
+   "id": "type:tests/test_handoff.py#UserContextTests",
+   "type": "Type",
+   "name": "UserContextTests",
+   "summary": "The application from its users' side, on a synthetic app with three user types: an author writes and uploads, an editor reviews and publishes, anyone reads the result.",
+   "file": "tests/test_handoff.py",
+   "line": 548,
+   "attrs": {
+    "kind": "class"
+   },
+   "page": "wiki/files/tests__test_handoff.py.md"
+  },
+  {
    "id": "type:handoff247/wiki.py#Wiki",
    "type": "Type",
    "name": "Wiki",
    "file": "handoff247/wiki.py",
-   "line": 88,
+   "line": 95,
    "attrs": {
     "kind": "class"
    },
@@ -1013,7 +1313,7 @@
    "name": "build",
    "summary": "analyze the project and write the handoff pack",
    "file": "handoff247/cli.py",
-   "line": 130,
+   "line": 172,
    "page": "wiki/subcommands.md"
   },
   {
@@ -1022,7 +1322,7 @@
    "name": "check",
    "summary": "report what is still undocumented; non-zero exit below --min",
    "file": "handoff247/cli.py",
-   "line": 140,
+   "line": 182,
    "page": "wiki/subcommands.md"
   },
   {
@@ -1031,7 +1331,7 @@
    "name": "go",
    "summary": "one step: create or extend the notes file, build the pack, list what is left; a folder of projects gets one pack per project plus an index",
    "file": "handoff247/cli.py",
-   "line": 120,
+   "line": 162,
    "page": "wiki/subcommands.md"
   },
   {
@@ -1040,7 +1340,7 @@
    "name": "mcp",
    "summary": "run an MCP server (stdio) so an AI agent can read the ontology and source and write notes; add it to Codex or Claude Code as a command",
    "file": "handoff247/cli.py",
-   "line": 143,
+   "line": 185,
    "page": "wiki/subcommands.md"
   },
   {
@@ -1049,7 +1349,16 @@
    "name": "notes",
    "summary": "create the notes file or add headings for new files/modes/folders",
    "file": "handoff247/cli.py",
-   "line": 138,
+   "line": 180,
+   "page": "wiki/subcommands.md"
+  },
+  {
+   "id": "subcmd:trace",
+   "type": "Subcommand",
+   "name": "trace",
+   "summary": "answer a question about the application from a user's side: start from a user's words, a user type, a feature, an asset or a code file (no pack is written)",
+   "file": "handoff247/cli.py",
+   "line": 188,
    "page": "wiki/subcommands.md"
   },
   {
@@ -1062,6 +1371,15 @@
    "page": "wiki/operations.md"
   },
   {
+   "id": "table:handoff247/journeys.py:139",
+   "type": "Table",
+   "name": "handoff247/journeys.py:139",
+   "summary": "13 operation(s), picked by `k`",
+   "file": "handoff247/journeys.py",
+   "line": 139,
+   "page": "wiki/operations.md"
+  },
+  {
    "id": "table:handoff247/leaving.py:257",
    "type": "Table",
    "name": "handoff247/leaving.py:257",
@@ -1071,12 +1389,12 @@
    "page": "wiki/operations.md"
   },
   {
-   "id": "table:handoff247/mcp.py:250",
+   "id": "table:handoff247/mcp.py:421",
    "type": "Table",
-   "name": "handoff247/mcp.py:250",
-   "summary": "4 operation(s), picked by `method`",
+   "name": "handoff247/mcp.py:421",
+   "summary": "6 operation(s), picked by `method`",
    "file": "handoff247/mcp.py",
-   "line": 250,
+   "line": 421,
    "page": "wiki/operations.md"
   },
   {
@@ -1096,6 +1414,14 @@
    "page": "wiki/operations/tool-versions.md"
   },
   {
+   "id": "op:background",
+   "type": "Operation",
+   "name": "background",
+   "file": "handoff247/journeys.py",
+   "line": 161,
+   "page": "wiki/operations/background.md"
+  },
+  {
    "id": "op:batch",
    "type": "Operation",
    "name": "batch",
@@ -1107,6 +1433,22 @@
     "expression": "shell.analyze_batch"
    },
    "page": "wiki/operations/batch.md"
+  },
+  {
+   "id": "op:branch",
+   "type": "Operation",
+   "name": "branch",
+   "file": "handoff247/journeys.py",
+   "line": 163,
+   "page": "wiki/operations/branch.md"
+  },
+  {
+   "id": "op:call",
+   "type": "Operation",
+   "name": "call",
+   "file": "handoff247/journeys.py",
+   "line": 167,
+   "page": "wiki/operations/call.md"
   },
   {
    "id": "op:csharp",
@@ -1148,6 +1490,30 @@
    "page": "wiki/operations/dockerfile.md"
   },
   {
+   "id": "op:external",
+   "type": "Operation",
+   "name": "external",
+   "file": "handoff247/journeys.py",
+   "line": 159,
+   "page": "wiki/operations/external.md"
+  },
+  {
+   "id": "op:field",
+   "type": "Operation",
+   "name": "field",
+   "file": "handoff247/journeys.py",
+   "line": 145,
+   "page": "wiki/operations/field.md"
+  },
+  {
+   "id": "op:file",
+   "type": "Operation",
+   "name": "file",
+   "file": "handoff247/journeys.py",
+   "line": 152,
+   "page": "wiki/operations/file.md"
+  },
+  {
    "id": "op:go.mod",
    "type": "Operation",
    "name": "go.mod",
@@ -1173,7 +1539,7 @@
    "type": "Operation",
    "name": "initialize",
    "file": "handoff247/mcp.py",
-   "line": 250,
+   "line": 421,
    "page": "wiki/operations/initialize.md"
   },
   {
@@ -1216,6 +1582,14 @@
    "page": "wiki/operations/markdown.md"
   },
   {
+   "id": "op:message",
+   "type": "Operation",
+   "name": "message",
+   "file": "handoff247/journeys.py",
+   "line": 165,
+   "page": "wiki/operations/message.md"
+  },
+  {
    "id": "op:msbuild",
    "type": "Operation",
    "name": "msbuild",
@@ -1233,7 +1607,7 @@
    "type": "Operation",
    "name": "ping",
    "file": "handoff247/mcp.py",
-   "line": 256,
+   "line": 427,
    "page": "wiki/operations/ping.md"
   },
   {
@@ -1263,6 +1637,30 @@
    "page": "wiki/operations/python.md"
   },
   {
+   "id": "op:redirect",
+   "type": "Operation",
+   "name": "redirect",
+   "file": "handoff247/journeys.py",
+   "line": 143,
+   "page": "wiki/operations/redirect.md"
+  },
+  {
+   "id": "op:render",
+   "type": "Operation",
+   "name": "render",
+   "file": "handoff247/journeys.py",
+   "line": 139,
+   "page": "wiki/operations/render.md"
+  },
+  {
+   "id": "op:render_dynamic",
+   "type": "Operation",
+   "name": "render_dynamic",
+   "file": "handoff247/journeys.py",
+   "line": 141,
+   "page": "wiki/operations/render_dynamic.md"
+  },
+  {
    "id": "op:requirements",
    "type": "Operation",
    "name": "requirements",
@@ -1276,6 +1674,30 @@
    "page": "wiki/operations/requirements.md"
   },
   {
+   "id": "op:resources/list",
+   "type": "Operation",
+   "name": "resources/list",
+   "file": "handoff247/mcp.py",
+   "line": 443,
+   "page": "wiki/operations/resources__list.md"
+  },
+  {
+   "id": "op:resources/read",
+   "type": "Operation",
+   "name": "resources/read",
+   "file": "handoff247/mcp.py",
+   "line": 448,
+   "page": "wiki/operations/resources__read.md"
+  },
+  {
+   "id": "op:setting",
+   "type": "Operation",
+   "name": "setting",
+   "file": "handoff247/journeys.py",
+   "line": 155,
+   "page": "wiki/operations/setting.md"
+  },
+  {
    "id": "op:shell",
    "type": "Operation",
    "name": "shell",
@@ -1287,6 +1709,22 @@
     "expression": "shell.analyze_shell"
    },
    "page": "wiki/operations/shell.md"
+  },
+  {
+   "id": "op:sql",
+   "type": "Operation",
+   "name": "sql",
+   "file": "handoff247/journeys.py",
+   "line": 147,
+   "page": "wiki/operations/sql.md"
+  },
+  {
+   "id": "op:sql_dynamic",
+   "type": "Operation",
+   "name": "sql_dynamic",
+   "file": "handoff247/journeys.py",
+   "line": 150,
+   "page": "wiki/operations/sql_dynamic.md"
   },
   {
    "id": "op:text",
@@ -1319,7 +1757,7 @@
    "type": "Operation",
    "name": "tools/call",
    "file": "handoff247/mcp.py",
-   "line": 260,
+   "line": 431,
    "page": "wiki/operations/tools__call.md"
   },
   {
@@ -1327,7 +1765,7 @@
    "type": "Operation",
    "name": "tools/list",
    "file": "handoff247/mcp.py",
-   "line": 258,
+   "line": 429,
    "page": "wiki/operations/tools__list.md"
   },
   {
@@ -1409,7 +1847,7 @@
    "id": "person:R B",
    "type": "Person",
    "name": "R B",
-   "summary": "8 commit(s), 2026-11-09 to 2026-11-10",
+   "summary": "10 commit(s), 2026-11-09 to 2026-11-14",
    "page": "wiki/people.md"
   }
  ],
@@ -1477,7 +1915,22 @@
   {
    "s": "area:handoff247",
    "p": "contains",
+   "o": "file:handoff247/explore.py"
+  },
+  {
+   "s": "area:handoff247",
+   "p": "contains",
+   "o": "file:handoff247/handlers.py"
+  },
+  {
+   "s": "area:handoff247",
+   "p": "contains",
    "o": "file:handoff247/inventory.py"
+  },
+  {
+   "s": "area:handoff247",
+   "p": "contains",
+   "o": "file:handoff247/journeys.py"
   },
   {
    "s": "area:handoff247",
@@ -1537,6 +1990,16 @@
   {
    "s": "area:handoff247",
    "p": "contains",
+   "o": "file:handoff247/render_users.py"
+  },
+  {
+   "s": "area:handoff247",
+   "p": "contains",
+   "o": "file:handoff247/screens.py"
+  },
+  {
+   "s": "area:handoff247",
+   "p": "contains",
    "o": "file:handoff247/summarize.py"
   },
   {
@@ -1578,21 +2041,21 @@
    "p": "documents",
    "o": "file:LICENSE",
    "file": "README.md",
-   "line": 400
+   "line": 650
   },
   {
    "s": "file:README.md",
    "p": "mentions",
    "o": "host:github.com",
    "file": "README.md",
-   "line": 40
+   "line": 45
   },
   {
    "s": "file:README.md",
    "p": "mentions",
    "o": "host:llmstxt.org",
    "file": "README.md",
-   "line": 127
+   "line": 134
   },
   {
    "s": "file:handoff247/__main__.py",
@@ -1802,35 +2265,42 @@
    "p": "defines",
    "o": "subcmd:build",
    "file": "handoff247/cli.py",
-   "line": 130
+   "line": 172
   },
   {
    "s": "file:handoff247/cli.py",
    "p": "defines",
    "o": "subcmd:check",
    "file": "handoff247/cli.py",
-   "line": 140
+   "line": 182
   },
   {
    "s": "file:handoff247/cli.py",
    "p": "defines",
    "o": "subcmd:go",
    "file": "handoff247/cli.py",
-   "line": 120
+   "line": 162
   },
   {
    "s": "file:handoff247/cli.py",
    "p": "defines",
    "o": "subcmd:mcp",
    "file": "handoff247/cli.py",
-   "line": 143
+   "line": 185
   },
   {
    "s": "file:handoff247/cli.py",
    "p": "defines",
    "o": "subcmd:notes",
    "file": "handoff247/cli.py",
-   "line": 138
+   "line": 180
+  },
+  {
+   "s": "file:handoff247/cli.py",
+   "p": "defines",
+   "o": "subcmd:trace",
+   "file": "handoff247/cli.py",
+   "line": 188
   },
   {
    "s": "file:handoff247/cli.py",
@@ -1849,6 +2319,13 @@
   {
    "s": "file:handoff247/cli.py",
    "p": "imports",
+   "o": "file:handoff247/explore.py",
+   "file": "handoff247/cli.py",
+   "line": 113
+  },
+  {
+   "s": "file:handoff247/cli.py",
+   "p": "imports",
    "o": "file:handoff247/leaving.py",
    "file": "handoff247/cli.py",
    "line": 9
@@ -1858,7 +2335,7 @@
    "p": "imports",
    "o": "file:handoff247/mcp.py",
    "file": "handoff247/cli.py",
-   "line": 150
+   "line": 207
   },
   {
    "s": "file:handoff247/cli.py",
@@ -1879,7 +2356,7 @@
    "p": "imports",
    "o": "file:handoff247/render_md.py",
    "file": "handoff247/cli.py",
-   "line": 205
+   "line": 262
   },
   {
    "s": "file:handoff247/cli.py",
@@ -1907,7 +2384,7 @@
    "p": "mentions",
    "o": "host:github.com",
    "file": "handoff247/cli.py",
-   "line": 135
+   "line": 177
   },
   {
    "s": "file:handoff247/connect.py",
@@ -1924,6 +2401,48 @@
    "line": 11
   },
   {
+   "s": "file:handoff247/explore.py",
+   "p": "defines",
+   "o": "type:handoff247/explore.py#Explorer",
+   "file": "handoff247/explore.py",
+   "line": 72
+  },
+  {
+   "s": "file:handoff247/explore.py",
+   "p": "imports",
+   "o": "file:handoff247/journeys.py",
+   "file": "handoff247/explore.py",
+   "line": 19
+  },
+  {
+   "s": "file:handoff247/explore.py",
+   "p": "refers",
+   "o": "file:README.md",
+   "file": "handoff247/explore.py",
+   "line": 605
+  },
+  {
+   "s": "file:handoff247/handlers.py",
+   "p": "defines",
+   "o": "type:handoff247/handlers.py#PyIndex",
+   "file": "handoff247/handlers.py",
+   "line": 258
+  },
+  {
+   "s": "file:handoff247/handlers.py",
+   "p": "imports",
+   "o": "file:handoff247/model.py",
+   "file": "handoff247/handlers.py",
+   "line": 25
+  },
+  {
+   "s": "file:handoff247/handlers.py",
+   "p": "refers",
+   "o": "file:handoff247/__init__.py",
+   "file": "handoff247/handlers.py",
+   "line": 316
+  },
+  {
    "s": "file:handoff247/inventory.py",
    "p": "imports",
    "o": "file:handoff247/model.py",
@@ -1936,6 +2455,41 @@
    "o": "cmd:git",
    "file": "handoff247/inventory.py",
    "line": 95
+  },
+  {
+   "s": "file:handoff247/journeys.py",
+   "p": "defines",
+   "o": "table:handoff247/journeys.py:139",
+   "file": "handoff247/journeys.py",
+   "line": 139
+  },
+  {
+   "s": "file:handoff247/journeys.py",
+   "p": "imports",
+   "o": "file:handoff247/__init__.py",
+   "file": "handoff247/journeys.py",
+   "line": 24
+  },
+  {
+   "s": "file:handoff247/journeys.py",
+   "p": "imports",
+   "o": "file:handoff247/handlers.py",
+   "file": "handoff247/journeys.py",
+   "line": 25
+  },
+  {
+   "s": "file:handoff247/journeys.py",
+   "p": "imports",
+   "o": "file:handoff247/model.py",
+   "file": "handoff247/journeys.py",
+   "line": 26
+  },
+  {
+   "s": "file:handoff247/journeys.py",
+   "p": "imports",
+   "o": "file:handoff247/screens.py",
+   "file": "handoff247/journeys.py",
+   "line": 24
   },
   {
    "s": "file:handoff247/leaving.py",
@@ -2003,86 +2557,114 @@
   {
    "s": "file:handoff247/mcp.py",
    "p": "defines",
-   "o": "table:handoff247/mcp.py:250",
+   "o": "table:handoff247/mcp.py:421",
    "file": "handoff247/mcp.py",
-   "line": 250
+   "line": 421
   },
   {
    "s": "file:handoff247/mcp.py",
    "p": "defines",
    "o": "type:handoff247/mcp.py#Server",
    "file": "handoff247/mcp.py",
-   "line": 86
+   "line": 165
   },
   {
    "s": "file:handoff247/mcp.py",
    "p": "defines",
    "o": "type:handoff247/mcp.py#ToolError",
    "file": "handoff247/mcp.py",
-   "line": 82
+   "line": 161
   },
   {
    "s": "file:handoff247/mcp.py",
    "p": "imports",
    "o": "file:handoff247/__init__.py",
    "file": "handoff247/mcp.py",
-   "line": 22
+   "line": 27
   },
   {
    "s": "file:handoff247/mcp.py",
    "p": "imports",
    "o": "file:handoff247/cli.py",
    "file": "handoff247/mcp.py",
-   "line": 119
+   "line": 290
+  },
+  {
+   "s": "file:handoff247/mcp.py",
+   "p": "imports",
+   "o": "file:handoff247/explore.py",
+   "file": "handoff247/mcp.py",
+   "line": 28
   },
   {
    "s": "file:handoff247/mcp.py",
    "p": "imports",
    "o": "file:handoff247/leaving.py",
    "file": "handoff247/mcp.py",
-   "line": 22
+   "line": 27
+  },
+  {
+   "s": "file:handoff247/mcp.py",
+   "p": "imports",
+   "o": "file:handoff247/mermaid.py",
+   "file": "handoff247/mcp.py",
+   "line": 207
   },
   {
    "s": "file:handoff247/mcp.py",
    "p": "imports",
    "o": "file:handoff247/notes.py",
    "file": "handoff247/mcp.py",
-   "line": 23
+   "line": 29
   },
   {
    "s": "file:handoff247/mcp.py",
    "p": "imports",
    "o": "file:handoff247/ontology.py",
    "file": "handoff247/mcp.py",
-   "line": 22
+   "line": 27
   },
   {
    "s": "file:handoff247/mcp.py",
    "p": "imports",
    "o": "file:handoff247/pipeline.py",
    "file": "handoff247/mcp.py",
-   "line": 24
+   "line": 30
   },
   {
    "s": "file:handoff247/mcp.py",
    "p": "imports",
    "o": "file:handoff247/render_md.py",
    "file": "handoff247/mcp.py",
-   "line": 131
+   "line": 302
   },
   {
    "s": "file:handoff247/mcp.py",
    "p": "imports",
    "o": "file:handoff247/summarize.py",
    "file": "handoff247/mcp.py",
-   "line": 22
+   "line": 27
   },
   {
    "s": "file:handoff247/mcp.py",
    "p": "imports",
    "o": "file:handoff247/translate.py",
    "file": "handoff247/mcp.py",
-   "line": 22
+   "line": 27
+  },
+  {
+   "s": "file:handoff247/mcp.py",
+   "p": "imports",
+   "o": "file:handoff247/wiki.py",
+   "file": "handoff247/mcp.py",
+   "line": 27
+  },
+  {
+   "s": "file:handoff247/mcp.py",
+   "p": "refers",
+   "o": "file:README.md",
+   "file": "handoff247/mcp.py",
+   "line": 214
   },
   {
    "s": "file:handoff247/mermaid.py",
@@ -2097,6 +2679,13 @@
    "o": "file:handoff247/connect.py",
    "file": "handoff247/mermaid.py",
    "line": 10
+  },
+  {
+   "s": "file:handoff247/mermaid.py",
+   "p": "imports",
+   "o": "file:handoff247/explore.py",
+   "file": "handoff247/mermaid.py",
+   "line": 472
   },
   {
    "s": "file:handoff247/mermaid.py",
@@ -2213,6 +2802,13 @@
   {
    "s": "file:handoff247/ontology.py",
    "p": "imports",
+   "o": "file:handoff247/explore.py",
+   "file": "handoff247/ontology.py",
+   "line": 156
+  },
+  {
+   "s": "file:handoff247/ontology.py",
+   "p": "imports",
    "o": "file:handoff247/model.py",
    "file": "handoff247/ontology.py",
    "line": 12
@@ -2222,7 +2818,7 @@
    "p": "refers",
    "o": "file:README.md",
    "file": "handoff247/ontology.py",
-   "line": 128
+   "line": 280
   },
   {
    "s": "file:handoff247/pipeline.py",
@@ -2251,6 +2847,13 @@
    "o": "file:handoff247/inventory.py",
    "file": "handoff247/pipeline.py",
    "line": 8
+  },
+  {
+   "s": "file:handoff247/pipeline.py",
+   "p": "imports",
+   "o": "file:handoff247/journeys.py",
+   "file": "handoff247/pipeline.py",
+   "line": 6
   },
   {
    "s": "file:handoff247/pipeline.py",
@@ -2345,17 +2948,73 @@
   },
   {
    "s": "file:handoff247/render_md.py",
+   "p": "imports",
+   "o": "file:handoff247/render_users.py",
+   "file": "handoff247/render_md.py",
+   "line": 249
+  },
+  {
+   "s": "file:handoff247/render_md.py",
    "p": "mentions",
    "o": "host:github.com",
    "file": "handoff247/render_md.py",
-   "line": 638
+   "line": 647
   },
   {
    "s": "file:handoff247/render_md.py",
    "p": "refers",
    "o": "file:README.md",
    "file": "handoff247/render_md.py",
-   "line": 110
+   "line": 111
+  },
+  {
+   "s": "file:handoff247/render_users.py",
+   "p": "defines",
+   "o": "type:handoff247/render_users.py#Ctx",
+   "file": "handoff247/render_users.py",
+   "line": 40
+  },
+  {
+   "s": "file:handoff247/render_users.py",
+   "p": "imports",
+   "o": "file:handoff247/explore.py",
+   "file": "handoff247/render_users.py",
+   "line": 11
+  },
+  {
+   "s": "file:handoff247/render_users.py",
+   "p": "imports",
+   "o": "file:handoff247/journeys.py",
+   "file": "handoff247/render_users.py",
+   "line": 12
+  },
+  {
+   "s": "file:handoff247/render_users.py",
+   "p": "imports",
+   "o": "file:handoff247/labels.py",
+   "file": "handoff247/render_users.py",
+   "line": 13
+  },
+  {
+   "s": "file:handoff247/render_users.py",
+   "p": "imports",
+   "o": "file:handoff247/render_md.py",
+   "file": "handoff247/render_users.py",
+   "line": 384
+  },
+  {
+   "s": "file:handoff247/screens.py",
+   "p": "defines",
+   "o": "type:handoff247/screens.py#Locales",
+   "file": "handoff247/screens.py",
+   "line": 87
+  },
+  {
+   "s": "file:handoff247/screens.py",
+   "p": "imports",
+   "o": "file:handoff247/model.py",
+   "file": "handoff247/screens.py",
+   "line": 19
   },
   {
    "s": "file:handoff247/summarize.py",
@@ -2397,42 +3056,56 @@
    "p": "defines",
    "o": "type:handoff247/wiki.py#Wiki",
    "file": "handoff247/wiki.py",
-   "line": 88
+   "line": 95
   },
   {
    "s": "file:handoff247/wiki.py",
    "p": "imports",
    "o": "file:handoff247/__init__.py",
    "file": "handoff247/wiki.py",
-   "line": 26
+   "line": 28
+  },
+  {
+   "s": "file:handoff247/wiki.py",
+   "p": "imports",
+   "o": "file:handoff247/explore.py",
+   "file": "handoff247/wiki.py",
+   "line": 32
   },
   {
    "s": "file:handoff247/wiki.py",
    "p": "imports",
    "o": "file:handoff247/labels.py",
    "file": "handoff247/wiki.py",
-   "line": 27
+   "line": 29
   },
   {
    "s": "file:handoff247/wiki.py",
    "p": "imports",
    "o": "file:handoff247/notes.py",
    "file": "handoff247/wiki.py",
-   "line": 28
+   "line": 30
   },
   {
    "s": "file:handoff247/wiki.py",
    "p": "imports",
    "o": "file:handoff247/render_md.py",
    "file": "handoff247/wiki.py",
-   "line": 29
+   "line": 33
+  },
+  {
+   "s": "file:handoff247/wiki.py",
+   "p": "imports",
+   "o": "file:handoff247/render_users.py",
+   "file": "handoff247/wiki.py",
+   "line": 31
   },
   {
    "s": "file:handoff247/wiki.py",
    "p": "refers",
    "o": "file:README.md",
    "file": "handoff247/wiki.py",
-   "line": 225
+   "line": 266
   },
   {
    "s": "file:handoff247/workspace.py",
@@ -2548,6 +3221,13 @@
   },
   {
    "s": "file:tests/test_handoff.py",
+   "p": "defines",
+   "o": "type:tests/test_handoff.py#UserContextTests",
+   "file": "tests/test_handoff.py",
+   "line": 548
+  },
+  {
+   "s": "file:tests/test_handoff.py",
    "p": "imports",
    "o": "file:handoff247/__init__.py",
    "file": "tests/test_handoff.py",
@@ -2570,6 +3250,27 @@
   {
    "s": "file:tests/test_handoff.py",
    "p": "imports",
+   "o": "file:handoff247/explore.py",
+   "file": "tests/test_handoff.py",
+   "line": 556
+  },
+  {
+   "s": "file:tests/test_handoff.py",
+   "p": "imports",
+   "o": "file:handoff247/handlers.py",
+   "file": "tests/test_handoff.py",
+   "line": 852
+  },
+  {
+   "s": "file:tests/test_handoff.py",
+   "p": "imports",
+   "o": "file:handoff247/journeys.py",
+   "file": "tests/test_handoff.py",
+   "line": 871
+  },
+  {
+   "s": "file:tests/test_handoff.py",
+   "p": "imports",
    "o": "file:handoff247/lexer.py",
    "file": "tests/test_handoff.py",
    "line": 18
@@ -2580,6 +3281,13 @@
    "o": "file:handoff247/pipeline.py",
    "file": "tests/test_handoff.py",
    "line": 19
+  },
+  {
+   "s": "file:tests/test_handoff.py",
+   "p": "imports",
+   "o": "file:handoff247/screens.py",
+   "file": "tests/test_handoff.py",
+   "line": 872
   },
   {
    "s": "file:tests/test_handoff.py",
@@ -2942,6 +3650,97 @@
    "line": 24
   },
   {
+   "s": "table:handoff247/journeys.py:139",
+   "p": "hasOperation",
+   "o": "op:background",
+   "file": "handoff247/journeys.py",
+   "line": 161
+  },
+  {
+   "s": "table:handoff247/journeys.py:139",
+   "p": "hasOperation",
+   "o": "op:branch",
+   "file": "handoff247/journeys.py",
+   "line": 163
+  },
+  {
+   "s": "table:handoff247/journeys.py:139",
+   "p": "hasOperation",
+   "o": "op:call",
+   "file": "handoff247/journeys.py",
+   "line": 167
+  },
+  {
+   "s": "table:handoff247/journeys.py:139",
+   "p": "hasOperation",
+   "o": "op:external",
+   "file": "handoff247/journeys.py",
+   "line": 159
+  },
+  {
+   "s": "table:handoff247/journeys.py:139",
+   "p": "hasOperation",
+   "o": "op:field",
+   "file": "handoff247/journeys.py",
+   "line": 145
+  },
+  {
+   "s": "table:handoff247/journeys.py:139",
+   "p": "hasOperation",
+   "o": "op:file",
+   "file": "handoff247/journeys.py",
+   "line": 152
+  },
+  {
+   "s": "table:handoff247/journeys.py:139",
+   "p": "hasOperation",
+   "o": "op:message",
+   "file": "handoff247/journeys.py",
+   "line": 165
+  },
+  {
+   "s": "table:handoff247/journeys.py:139",
+   "p": "hasOperation",
+   "o": "op:redirect",
+   "file": "handoff247/journeys.py",
+   "line": 143
+  },
+  {
+   "s": "table:handoff247/journeys.py:139",
+   "p": "hasOperation",
+   "o": "op:render",
+   "file": "handoff247/journeys.py",
+   "line": 139
+  },
+  {
+   "s": "table:handoff247/journeys.py:139",
+   "p": "hasOperation",
+   "o": "op:render_dynamic",
+   "file": "handoff247/journeys.py",
+   "line": 141
+  },
+  {
+   "s": "table:handoff247/journeys.py:139",
+   "p": "hasOperation",
+   "o": "op:setting",
+   "file": "handoff247/journeys.py",
+   "line": 155
+  },
+  {
+   "s": "table:handoff247/journeys.py:139",
+   "p": "hasOperation",
+   "o": "op:sql",
+   "file": "handoff247/journeys.py",
+   "line": 147
+  },
+  {
+   "s": "table:handoff247/journeys.py:139",
+   "p": "hasOperation",
+   "o": "op:sql_dynamic",
+   "file": "handoff247/journeys.py",
+   "line": 150
+  },
+  {
    "s": "table:handoff247/leaving.py:257",
    "p": "hasOperation",
    "o": "op:.python-version",
@@ -2963,33 +3762,47 @@
    "line": 264
   },
   {
-   "s": "table:handoff247/mcp.py:250",
+   "s": "table:handoff247/mcp.py:421",
    "p": "hasOperation",
    "o": "op:initialize",
    "file": "handoff247/mcp.py",
-   "line": 250
+   "line": 421
   },
   {
-   "s": "table:handoff247/mcp.py:250",
+   "s": "table:handoff247/mcp.py:421",
    "p": "hasOperation",
    "o": "op:ping",
    "file": "handoff247/mcp.py",
-   "line": 256
+   "line": 427
   },
   {
-   "s": "table:handoff247/mcp.py:250",
+   "s": "table:handoff247/mcp.py:421",
+   "p": "hasOperation",
+   "o": "op:resources/list",
+   "file": "handoff247/mcp.py",
+   "line": 443
+  },
+  {
+   "s": "table:handoff247/mcp.py:421",
+   "p": "hasOperation",
+   "o": "op:resources/read",
+   "file": "handoff247/mcp.py",
+   "line": 448
+  },
+  {
+   "s": "table:handoff247/mcp.py:421",
    "p": "hasOperation",
    "o": "op:tools/call",
    "file": "handoff247/mcp.py",
-   "line": 260
+   "line": 431
   },
   {
-   "s": "table:handoff247/mcp.py:250",
+   "s": "table:handoff247/mcp.py:421",
    "p": "hasOperation",
    "o": "op:tools/list",
    "file": "handoff247/mcp.py",
-   "line": 258
+   "line": 429
   }
  ],
- "generated": "2026-11-10"
+ "generated": "2026-11-14"
 }

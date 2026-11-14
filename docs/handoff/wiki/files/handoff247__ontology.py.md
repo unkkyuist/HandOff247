@@ -12,7 +12,7 @@ source: "handoff247/ontology.py"
 - **Class:** File — A file of the project (images and other assets are left out).
 - **Language:** Python
 - **Kind of file:** code
-- **Lines:** 283
+- **Lines:** 437
 - **Source:** [handoff247/ontology.py](../../../../handoff247/ontology.py)
 
 **Notes from the previous owner**
@@ -23,11 +23,12 @@ source: "handoff247/ontology.py"
 
 - [`handoff247/__init__.py`](handoff247____init__.py.md) · [handoff247/ontology.py:10](../../../../handoff247/ontology.py#L10)
 - [`handoff247/connect.py`](handoff247__connect.py.md) · [handoff247/ontology.py:11](../../../../handoff247/ontology.py#L11)
+- [`handoff247/explore.py`](handoff247__explore.py.md) · [handoff247/ontology.py:156](../../../../handoff247/ontology.py#L156)
 - [`handoff247/model.py`](handoff247__model.py.md) · [handoff247/ontology.py:12](../../../../handoff247/ontology.py#L12)
 
 **refers to** →
 
-- [`README.md`](README.md.md) · [handoff247/ontology.py:128](../../../../handoff247/ontology.py#L128)
+- [`README.md`](README.md.md) · [handoff247/ontology.py:280](../../../../handoff247/ontology.py#L280)
 
 **is part of** ←
 
@@ -36,7 +37,7 @@ source: "handoff247/ontology.py"
 **is imported by** ←
 
 - [`handoff247/build.py`](handoff247__build.py.md) · [handoff247/build.py:9](../../../../handoff247/build.py#L9)
-- [`handoff247/mcp.py`](handoff247__mcp.py.md) · [handoff247/mcp.py:22](../../../../handoff247/mcp.py#L22)
+- [`handoff247/mcp.py`](handoff247__mcp.py.md) · [handoff247/mcp.py:27](../../../../handoff247/mcp.py#L27)
 
 ## Comment in the file
 
@@ -44,7 +45,7 @@ The project as an ontology: typed entities and typed relations between them. *(m
 
 ## Defined here
 
-- `first_line` — function, [line 70](../../../../handoff247/ontology.py#L70)
-- `_Builder.ent` — method, [line 84](../../../../handoff247/ontology.py#L84)
-- `_Builder.rel` — method, [line 100](../../../../handoff247/ontology.py#L100)
-- `build` — function, [line 119](../../../../handoff247/ontology.py#L119)
+- `first_line` — function, [line 104](../../../../handoff247/ontology.py#L104)
+- `_Builder.ent` — method, [line 118](../../../../handoff247/ontology.py#L118)
+- `_Builder.rel` — method, [line 134](../../../../handoff247/ontology.py#L134)
+- `build` — function, [line 271](../../../../handoff247/ontology.py#L271)

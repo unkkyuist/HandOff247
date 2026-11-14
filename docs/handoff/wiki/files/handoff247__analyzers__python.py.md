@@ -12,7 +12,7 @@ source: "handoff247/analyzers/python.py"
 - **Class:** File — A file of the project (images and other assets are left out).
 - **Language:** Python
 - **Kind of file:** code
-- **Lines:** 281
+- **Lines:** 282
 - **Source:** [handoff247/analyzers/python.py](../../../../handoff247/analyzers/python.py)
 
 **Notes from the previous owner**

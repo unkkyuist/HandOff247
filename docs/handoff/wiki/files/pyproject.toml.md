@@ -7,7 +7,7 @@ source: "pyproject.toml"
 
 # `pyproject.toml`
 
-> Turn a project folder into a handoff pack: diagrams, structure, comments, how the tools connect, an ontology graph and a wiki for AI assistants.
+> Turn a project folder into a handoff pack: diagrams, structure, how the tools connect, who uses the application and what they see, an ontology graph, a wiki and an MCP server for AI assistants.
 
 - **Class:** File — A file of the project (images and other assets are left out).
 - **Language:** TOML

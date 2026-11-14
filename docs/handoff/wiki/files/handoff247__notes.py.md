@@ -12,7 +12,7 @@ source: "handoff247/notes.py"
 - **Class:** File — A file of the project (images and other assets are left out).
 - **Language:** Python
 - **Kind of file:** code
-- **Lines:** 201
+- **Lines:** 206
 - **Source:** [handoff247/notes.py](../../../../handoff247/notes.py)
 
 **Notes from the previous owner**
@@ -43,9 +43,9 @@ source: "handoff247/notes.py"
 
 - [`handoff247/build.py`](handoff247__build.py.md) · [handoff247/build.py:12](../../../../handoff247/build.py#L12)
 - [`handoff247/cli.py`](handoff247__cli.py.md) · [handoff247/cli.py:11](../../../../handoff247/cli.py#L11)
-- [`handoff247/mcp.py`](handoff247__mcp.py.md) · [handoff247/mcp.py:23](../../../../handoff247/mcp.py#L23)
+- [`handoff247/mcp.py`](handoff247__mcp.py.md) · [handoff247/mcp.py:29](../../../../handoff247/mcp.py#L29)
 - [`handoff247/render_md.py`](handoff247__render_md.py.md) · [handoff247/render_md.py:12](../../../../handoff247/render_md.py#L12)
-- [`handoff247/wiki.py`](handoff247__wiki.py.md) · [handoff247/wiki.py:28](../../../../handoff247/wiki.py#L28)
+- [`handoff247/wiki.py`](handoff247__wiki.py.md) · [handoff247/wiki.py:30](../../../../handoff247/wiki.py#L30)
 - [`handoff247/workspace.py`](handoff247__workspace.py.md) · [handoff247/workspace.py:21](../../../../handoff247/workspace.py#L21)
 
 ## Comment in the file
@@ -60,10 +60,10 @@ The human half of a handoff: a Markdown notes file with one heading per item. *(
 - `Notes.translation_rows` — method, [line 52](../../../../handoff247/notes.py#L52) — Every (original, english) row of the Translations table, TODO rows included.
 - `Notes.translations` — method, [line 65](../../../../handoff247/notes.py#L65) — Original → English for the rows that have been filled in.
 - `Notes.stale` — method, [line 69](../../../../handoff247/notes.py#L69)
-- `is_filled` — function, [line 83](../../../../handoff247/notes.py#L83)
-- `parse` — function, [line 92](../../../../handoff247/notes.py#L92)
-- `load` — function, [line 117](../../../../handoff247/notes.py#L117)
-- `translation_skeleton` — function, [line 127](../../../../handoff247/notes.py#L127)
-- `skeleton` — function, [line 134](../../../../handoff247/notes.py#L134)
-- `render_new` — function, [line 156](../../../../handoff247/notes.py#L156)
-- `update` — function, [line 181](../../../../handoff247/notes.py#L181) — Create the notes file or append headings (and translation rows) that are missing.
+- `is_filled` — function, [line 85](../../../../handoff247/notes.py#L85)
+- `parse` — function, [line 94](../../../../handoff247/notes.py#L94)
+- `load` — function, [line 119](../../../../handoff247/notes.py#L119)
+- `translation_skeleton` — function, [line 129](../../../../handoff247/notes.py#L129)
+- `skeleton` — function, [line 136](../../../../handoff247/notes.py#L136)
+- `render_new` — function, [line 161](../../../../handoff247/notes.py#L161)
+- `update` — function, [line 186](../../../../handoff247/notes.py#L186) — Create the notes file or append headings (and translation rows) that are missing.

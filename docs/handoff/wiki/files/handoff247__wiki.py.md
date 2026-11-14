@@ -12,7 +12,7 @@ source: "handoff247/wiki.py"
 - **Class:** File — A file of the project (images and other assets are left out).
 - **Language:** Python
 - **Kind of file:** code
-- **Lines:** 391
+- **Lines:** 456
 - **Source:** [handoff247/wiki.py](../../../../handoff247/wiki.py)
 
 **Notes from the previous owner**
@@ -21,18 +21,20 @@ source: "handoff247/wiki.py"
 
 **defines** →
 
-- `Wiki` · [handoff247/wiki.py:88](../../../../handoff247/wiki.py#L88)
+- `Wiki` · [handoff247/wiki.py:95](../../../../handoff247/wiki.py#L95)
 
 **imports** →
 
-- [`handoff247/__init__.py`](handoff247____init__.py.md) · [handoff247/wiki.py:26](../../../../handoff247/wiki.py#L26)
-- [`handoff247/labels.py`](handoff247__labels.py.md) · [handoff247/wiki.py:27](../../../../handoff247/wiki.py#L27)
-- [`handoff247/notes.py`](handoff247__notes.py.md) · [handoff247/wiki.py:28](../../../../handoff247/wiki.py#L28)
-- [`handoff247/render_md.py`](handoff247__render_md.py.md) · [handoff247/wiki.py:29](../../../../handoff247/wiki.py#L29)
+- [`handoff247/__init__.py`](handoff247____init__.py.md) · [handoff247/wiki.py:28](../../../../handoff247/wiki.py#L28)
+- [`handoff247/explore.py`](handoff247__explore.py.md) · [handoff247/wiki.py:32](../../../../handoff247/wiki.py#L32)
+- [`handoff247/labels.py`](handoff247__labels.py.md) · [handoff247/wiki.py:29](../../../../handoff247/wiki.py#L29)
+- [`handoff247/notes.py`](handoff247__notes.py.md) · [handoff247/wiki.py:30](../../../../handoff247/wiki.py#L30)
+- [`handoff247/render_md.py`](handoff247__render_md.py.md) · [handoff247/wiki.py:33](../../../../handoff247/wiki.py#L33)
+- [`handoff247/render_users.py`](handoff247__render_users.py.md) · [handoff247/wiki.py:31](../../../../handoff247/wiki.py#L31)
 
 **refers to** →
 
-- [`README.md`](README.md.md) · [handoff247/wiki.py:225](../../../../handoff247/wiki.py#L225)
+- [`README.md`](README.md.md) · [handoff247/wiki.py:266](../../../../handoff247/wiki.py#L266)
 
 **is part of** ←
 
@@ -41,6 +43,7 @@ source: "handoff247/wiki.py"
 **is imported by** ←
 
 - [`handoff247/build.py`](handoff247__build.py.md) · [handoff247/build.py:9](../../../../handoff247/build.py#L9)
+- [`handoff247/mcp.py`](handoff247__mcp.py.md) · [handoff247/mcp.py:27](../../../../handoff247/mcp.py#L27)
 
 ## Comment in the file
 
@@ -48,21 +51,22 @@ The LLM wiki: the ontology written out as small, interlinked Markdown pages that
 
 ## Defined here
 
-- `assign_pages` — function, [line 58](../../../../handoff247/wiki.py#L58) — Give every entity the pack-relative path of the wiki page that describes it.
-- `Wiki` — class, [line 88](../../../../handoff247/wiki.py#L88)
-- `Wiki.href` — method, [line 106](../../../../handoff247/wiki.py#L106)
-- `Wiki.ref` — method, [line 109](../../../../handoff247/wiki.py#L109)
-- `Wiki.src` — method, [line 116](../../../../handoff247/wiki.py#L116)
-- `Wiki.front` — method, [line 119](../../../../handoff247/wiki.py#L119)
-- `Wiki.note` — method, [line 128](../../../../handoff247/wiki.py#L128)
-- `Wiki.relations` — method, [line 134](../../../../handoff247/wiki.py#L134)
-- `Wiki.body` — method, [line 158](../../../../handoff247/wiki.py#L158) — Summary, attributes, the owner's note and the relations of one entity.
-- `Wiki.entity_page` — method, [line 182](../../../../handoff247/wiki.py#L182)
-- `Wiki.list_page` — method, [line 202](../../../../handoff247/wiki.py#L202)
-- `Wiki.overview` — method, [line 212](../../../../handoff247/wiki.py#L212)
-- `Wiki.notes_page` — method, [line 250](../../../../handoff247/wiki.py#L250)
-- `Wiki.index` — method, [line 259](../../../../handoff247/wiki.py#L259)
-- `Wiki.line_summary` — method, [line 303](../../../../handoff247/wiki.py#L303)
-- `Wiki.agents` — method, [line 312](../../../../handoff247/wiki.py#L312)
-- `Wiki.llms_txt` — method, [line 348](../../../../handoff247/wiki.py#L348)
-- `Wiki.render` — method, [line 373](../../../../handoff247/wiki.py#L373) — Pack-relative path → text for every wiki file, llms.txt and llms-full.txt included.
+- `assign_pages` — function, [line 65](../../../../handoff247/wiki.py#L65) — Give every entity the pack-relative path of the wiki page that describes it.
+- `Wiki` — class, [line 95](../../../../handoff247/wiki.py#L95)
+- `Wiki.ctx` — method, [line 114](../../../../handoff247/wiki.py#L114) — The user-context sections, with links that work from ``page``.
+- `Wiki.href` — method, [line 120](../../../../handoff247/wiki.py#L120)
+- `Wiki.ref` — method, [line 123](../../../../handoff247/wiki.py#L123)
+- `Wiki.src` — method, [line 130](../../../../handoff247/wiki.py#L130)
+- `Wiki.front` — method, [line 133](../../../../handoff247/wiki.py#L133)
+- `Wiki.note` — method, [line 142](../../../../handoff247/wiki.py#L142)
+- `Wiki.relations` — method, [line 148](../../../../handoff247/wiki.py#L148)
+- `Wiki.body` — method, [line 172](../../../../handoff247/wiki.py#L172) — Summary, attributes, the owner's note and the relations of one entity.
+- `Wiki.entity_page` — method, [line 196](../../../../handoff247/wiki.py#L196)
+- `Wiki.list_page` — method, [line 232](../../../../handoff247/wiki.py#L232)
+- `Wiki.overview` — method, [line 253](../../../../handoff247/wiki.py#L253)
+- `Wiki.notes_page` — method, [line 291](../../../../handoff247/wiki.py#L291)
+- `Wiki.index` — method, [line 300](../../../../handoff247/wiki.py#L300)
+- `Wiki.line_summary` — method, [line 350](../../../../handoff247/wiki.py#L350)
+- `Wiki.agents` — method, [line 359](../../../../handoff247/wiki.py#L359)
+- `Wiki.llms_txt` — method, [line 412](../../../../handoff247/wiki.py#L412)
+- `Wiki.render` — method, [line 438](../../../../handoff247/wiki.py#L438) — Pack-relative path → text for every wiki file, llms.txt and llms-full.txt included.

@@ -7,17 +7,17 @@ source: "handoff247/build.py"
 
 # `handoff247/build.py`
 
-> Writes the pack: six Markdown pages, `diagrams/*.mmd`, `handoff.json` (its first key `"generator": "HandOff247"` is how later runs recognise and skip an old pack), `ontology.json`, the wiki and `index.html`. `write_wiki…
+> Writes the pack: seven Markdown pages, `diagrams/*.mmd`, `handoff.json` (its first key `"generator": "HandOff247"` is how later runs recognise and skip an old pack), `ontology.json`, the wiki and `index.html`. `write_wi…
 
 - **Class:** File — A file of the project (images and other assets are left out).
 - **Language:** Python
 - **Kind of file:** code
-- **Lines:** 91
+- **Lines:** 95
 - **Source:** [handoff247/build.py](../../../../handoff247/build.py)
 
 **Notes from the previous owner**
 
-> Writes the pack: six Markdown pages, `diagrams/*.mmd`, `handoff.json` (its first key `"generator": "HandOff247"` is how later runs recognise and skip an old pack), `ontology.json`, the wiki and `index.html`. `write_wiki` deletes wiki pages of an earlier run that no longer exist, but only files that start with the generator mark, so a page someone added by hand stays.
+> Writes the pack: seven Markdown pages, `diagrams/*.mmd`, `handoff.json` (its first key `"generator": "HandOff247"` is how later runs recognise and skip an old pack), `ontology.json`, the wiki and `index.html`. `write_wiki` deletes wiki pages of an earlier run that no longer exist, but only files that start with the generator mark, so a page someone added by hand stays.
 
 **imports** →
 
@@ -54,4 +54,4 @@ Write the handoff pack to disk. *(module docstring)*
 
 - `to_json` — function, [line 19](../../../../handoff247/build.py#L19)
 - `write_pack` — function, [line 33](../../../../handoff247/build.py#L33) — Render every page.
-- `write_wiki` — function, [line 72](../../../../handoff247/build.py#L72) — Write the wiki and remove pages of an earlier run that no longer exist.
+- `write_wiki` — function, [line 76](../../../../handoff247/build.py#L76) — Write the wiki and remove pages of an earlier run that no longer exist.

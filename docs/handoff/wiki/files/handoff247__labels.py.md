@@ -12,7 +12,7 @@ source: "handoff247/labels.py"
 - **Class:** File — A file of the project (images and other assets are left out).
 - **Language:** Python
 - **Kind of file:** code
-- **Lines:** 255
+- **Lines:** 289
 - **Source:** [handoff247/labels.py](../../../../handoff247/labels.py)
 
 **Notes from the previous owner**
@@ -28,7 +28,8 @@ source: "handoff247/labels.py"
 - [`handoff247/mermaid.py`](handoff247__mermaid.py.md) · [handoff247/mermaid.py:11](../../../../handoff247/mermaid.py#L11)
 - [`handoff247/notes.py`](handoff247__notes.py.md) · [handoff247/notes.py:16](../../../../handoff247/notes.py#L16)
 - [`handoff247/render_md.py`](handoff247__render_md.py.md) · [handoff247/render_md.py:9](../../../../handoff247/render_md.py#L9)
-- [`handoff247/wiki.py`](handoff247__wiki.py.md) · [handoff247/wiki.py:27](../../../../handoff247/wiki.py#L27)
+- [`handoff247/render_users.py`](handoff247__render_users.py.md) · [handoff247/render_users.py:13](../../../../handoff247/render_users.py#L13)
+- [`handoff247/wiki.py`](handoff247__wiki.py.md) · [handoff247/wiki.py:29](../../../../handoff247/wiki.py#L29)
 
 ## Comment in the file
 
@@ -36,4 +37,4 @@ Every generated heading and label in one place, so the wording stays the same ac
 
 ## Defined here
 
-- `t` — function, [line 253](../../../../handoff247/labels.py#L253)
+- `t` — function, [line 287](../../../../handoff247/labels.py#L287)

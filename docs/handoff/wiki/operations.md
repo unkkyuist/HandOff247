@@ -6,7 +6,7 @@ generator: HandOff247
 
 A switch or mapping that turns an operation name into the code that handles it.
 
-3 found. [Back to the index](index.md)
+4 found. [Back to the index](index.md)
 
 ## `handoff247/analyzers/__init__.py:7`
 
@@ -39,6 +39,33 @@ A switch or mapping that turns an operation name into the code that handles it.
 
 - [`handoff247/analyzers/__init__.py`](files/handoff247__analyzers____init__.py.md) · [handoff247/analyzers/__init__.py:7](../../../handoff247/analyzers/__init__.py#L7)
 
+## `handoff247/journeys.py:139`
+
+> 13 operation(s), picked by `k`
+
+- **Class:** Dispatch table — A switch or mapping that turns an operation name into the code that handles it.
+- **Source:** [handoff247/journeys.py:139](../../../handoff247/journeys.py#L139)
+
+**has operation** →
+
+- [`background`](operations/background.md) · [handoff247/journeys.py:161](../../../handoff247/journeys.py#L161)
+- [`branch`](operations/branch.md) · [handoff247/journeys.py:163](../../../handoff247/journeys.py#L163)
+- [`call`](operations/call.md) · [handoff247/journeys.py:167](../../../handoff247/journeys.py#L167)
+- [`external`](operations/external.md) · [handoff247/journeys.py:159](../../../handoff247/journeys.py#L159)
+- [`field`](operations/field.md) · [handoff247/journeys.py:145](../../../handoff247/journeys.py#L145)
+- [`file`](operations/file.md) · [handoff247/journeys.py:152](../../../handoff247/journeys.py#L152)
+- [`message`](operations/message.md) · [handoff247/journeys.py:165](../../../handoff247/journeys.py#L165)
+- [`redirect`](operations/redirect.md) · [handoff247/journeys.py:143](../../../handoff247/journeys.py#L143)
+- [`render`](operations/render.md) · [handoff247/journeys.py:139](../../../handoff247/journeys.py#L139)
+- [`render_dynamic`](operations/render_dynamic.md) · [handoff247/journeys.py:141](../../../handoff247/journeys.py#L141)
+- [`setting`](operations/setting.md) · [handoff247/journeys.py:155](../../../handoff247/journeys.py#L155)
+- [`sql`](operations/sql.md) · [handoff247/journeys.py:147](../../../handoff247/journeys.py#L147)
+- [`sql_dynamic`](operations/sql_dynamic.md) · [handoff247/journeys.py:150](../../../handoff247/journeys.py#L150)
+
+**is defined in** ←
+
+- [`handoff247/journeys.py`](files/handoff247__journeys.py.md) · [handoff247/journeys.py:139](../../../handoff247/journeys.py#L139)
+
 ## `handoff247/leaving.py:257`
 
 > 3 operation(s), picked by `name`
@@ -56,20 +83,22 @@ A switch or mapping that turns an operation name into the code that handles it.
 
 - [`handoff247/leaving.py`](files/handoff247__leaving.py.md) · [handoff247/leaving.py:257](../../../handoff247/leaving.py#L257)
 
-## `handoff247/mcp.py:250`
+## `handoff247/mcp.py:421`
 
-> 4 operation(s), picked by `method`
+> 6 operation(s), picked by `method`
 
 - **Class:** Dispatch table — A switch or mapping that turns an operation name into the code that handles it.
-- **Source:** [handoff247/mcp.py:250](../../../handoff247/mcp.py#L250)
+- **Source:** [handoff247/mcp.py:421](../../../handoff247/mcp.py#L421)
 
 **has operation** →
 
-- [`initialize`](operations/initialize.md) · [handoff247/mcp.py:250](../../../handoff247/mcp.py#L250)
-- [`ping`](operations/ping.md) · [handoff247/mcp.py:256](../../../handoff247/mcp.py#L256)
-- [`tools/call`](operations/tools__call.md) · [handoff247/mcp.py:260](../../../handoff247/mcp.py#L260)
-- [`tools/list`](operations/tools__list.md) · [handoff247/mcp.py:258](../../../handoff247/mcp.py#L258)
+- [`initialize`](operations/initialize.md) · [handoff247/mcp.py:421](../../../handoff247/mcp.py#L421)
+- [`ping`](operations/ping.md) · [handoff247/mcp.py:427](../../../handoff247/mcp.py#L427)
+- [`resources/list`](operations/resources__list.md) · [handoff247/mcp.py:443](../../../handoff247/mcp.py#L443)
+- [`resources/read`](operations/resources__read.md) · [handoff247/mcp.py:448](../../../handoff247/mcp.py#L448)
+- [`tools/call`](operations/tools__call.md) · [handoff247/mcp.py:431](../../../handoff247/mcp.py#L431)
+- [`tools/list`](operations/tools__list.md) · [handoff247/mcp.py:429](../../../handoff247/mcp.py#L429)
 
 **is defined in** ←
 
-- [`handoff247/mcp.py`](files/handoff247__mcp.py.md) · [handoff247/mcp.py:250](../../../handoff247/mcp.py#L250)
+- [`handoff247/mcp.py`](files/handoff247__mcp.py.md) · [handoff247/mcp.py:421](../../../handoff247/mcp.py#L421)

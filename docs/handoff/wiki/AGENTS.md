@@ -16,6 +16,18 @@ This wiki describes **HandOff247** for an AI assistant that has to answer questi
 5. Something that is not in the wiki was not found. That does not mean it does not exist: code built from runtime strings, reflection or dependency-injection containers is not followed. Say that you do not know.
 6. [notes.md](notes.md) is the only human-written page. "Not answered" there is a question for a person.
 
+## Helping someone who uses the application
+
+The user types in this wiki (`users/`) are the kinds of user the analysed application tells apart. They are not access levels of the wiki: read every flow you need, whoever it belongs to. Five ways in:
+
+- **From a user type:** `users/<name>.md` lists the screens, what each control does and who picks the work up next.
+- **From words on a screen:** [terms.md](terms.md) has every link, button, field label, heading and message, with the feature it leads to. The word a user says and the name in the code often differ; the page gives both.
+- **From an asset or a table:** `assets/` and `data/` say who provides it, what stores it and where it shows.
+- **From code:** a file page lists the features that run it under *runs for*; a feature page lists its code.
+- **From a request:** find the feature through the words, then read its page in `features/`: started from, what the code does, branches, hand-overs, what to check, not verified.
+
+Two rules when you answer. The same word can be on several screens: name the screen and the user type, and if two candidates fit, show both instead of picking one. And a condition in the code is not a diagnosis: "the article is only listed when status is in_review" is what the code does, not proof of why this user's article is missing. Say what to check (*What to check* on the feature page) unless you have the live data or a log.
+
 ## Classes
 
 | Class | Meaning |
@@ -36,6 +48,13 @@ This wiki describes **HandOff247** for an AI assistant that has to answer questi
 | External host | A host name found in a URL. |
 | Command-line tool | A well-known program the project's scripts start; it has to be installed. |
 | Person | An author in the Git history. |
+| User type | A kind of user the analysed application tells apart, found from role checks. Not an access level of this pack. |
+| Screen | A template or page a user sees. |
+| Screen term | Words a user reads: a link, button, field label, heading, or a message the code shows. |
+| Function | Project code that a feature runs. Modelled once, however many features use it. |
+| Data table | A table named in an SQL statement. |
+| State | A column value that statements set or filter on, such as status = 'published'. |
+| Asset | A file users see or provide: shipped with the project, uploaded, generated, or kept in external storage. |
 
 ## Relations
 
@@ -65,6 +84,26 @@ This wiki describes **HandOff247** for an AI assistant that has to answer questi
 | depends on | is a dependency of | The file declares or imports the package. |
 | starts | is started by | The file starts the command-line tool. |
 | has commits in | has commits by | Author in the Git history of the project. |
+| is open to | may use | Role check on the route, or none found (anyone). |
+| sees | is seen by | A route this user type may use shows the screen. |
+| shows | is shown by | The route renders the screen. |
+| is built on | is part of | The template extends or includes the other one. |
+| displays | is displayed on | The words are on the screen, or the route shows the message. |
+| leads to | is started from | The link, button or form of the term targets the route; a script of the screen calls it. |
+| redirects to | is reached by redirect from | The handler redirects to the other route. |
+| runs | runs for | The handler calls the function, directly or through other functions. |
+| reads | is read by | An SQL statement of the feature reads the table. |
+| writes | is written by | An SQL statement of the feature inserts, updates or deletes rows. |
+| has the state | is a state of | A literal column value found in a statement. |
+| sets | is set by | A statement of the feature sets the column to this value. |
+| lists only | is the filter of | A statement of the feature filters on this value. |
+| is tested by | tests | A template condition or a handler branch names the same column and value. |
+| hands over to | receives from | One feature sets a state that the other filters on. |
+| shows | appears on | The screen references the file. |
+| provides | is provided by | The feature receives the upload or writes the generated file. |
+| delivers | is delivered by | The route sends the file to the browser. |
+| has its name kept in | keeps the name of | The stored file name is written to a column of the table. |
+| takes its text from | words | The text of the term comes from a locale file. |
 
 ## Writing
 
@@ -73,6 +112,7 @@ Do not edit these pages: the next run overwrites them. Knowledge that should las
 - `## Project` — what the project is and its status
 - `## Topic: <name>` — the handover questions listed in [notes.md](notes.md)
 - `## Area: <folder>`, `## File: <path>`, `## Mode: <name>`, `## Op: <operation>` — one thing each
+- `## User: <user type>` — who these users are in real life and what they usually ask for
 
 Write plain sentences, say only what you verified in the source, and never paste a password or token; say where it is kept. Then run `python -m handoff247 <project folder>` again: the note appears on the matching wiki page, in the handoff pages and in the viewer.
 
@@ -84,4 +124,4 @@ Write plain sentences, say only what you verified in the source, and never paste
 
 ## Working through MCP
 
-`python -m handoff247 mcp` is an MCP server over the same data: search and read entities, read source lines, list what is still undocumented, and write notes under the right heading (marked as written by an agent). It is the supported way for an assistant to add to this wiki.
+`python -m handoff247 mcp` is an MCP server over the same data: a briefing of the whole project, the flows of each user type, a search from a user's own words, one feature in full, assets, the effect of a code change, entities, source lines, what is still undocumented, and notes written under the right heading (marked as written by an agent). It is the supported way for an assistant to add to this wiki.

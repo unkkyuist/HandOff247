@@ -12,7 +12,7 @@ source: "handoff247/render_html.py"
 - **Class:** File — A file of the project (images and other assets are left out).
 - **Language:** Python
 - **Kind of file:** code
-- **Lines:** 537
+- **Lines:** 597
 - **Source:** [handoff247/render_html.py](../../../../handoff247/render_html.py)
 
 **Notes from the previous owner**
@@ -42,4 +42,4 @@ Single-file interactive viewer (index.html). *(module docstring)*
 
 ## Defined here
 
-- `render` — function, [line 498](../../../../handoff247/render_html.py#L498)
+- `render` — function, [line 548](../../../../handoff247/render_html.py#L548)

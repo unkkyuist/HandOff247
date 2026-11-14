@@ -36,7 +36,7 @@ source: "handoff247/summarize.py"
 **is imported by** ←
 
 - [`handoff247/cli.py`](handoff247__cli.py.md) · [handoff247/cli.py:9](../../../../handoff247/cli.py#L9)
-- [`handoff247/mcp.py`](handoff247__mcp.py.md) · [handoff247/mcp.py:22](../../../../handoff247/mcp.py#L22)
+- [`handoff247/mcp.py`](handoff247__mcp.py.md) · [handoff247/mcp.py:27](../../../../handoff247/mcp.py#L27)
 - [`handoff247/workspace.py`](handoff247__workspace.py.md) · [handoff247/workspace.py:17](../../../../handoff247/workspace.py#L17)
 
 ## Comment in the file

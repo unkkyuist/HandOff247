@@ -9,7 +9,7 @@ type: Area
 > The package. Data flows inventory → analyzers → connect → (mermaid, render_md, render_html) → build. pipeline.py wires the first three; cli.py and build.py the rest.
 
 - **Class:** Area — A top-level folder of the project.
-- **Files:** 27
+- **Files:** 32
 
 **Notes from the previous owner**
 
@@ -28,7 +28,10 @@ type: Area
 - [`handoff247/build.py`](../files/handoff247__build.py.md)
 - [`handoff247/cli.py`](../files/handoff247__cli.py.md)
 - [`handoff247/connect.py`](../files/handoff247__connect.py.md)
+- [`handoff247/explore.py`](../files/handoff247__explore.py.md)
+- [`handoff247/handlers.py`](../files/handoff247__handlers.py.md)
 - [`handoff247/inventory.py`](../files/handoff247__inventory.py.md)
+- [`handoff247/journeys.py`](../files/handoff247__journeys.py.md)
 - [`handoff247/labels.py`](../files/handoff247__labels.py.md)
 - [`handoff247/leaving.py`](../files/handoff247__leaving.py.md)
 - [`handoff247/lexer.py`](../files/handoff247__lexer.py.md)
@@ -40,6 +43,8 @@ type: Area
 - [`handoff247/pipeline.py`](../files/handoff247__pipeline.py.md)
 - [`handoff247/render_html.py`](../files/handoff247__render_html.py.md)
 - [`handoff247/render_md.py`](../files/handoff247__render_md.py.md)
+- [`handoff247/render_users.py`](../files/handoff247__render_users.py.md)
+- [`handoff247/screens.py`](../files/handoff247__screens.py.md)
 - [`handoff247/summarize.py`](../files/handoff247__summarize.py.md)
 - [`handoff247/translate.py`](../files/handoff247__translate.py.md)
 - [`handoff247/wiki.py`](../files/handoff247__wiki.py.md)

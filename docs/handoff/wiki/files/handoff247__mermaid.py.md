@@ -7,17 +7,17 @@ source: "handoff247/mermaid.py"
 
 # `handoff247/mermaid.py`
 
-> Builds the five diagrams. `system` collapses launch scripts into one node when there are more than three; `code` hides incoming arrows of shared foundations (hubs) so the rest stays readable.
+> Builds the six diagrams. `users_map` groups screens by who sees them and joins them through the states and files that pass work on. `system` collapses launch scripts into one node when there are more than three; `code`…
 
 - **Class:** File — A file of the project (images and other assets are left out).
 - **Language:** Python
 - **Kind of file:** code
-- **Lines:** 476
+- **Lines:** 538
 - **Source:** [handoff247/mermaid.py](../../../../handoff247/mermaid.py)
 
 **Notes from the previous owner**
 
-> Builds the five diagrams. `system` collapses launch scripts into one node when there are more than three; `code` hides incoming arrows of shared foundations (hubs) so the rest stays readable.
+> Builds the six diagrams. `users_map` groups screens by who sees them and joins them through the states and files that pass work on. `system` collapses launch scripts into one node when there are more than three; `code` hides incoming arrows of shared foundations (hubs) so the rest stays readable.
 
 **defines** →
 
@@ -26,6 +26,7 @@ source: "handoff247/mermaid.py"
 **imports** →
 
 - [`handoff247/connect.py`](handoff247__connect.py.md) · [handoff247/mermaid.py:10](../../../../handoff247/mermaid.py#L10)
+- [`handoff247/explore.py`](handoff247__explore.py.md) · [handoff247/mermaid.py:472](../../../../handoff247/mermaid.py#L472)
 - [`handoff247/labels.py`](handoff247__labels.py.md) · [handoff247/mermaid.py:11](../../../../handoff247/mermaid.py#L11)
 - [`handoff247/model.py`](handoff247__model.py.md) · [handoff247/mermaid.py:12](../../../../handoff247/mermaid.py#L12)
 
@@ -36,6 +37,7 @@ source: "handoff247/mermaid.py"
 **is imported by** ←
 
 - [`handoff247/build.py`](handoff247__build.py.md) · [handoff247/build.py:10](../../../../handoff247/build.py#L10)
+- [`handoff247/mcp.py`](handoff247__mcp.py.md) · [handoff247/mcp.py:207](../../../../handoff247/mcp.py#L207)
 - [`handoff247/render_md.py`](handoff247__render_md.py.md) · [handoff247/render_md.py:10](../../../../handoff247/render_md.py#L10)
 - [`handoff247/workspace.py`](handoff247__workspace.py.md) · [handoff247/workspace.py:20](../../../../handoff247/workspace.py#L20)
 
@@ -59,4 +61,5 @@ Mermaid flowchart builders. *(module docstring)*
 - `operations` — function, [line 335](../../../../handoff247/mermaid.py#L335) — Per dispatch table: who calls which group of operations, and which component handles them.
 - `code_map` — function, [line 383](../../../../handoff247/mermaid.py#L383) — File-level dependency map grouped by folder.
 - `areas_map` — function, [line 445](../../../../handoff247/mermaid.py#L445) — Folder-level overview with file counts and aggregated links between folders.
-- `all_diagrams` — function, [line 469](../../../../handoff247/mermaid.py#L469)
+- `users_map` — function, [line 469](../../../../handoff247/mermaid.py#L469) — Screens grouped by who sees them, joined through the states and files that pass work from one user type to the next.
+- `all_diagrams` — function, [line 531](../../../../handoff247/mermaid.py#L531)

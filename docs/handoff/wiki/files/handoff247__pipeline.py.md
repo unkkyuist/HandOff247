@@ -12,7 +12,7 @@ source: "handoff247/pipeline.py"
 - **Class:** File — A file of the project (images and other assets are left out).
 - **Language:** Python
 - **Kind of file:** code
-- **Lines:** 21
+- **Lines:** 22
 - **Source:** [handoff247/pipeline.py](../../../../handoff247/pipeline.py)
 
 **Notes from the previous owner**
@@ -25,6 +25,7 @@ source: "handoff247/pipeline.py"
 - [`handoff247/analyzers/__init__.py`](handoff247__analyzers____init__.py.md) · [handoff247/pipeline.py:6](../../../../handoff247/pipeline.py#L6)
 - [`handoff247/connect.py`](handoff247__connect.py.md) · [handoff247/pipeline.py:7](../../../../handoff247/pipeline.py#L7)
 - [`handoff247/inventory.py`](handoff247__inventory.py.md) · [handoff247/pipeline.py:8](../../../../handoff247/pipeline.py#L8)
+- [`handoff247/journeys.py`](handoff247__journeys.py.md) · [handoff247/pipeline.py:6](../../../../handoff247/pipeline.py#L6)
 - [`handoff247/leaving.py`](handoff247__leaving.py.md) · [handoff247/pipeline.py:6](../../../../handoff247/pipeline.py#L6)
 - [`handoff247/model.py`](handoff247__model.py.md) · [handoff247/pipeline.py:9](../../../../handoff247/pipeline.py#L9)
 
@@ -35,7 +36,7 @@ source: "handoff247/pipeline.py"
 **is imported by** ←
 
 - [`handoff247/cli.py`](handoff247__cli.py.md) · [handoff247/cli.py:12](../../../../handoff247/cli.py#L12)
-- [`handoff247/mcp.py`](handoff247__mcp.py.md) · [handoff247/mcp.py:24](../../../../handoff247/mcp.py#L24)
+- [`handoff247/mcp.py`](handoff247__mcp.py.md) · [handoff247/mcp.py:30](../../../../handoff247/mcp.py#L30)
 - [`handoff247/workspace.py`](handoff247__workspace.py.md) · [handoff247/workspace.py:22](../../../../handoff247/workspace.py#L22)
 - [`tests/test_handoff.py`](tests__test_handoff.py.md) · [tests/test_handoff.py:19](../../../../tests/test_handoff.py#L19)
 
